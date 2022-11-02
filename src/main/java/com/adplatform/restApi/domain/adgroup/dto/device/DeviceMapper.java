@@ -1,0 +1,12 @@
+package com.adplatform.restApi.domain.adgroup.dto.device;
+
+import com.adplatform.restApi.domain.adgroup.domain.Device;
+import com.adplatform.restApi.global.dto.BaseMapperConfig;
+import org.mapstruct.Mapper;
+
+import java.util.List;
+
+@Mapper(config = BaseMapperConfig.class)
+public interface DeviceMapper {
+    List<DeviceDto.Response.Default> toDefaultResponse(List<Device> devices);
+}

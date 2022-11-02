@@ -1,0 +1,3 @@
+jwt:
+  prefix: "Bearer "
+  secret: 2022unionmobile!!

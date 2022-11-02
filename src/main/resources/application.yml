@@ -1,0 +1,13 @@
+spring:
+  profiles:
+    group:
+      "dev": "dev,jwt,aes,email"
+      "local": "local,jwt,aes,email"
+
+  messages:
+    basename: exception/messages,validation/messages
+
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true

@@ -1,0 +1,104 @@
+package com.adplatform.restApi.domain.adgroup.domain;
+
+import com.adplatform.restApi.global.converter.BooleanToStringYOrNConverter;
+import lombok.*;
+import lombok.experimental.Accessors;
+
+import javax.persistence.*;
+
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
+@Table(name = "adgroup_schedule")
+public class AdGroupSchedule {
+    @Id
+    @Column(name = "adgroup_info_id", nullable = false, unique = true)
+    private Integer id;
+
+    @Setter
+    @MapsId
+    @OneToOne
+    @JoinColumn(name = "adgroup_info_id")
+    private AdGroup adGroup;
+
+    @Column(name = "start_date")
+    private Integer startDate;
+
+    @Column(name = "end_date")
+    private Integer endDate;
+
+    /**
+     * 심야 타겟팅 여부.<br/>
+     * {@link Boolean#TRUE true}: 심야 시간대에만 타겟팅을 하며, 각 요일의 상세 시간 설정은 필요하지 않다.<br/>
+     * {@link Boolean#FALSE false}: 심야 타겟팅을 하지 않는다. 각 요일의 상세 시간 설정이 필요하다.
+     */
+    @Convert(converter = BooleanToStringYOrNConverter.class)
+    @Column(name = "late_night_yn", columnDefinition = "CHAR")
+    private boolean lateNightTargeting;
+
+    /**
+     * 상세 시간 설정 여부.<br/>
+     * {@link Boolean#TRUE true}: 심야 타겟팅이 true인 경우 해당 값은 false이어야 한다.<br/>
+     * {@link Boolean#FALSE false}: 심야 타겟팅이 false인 경우 해당 값은 true이어야 한다.
+     */
+    @Accessors(fluent = true)
+    @Convert(converter = BooleanToStringYOrNConverter.class)
+    @Column(name = "detail_time_yn", columnDefinition = "CHAR")
+    private boolean hasDetailTime;
+
+    @Embedded
+    @AttributeOverride(name = "time", column = @Column(name = "monday_time"))
+    private ScheduleTime mondayTime;
+
+    @Embedded
+    @AttributeOverride(name = "time", column = @Column(name = "tuesday_time"))
+    private ScheduleTime tuesdayTime;
+
+    @Embedded
+    @AttributeOverride(name = "time", column = @Column(name = "wednesday_time"))
+    private ScheduleTime wednesdayTime;
+
+    @Embedded
+    @AttributeOverride(name = "time", column = @Column(name = "thursdayTime"))
+    private ScheduleTime thursdayTime;
+
+    @Embedded
+    @AttributeOverride(name = "time", column = @Column(name = "friday_time"))
+    private ScheduleTime fridayTime;
+
+    @Embedded
+    @AttributeOverride(name = "time", column = @Column(name = "saturday_time"))
+    private ScheduleTime saturdayTime;
+
+    @Embedded
+    @AttributeOverride(name = "time", column = @Column(name = "sunday_time"))
+    private ScheduleTime sundayTime;
+
+    @Builder
+    public AdGroupSchedule(
+            AdGroup adGroup,
+            Integer startDate,
+            Integer endDate,
+            boolean lateNightTargeting,
+            boolean hasDetailTime,
+            ScheduleTime mondayTime,
+            ScheduleTime tuesdayTime,
+            ScheduleTime wednesdayTime,
+            ScheduleTime thursdayTime,
+            ScheduleTime fridayTime,
+            ScheduleTime saturdayTime,
+            ScheduleTime sundayTime) {
+        this.adGroup = adGroup;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.lateNightTargeting = lateNightTargeting;
+        this.hasDetailTime = hasDetailTime;
+        this.mondayTime = mondayTime;
+        this.tuesdayTime = tuesdayTime;
+        this.wednesdayTime = wednesdayTime;
+        this.thursdayTime = thursdayTime;
+        this.fridayTime = fridayTime;
+        this.saturdayTime = saturdayTime;
+        this.sundayTime = sundayTime;
+    }
+}
