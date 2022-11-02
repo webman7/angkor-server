@@ -3,19 +3,16 @@ package com.adplatform.restApi.domain.user.dao;
 import com.adplatform.restApi.domain.user.domain.User;
 import com.adplatform.restApi.domain.user.dto.user.QUserDto_Response_Detail;
 import com.adplatform.restApi.domain.user.dto.user.UserDto;
-import com.querydsl.core.types.Order;
+import com.adplatform.restApi.global.util.QuerydslOrderSpecifierUtil;
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
@@ -36,9 +33,9 @@ public class UserQuerydslRepositoryImpl implements UserQuerydslRepository {
                 .join(user.roles, userRole)
                 .join(userRole.role, role)
                 .join(user.company, company)
+                .orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(User.class, pageable.getSort()).toArray(OrderSpecifier[]::new))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(this.getOrderSpecifier(pageable.getSort()).toArray(OrderSpecifier[]::new))
                 .transform(groupBy(user.id)
                         .list(new QUserDto_Response_Detail(
                                 user.id,
@@ -59,16 +56,5 @@ public class UserQuerydslRepositoryImpl implements UserQuerydslRepository {
 
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
-    }
-
-    private List<OrderSpecifier<?>> getOrderSpecifier(Sort sort) {
-        List<OrderSpecifier<?>> orders = new ArrayList<>();
-        sort.stream().forEach(order -> {
-            Order direction = order.isAscending() ? Order.ASC : Order.DESC;
-            String property = order.getProperty();
-            PathBuilder<User> pathBuilder = new PathBuilder<>(User.class, "user");
-            orders.add(new OrderSpecifier(direction, pathBuilder.get(property)));
-        });
-        return orders;
     }
 }

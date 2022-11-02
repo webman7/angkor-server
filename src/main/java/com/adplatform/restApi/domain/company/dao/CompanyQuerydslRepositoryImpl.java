@@ -55,7 +55,6 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
     }
 
     private BooleanExpression isDeletedEq(Boolean deleted) {
-        System.out.println("isDeletedEq: " + deleted);
         if (deleted == null) return null;
         return deleted ? company.deleted.eq(true) : company.deleted.eq(false);
     }
