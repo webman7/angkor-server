@@ -3,10 +3,7 @@ package com.adplatform.restApi.domain.user.domain;
 import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.global.entity.BaseUpdatedEntity;
 import com.adplatform.restApi.global.value.Email;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -18,6 +15,7 @@ import java.util.Set;
 @AttributeOverride(name = "id", column = @Column(name = "user_no", columnDefinition = "INT"))
 @Entity
 @Table(name = "user_info")
+@ToString
 public class User extends BaseUpdatedEntity {
     public enum Active {
         /**
@@ -53,7 +51,7 @@ public class User extends BaseUpdatedEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private final Set<UserRole> roles = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_info_id")
     private Company company;
 

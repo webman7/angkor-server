@@ -52,6 +52,5 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
         JPAQuery<Long> countQuery = this.query.select(campaign.count()).from(campaign).join(campaign.adTypeAndGoal, adTypeAndGoal);
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
-
     }
 }

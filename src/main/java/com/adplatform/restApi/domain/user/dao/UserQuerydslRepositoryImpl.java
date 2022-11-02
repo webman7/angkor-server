@@ -14,6 +14,7 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
 import static com.adplatform.restApi.domain.user.domain.QRole.role;
@@ -26,6 +27,15 @@ import static com.querydsl.core.group.GroupBy.list;
 @Repository
 public class UserQuerydslRepositoryImpl implements UserQuerydslRepository {
     private final JPAQueryFactory query;
+
+    @Override
+    public Optional<User> findByLoginId(String loginId) {
+        return Optional.ofNullable(this.query.selectFrom(user)
+                .join(user.roles, userRole).fetchJoin()
+                .join(userRole.role, role).fetchJoin()
+                .where(user.loginId.eq(loginId))
+                .fetchOne());
+    }
 
     @Override
     public Page<UserDto.Response.Detail> search(Pageable pageable) {
