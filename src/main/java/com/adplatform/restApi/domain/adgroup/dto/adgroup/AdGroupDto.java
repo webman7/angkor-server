@@ -3,6 +3,7 @@ package com.adplatform.restApi.domain.adgroup.dto.adgroup;
 import com.adplatform.restApi.domain.adgroup.domain.AdGroup;
 import com.adplatform.restApi.domain.adgroup.dto.schedule.AdGroupScheduleDto;
 import com.adplatform.restApi.domain.adgroup.dto.target.AdGroupDemographicTargetDto;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -39,6 +40,16 @@ public abstract class AdGroupDto {
             private boolean onlyWifiDisplay;
             private boolean allMedia;
             private boolean onlyAdult;
+        }
+    }
+
+    public static abstract class Response {
+        @Getter
+        @AllArgsConstructor
+        public static class FirstStartDateAndLastEndDate {
+            private Integer campaignId;
+            private Integer firstStartDate;
+            private Integer lastEndDate;
         }
     }
 }

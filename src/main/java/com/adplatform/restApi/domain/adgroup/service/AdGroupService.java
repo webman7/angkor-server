@@ -14,7 +14,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import static com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupDto.Response;
 
 @RequiredArgsConstructor
 @Transactional
@@ -39,5 +42,15 @@ public class AdGroupService {
     private Device findDeviceByNameOrElseThrow(String name) {
         return this.deviceRepository.findByName(name)
                 .orElseThrow(DeviceNotFoundException::new);
+    }
+
+    public List<Response.FirstStartDateAndLastEndDate> findFirstStartDateAndLastEndDateByCampaignId(List<Integer> campaignIds) {
+        Map<Integer, Integer> firstStartDates = this.adGroupRepository.findScheduleFirstStartDateByCampaignId(campaignIds);
+        Map<Integer, Integer> lastEndDates = this.adGroupRepository.findScheduleLastEndDateByCampaignId(campaignIds);
+        return campaignIds.stream().map(campaignId -> new Response.FirstStartDateAndLastEndDate(
+                campaignId,
+                firstStartDates.get(campaignId),
+                lastEndDates.get(campaignId)))
+                .collect(Collectors.toList());
     }
 }

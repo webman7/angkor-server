@@ -13,9 +13,8 @@ public abstract class AdGroupScheduleDto {
         @Setter
         public static class FirstSave {
             @NotNull
-            private int startDate;
-            @NotNull
-            private int endDate;
+            private Integer startDate;
+            private Integer endDate;
             @NotNull
             private boolean lateNightTargeting;
             @NotNull

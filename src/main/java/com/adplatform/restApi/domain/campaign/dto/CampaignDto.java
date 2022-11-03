@@ -5,6 +5,7 @@ import com.adplatform.restApi.domain.campaign.domain.Campaign;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -35,6 +36,7 @@ public abstract class CampaignDto {
     public static abstract class Response {
         @Getter
         @Setter
+        @Accessors(chain = true)
         public static class Page {
             private Integer id;
             private AdTypeAndGoalDto adTypeAndGoal;
@@ -45,6 +47,8 @@ public abstract class CampaignDto {
             private Campaign.Status status;
             private LocalDateTime createdAt;
             private LocalDateTime updatedAt;
+            private Integer adGroupSchedulesFirstStartDate;
+            private Integer adGroupSchedulesLastEndDate;
 
             @QueryProjection
             public Page(

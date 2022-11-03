@@ -31,7 +31,6 @@ public class CompanyQueryApi {
     public ResponseEntity<PageDto<CompanyDto.Response.Page>> search(
             @PageableDefault Pageable pageable,
             CompanyDto.Request.Search searchRequest) {
-        System.out.println("api: " + searchRequest.getDeleted());
         return ResponseEntity.ok(PageDto.create(this.companyRepository.search(pageable, searchRequest)));
     }
 }
