@@ -1,4 +1,4 @@
-package com.adplatform.restApi.domain.adgroup.dao;
+package com.adplatform.restApi.domain.adgroup.dao.device;
 
 import com.adplatform.restApi.domain.adgroup.domain.Device;
 import org.springframework.data.jpa.repository.JpaRepository;

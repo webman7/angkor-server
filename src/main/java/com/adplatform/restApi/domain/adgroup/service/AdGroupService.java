@@ -1,8 +1,8 @@
 package com.adplatform.restApi.domain.adgroup.service;
 
-import com.adplatform.restApi.domain.adgroup.dao.AdGroupRepository;
-import com.adplatform.restApi.domain.adgroup.dao.DeviceRepository;
-import com.adplatform.restApi.domain.adgroup.dao.MediaRepository;
+import com.adplatform.restApi.domain.adgroup.dao.adgroup.AdGroupRepository;
+import com.adplatform.restApi.domain.adgroup.dao.device.DeviceRepository;
+import com.adplatform.restApi.domain.adgroup.dao.media.MediaRepository;
 import com.adplatform.restApi.domain.adgroup.domain.Device;
 import com.adplatform.restApi.domain.adgroup.domain.Media;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupMapper;

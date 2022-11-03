@@ -1,4 +1,4 @@
-package com.adplatform.restApi.domain.adgroup.dao;
+package com.adplatform.restApi.domain.adgroup.dao.schedule;
 
 import com.adplatform.restApi.domain.adgroup.domain.AdGroupSchedule;
 import org.springframework.data.jpa.repository.JpaRepository;

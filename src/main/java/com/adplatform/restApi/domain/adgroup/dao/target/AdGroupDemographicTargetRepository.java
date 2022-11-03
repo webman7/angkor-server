@@ -1,4 +1,4 @@
-package com.adplatform.restApi.domain.adgroup.dao;
+package com.adplatform.restApi.domain.adgroup.dao.target;
 
 import com.adplatform.restApi.domain.adgroup.domain.AdGroupDemographicTarget;
 import org.springframework.data.jpa.repository.JpaRepository;

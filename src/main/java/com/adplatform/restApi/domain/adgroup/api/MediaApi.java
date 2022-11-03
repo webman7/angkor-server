@@ -1,6 +1,6 @@
 package com.adplatform.restApi.domain.adgroup.api;
 
-import com.adplatform.restApi.domain.adgroup.dao.MediaRepository;
+import com.adplatform.restApi.domain.adgroup.dao.media.MediaRepository;
 import com.adplatform.restApi.domain.adgroup.dto.media.MediaDto;
 import com.adplatform.restApi.domain.adgroup.dto.media.MediaMapper;
 import lombok.RequiredArgsConstructor;

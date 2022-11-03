@@ -1,6 +1,6 @@
 package com.adplatform.restApi.domain.adgroup.api;
 
-import com.adplatform.restApi.domain.adgroup.dao.DeviceRepository;
+import com.adplatform.restApi.domain.adgroup.dao.device.DeviceRepository;
 import com.adplatform.restApi.domain.adgroup.dto.device.DeviceDto;
 import com.adplatform.restApi.domain.adgroup.dto.device.DeviceMapper;
 import lombok.RequiredArgsConstructor;

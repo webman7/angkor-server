@@ -1,4 +1,4 @@
-package com.adplatform.restApi.domain.adgroup.dao;
+package com.adplatform.restApi.domain.adgroup.dao.media;
 
 import com.adplatform.restApi.domain.adgroup.domain.Media;
 import org.springframework.data.jpa.repository.JpaRepository;
