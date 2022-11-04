@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/users/**").hasAuthority(ROLE_ADMIN.name())
                 .antMatchers("/companies/**").hasAuthority(ROLE_ADMIN.name())
-                .antMatchers(HttpMethod.POST, "/campaign")
+                .antMatchers(HttpMethod.POST, "/campaign", "/creative")
                 .hasAnyAuthority(ROLE_ADMIN.name(), ROLE_OPERATOR.name(), ROLE_COMPANY_ADMINISTRATOR.name(), ROLE_COMPANY_GENERAL.name())
                 .antMatchers(HttpMethod.GET, "/campaign/search/**").authenticated()
                 .antMatchers(HttpMethod.GET, "/media", "/device").authenticated()

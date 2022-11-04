@@ -1,5 +1,6 @@
 package com.adplatform.restApi.domain.campaign.domain;
 
+import com.adplatform.restApi.global.converter.BooleanToStringYOrNConverter;
 import com.adplatform.restApi.global.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -19,4 +20,8 @@ public class AdTypeAndGoal extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ad_goal_info_id")
     private AdGoal adGoal;
+
+    @Convert(converter = BooleanToStringYOrNConverter.class)
+    @Column(name = "del_yn", columnDefinition = "CHAR")
+    private boolean deleted;
 }
