@@ -17,6 +17,11 @@ spring:
       hibernate:
         format_sql: true
         use_sql_comments: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      data-locations: classpath:sql/local-init-data.sql
+      mode: always
   servlet:
     multipart:
       max-file-size: 20MB
