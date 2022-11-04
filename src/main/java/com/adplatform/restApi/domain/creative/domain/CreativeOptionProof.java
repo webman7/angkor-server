@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "creative_option_proof")
+@Table(name = "creative_opinion_proof")
 public class CreativeOptionProof extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "creative_info_id")
