@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupDto.Response;
+import static com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupDto.Response.FirstStartDateAndLastEndDate;
 
 @RequiredArgsConstructor
 @Transactional
@@ -44,10 +44,10 @@ public class AdGroupService {
                 .orElseThrow(DeviceNotFoundException::new);
     }
 
-    public List<Response.FirstStartDateAndLastEndDate> findFirstStartDateAndLastEndDateByCampaignId(List<Integer> campaignIds) {
+    public List<FirstStartDateAndLastEndDate> findFirstStartDateAndLastEndDateByCampaignId(List<Integer> campaignIds) {
         Map<Integer, Integer> firstStartDates = this.adGroupRepository.findScheduleFirstStartDateByCampaignId(campaignIds);
         Map<Integer, Integer> lastEndDates = this.adGroupRepository.findScheduleLastEndDateByCampaignId(campaignIds);
-        return campaignIds.stream().map(campaignId -> new Response.FirstStartDateAndLastEndDate(
+        return campaignIds.stream().map(campaignId -> new FirstStartDateAndLastEndDate(
                 campaignId,
                 firstStartDates.get(campaignId),
                 lastEndDates.get(campaignId)))

@@ -1,6 +1,7 @@
 package com.adplatform.restApi.domain.adgroup.domain;
 
 import com.adplatform.restApi.domain.campaign.domain.Campaign;
+import com.adplatform.restApi.domain.creative.domain.Creative;
 import com.adplatform.restApi.global.converter.BooleanToStringYOrNConverter;
 import com.adplatform.restApi.global.entity.BaseUpdatedEntity;
 import lombok.*;
@@ -92,6 +93,9 @@ public class AdGroup extends BaseUpdatedEntity {
             joinColumns = @JoinColumn(name = "adgroup_info_id"),
             inverseJoinColumns = @JoinColumn(name = "device_info_id"))
     private final List<Device> devices = new ArrayList<>();
+
+    @OneToMany(mappedBy = "adGroup", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Creative> creatives = new ArrayList<>();
 
     @Column(name = "name", length = 50)
     private String name;
