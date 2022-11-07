@@ -15,7 +15,7 @@ public abstract class CreativeMapper {
     protected AdGroupQueryService adGroupQueryService;
 
     @Mapping(target = "representativeId", constant = "1")
-    @Mapping(target = "adGroup", expression = ("java(adGroupSearchService.findById(dto.getAdGroupId()))"))
+    @Mapping(target = "adGroup", expression = ("java(adGroupQueryService.findById(dto.getAdGroupId()))"))
     @Mapping(target = "files", ignore = true)
     @Mapping(target = "opinionProofFiles", ignore = true)
     @Mapping(target = "landing", source = "dto", qualifiedByName = "mapCreativeLanding")
