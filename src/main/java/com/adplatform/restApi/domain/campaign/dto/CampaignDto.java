@@ -72,5 +72,24 @@ public abstract class CampaignDto {
                 this.updatedAt = updatedAt;
             }
         }
+
+        @Getter
+        @Setter
+        public static class ForSaveAdGroup {
+            private Integer id;
+            private String name;
+            private LocalDateTime createdAt;
+            private LocalDateTime updatedAt;
+            private AdTypeAndGoalDto adTypeAndGoal;
+
+            @QueryProjection
+            public ForSaveAdGroup(Integer id, String name, LocalDateTime createdAt, LocalDateTime updatedAt, AdTypeAndGoalDto adTypeAndGoal) {
+                this.id = id;
+                this.name = name;
+                this.createdAt = createdAt;
+                this.updatedAt = updatedAt;
+                this.adTypeAndGoal = adTypeAndGoal;
+            }
+        }
     }
 }

@@ -13,7 +13,7 @@ import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/campaign")
+@RequestMapping("/campaigns")
 public class CampaignCommandApi {
     private final CampaignSaveService campaignSaveService;
 

@@ -41,4 +41,8 @@ public class CampaignQueryService {
                 .setAdGroupSchedulesFirstStartDate(map.get(campaign.getId()).getFirstStartDate())
                 .setAdGroupSchedulesLastEndDate(map.get(campaign.getId()).getLastEndDate()));
     }
+
+    public Page<CampaignDto.Response.ForSaveAdGroup> searchForSaveAdGroup(Pageable pageable, String name) {
+        return this.campaignRepository.searchForSaveAdGroup(pageable, name);
+    }
 }
