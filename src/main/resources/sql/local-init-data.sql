@@ -52,6 +52,14 @@ INSERT INTO user_info (user_id, company_info_id, user_password, user_name, email
 VALUES ('admin@test.com', null, '$2a$10$HADe0IGj92syHeV7z6NO0OK5Gsts.xpFCbI40cRVKj0KzRCSOpFuy',
         'admin', null, null, 'Y', 'N', 0, '2022-10-07 13:29:03', 0, '2022-10-07 13:29:03', 0, '2022-10-07 13:29:03');
 
+INSERT INTO user_info (user_id, company_info_id, user_password, user_name, email, phone, active, first_pwd_yn,
+                       pwd_wrong_cnt, pwd_upd_date, reg_user_no, reg_date, upd_user_no, upd_date)
+VALUES ('advertiser@test.com', null, '$2a$10$HADe0IGj92syHeV7z6NO0OK5Gsts.xpFCbI40cRVKj0KzRCSOpFuy',
+        'advertiser', null, null, 'Y', 'N', 0, '2022-10-07 13:29:03', 0, '2022-10-07 13:29:03', 0, '2022-10-07 13:29:03');
+
 -- user_roles
 INSERT INTO user_roles (user_no, roles_info_id)
 VALUES (1, 1);
+
+INSERT INTO user_roles (user_no, roles_info_id)
+VALUES (2, 3);
