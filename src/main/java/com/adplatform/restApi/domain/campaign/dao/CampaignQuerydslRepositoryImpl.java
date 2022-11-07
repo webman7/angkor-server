@@ -62,20 +62,18 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
     @Override
     public Page<CampaignDto.Response.ForSaveAdGroup> searchForSaveAdGroup(Pageable pageable, String name) {
         List<CampaignDto.Response.ForSaveAdGroup> content = this.query
-                .select(campaign.id, campaign.name, campaign.createdAt, campaign.updatedAt, adType.name, adGoal.name)
+                .select(new QCampaignDto_Response_ForSaveAdGroup(
+                        campaign.id,
+                        campaign.name,
+                        campaign.createdAt,
+                        campaign.updatedAt,
+                        new QAdTypeAndGoalDto(adType.name, adGoal.name)))
                 .from(campaign)
                 .join(campaign.adTypeAndGoal, adTypeAndGoal)
                 .join(adTypeAndGoal.adType, adType)
                 .join(adTypeAndGoal.adGoal, adGoal)
                 .where(this.containsName(name))
-                .transform(groupBy(campaign.id)
-                        .list(new QCampaignDto_Response_ForSaveAdGroup(
-                                campaign.id,
-                                campaign.name,
-                                campaign.createdAt,
-                                campaign.updatedAt,
-                                new QAdTypeAndGoalDto(adType.name, adGoal.name)
-                        )));
+                .fetch();
 
         JPAQuery<Long> countQuery = this.query.select(campaign.count())
                 .from(campaign)
