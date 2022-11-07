@@ -1,6 +1,6 @@
 package com.adplatform.restApi.domain.creative.dto;
 
-import com.adplatform.restApi.domain.adgroup.service.AdGroupSearchService;
+import com.adplatform.restApi.domain.adgroup.service.AdGroupQueryService;
 import com.adplatform.restApi.domain.creative.domain.Creative;
 import com.adplatform.restApi.domain.creative.domain.CreativeLanding;
 import com.adplatform.restApi.global.dto.BaseMapperConfig;
@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Mapper(config = BaseMapperConfig.class)
 public abstract class CreativeMapper {
     @Autowired
-    protected AdGroupSearchService adGroupSearchService;
+    protected AdGroupQueryService adGroupQueryService;
 
     @Mapping(target = "representativeId", constant = "1")
     @Mapping(target = "adGroup", expression = ("java(adGroupSearchService.findById(dto.getAdGroupId()))"))

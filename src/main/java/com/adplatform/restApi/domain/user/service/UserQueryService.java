@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class UserSearchService {
+public class UserQueryService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
 

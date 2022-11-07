@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class AdGroupSearchService {
+public class AdGroupQueryService {
     private final AdGroupRepository adGroupRepository;
 
     public AdGroup findById(Integer id) {

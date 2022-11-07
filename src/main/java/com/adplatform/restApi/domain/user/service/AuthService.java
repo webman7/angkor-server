@@ -27,11 +27,11 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
     private final AuthMapper authMapper;
-    private final UserSearchService userSearchService;
+    private final UserQueryService userQueryService;
 
     @Transactional(noRollbackFor = {UserLoginFailedException.class, PasswordWrongCountExceededException.class})
     public TokenDto login(AuthDto.Request.Login request) {
-        User user = this.userSearchService.findByIdOrElseThrow(request.getId());
+        User user = this.userQueryService.findByIdOrElseThrow(request.getId());
         this.validateUserActive(user.getActive());
         try {
             if (!user.getPassword().validate(this.passwordEncoder, request.getPassword()))
@@ -52,14 +52,14 @@ public class AuthService {
     }
 
     public void signup(AuthDto.Request.SignUp request) {
-        this.userSearchService.validateExistsByLoginId(request);
+        this.userQueryService.validateExistsByLoginId(request);
         User user = this.authMapper.toEntity(request, this.passwordEncoder);
-        Role role = this.userSearchService.findRoleByType(Role.Type.ROLE_ADMIN);
+        Role role = this.userQueryService.findRoleByType(Role.Type.ROLE_ADMIN);
         this.userRepository.save(user.updateRole(new UserRole(user, role)));
     }
 
     public void findPassword(AuthDto.Request.FindPassword request) {
-        String randomPassword = this.userSearchService.findByLoginIdAndName(request.getId(), request.getName())
+        String randomPassword = this.userQueryService.findByLoginIdAndName(request.getId(), request.getName())
                 .updateActive(User.Active.Y)
                 .getPassword()
                 .changeToRandomPassword(this.passwordEncoder);
@@ -69,7 +69,7 @@ public class AuthService {
     public void changePassword(AuthDto.Request.ChangePassword request) {
         if (!this.isEqualPassword(request.getPassword1(), request.getPassword2()))
             throw new ChangePasswordNotEqualException();
-        this.userSearchService.findByIdOrElseThrow(SecurityUtil.getLoginUserLoginId())
+        this.userQueryService.findByIdOrElseThrow(SecurityUtil.getLoginUserLoginId())
                 .updateActive(User.Active.Y)
                 .getPassword()
                 .changePassword(this.passwordEncoder, request.getPassword1());
