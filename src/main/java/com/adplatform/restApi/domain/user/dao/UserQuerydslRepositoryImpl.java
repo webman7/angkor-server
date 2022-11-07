@@ -43,7 +43,7 @@ public class UserQuerydslRepositoryImpl implements UserQuerydslRepository {
                 .join(user.roles, userRole)
                 .join(userRole.role, role)
                 .join(user.company, company)
-                .orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(User.class, pageable.getSort()).toArray(OrderSpecifier[]::new))
+                .orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(User.class, "user", pageable.getSort()).toArray(OrderSpecifier[]::new))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .transform(groupBy(user.id)

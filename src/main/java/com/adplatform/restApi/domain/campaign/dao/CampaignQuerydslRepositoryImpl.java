@@ -36,7 +36,7 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
                 .join(campaign.adTypeAndGoal, adTypeAndGoal)
                 .join(adTypeAndGoal.adType, adType)
                 .join(adTypeAndGoal.adGoal, adGoal)
-                .orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(Campaign.class, pageable.getSort()).toArray(OrderSpecifier[]::new))
+                .orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(Campaign.class, "campaign", pageable.getSort()).toArray(OrderSpecifier[]::new))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .transform(groupBy(campaign.id)

@@ -9,12 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class QuerydslOrderSpecifierUtil {
-    public static <T> List<OrderSpecifier<?>> getOrderSpecifier(Class<T> clazz, Sort sort) {
+    public static <T> List<OrderSpecifier<?>> getOrderSpecifier(Class<T> clazz, String variable, Sort sort) {
         List<OrderSpecifier<?>> orders = new ArrayList<>();
         sort.stream().forEach(order -> {
             Order direction = order.isAscending() ? Order.ASC : Order.DESC;
             String property = order.getProperty();
-            PathBuilder<T> pathBuilder = new PathBuilder<>(clazz, clazz.getSimpleName().toLowerCase());
+            PathBuilder<T> pathBuilder = new PathBuilder<>(clazz, variable);
             orders.add(new OrderSpecifier(direction, pathBuilder.get(property)));
         });
         return orders;

@@ -19,7 +19,7 @@ import java.util.List;
 @Table(name = "creative_info")
 public class Creative extends BaseUpdatedEntity {
     public enum Format {
-        IMAGE_BANNER, IMAGE_NATIVE, SERVICE_CONTENT;
+        IMAGE_BANNER, IMAGE_NATIVE, VIDEO_NATIVE, SERVICE_CONTENT;
     }
 
 

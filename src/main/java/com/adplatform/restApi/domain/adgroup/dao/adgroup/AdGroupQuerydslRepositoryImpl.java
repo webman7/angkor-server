@@ -1,8 +1,11 @@
 package com.adplatform.restApi.domain.adgroup.dao.adgroup;
 
+import com.adplatform.restApi.domain.adgroup.domain.AdGroup;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupDto;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.QAdGroupDto_Response_Default;
+import com.adplatform.restApi.global.util.QuerydslOrderSpecifierUtil;
 import com.querydsl.core.group.GroupBy;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -68,6 +71,7 @@ public class AdGroupQuerydslRepositoryImpl implements AdGroupQuerydslRepository 
                 .join(adGroup.campaign, campaign)
                 .join(adGroup.adGroupSchedule, adGroupSchedule)
                 .where(this.eqCampaignId(campaignId))
+                .orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(AdGroup.class, "adGroup", pageable.getSort()).toArray(OrderSpecifier[]::new))
                 .fetch();
 
         JPAQuery<Long> countQuery = this.query.select(adGroup.count())
