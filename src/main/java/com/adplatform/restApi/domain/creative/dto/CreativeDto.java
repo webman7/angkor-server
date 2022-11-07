@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,7 @@ public abstract class CreativeDto {
             @NotNull
             private CreativeFile.Type type;
             @NotNull
+            @Size(min = 1, max = 100)
             private List<MultipartFile> files = new ArrayList<>();
             private List<MultipartFile> opinionProofFiles = new ArrayList<>();
             @NotEmpty

@@ -22,21 +22,17 @@ public class Creative extends BaseUpdatedEntity {
         IMAGE_BANNER, IMAGE_NATIVE, VIDEO_NATIVE, SERVICE_CONTENT;
     }
 
-
     public enum ActionButton {
         DETAIL, BUY, GIFT, ORDER;
     }
-
 
     public enum Config {
         ON, OFF, DEL;
     }
 
-
     public enum SystemConfig {
         ON, ADMIN_STOP, EXTERNAL_SERVICE_STOP;
     }
-
 
     public enum ReviewStatus {
         /**
@@ -60,7 +56,6 @@ public class Creative extends BaseUpdatedEntity {
          */
         MODIFICATION_REJECTED;
     }
-
 
     public enum Status {
         /**

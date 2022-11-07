@@ -25,6 +25,7 @@ public abstract class CampaignDto {
             @Valid
             private List<AdGroupDto.Request.FirstSave> adGroups;
             @Size(min = 2)
+            @NotNull
             private String name;
             @NotNull
             private Long dailyBudgetAmount;
