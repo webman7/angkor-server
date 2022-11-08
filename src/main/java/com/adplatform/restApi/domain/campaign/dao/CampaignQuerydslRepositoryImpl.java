@@ -73,6 +73,8 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
                 .join(adTypeAndGoal.adType, adType)
                 .join(adTypeAndGoal.adGoal, adGoal)
                 .where(campaign.status.ne(Campaign.Status.CANCELED), this.containsName(name))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
         JPAQuery<Long> countQuery = this.query.select(campaign.count())

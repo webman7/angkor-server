@@ -92,6 +92,8 @@ public class AdGroupQuerydslRepositoryImpl implements AdGroupQuerydslRepository 
                 .from(adGroup)
                 .join(adGroup.campaign, campaign)
                 .where(adGroup.status.ne(Campaign.Status.CANCELED), this.containsName(name))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
         JPAQuery<Long> countQuery = this.query.select(adGroup.count())
