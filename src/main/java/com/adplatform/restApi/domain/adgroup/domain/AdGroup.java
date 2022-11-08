@@ -26,7 +26,7 @@ public class AdGroup extends BaseUpdatedEntity {
      * 과금 방식
      */
     public enum PacingType {
-        CPM, CPC, CPA
+        CPM, CPC, CPA, CPV
     }
 
     /**
