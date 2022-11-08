@@ -62,6 +62,7 @@ public abstract class CreativeDto {
             private Creative.Status status;
             private Integer adGroupId;
             private String adGroupName;
+            private Integer fileId;
             private String fileName;
 
             @QueryProjection
@@ -74,6 +75,7 @@ public abstract class CreativeDto {
                     Creative.Status status,
                     Integer adGroupId,
                     String adGroupName,
+                    Integer fileId,
                     String fileName) {
                 this.id = id;
                 this.name = name;
@@ -83,6 +85,7 @@ public abstract class CreativeDto {
                 this.status = status;
                 this.adGroupId = adGroupId;
                 this.adGroupName = adGroupName;
+                this.fileId = fileId;
                 this.fileName = fileName;
             }
         }

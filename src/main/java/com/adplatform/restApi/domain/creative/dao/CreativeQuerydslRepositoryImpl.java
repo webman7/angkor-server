@@ -37,6 +37,7 @@ public class CreativeQuerydslRepositoryImpl implements CreativeQuerydslRepositor
                         creative.status,
                         creative.adGroup.id,
                         adGroup.name,
+                        creativeFile.id,
                         creativeFile.information.filename))
                 .from(creative)
                 .join(creative.adGroup, adGroup)
