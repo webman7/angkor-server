@@ -111,5 +111,15 @@ public abstract class AdGroupDto {
                 this.updatedAt = updatedAt;
             }
         }
+
+        @Getter
+        @Setter
+        @AllArgsConstructor
+        public static class ForSaveCreative {
+            private Integer id;
+            private String name;
+            private Integer campaignId;
+            private String campaignName;
+        }
     }
 }

@@ -11,15 +11,23 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/adgroups")
+@RequestMapping("/adgroups/search")
 public class AdGroupQueryApi {
     private final AdGroupRepository adGroupRepository;
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/search")
+    @GetMapping
     public Page<AdGroupDto.Response.Default> search(
             @PageableDefault Pageable pageable,
             @RequestParam(required = false) Integer campaignId) {
         return this.adGroupRepository.search(pageable, campaignId);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/for-save-creative")
+    public Page<AdGroupDto.Response.ForSaveCreative> searchForSaveCreative(
+            @PageableDefault Pageable pageable,
+            @RequestParam(required = false) String name) {
+        return this.adGroupRepository.searchForSaveCreative(pageable, name);
     }
 }

@@ -13,4 +13,6 @@ public interface AdGroupQuerydslRepository {
     Map<Integer, Integer> findScheduleLastEndDateByCampaignId(List<Integer> campaignIds);
 
     Page<AdGroupDto.Response.Default> search(Pageable pageable, Integer campaignId);
+
+    Page<AdGroupDto.Response.ForSaveCreative> searchForSaveCreative(Pageable pageable, String name);
 }
