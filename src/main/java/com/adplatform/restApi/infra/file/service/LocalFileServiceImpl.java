@@ -18,10 +18,13 @@ public class LocalFileServiceImpl implements FileService {
     @SneakyThrows
     @Override
     public String save(MultipartFile file) {
-        File savedFile = new File(String.format("%s%s.%s", FILE_PATH, UUID.randomUUID(), FilenameUtils.getExtension(file.getOriginalFilename())));
+        File savedFile = new File(String.format(
+                "%s%s.%s",
+                FILE_PATH, UUID.randomUUID(),
+                FilenameUtils.getExtension(file.getOriginalFilename())));
         savedFile.getParentFile().mkdirs();
         file.transferTo(savedFile.toPath());
-        return savedFile.getPath();
+        return savedFile.getName();
     }
 
     @SneakyThrows

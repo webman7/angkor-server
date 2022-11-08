@@ -45,7 +45,7 @@ public class SecurityConfig {
                 .antMatchers("/companies/**").hasAuthority(ROLE_ADMIN.name())
                 .antMatchers(HttpMethod.POST, "/campaigns", "/creative")
                 .hasAnyAuthority(ROLE_ADMIN.name(), ROLE_OPERATOR.name(), ROLE_COMPANY_ADMINISTRATOR.name(), ROLE_COMPANY_GENERAL.name())
-                .antMatchers(HttpMethod.GET, "/campaigns/search/**", "/adgroups/search/**").authenticated()
+                .antMatchers(HttpMethod.GET, "/campaigns/search/**", "/adgroups/search/**", "/creative/search/**").authenticated()
                 .antMatchers(HttpMethod.GET, "/media", "/device").authenticated()
                 .antMatchers(HttpMethod.POST, "/change-password").authenticated()
                 .antMatchers(HttpMethod.POST, "/signup", "/login", "/find-password").permitAll()

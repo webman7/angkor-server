@@ -4,6 +4,7 @@ import com.adplatform.restApi.domain.creative.domain.Creative;
 import com.adplatform.restApi.domain.creative.domain.CreativeFile;
 import com.adplatform.restApi.domain.creative.domain.CreativeLanding;
 import com.adplatform.restApi.domain.creative.domain.FileInformation;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
@@ -46,6 +47,44 @@ public abstract class CreativeDto {
             private boolean frequencyType;
             private int frequency;
             private String opinion;
+        }
+    }
+
+    public abstract static class Response {
+        @Getter
+        @Setter
+        public static class Default {
+            private Integer id;
+            private String name;
+            private Creative.Config config;
+            private Creative.SystemConfig systemConfig;
+            private Creative.ReviewStatus reviewStatus;
+            private Creative.Status status;
+            private Integer adGroupId;
+            private String adGroupName;
+            private String fileName;
+
+            @QueryProjection
+            public Default(
+                    Integer id,
+                    String name,
+                    Creative.Config config,
+                    Creative.SystemConfig systemConfig,
+                    Creative.ReviewStatus reviewStatus,
+                    Creative.Status status,
+                    Integer adGroupId,
+                    String adGroupName,
+                    String fileName) {
+                this.id = id;
+                this.name = name;
+                this.config = config;
+                this.systemConfig = systemConfig;
+                this.reviewStatus = reviewStatus;
+                this.status = status;
+                this.adGroupId = adGroupId;
+                this.adGroupName = adGroupName;
+                this.fileName = fileName;
+            }
         }
     }
 }
