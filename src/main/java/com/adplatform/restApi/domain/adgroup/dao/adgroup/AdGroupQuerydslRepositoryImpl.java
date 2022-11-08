@@ -75,6 +75,8 @@ public class AdGroupQuerydslRepositoryImpl implements AdGroupQuerydslRepository 
                 .join(adGroup.adGroupSchedule, adGroupSchedule)
                 .where(this.eqCampaignId(campaignId))
                 .orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(AdGroup.class, "adGroup", pageable.getSort()).toArray(OrderSpecifier[]::new))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
         JPAQuery<Long> countQuery = this.query.select(adGroup.count())
