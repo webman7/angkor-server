@@ -2,7 +2,9 @@ package com.adplatform.restApi.infra.file.service;
 
 import lombok.SneakyThrows;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,9 +24,12 @@ public class LocalFileServiceImpl implements FileService {
         return savedFile.getPath();
     }
 
+    @SneakyThrows
     @Override
     public byte[] findByName(String filename) {
-        return new byte[0];
+        FileSystemResource resource = new FileSystemResource(FILE_PATH + filename);
+        if (!resource.exists()) throw new IllegalArgumentException("해당 파일이 존재하지 않습니다.");
+        return IOUtils.toByteArray(resource.getInputStream());
     }
 
     @Override

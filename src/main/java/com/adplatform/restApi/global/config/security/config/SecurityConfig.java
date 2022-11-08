@@ -49,7 +49,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET, "/media", "/device").authenticated()
                 .antMatchers(HttpMethod.POST, "/change-password").authenticated()
                 .antMatchers(HttpMethod.POST, "/signup", "/login", "/find-password").permitAll()
-                .antMatchers(HttpMethod.GET, "/exception/**", "/").permitAll()
+                .antMatchers(HttpMethod.GET, "/exception/**", "/", "/files/**").permitAll()
                 .anyRequest().authenticated()
 
                 .and()
