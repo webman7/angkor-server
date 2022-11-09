@@ -33,13 +33,7 @@ public class CampaignSaveService {
                 request.getAdTypeAndGoal().getAdTypeName(),
                 request.getAdTypeAndGoal().getAdGoalName());
         Campaign campaign = this.campaignRepository.save(this.campaignMapper.toEntity(request, adTypeAndGoal));
-        this.mapToAdGroupSavedEvents(request, campaign).forEach(this.eventPublisher::publishEvent);
-    }
-
-    private List<AdGroupSavedEvent> mapToAdGroupSavedEvents(CampaignDto.Request.Save request, Campaign campaign) {
-        return request.getAdGroups().stream()
-                .map(a -> this.adGroupEventMapper.toEvent(a, campaign))
-                .collect(Collectors.toList());
+        this.mapToAdGroupSavedEvent(request.getAdGroups(), campaign).forEach(this.eventPublisher::publishEvent);
     }
 
     private AdTypeAndGoal findAdTypeAndGoal(String adTypeName, String adGoalName) {
@@ -49,7 +43,10 @@ public class CampaignSaveService {
 
     public void adGroupSave(AdGroupDto.Request.Save request) {
         Campaign campaign = CampaignFindUtils.findById(request.getCampaignId(), this.campaignRepository);
-        request.getAdGroups().forEach(adGroup ->
-                this.eventPublisher.publishEvent(this.adGroupEventMapper.toEvent(adGroup, campaign)));
+        this.mapToAdGroupSavedEvent(request.getAdGroups(), campaign).forEach(this.eventPublisher::publishEvent);
+    }
+
+    private List<AdGroupSavedEvent> mapToAdGroupSavedEvent(List<AdGroupDto.Request.FirstSave> request, Campaign campaign) {
+        return request.stream().map(a -> this.adGroupEventMapper.toEvent(a, campaign)).collect(Collectors.toList());
     }
 }
