@@ -48,7 +48,8 @@ public class CampaignSaveService {
     }
 
     public void adGroupSave(AdGroupDto.Request.Save request) {
-        this.eventPublisher.publishEvent(this.adGroupEventMapper.toEvent(
-                request, CampaignFindUtils.findById(request.getCampaignId(), this.campaignRepository)));
+        Campaign campaign = CampaignFindUtils.findById(request.getCampaignId(), this.campaignRepository);
+        request.getAdGroups().forEach(adGroup ->
+                this.eventPublisher.publishEvent(this.adGroupEventMapper.toEvent(adGroup, campaign)));
     }
 }

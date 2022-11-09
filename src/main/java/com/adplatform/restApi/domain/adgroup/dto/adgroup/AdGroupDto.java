@@ -47,9 +47,12 @@ public abstract class AdGroupDto {
 
         @Getter
         @Setter
-        public static class Save extends FirstSave {
+        public static class Save {
             @NotNull
             private Integer campaignId;
+            @NotNull
+            @Size(min = 1)
+            private List<FirstSave> adGroups;
         }
     }
 
