@@ -1,5 +1,6 @@
 package com.adplatform.restApi.domain.campaign.service;
 
+import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupDto;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupEventMapper;
 import com.adplatform.restApi.domain.adgroup.event.AdGroupSavedEvent;
 import com.adplatform.restApi.domain.campaign.dao.AdTypeAndGoalRepository;
@@ -44,5 +45,10 @@ public class CampaignSaveService {
     private AdTypeAndGoal findAdTypeAndGoal(String adTypeName, String adGoalName) {
         return this.adTypeAndGoalRepository.findByAdType_NameAndAdGoal_Name(adTypeName, adGoalName)
                 .orElseThrow(AdTypeAndGoalNotFoundException::new);
+    }
+
+    public void adGroupSave(AdGroupDto.Request.Save request) {
+        this.eventPublisher.publishEvent(this.adGroupEventMapper.toEvent(
+                request, CampaignFindUtils.findById(request.getCampaignId(), this.campaignRepository)));
     }
 }

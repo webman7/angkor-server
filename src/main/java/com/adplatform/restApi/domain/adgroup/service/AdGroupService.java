@@ -29,9 +29,17 @@ public class AdGroupService {
     private final AdGroupMapper adGroupMapper;
 
     public void save(AdGroupSavedEvent event) {
-        List<Media> media = event.getMedia().stream().map(this::findMediaByNameOrElseThrow).collect(Collectors.toList());
-        List<Device> devices = event.getDevices().stream().map(this::findDeviceByNameOrElseThrow).collect(Collectors.toList());
+        List<Media> media = this.findByMediaName(event.getMedia());
+        List<Device> devices = this.findByDeviceName(event.getDevices());
         this.adGroupRepository.save(this.adGroupMapper.toEntity(event, media, devices));
+    }
+
+    private List<Media> findByMediaName(List<String> mediaNames) {
+        return mediaNames.stream().map(this::findMediaByNameOrElseThrow).collect(Collectors.toList());
+    }
+
+    private List<Device> findByDeviceName(List<String> deviceNames) {
+        return deviceNames.stream().map(this::findDeviceByNameOrElseThrow).collect(Collectors.toList());
     }
 
     private Media findMediaByNameOrElseThrow(String name) {

@@ -43,10 +43,7 @@ public class AdGroupSavedEvent {
             boolean fullDeviceDisplay,
             boolean onlyWifiDisplay,
             boolean allMedia,
-            boolean onlyAdult,
-            AdGroup.Config config,
-            AdGroup.SystemConfig systemConfig,
-            Campaign.Status status) {
+            boolean onlyAdult) {
         this.campaign = campaign;
         this.demographicTarget = demographicTarget;
         this.adGroupSchedule = adGroupSchedule;

@@ -44,6 +44,13 @@ public abstract class AdGroupDto {
             private boolean allMedia;
             private boolean onlyAdult;
         }
+
+        @Getter
+        @Setter
+        public static class Save extends FirstSave {
+            @NotNull
+            private Integer campaignId;
+        }
     }
 
     public static abstract class Response {
