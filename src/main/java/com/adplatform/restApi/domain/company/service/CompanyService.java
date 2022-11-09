@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Service
 public class CompanyService {
-    private final CompanyQueryService companyQueryService;
     private final CompanyRepository companyRepository;
     private final CompanyMapper companyMapper;
 
@@ -20,10 +19,10 @@ public class CompanyService {
     }
 
     public void update(CompanyDto.Request.Update request) {
-        this.companyRepository.save(this.companyQueryService.findById(request.getId()).update(request));
+        this.companyRepository.save(CompanyFindUtils.findById(request.getId(), this.companyRepository).update(request));
     }
 
     public void delete(Integer id) {
-        this.companyQueryService.findById(id).delete();
+        CompanyFindUtils.findById(id, this.companyRepository).delete();
     }
 }
