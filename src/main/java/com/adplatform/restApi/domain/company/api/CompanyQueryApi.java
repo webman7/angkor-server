@@ -1,6 +1,7 @@
 package com.adplatform.restApi.domain.company.api;
 
 import com.adplatform.restApi.domain.company.dao.CompanyRepository;
+import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.company.dto.CompanyMapper;
 import com.adplatform.restApi.domain.company.service.CompanyFindUtils;
@@ -10,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -26,9 +29,17 @@ public class CompanyQueryApi {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/search")
-    public PageDto<CompanyDto.Response.Page> search(
+    public PageDto<CompanyDto.Response.Default> search(
             @PageableDefault Pageable pageable,
             CompanyDto.Request.Search searchRequest) {
         return PageDto.create(this.companyRepository.search(pageable, searchRequest));
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/search/for-signup")
+    public List<CompanyDto.Response.Default> searchForSignUp(
+            @RequestParam Company.Type type,
+            @RequestParam(required = false) String name) {
+        return this.companyRepository.searchForSignUp(type, name);
     }
 }

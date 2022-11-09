@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -63,6 +64,12 @@ public class ApiExceptionHandler {
         String enumValues = message.substring(message.indexOf("["), message.indexOf("]") + 1);
         String errorMessage = MessageFormat.format("The value must correspond to: {0}", enumValues);
         return ErrorResponse.create(1000, errorMessage);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    protected ErrorResponse handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
+        return ErrorResponse.create(1000, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)

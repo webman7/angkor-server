@@ -2,7 +2,7 @@ package com.adplatform.restApi.domain.company.dao;
 
 import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
-import com.adplatform.restApi.domain.company.dto.QCompanyDto_Response_Page;
+import com.adplatform.restApi.domain.company.dto.QCompanyDto_Response_Default;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -24,9 +24,9 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
     private final JPAQueryFactory query;
 
     @Override
-    public Page<CompanyDto.Response.Page> search(Pageable pageable, CompanyDto.Request.Search searchRequest) {
-        List<CompanyDto.Response.Page> content = this.query
-                .select(new QCompanyDto_Response_Page(company.id, company.name))
+    public Page<CompanyDto.Response.Default> search(Pageable pageable, CompanyDto.Request.Search searchRequest) {
+        List<CompanyDto.Response.Default> content = this.query
+                .select(new QCompanyDto_Response_Default(company.id, company.name))
                 .from(company)
                 .where(
                         this.nameContains(searchRequest.getName()),
@@ -44,6 +44,14 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                 .from(company);
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public List<CompanyDto.Response.Default> searchForSignUp(Company.Type type, String name) {
+        return this.query.select(new QCompanyDto_Response_Default(company.id, company.name))
+                .from(company)
+                .where(company.deleted.eq(false), company.type.eq(type), this.nameContains(name))
+                .fetch();
     }
 
     private BooleanExpression nameContains(String name) {

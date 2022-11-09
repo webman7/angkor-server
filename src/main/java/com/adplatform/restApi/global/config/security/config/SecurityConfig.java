@@ -42,6 +42,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/users/**").hasAuthority(ROLE_ADMIN.name())
+                .antMatchers(HttpMethod.GET, "/companies/search/for-signup").permitAll()
                 .antMatchers("/companies/**").hasAuthority(ROLE_ADMIN.name())
                 .antMatchers(HttpMethod.POST, "/campaigns", "/creative")
                 .hasAnyAuthority(ROLE_ADMIN.name(), ROLE_OPERATOR.name(), ROLE_COMPANY_ADMINISTRATOR.name(), ROLE_COMPANY_GENERAL.name())

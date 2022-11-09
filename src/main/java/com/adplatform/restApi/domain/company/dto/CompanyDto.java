@@ -67,12 +67,12 @@ public abstract class CompanyDto {
     public static abstract class Response {
         @Getter
         @Setter
-        public static class Page {
+        public static class Default {
             private Integer id;
             private String name;
 
             @QueryProjection
-            public Page(Integer id, String name) {
+            public Default(Integer id, String name) {
                 this.id = id;
                 this.name = name;
             }
