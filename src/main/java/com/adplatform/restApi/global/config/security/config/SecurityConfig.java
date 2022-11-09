@@ -45,7 +45,8 @@ public class SecurityConfig {
                 .antMatchers("/companies/**").hasAuthority(ROLE_ADMIN.name())
                 .antMatchers(HttpMethod.POST, "/campaigns", "/creative")
                 .hasAnyAuthority(ROLE_ADMIN.name(), ROLE_OPERATOR.name(), ROLE_COMPANY_ADMINISTRATOR.name(), ROLE_COMPANY_GENERAL.name())
-                .antMatchers(HttpMethod.GET, "/campaigns/search/**", "/adgroups/search/**", "/creative/search/**").authenticated()
+                .antMatchers(HttpMethod.GET, "/campaigns/search/**", "/adgroups/search/**", "/creative/search/**", "/ad-type-goal")
+                .authenticated()
                 .antMatchers(HttpMethod.GET, "/media", "/device").authenticated()
                 .antMatchers(HttpMethod.POST, "/change-password").authenticated()
                 .antMatchers(HttpMethod.POST, "/signup", "/login", "/find-password").permitAll()
@@ -63,7 +64,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-    public CorsConfigurationSource corsConfigurationSource() {
+    private CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOriginPattern("*");
         configuration.addAllowedHeader("*");
