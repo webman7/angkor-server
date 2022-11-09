@@ -53,8 +53,9 @@ public class AuthService {
 
     public void signup(AuthDto.Request.SignUp request) {
         this.userQueryService.validateExistsByLoginId(request);
+        this.validateIsEqualPassword(request.getPassword1(), request.getPassword2());
         User user = this.authMapper.toEntity(request, this.passwordEncoder);
-        Role role = this.userQueryService.findRoleByType(Role.Type.ROLE_ADMIN);
+        Role role = this.userQueryService.findRoleByType(Role.Type.ROLE_COMPANY_GENERAL);
         this.userRepository.save(user.updateRole(new UserRole(user, role)));
     }
 
@@ -67,15 +68,14 @@ public class AuthService {
     }
 
     public void changePassword(AuthDto.Request.ChangePassword request) {
-        if (!this.isEqualPassword(request.getPassword1(), request.getPassword2()))
-            throw new ChangePasswordNotEqualException();
+        this.validateIsEqualPassword(request.getPassword1(), request.getPassword2());
         this.userQueryService.findByIdOrElseThrow(SecurityUtil.getLoginUserLoginId())
                 .updateActive(User.Active.Y)
                 .getPassword()
                 .changePassword(this.passwordEncoder, request.getPassword1());
     }
 
-    private boolean isEqualPassword(String password1, String password2) {
-        return password1.equals(password2);
+    private void validateIsEqualPassword(String password1, String password2) {
+        if (!password1.equals(password2)) throw new PasswordNotEqualException();
     }
 }

@@ -27,6 +27,10 @@ public class User extends BaseUpdatedEntity {
         Y, N, W, L
     }
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_info_id")
+    private Company company;
+
     @Column(name = "user_id", nullable = false, length = 256, unique = true)
     private String loginId;
 
@@ -51,18 +55,20 @@ public class User extends BaseUpdatedEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private final Set<UserRole> roles = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "company_info_id")
-    private Company company;
-
     @Builder
-    public User(String loginId, String password, String name, String email, String phone, Active active) {
+    public User(Company company, String loginId, String password, String name, String email, String phone, Active active) {
+        this.company = company;
         this.loginId = loginId;
         this.password = new Password(password);
         this.name = name;
         this.email = new Email(email);
         this.phone = phone;
         this.active = active;
+    }
+
+    public User updateCompany(Company company) {
+        this.company = company;
+        return this;
     }
 
     public User updateRole(UserRole role) {
