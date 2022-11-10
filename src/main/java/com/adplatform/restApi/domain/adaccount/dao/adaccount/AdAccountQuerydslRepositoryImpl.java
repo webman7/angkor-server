@@ -1,5 +1,6 @@
 package com.adplatform.restApi.domain.adaccount.dao.adaccount;
 
+import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.QAdAccountDto_Response_Page;
 import com.adplatform.restApi.domain.campaign.domain.Campaign;
@@ -42,7 +43,7 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                         this.idEq(searchRequest.getId()),
                         this.nameContains(searchRequest.getName())
                         )
-                .orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(Campaign.class, "adaccount", pageable.getSort()).toArray(OrderSpecifier[]::new))
+                .orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(AdAccount.class, "adAccount", pageable.getSort()).toArray(OrderSpecifier[]::new))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize()).fetch();
 

@@ -18,7 +18,7 @@ public class AdAccountDto {
             private Integer id;
             private String name;
 //            private AdAccount.CompanyType companyType;
-            private List<WalletDto.Request.WalletSpend> walletSpend;
+//            private List<WalletDto.Request.WalletSpend> walletSpend;
 //            private String config;
 //            private String adminStopYn;
 //            private String outOfBalanceYn;
@@ -34,7 +34,7 @@ public class AdAccountDto {
             private Integer id;
             private String name;
             private AdAccount.CompanyType companyType;
-//            private List<AdAccountDto.Request.WalletSpend> walletSpend;
+            private List<WalletDto.Request.WalletSpend> walletSpend;
             private Integer creditLimit;
             private String preDeferredPaymentYn;
             private String config;
