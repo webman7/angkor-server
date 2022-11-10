@@ -9,7 +9,7 @@ import com.adplatform.restApi.domain.user.dto.auth.AuthMapper;
 import com.adplatform.restApi.domain.user.exception.*;
 import com.adplatform.restApi.global.config.security.dto.TokenDto;
 import com.adplatform.restApi.global.config.security.service.JwtProvider;
-import com.adplatform.restApi.global.config.security.util.SecurityUtil;
+import com.adplatform.restApi.global.config.security.util.SecurityUtils;
 import com.adplatform.restApi.global.value.Email;
 import com.adplatform.restApi.infra.mail.event.FindPasswordEmailSentEvent;
 import lombok.RequiredArgsConstructor;
@@ -69,7 +69,7 @@ public class AuthService {
 
     public void changePassword(AuthDto.Request.ChangePassword request) {
         this.validateIsEqualPassword(request.getPassword1(), request.getPassword2());
-        this.userQueryService.findByIdOrElseThrow(SecurityUtil.getLoginUserLoginId())
+        this.userQueryService.findByIdOrElseThrow(SecurityUtils.getLoginUserLoginId())
                 .updateActive(User.Active.Y)
                 .getPassword()
                 .changePassword(this.passwordEncoder, request.getPassword1());

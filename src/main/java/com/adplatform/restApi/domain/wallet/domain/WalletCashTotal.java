@@ -7,22 +7,25 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "wallet_cash_total")
-@IdClass(WalletCashTotalId.class)
-public class WalletCashTotal implements Serializable {
-    @Id
-    @Column(name = "adaccount_info_id", columnDefinition = "Integer")
-    private Integer adAccountInfoId;
+public class WalletCashTotal {
+    @EmbeddedId
+    private WalletCashTotalId id;
 
-    @Id
-    @Column(name = "cash_info_id", columnDefinition = "Integer")
-    private Integer cashInfoId;
+    @MapsId("adAccountId")
+    @ManyToOne
+    @JoinColumn(name = "adaccount_info_id")
+    private WalletMaster walletMaster;
+
+    @MapsId("cashId")
+    @ManyToOne
+    @JoinColumn(name = "cash_info_id")
+    private Cash cash;
 
     @Column(name = "amount", columnDefinition = "Integer")
     private Integer amount;

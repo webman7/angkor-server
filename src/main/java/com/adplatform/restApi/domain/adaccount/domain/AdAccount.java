@@ -1,6 +1,7 @@
 package com.adplatform.restApi.domain.adaccount.domain;
 
 import com.adplatform.restApi.domain.company.domain.Company;
+import com.adplatform.restApi.domain.wallet.domain.WalletMaster;
 import com.adplatform.restApi.global.converter.BooleanToStringYOrNConverter;
 import com.adplatform.restApi.global.entity.BaseUpdatedEntity;
 import lombok.AccessLevel;
@@ -39,6 +40,9 @@ public class AdAccount extends BaseUpdatedEntity {
     @ManyToOne
     @JoinColumn(name = "owner_company_info_id")
     private Company ownerCompany;
+
+    @OneToOne(mappedBy = "adAccount", cascade = CascadeType.ALL, orphanRemoval = true)
+    private WalletMaster walletMaster;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "adaccount_type")

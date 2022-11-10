@@ -1,16 +1,31 @@
 package com.adplatform.restApi.domain.adaccount.dao.adaccount;
 
+import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto;
+import com.adplatform.restApi.domain.adaccount.dto.adaccount.QAdAccountDto_Response_Page;
+import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_WalletSpend;
+import com.adplatform.restApi.global.util.QuerydslOrderSpecifierUtil;
+import com.querydsl.core.group.GroupBy;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
-import static com.adplatform.restApi.domain.adaccount.domain.QAdAccount.adAccount;
+import java.util.List;
 
+import static com.adplatform.restApi.domain.adaccount.domain.QAdAccount.adAccount;
+import static com.adplatform.restApi.domain.wallet.domain.QCash.cash;
+import static com.adplatform.restApi.domain.wallet.domain.QWalletCashTotal.walletCashTotal;
+import static com.adplatform.restApi.domain.wallet.domain.QWalletMaster.walletMaster;
+
+@Slf4j
 @RequiredArgsConstructor
 @Repository
 public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslRepository {
@@ -18,30 +33,37 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
     private final JPAQueryFactory query;
 
     @Override
-    public Page<AdAccountDto.Response.Page> mySearch(Pageable pageable, AdAccountDto.Request.MySearch searchRequest) {
-//        List<AdAccountDto.Response.Page> content = this.query.select(new QAdAccountDto_Response_Page(
-//                        adAccount.id,
-//                        adAccount.name,
-//                        adAccount.companyType,
-//                        adAccount.creditLimit,
-//                        adAccount.preDeferredPaymentYn,
-//                        adAccount.config,
-//                        adAccount.adminStopYn,
-//                        adAccount.outOfBalanceYn))
-//                .from(adAccount)
-//                .where(
-//                        this.eqId(searchRequest.getId()),
-//                        this.containsName(searchRequest.getName()))
-//                .orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(AdAccount.class, "adAccount", pageable.getSort()).toArray(OrderSpecifier[]::new))
-//                .offset(pageable.getOffset())
-//                .limit(pageable.getPageSize()).fetch();
-//
-//        JPAQuery<Long> countQuery = this.query.select(adAccount.count())
-//                .where(this.eqId(searchRequest.getId()), this.containsName(searchRequest.getName()))
-//                .from(adAccount);
-//
-//        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
-        return null;
+    public Page<AdAccountDto.Response.Page> search(Pageable pageable, AdAccountDto.Request.MySearch request) {
+        List<AdAccountDto.Response.Page> content = this.query
+                .from(adAccount)
+                .join(adAccount.walletMaster, walletMaster)
+                .leftJoin(walletMaster.cashTotals, walletCashTotal)
+                .leftJoin(walletCashTotal.cash, cash)
+                .where(
+                        cash.saleAffect.eq(true),
+                        this.eqId(request.getId()),
+                        this.containsName(request.getName())
+                )
+                .orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(AdAccount.class, "adAccount", pageable.getSort()).toArray(OrderSpecifier[]::new))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .transform(GroupBy.groupBy(adAccount.id)
+                        .list(new QAdAccountDto_Response_Page(
+                                adAccount.id,
+                                adAccount.name,
+                                new QWalletDto_Response_WalletSpend(walletCashTotal.amount.sum()),
+                                adAccount.creditLimit,
+                                adAccount.preDeferredPayment,
+                                adAccount.config,
+                                adAccount.adminStop,
+                                adAccount.outOfBalance
+                        )));
+
+        JPAQuery<Long> countQuery = this.query.select(adAccount.count())
+                .where(cash.saleAffect.eq(true), this.eqId(request.getId()), this.containsName(request.getName()))
+                .from(adAccount);
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
     private BooleanExpression eqId(Integer id) {

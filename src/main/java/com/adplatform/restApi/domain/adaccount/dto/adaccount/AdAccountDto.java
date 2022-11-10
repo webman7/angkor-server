@@ -5,8 +5,6 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 public class AdAccountDto {
 
     public static abstract class Request {
@@ -26,39 +24,37 @@ public class AdAccountDto {
 
 
     public static abstract class Response {
-
         @Getter
         @Setter
         public static class Page {
             private Integer id;
             private String name;
-            private List<WalletDto.Request.WalletSpend> walletSpend;
+            private WalletDto.Response.WalletSpend walletSpend;
             private Integer creditLimit;
-            private String preDeferredPaymentYn;
+            private boolean preDeferredPayment;
             private String config;
-            private String adminStopYn;
-            private String outOfBalanceYn;
+            private boolean adminStop;
+            private boolean outOfBalance;
 
             @QueryProjection
             public Page(
                     Integer id,
                     String name,
-                    List<WalletDto.Request.WalletSpend> walletSpend,
+                    WalletDto.Response.WalletSpend walletSpend,
                     Integer creditLimit,
-                    String preDeferredPaymentYn,
+                    boolean preDeferredPayment,
                     String config,
-                    String adminStopYn,
-                    String outOfBalanceYn) {
+                    boolean adminStop,
+                    boolean outOfBalance) {
                 this.id = id;
                 this.name = name;
                 this.walletSpend = walletSpend;
                 this.creditLimit = creditLimit;
-                this.preDeferredPaymentYn = preDeferredPaymentYn;
+                this.preDeferredPayment = preDeferredPayment;
                 this.config = config;
-                this.adminStopYn = adminStopYn;
-                this.outOfBalanceYn = outOfBalanceYn;
+                this.adminStop = adminStop;
+                this.outOfBalance = outOfBalance;
             }
         }
-
     }
 }

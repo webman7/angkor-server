@@ -1,26 +1,32 @@
 package com.adplatform.restApi.domain.wallet.domain;
 
+import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
+import com.adplatform.restApi.global.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@AttributeOverride(name = "id", column = @Column(name = "adaccount_info_id"))
 @Table(name = "wallet_master")
-public class WalletMaster {
-    @Id
-    @Column(name = "adaccount_info_id", columnDefinition = "Integer")
-    private Integer adAccountInfoId;
+public class WalletMaster extends BaseEntity {
+    @MapsId
+    @OneToOne
+    @JoinColumn(name = "adaccount_info_id")
+    private AdAccount adAccount;
 
-    @Column(name = "open_date", columnDefinition = "Integer")
+    @OneToMany(mappedBy = "walletMaster", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WalletCashTotal> cashTotals = new ArrayList<>();
+
+    @Column(name = "open_date", columnDefinition = "INT")
     private Integer openDate;
 
-    @Column(name = "close_date", columnDefinition = "Integer")
+    @Column(name = "close_date", columnDefinition = "INT")
     private Integer closeDate;
 }
