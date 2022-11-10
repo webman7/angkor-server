@@ -18,6 +18,10 @@ public class CompanyService {
         this.companyRepository.save(this.companyMapper.toAdvertiserEntity(request));
     }
 
+    public void saveAgency(CompanyDto.Request.Save request) {
+        this.companyRepository.save(this.companyMapper.toAgencyEntity(request));
+    }
+
     public void update(CompanyDto.Request.Update request) {
         this.companyRepository.save(CompanyFindUtils.findById(request.getId(), this.companyRepository).update(request));
     }
