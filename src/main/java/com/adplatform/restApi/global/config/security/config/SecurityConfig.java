@@ -29,6 +29,18 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        this.securityConfig(http);
+        this.userAntMatchers(http);
+        this.companyAntMatchers(http);
+        this.campaignAntMatchers(http);
+        this.adGroupAntMatchers(http);
+        this.creativeAntMatchers(http);
+        this.mediaAndDeviceAntMatchers(http);
+        this.permitAll(http);
+        return http.build();
+    }
+
+    private void securityConfig(HttpSecurity http) throws Exception {
         http
                 .formLogin().disable()
                 .httpBasic().disable()
@@ -38,31 +50,55 @@ public class SecurityConfig {
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-
-                .and()
-                .authorizeRequests()
-                .antMatchers("/users/**").hasAuthority(ROLE_ADMIN.name())
-                .antMatchers(HttpMethod.GET, "/companies/search/for-signup").permitAll()
-                .antMatchers("/companies/**").hasAuthority(ROLE_ADMIN.name())
-                .antMatchers(HttpMethod.POST, "/campaigns", "/creative")
-                .hasAnyAuthority(ROLE_ADMIN.name(), ROLE_OPERATOR.name(), ROLE_COMPANY_ADMINISTRATOR.name(), ROLE_COMPANY_GENERAL.name())
-                .antMatchers(HttpMethod.GET, "/campaigns/search/**", "/adgroups/search/**", "/creative/search/**", "/ad-type-goal")
-                .authenticated()
-                .antMatchers(HttpMethod.GET, "/media", "/device").authenticated()
-                .antMatchers(HttpMethod.POST, "/change-password").authenticated()
-                .antMatchers(HttpMethod.POST, "/signup", "/login", "/find-password").permitAll()
-                .antMatchers(HttpMethod.GET, "/exception/**", "/", "/files/**").permitAll()
-                .anyRequest().authenticated()
-
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(this.customAuthenticationEntryPoint)
                 .accessDeniedHandler(this.customAccessDeniedHandler)
-
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
+    }
 
-        return http.build();
+    private void userAntMatchers(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers("/users/**").hasAuthority(ROLE_ADMIN.name())
+                .antMatchers(HttpMethod.POST, "/change-password").authenticated()
+                .antMatchers(HttpMethod.POST, "/signup", "/login", "/find-password").permitAll();
+    }
+
+    private void companyAntMatchers(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/companies/search/for-signup").permitAll()
+                .antMatchers("/companies/**").hasAuthority(ROLE_ADMIN.name());
+    }
+
+    private void campaignAntMatchers(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/campaigns/search/**", "/ad-type-goal").authenticated()
+                .antMatchers(HttpMethod.POST, "/campaigns")
+                .hasAnyAuthority(ROLE_ADMIN.name(), ROLE_OPERATOR.name(), ROLE_COMPANY_ADMINISTRATOR.name(), ROLE_COMPANY_GENERAL.name());
+    }
+
+    private void adGroupAntMatchers(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers("/adgroups/search/**").authenticated();
+    }
+
+    private void creativeAntMatchers(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers("/creative/search/**").authenticated()
+                .antMatchers("/creative")
+                .hasAnyAuthority(ROLE_ADMIN.name(), ROLE_OPERATOR.name(), ROLE_COMPANY_ADMINISTRATOR.name(), ROLE_COMPANY_GENERAL.name());
+    }
+
+    private void mediaAndDeviceAntMatchers(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/media", "/device").authenticated();
+    }
+
+    private void permitAll(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/exception/**", "/", "/files/**").permitAll()
+                .anyRequest().authenticated();
     }
 
     private CorsConfigurationSource corsConfigurationSource() {

@@ -15,10 +15,9 @@ public class Role extends BaseEntity {
     public enum Type {
         ROLE_ADMIN,
         ROLE_OPERATOR,
-        ROLE_ADVERTISER,
         ROLE_COMPANY_ADMINISTRATOR,
-        ROLE_COMPANY_GENERAL,
-        ROLE_COMPANY_ACCOUNTANT
+        ROLE_COMPANY_ACCOUNTANT,
+        ROLE_COMPANY_GENERAL
     }
 
     @Enumerated(EnumType.STRING)
