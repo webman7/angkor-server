@@ -1,6 +1,5 @@
 package com.adplatform.restApi.domain.adaccount.dto.adaccount;
 
-import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
 import com.adplatform.restApi.domain.wallet.dto.WalletDto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
@@ -33,7 +32,6 @@ public class AdAccountDto {
         public static class Page {
             private Integer id;
             private String name;
-            private AdAccount.CompanyType companyType;
             private List<WalletDto.Request.WalletSpend> walletSpend;
             private Integer creditLimit;
             private String preDeferredPaymentYn;
@@ -42,11 +40,18 @@ public class AdAccountDto {
             private String outOfBalanceYn;
 
             @QueryProjection
-            public Page(Integer id, String name, AdAccount.CompanyType companyType, Integer creditLimit, String preDeferredPaymentYn, String config, String adminStopYn, String outOfBalanceYn) {
+            public Page(
+                    Integer id,
+                    String name,
+                    List<WalletDto.Request.WalletSpend> walletSpend,
+                    Integer creditLimit,
+                    String preDeferredPaymentYn,
+                    String config,
+                    String adminStopYn,
+                    String outOfBalanceYn) {
                 this.id = id;
                 this.name = name;
-                this.companyType = companyType;
-//                this.walletSpend = walletSpend;
+                this.walletSpend = walletSpend;
                 this.creditLimit = creditLimit;
                 this.preDeferredPaymentYn = preDeferredPaymentYn;
                 this.config = config;

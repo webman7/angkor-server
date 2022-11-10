@@ -1,5 +1,6 @@
 package com.adplatform.restApi.domain.company.domain;
 
+import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.user.domain.User;
 import com.adplatform.restApi.global.converter.BooleanToStringYOrNConverter;
@@ -82,6 +83,9 @@ public class Company extends BaseUpdatedEntity {
 
     @OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<User> users = new ArrayList<>();
+
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<AdAccount> adAccounts = new ArrayList<>();
 
     @Builder
     public Company(

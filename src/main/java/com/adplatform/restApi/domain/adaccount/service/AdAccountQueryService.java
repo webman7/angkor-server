@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class AdAccountQueryService {
-
     private final AdAccountRepository adAccountRepository;
 
     public AdAccount findById(Integer id) {

@@ -1,7 +1,7 @@
 package com.adplatform.restApi.domain.adaccount.domain;
 
-import com.adplatform.restApi.domain.adaccount.dao.adaccount.AdAccountQuerydslRepository;
 import com.adplatform.restApi.domain.company.domain.Company;
+import com.adplatform.restApi.global.converter.BooleanToStringYOrNConverter;
 import com.adplatform.restApi.global.entity.BaseUpdatedEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,16 +14,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "adaccount_info")
 public class AdAccount extends BaseUpdatedEntity {
-    /**
-     * 회사 타입
-     */
-    public enum CompanyType {
-        /** 대행사 */
-        AGENCY,
-        /** 광고주 */
-        ADVERTISER
-    }
-
     /**
      * 광고 타입
      */
@@ -42,27 +32,24 @@ public class AdAccount extends BaseUpdatedEntity {
         AD
     }
 
-    @Column(name = "company_info_id", columnDefinition = "Integer")
-    private Integer companyInfoId;
+    @ManyToOne
+    @JoinColumn(name = "company_info_id")
+    private Company company;
 
-    @Column(name = "owner_company_info_id", columnDefinition = "Integer")
-    private Integer ownerCompanyInfoId;
+    @ManyToOne
+    @JoinColumn(name = "owner_company_info_id")
+    private Company ownerCompany;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "adaccount_type")
-    private AdAccount.AdAccountType adAccountType;
+    private AdAccount.AdAccountType type;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "platform_type")
     private AdAccount.PlatformType platformType;
 
-
     @Column(name = "name")
     private String name;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "company_type")
-    private AdAccount.CompanyType companyType;
 
     @Column(name = "business_registration_number", length = 20)
     private String businessRegistrationNumber;
@@ -70,14 +57,16 @@ public class AdAccount extends BaseUpdatedEntity {
     @Column(name = "member_count")
     private Integer memberCount;
 
+    @Convert(converter = BooleanToStringYOrNConverter.class)
     @Column(name = "business_right_yn", nullable = false, columnDefinition = "CHAR(1)")
-    private String businessRightYn;
+    private boolean businessRight;
 
     @Column(name = "credit_limit")
     private Integer creditLimit;
 
+    @Convert(converter = BooleanToStringYOrNConverter.class)
     @Column(name = "pre_deferred_payment_yn", nullable = false, columnDefinition = "CHAR(1)")
-    private String preDeferredPaymentYn;
+    private boolean preDeferredPayment;
 
     @Column(name = "repayment_criteria", length = 10)
     private String repaymentCriteria;
@@ -85,10 +74,11 @@ public class AdAccount extends BaseUpdatedEntity {
     @Column(name = "config", nullable = false, columnDefinition = "CHAR(5)")
     private String config;
 
+    @Convert(converter = BooleanToStringYOrNConverter.class)
     @Column(name = "admin_stop_yn", nullable = false, columnDefinition = "CHAR(1)")
-    private String adminStopYn;
+    private boolean adminStop;
 
+    @Convert(converter = BooleanToStringYOrNConverter.class)
     @Column(name = "out_of_balance_yn", nullable = false, columnDefinition = "CHAR(1)")
-    private String outOfBalanceYn;
-
+    private boolean outOfBalance;
 }

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("adaccounts")
 public class AdAccountQueryApi {
-
     private final AdAccountRepository adAccountRepository;
 
     @GetMapping("/mySearch")
