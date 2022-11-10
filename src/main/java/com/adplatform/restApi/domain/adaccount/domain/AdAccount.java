@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -32,6 +34,9 @@ public class AdAccount extends BaseUpdatedEntity {
         /** 디스플레이 광고 */
         AD
     }
+
+    @OneToMany(mappedBy = "adAccount", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AdAccountUser> adAccountUsers = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "company_info_id")
