@@ -29,9 +29,6 @@ public abstract class CompanyDto {
             @NotBlank
             private String name;
 
-            @NotNull
-            private Company.Type type;
-
             @NotBlank
             @Size(min = 1, max = 20)
             private String registrationNumber;

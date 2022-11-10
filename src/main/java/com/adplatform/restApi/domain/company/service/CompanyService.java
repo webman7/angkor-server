@@ -14,8 +14,8 @@ public class CompanyService {
     private final CompanyRepository companyRepository;
     private final CompanyMapper companyMapper;
 
-    public void save(CompanyDto.Request.Save request) {
-        this.companyRepository.save(this.companyMapper.toEntity(request));
+    public void saveAdvertiser(CompanyDto.Request.Save request) {
+        this.companyRepository.save(this.companyMapper.toAdvertiserEntity(request));
     }
 
     public void update(CompanyDto.Request.Update request) {

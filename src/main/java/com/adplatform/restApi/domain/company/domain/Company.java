@@ -110,7 +110,6 @@ public class Company extends BaseUpdatedEntity {
 
     public Company update(CompanyDto.Request.Update request) {
         this.name = request.getName();
-        this.type = request.getType();
         this.registrationNumber = request.getRegistrationNumber();
         this.representationName = request.getRepresentationName();
         this.businessCategory = request.getBusinessCategory();

@@ -68,6 +68,7 @@ public class SecurityConfig {
     private void companyAntMatchers(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/companies/search/for-signup").permitAll()
+                .antMatchers(HttpMethod.POST, "/companies/advertiser").permitAll()
                 .antMatchers("/companies/**").hasAuthority(ROLE_ADMIN.name());
     }
 

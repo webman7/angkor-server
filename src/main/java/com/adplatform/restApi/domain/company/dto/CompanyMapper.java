@@ -9,11 +9,12 @@ import org.mapstruct.Named;
 
 @Mapper(config = BaseMapperConfig.class, imports = Email.class)
 public interface CompanyMapper {
+    @Mapping(target = "type", expression = "java(Company.Type.ADVERTISER)")
     @Mapping(target = "address", ignore = true)
     @Mapping(target = "taxBillEmail1", qualifiedByName = "createEmail")
     @Mapping(target = "taxBillEmail2", qualifiedByName = "createEmail")
     @Mapping(target = "active", expression = "java(true)")
-    Company toEntity(CompanyDto.Request.Save saveDto);
+    Company toAdvertiserEntity(CompanyDto.Request.Save saveDto);
 
     @Mapping(target = "address", ignore = true)
     @Mapping(target = "taxBillEmail1", qualifiedByName = "getEmail")
