@@ -2,6 +2,7 @@ package com.adplatform.restApi.domain.adaccount.api;
 
 import com.adplatform.restApi.domain.adaccount.dao.adaccount.AdAccountRepository;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto;
+import com.adplatform.restApi.global.config.security.util.SecurityUtils;
 import com.adplatform.restApi.global.dto.PageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,6 @@ public class AdAccountQueryApi {
     public PageDto<AdAccountDto.Response.Page> mySearch(
             @PageableDefault Pageable pageable,
             AdAccountDto.Request.MySearch request) {
-        return PageDto.create(this.adAccountRepository.search(pageable, request));
+        return PageDto.create(this.adAccountRepository.search(pageable, request, SecurityUtils.getLoginUserId()));
     }
 }

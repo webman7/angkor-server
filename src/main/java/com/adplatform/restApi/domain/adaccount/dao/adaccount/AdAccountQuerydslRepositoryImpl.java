@@ -21,6 +21,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 
 import static com.adplatform.restApi.domain.adaccount.domain.QAdAccount.adAccount;
+import static com.adplatform.restApi.domain.adaccount.domain.QAdAccountUser.adAccountUser;
 import static com.adplatform.restApi.domain.wallet.domain.QCash.cash;
 import static com.adplatform.restApi.domain.wallet.domain.QWalletCashTotal.walletCashTotal;
 import static com.adplatform.restApi.domain.wallet.domain.QWalletMaster.walletMaster;
@@ -33,13 +34,15 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
     private final JPAQueryFactory query;
 
     @Override
-    public Page<AdAccountDto.Response.Page> search(Pageable pageable, AdAccountDto.Request.MySearch request) {
+    public Page<AdAccountDto.Response.Page> search(Pageable pageable, AdAccountDto.Request.MySearch request, Integer userId) {
         List<AdAccountDto.Response.Page> content = this.query
                 .from(adAccount)
+                .join(adAccount.adAccountUsers, adAccountUser)
                 .join(adAccount.walletMaster, walletMaster)
                 .leftJoin(walletMaster.cashTotals, walletCashTotal)
                 .leftJoin(walletCashTotal.cash, cash)
                 .where(
+                        adAccountUser.user.id.eq(userId),
                         cash.saleAffect.eq(true),
                         this.eqId(request.getId()),
                         this.containsName(request.getName())
@@ -60,7 +63,11 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                         )));
 
         JPAQuery<Long> countQuery = this.query.select(adAccount.count())
-                .where(cash.saleAffect.eq(true), this.eqId(request.getId()), this.containsName(request.getName()))
+                .where(
+                        adAccountUser.user.id.eq(userId),
+                        cash.saleAffect.eq(true),
+                        this.eqId(request.getId()),
+                        this.containsName(request.getName()))
                 .from(adAccount);
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
