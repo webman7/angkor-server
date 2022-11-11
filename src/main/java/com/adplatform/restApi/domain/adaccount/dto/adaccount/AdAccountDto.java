@@ -1,5 +1,7 @@
 package com.adplatform.restApi.domain.adaccount.dto.adaccount;
 
+import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
+import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
 import com.adplatform.restApi.domain.wallet.dto.WalletDto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
@@ -32,7 +34,7 @@ public class AdAccountDto {
             private WalletDto.Response.WalletSpend walletSpend;
             private Integer creditLimit;
             private boolean preDeferredPayment;
-            private String config;
+            private AdAccount.Config config;
             private boolean adminStop;
             private boolean outOfBalance;
 
@@ -43,7 +45,7 @@ public class AdAccountDto {
                     WalletDto.Response.WalletSpend walletSpend,
                     Integer creditLimit,
                     boolean preDeferredPayment,
-                    String config,
+                    AdAccount.Config config,
                     boolean adminStop,
                     boolean outOfBalance) {
                 this.id = id;
@@ -54,6 +56,36 @@ public class AdAccountDto {
                 this.config = config;
                 this.adminStop = adminStop;
                 this.outOfBalance = outOfBalance;
+            }
+        }
+
+        @Getter
+        @Setter
+        public static class ForAdvertiser {
+            private Integer id;
+            private String name;
+            private String masterEmail;
+            private long memberSize;
+            private AdAccount.Config config;
+            private boolean outOfBalance;
+            private AdAccountUser.RequestStatus requestStatus;
+
+            @QueryProjection
+            public ForAdvertiser(
+                    Integer id,
+                    String name,
+                    String masterEmail,
+                    long memberSize,
+                    AdAccount.Config config,
+                    boolean outOfBalance,
+                    AdAccountUser.RequestStatus requestStatus) {
+                this.id = id;
+                this.name = name;
+                this.masterEmail = masterEmail;
+                this.memberSize = memberSize;
+                this.config = config;
+                this.outOfBalance = outOfBalance;
+                this.requestStatus = requestStatus;
             }
         }
     }

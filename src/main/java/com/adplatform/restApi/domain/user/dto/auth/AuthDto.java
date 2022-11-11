@@ -29,9 +29,9 @@ public abstract class AuthDto {
             private String id;
             @NotBlank
             private String name;
-            @NotEmpty
+            @NotBlank
             private String password1;
-            @NotEmpty
+            @NotBlank
             private String password2;
             private String phone;
         }

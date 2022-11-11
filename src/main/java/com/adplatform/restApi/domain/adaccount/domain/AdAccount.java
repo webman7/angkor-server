@@ -35,6 +35,10 @@ public class AdAccount extends BaseUpdatedEntity {
         AD
     }
 
+    public enum Config {
+        ON, OFF, DEL
+    }
+
     @OneToMany(mappedBy = "adAccount", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AdAccountUser> adAccountUsers = new ArrayList<>();
 
@@ -80,8 +84,9 @@ public class AdAccount extends BaseUpdatedEntity {
     @Column(name = "repayment_criteria", length = 10)
     private String repaymentCriteria;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "config", nullable = false, columnDefinition = "CHAR(5)")
-    private String config;
+    private Config config;
 
     @Convert(converter = BooleanToStringYOrNConverter.class)
     @Column(name = "admin_stop_yn", nullable = false, columnDefinition = "CHAR(1)")
