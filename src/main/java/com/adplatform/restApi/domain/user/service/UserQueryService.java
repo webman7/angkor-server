@@ -19,12 +19,17 @@ public class UserQueryService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
 
+    public User findByIdOrElseThrow(Integer id) {
+        return this.userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
+    }
+
     public void validateExistsByLoginId(AuthDto.Request.SignUp request) {
         if (this.userRepository.existsByLoginId(request.getId()))
             throw new UserAlreadyExistException();
     }
 
-    public User findByIdOrElseThrow(String id) {
+    public User findByLoginIdOrElseThrow(String id) {
         return this.userRepository.findByLoginId(id)
                 .orElseThrow(UserNotFoundException::new);
     }

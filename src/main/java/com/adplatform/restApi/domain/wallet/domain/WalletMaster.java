@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,4 +31,18 @@ public class WalletMaster extends BaseEntity {
 
     @Column(name = "close_date", columnDefinition = "INT")
     private Integer closeDate;
+
+    public WalletMaster(AdAccount adAccount, Integer openDate) {
+        this.adAccount = adAccount;
+        this.openDate = openDate;
+    }
+
+    public static WalletMaster create() {
+        return new WalletMaster(null, Integer.getInteger(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"))));
+    }
+
+    public WalletMaster updateAdAccount(AdAccount adAccount) {
+        this.adAccount = adAccount;
+        return this;
+    }
 }

@@ -10,6 +10,13 @@ import lombok.Setter;
 public class AdAccountDto {
 
     public static abstract class Request {
+        @Getter
+        @Setter
+        public static class Save {
+            private AdAccount.AdAccountType type;
+            private String businessRegistrationNumber;
+            private String name;
+        }
 
         @Getter
         @Setter

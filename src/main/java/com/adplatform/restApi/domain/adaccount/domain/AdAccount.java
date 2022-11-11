@@ -1,10 +1,12 @@
 package com.adplatform.restApi.domain.adaccount.domain;
 
 import com.adplatform.restApi.domain.company.domain.Company;
+import com.adplatform.restApi.domain.user.domain.User;
 import com.adplatform.restApi.domain.wallet.domain.WalletMaster;
 import com.adplatform.restApi.global.converter.BooleanToStringYOrNConverter;
 import com.adplatform.restApi.global.entity.BaseUpdatedEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,9 +23,13 @@ public class AdAccount extends BaseUpdatedEntity {
      * 광고 타입
      */
     public enum AdAccountType {
-        /** 회사 */
+        /**
+         * 회사
+         */
         BUSINESS,
-        /** 개인 */
+        /**
+         * 개인
+         */
         INDIVIDUAL
     }
 
@@ -31,7 +37,9 @@ public class AdAccount extends BaseUpdatedEntity {
      * 플랫폼 타입
      */
     public enum PlatformType {
-        /** 디스플레이 광고 */
+        /**
+         * 디스플레이 광고
+         */
         AD
     }
 
@@ -95,4 +103,42 @@ public class AdAccount extends BaseUpdatedEntity {
     @Convert(converter = BooleanToStringYOrNConverter.class)
     @Column(name = "out_of_balance_yn", nullable = false, columnDefinition = "CHAR(1)")
     private boolean outOfBalance;
+
+    @Builder
+    public AdAccount(
+            User user,
+            AdAccountType type,
+            PlatformType platformType,
+            String name,
+            String businessRegistrationNumber,
+            boolean businessRight,
+            Integer creditLimit,
+            boolean preDeferredPayment,
+            Config config,
+            boolean adminStop,
+            boolean outOfBalance) {
+        this.company = user.getCompany();
+        this.ownerCompany = user.getCompany();
+        this.type = type;
+        this.platformType = platformType;
+        this.name = name;
+        this.businessRegistrationNumber = businessRegistrationNumber;
+        this.businessRight = businessRight;
+        this.creditLimit = creditLimit;
+        this.preDeferredPayment = preDeferredPayment;
+        this.config = config;
+        this.adminStop = adminStop;
+        this.outOfBalance = outOfBalance;
+    }
+
+    public AdAccount addAdAccountUser(User user, AdAccountUser.MemberType memberType, AdAccountUser.RequestStatus requestStatus) {
+        this.adAccountUsers.add(new AdAccountUser(this, user, memberType, requestStatus));
+        return this;
+    }
+
+    public AdAccount changeWalletMaster(WalletMaster walletMaster) {
+        this.walletMaster = walletMaster;
+        this.walletMaster.updateAdAccount(this);
+        return this;
+    }
 }

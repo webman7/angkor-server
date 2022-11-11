@@ -31,7 +31,7 @@ public class AuthService {
 
     @Transactional(noRollbackFor = {UserLoginFailedException.class, PasswordWrongCountExceededException.class})
     public TokenDto login(AuthDto.Request.Login request) {
-        User user = this.userQueryService.findByIdOrElseThrow(request.getId());
+        User user = this.userQueryService.findByLoginIdOrElseThrow(request.getId());
         this.validateUserActive(user.getActive());
         try {
             if (!user.getPassword().validate(this.passwordEncoder, request.getPassword()))
@@ -69,7 +69,7 @@ public class AuthService {
 
     public void changePassword(AuthDto.Request.ChangePassword request) {
         this.validateIsEqualPassword(request.getPassword1(), request.getPassword2());
-        this.userQueryService.findByIdOrElseThrow(SecurityUtils.getLoginUserLoginId())
+        this.userQueryService.findByLoginIdOrElseThrow(SecurityUtils.getLoginUserLoginId())
                 .updateActive(User.Active.Y)
                 .getPassword()
                 .changePassword(this.passwordEncoder, request.getPassword1());
