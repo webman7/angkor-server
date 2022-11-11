@@ -7,14 +7,22 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class AdAccountDto {
 
     public static abstract class Request {
         @Getter
         @Setter
         public static class Save {
+            @NotNull
             private AdAccount.AdAccountType type;
+            @NotBlank
             private String businessRegistrationNumber;
+            @Size(min = 1, max = 20)
+            @NotBlank
             private String name;
         }
 
