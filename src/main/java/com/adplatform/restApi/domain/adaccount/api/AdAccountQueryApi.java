@@ -18,8 +18,8 @@ public class AdAccountQueryApi {
     private final AdAccountRepository adAccountRepository;
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/search")
-    public PageDto<AdAccountDto.Response.Page> mySearch(
+    @GetMapping("/search-for-agency")
+    public PageDto<AdAccountDto.Response.Page> searchForAgency(
             @PageableDefault Pageable pageable,
             AdAccountDto.Request.MySearch request) {
         return PageDto.create(this.adAccountRepository.search(pageable, request, SecurityUtils.getLoginUserId()));
