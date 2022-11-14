@@ -50,6 +50,20 @@ public abstract class CampaignDto {
             @Size(min = 1)
             private String name;
         }
+
+        @Getter
+        @Setter
+        public static class Update implements CampaignIdGetter {
+            private Integer campaignId;
+            @Size(min = 2)
+            @NotNull
+            private String name;
+            @NotNull
+            private Long dailyBudgetAmount;
+            private Campaign.GoalType goalType;
+            private String trackingId;
+            private Campaign.TrackingType trackingType;
+        }
     }
     public static abstract class Response {
         @Getter

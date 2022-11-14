@@ -2,6 +2,7 @@ package com.adplatform.restApi.domain.campaign.domain;
 
 import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
 import com.adplatform.restApi.domain.adgroup.domain.AdGroup;
+import com.adplatform.restApi.domain.campaign.dto.CampaignDto;
 import com.adplatform.restApi.global.entity.BaseUpdatedEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -135,5 +136,14 @@ public class Campaign extends BaseUpdatedEntity {
         this.config = config;
         this.systemConfig = systemConfig;
         this.status = status;
+    }
+
+    public Campaign update(CampaignDto.Request.Update request) {
+        this.name = request.getName();
+        this.dailyBudgetAmount = request.getDailyBudgetAmount();
+        this.goalType = request.getGoalType();
+        this.trackingId = request.getTrackingId();
+        this.trackingType = request.getTrackingType();
+        return this;
     }
 }

@@ -25,6 +25,13 @@ public class CampaignCommandApi {
 
     @AuthorizedAdAccount
     @ResponseStatus(HttpStatus.OK)
+    @PatchMapping
+    public void update(@RequestBody @Valid CampaignDto.Request.Update request) {
+        this.campaignSaveService.update(request);
+    }
+
+    @AuthorizedAdAccount
+    @ResponseStatus(HttpStatus.OK)
     @PostMapping("/adgroups")
     public void adGroupSave(@RequestBody @Valid AdGroupDto.Request.Save request) {
         this.campaignSaveService.adGroupSave(request);

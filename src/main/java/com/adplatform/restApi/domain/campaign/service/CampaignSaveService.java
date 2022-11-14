@@ -54,4 +54,9 @@ public class CampaignSaveService {
     private List<AdGroupSavedEvent> mapToAdGroupSavedEvent(List<AdGroupDto.Request.FirstSave> request, Campaign campaign) {
         return request.stream().map(a -> this.adGroupEventMapper.toEvent(a, campaign)).collect(Collectors.toList());
     }
+
+    public void update(CampaignDto.Request.Update request) {
+        CampaignFindUtils.findById(request.getCampaignId(), this.campaignRepository)
+                .update(request);
+    }
 }
