@@ -63,3 +63,8 @@ VALUES (1, 1);
 
 INSERT INTO user_roles (user_no, roles_info_id)
 VALUES (2, 3);
+
+-- cash_info
+INSERT INTO cash_info (id, name, sale_affect_yn, refund_yn, priority) VALUES (1, '후불캐시', 'Y', 'N', 3);
+INSERT INTO cash_info (id, name, sale_affect_yn, refund_yn, priority) VALUES (2, '선불캐시', 'Y', 'Y', 2);
+INSERT INTO cash_info (id, name, sale_affect_yn, refund_yn, priority) VALUES (3, '무상캐시', 'N', 'N', 1);

@@ -28,7 +28,7 @@ public class AdAccountDto {
 
         @Getter
         @Setter
-        public static class MySearch {
+        public static class ForAgencySearch {
             private Integer id;
             private String name;
 //            private AdAccount.CompanyType companyType;
@@ -43,7 +43,7 @@ public class AdAccountDto {
     public static abstract class Response {
         @Getter
         @Setter
-        public static class Page {
+        public static class ForAgencySearch {
             private Integer id;
             private String name;
             private WalletDto.Response.WalletSpend walletSpend;
@@ -54,7 +54,7 @@ public class AdAccountDto {
             private boolean outOfBalance;
 
             @QueryProjection
-            public Page(
+            public ForAgencySearch(
                     Integer id,
                     String name,
                     WalletDto.Response.WalletSpend walletSpend,
@@ -76,7 +76,7 @@ public class AdAccountDto {
 
         @Getter
         @Setter
-        public static class ForAdvertiser {
+        public static class ForAdvertiserSearch {
             private Integer id;
             private String name;
             private String masterEmail;
@@ -86,7 +86,7 @@ public class AdAccountDto {
             private AdAccountUser.RequestStatus requestStatus;
 
             @QueryProjection
-            public ForAdvertiser(
+            public ForAdvertiserSearch(
                     Integer id,
                     String name,
                     String masterEmail,

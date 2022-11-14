@@ -26,4 +26,7 @@ public class Cash extends BaseEntity {
     @Convert(converter = BooleanToStringYOrNConverter.class)
     @Column(name = "refund_yn", columnDefinition = "CHAR")
     private boolean refund;
+
+    @Column(name = "priority", columnDefinition = "TINYINT")
+    private int priority;
 }

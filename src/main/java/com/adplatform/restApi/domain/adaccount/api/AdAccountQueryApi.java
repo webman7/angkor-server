@@ -19,15 +19,15 @@ public class AdAccountQueryApi {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/search-for-agency")
-    public PageDto<AdAccountDto.Response.Page> searchForAgency(
+    public PageDto<AdAccountDto.Response.ForAgencySearch> searchForAgency(
             @PageableDefault Pageable pageable,
-            AdAccountDto.Request.MySearch request) {
-        return PageDto.create(this.adAccountRepository.search(pageable, request, SecurityUtils.getLoginUserId()));
+            AdAccountDto.Request.ForAgencySearch request) {
+        return PageDto.create(this.adAccountRepository.searchForAgency(pageable, request, SecurityUtils.getLoginUserId()));
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/search-for-advertiser")
-    public PageDto<AdAccountDto.Response.ForAdvertiser> searchForAdvertiser(
+    public PageDto<AdAccountDto.Response.ForAdvertiserSearch> searchForAdvertiser(
             @PageableDefault Pageable pageable,
             @RequestParam(required = false) Integer id,
             @RequestParam(required = false) String name,
