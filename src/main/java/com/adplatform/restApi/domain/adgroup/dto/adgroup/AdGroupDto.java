@@ -1,9 +1,11 @@
 package com.adplatform.restApi.domain.adgroup.dto.adgroup;
 
+import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountIdGetter;
 import com.adplatform.restApi.domain.adgroup.domain.AdGroup;
 import com.adplatform.restApi.domain.adgroup.dto.schedule.AdGroupScheduleDto;
 import com.adplatform.restApi.domain.adgroup.dto.target.AdGroupDemographicTargetDto;
 import com.adplatform.restApi.domain.campaign.domain.Campaign;
+import com.adplatform.restApi.domain.campaign.dto.CampaignIdGetter;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -47,12 +49,21 @@ public abstract class AdGroupDto {
 
         @Getter
         @Setter
-        public static class Save {
+        public static class Save implements CampaignIdGetter {
             @NotNull
             private Integer campaignId;
             @NotNull
             @Size(min = 1)
             private List<FirstSave> adGroups;
+        }
+
+        @Getter
+        @Setter
+        public static class Search implements AdAccountIdGetter {
+            @NotNull
+            private Integer adAccountId;
+            private Integer campaignId;
+            private String name;
         }
     }
 

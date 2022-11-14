@@ -1,6 +1,7 @@
 package com.adplatform.restApi.domain.creative.dto;
 
-import com.adplatform.restApi.domain.adgroup.service.AdGroupQueryService;
+import com.adplatform.restApi.domain.adgroup.dao.adgroup.AdGroupRepository;
+import com.adplatform.restApi.domain.adgroup.service.AdGroupFindUtils;
 import com.adplatform.restApi.domain.creative.domain.Creative;
 import com.adplatform.restApi.domain.creative.domain.CreativeLanding;
 import com.adplatform.restApi.global.dto.BaseMapperConfig;
@@ -9,13 +10,13 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Mapper(config = BaseMapperConfig.class)
+@Mapper(config = BaseMapperConfig.class, imports = AdGroupFindUtils.class)
 public abstract class CreativeMapper {
     @Autowired
-    protected AdGroupQueryService adGroupQueryService;
+    protected AdGroupRepository adGroupRepository;
 
     @Mapping(target = "representativeId", constant = "1")
-    @Mapping(target = "adGroup", expression = ("java(adGroupQueryService.findById(dto.getAdGroupId()))"))
+    @Mapping(target = "adGroup", expression = ("java(AdGroupFindUtils.findById(dto.getAdGroupId(), this.adGroupRepository))"))
     @Mapping(target = "files", ignore = true)
     @Mapping(target = "opinionProofFiles", ignore = true)
     @Mapping(target = "landing", source = "dto", qualifiedByName = "mapCreativeLanding")

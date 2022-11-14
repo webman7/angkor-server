@@ -1,5 +1,7 @@
 package com.adplatform.restApi.domain.creative.dto;
 
+import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountIdGetter;
+import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupIdGetter;
 import com.adplatform.restApi.domain.creative.domain.Creative;
 import com.adplatform.restApi.domain.creative.domain.CreativeFile;
 import com.adplatform.restApi.domain.creative.domain.CreativeLanding;
@@ -19,7 +21,7 @@ public abstract class CreativeDto {
     public abstract static class Request {
         @Getter
         @Setter
-        public static class Save {
+        public static class Save implements AdGroupIdGetter {
             @NotNull
             private Integer adGroupId;
             @NotNull
@@ -47,6 +49,14 @@ public abstract class CreativeDto {
             private boolean frequencyType;
             private int frequency;
             private String opinion;
+        }
+
+        @Getter
+        @Setter
+        public static class Search implements AdAccountIdGetter {
+            @NotNull
+            private Integer adAccountId;
+            private String name;
         }
     }
 

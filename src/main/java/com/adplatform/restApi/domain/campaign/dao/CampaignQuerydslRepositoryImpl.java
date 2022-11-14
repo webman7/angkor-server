@@ -23,7 +23,6 @@ import static com.adplatform.restApi.domain.campaign.domain.QAdGoal.adGoal;
 import static com.adplatform.restApi.domain.campaign.domain.QAdType.adType;
 import static com.adplatform.restApi.domain.campaign.domain.QAdTypeAndGoal.adTypeAndGoal;
 import static com.adplatform.restApi.domain.campaign.domain.QCampaign.campaign;
-import static com.querydsl.core.group.GroupBy.groupBy;
 
 @RequiredArgsConstructor
 @Repository
@@ -31,36 +30,38 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
     private final JPAQueryFactory query;
 
     @Override
-    public Page<CampaignDto.Response.Page> search(Pageable pageable) {
-        List<CampaignDto.Response.Page> content = this.query.from(campaign)
+    public Page<CampaignDto.Response.Page> search(CampaignDto.Request.Search request, Pageable pageable) {
+        List<CampaignDto.Response.Page> content = this.query.select(new QCampaignDto_Response_Page(
+                        campaign.id,
+                        new QAdTypeAndGoalDto(adType.name, adGoal.name),
+                        campaign.name,
+                        campaign.dailyBudgetAmount,
+                        campaign.config,
+                        campaign.systemConfig,
+                        campaign.status,
+                        campaign.createdAt,
+                        campaign.updatedAt
+                ))
+                .from(campaign)
                 .join(campaign.adTypeAndGoal, adTypeAndGoal)
                 .join(adTypeAndGoal.adType, adType)
                 .join(adTypeAndGoal.adGoal, adGoal)
                 .orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(Campaign.class, "campaign", pageable.getSort()).toArray(OrderSpecifier[]::new))
+                .where(this.eqAdAccountId(request.getAdAccountId()), this.containsName(request.getName()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .transform(groupBy(campaign.id)
-                        .list(new QCampaignDto_Response_Page(
-                                campaign.id,
-                                new QAdTypeAndGoalDto(adType.name, adGoal.name),
-                                campaign.name,
-                                campaign.dailyBudgetAmount,
-                                campaign.config,
-                                campaign.systemConfig,
-                                campaign.status,
-                                campaign.createdAt,
-                                campaign.updatedAt
-                        )));
+                .fetch();
 
         JPAQuery<Long> countQuery = this.query.select(campaign.count())
                 .from(campaign)
-                .join(campaign.adTypeAndGoal, adTypeAndGoal);
+                .join(campaign.adTypeAndGoal, adTypeAndGoal)
+                .where(this.eqAdAccountId(request.getAdAccountId()), this.containsName(request.getName()));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
     @Override
-    public Page<CampaignDto.Response.ForSaveAdGroup> searchForSaveAdGroup(Pageable pageable, String name) {
+    public Page<CampaignDto.Response.ForSaveAdGroup> searchForSaveAdGroup(CampaignDto.Request.Search request, Pageable pageable) {
         List<CampaignDto.Response.ForSaveAdGroup> content = this.query
                 .select(new QCampaignDto_Response_ForSaveAdGroup(
                         campaign.id,
@@ -72,7 +73,10 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
                 .join(campaign.adTypeAndGoal, adTypeAndGoal)
                 .join(adTypeAndGoal.adType, adType)
                 .join(adTypeAndGoal.adGoal, adGoal)
-                .where(campaign.status.ne(Campaign.Status.CANCELED), this.containsName(name))
+                .where(
+                        this.eqAdAccountId(request.getAdAccountId()),
+                        campaign.status.ne(Campaign.Status.CANCELED),
+                        this.containsName(request.getName()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -80,9 +84,16 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
         JPAQuery<Long> countQuery = this.query.select(campaign.count())
                 .from(campaign)
                 .join(campaign.adTypeAndGoal, adTypeAndGoal)
-                .where(campaign.status.ne(Campaign.Status.CANCELED), this.containsName(name));
+                .where(
+                        this.eqAdAccountId(request.getAdAccountId()),
+                        campaign.status.ne(Campaign.Status.CANCELED),
+                        this.containsName(request.getName()));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    private BooleanExpression eqAdAccountId(Integer adAccountId) {
+        return Objects.nonNull(adAccountId) ? campaign.adAccount.id.eq(adAccountId) : null;
     }
 
     private BooleanExpression containsName(String name) {

@@ -82,7 +82,7 @@ public class SecurityConfig {
     private void campaignAntMatchers(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/campaigns/search/**", "/ad-type-goal").authenticated()
-                .antMatchers(HttpMethod.POST, "/campaigns")
+                .antMatchers(HttpMethod.POST, "/campaigns/**")
                 .hasAnyAuthority(ROLE_ADMIN.name(), ROLE_OPERATOR.name(), ROLE_COMPANY_ADMINISTRATOR.name(), ROLE_COMPANY_GENERAL.name());
     }
 
@@ -93,8 +93,8 @@ public class SecurityConfig {
 
     private void creativeAntMatchers(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/creative/search/**").authenticated()
-                .antMatchers("/creative")
+                .antMatchers("/creatives/search/**").authenticated()
+                .antMatchers("/creatives")
                 .hasAnyAuthority(ROLE_ADMIN.name(), ROLE_OPERATOR.name(), ROLE_COMPANY_ADMINISTRATOR.name(), ROLE_COMPANY_GENERAL.name());
     }
 

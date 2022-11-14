@@ -52,7 +52,7 @@ public class AdGroupQuerydslRepositoryImpl implements AdGroupQuerydslRepository 
     }
 
     @Override
-    public Page<AdGroupDto.Response.Default> search(Pageable pageable, Integer campaignId) {
+    public Page<AdGroupDto.Response.Default> search(AdGroupDto.Request.Search request, Pageable pageable) {
         List<AdGroupDto.Response.Default> content = this.query.select(new QAdGroupDto_Response_Default(
                         adGroup.id,
                         adGroup.name,
@@ -73,7 +73,10 @@ public class AdGroupQuerydslRepositoryImpl implements AdGroupQuerydslRepository 
                 .from(adGroup)
                 .join(adGroup.campaign, campaign)
                 .join(adGroup.adGroupSchedule, adGroupSchedule)
-                .where(this.eqCampaignId(campaignId))
+                .where(
+                        this.eqAdAccountId(request.getAdAccountId()),
+                        this.eqCampaignId(request.getCampaignId()),
+                        this.containsName(request.getName()))
                 .orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(AdGroup.class, "adGroup", pageable.getSort()).toArray(OrderSpecifier[]::new))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -81,28 +84,41 @@ public class AdGroupQuerydslRepositoryImpl implements AdGroupQuerydslRepository 
 
         JPAQuery<Long> countQuery = this.query.select(adGroup.count())
                 .from(adGroup)
-                .where(this.eqCampaignId(campaignId));
+                .where(
+                        this.eqAdAccountId(request.getAdAccountId()),
+                        this.eqCampaignId(request.getCampaignId()),
+                        this.containsName(request.getName()));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
     @Override
-    public Page<AdGroupDto.Response.ForSaveCreative> searchForSaveCreative(Pageable pageable, String name) {
+    public Page<AdGroupDto.Response.ForSaveCreative> searchForSaveCreative(AdGroupDto.Request.Search request, Pageable pageable) {
         List<AdGroupDto.Response.ForSaveCreative> content = this.query.select(Projections.constructor(
                         AdGroupDto.Response.ForSaveCreative.class,
                         adGroup.id, adGroup.name, campaign.id, campaign.name))
                 .from(adGroup)
                 .join(adGroup.campaign, campaign)
-                .where(adGroup.status.ne(Campaign.Status.CANCELED), this.containsName(name))
+                .where(
+                        this.eqAdAccountId(request.getAdAccountId()),
+                        adGroup.status.ne(Campaign.Status.CANCELED),
+                        this.containsName(request.getName()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
         JPAQuery<Long> countQuery = this.query.select(adGroup.count())
                 .from(adGroup)
-                .where(adGroup.status.ne(Campaign.Status.CANCELED), this.containsName(name));
+                .where(
+                        this.eqAdAccountId(request.getAdAccountId()),
+                        adGroup.status.ne(Campaign.Status.CANCELED),
+                        this.containsName(request.getName()));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    private BooleanExpression eqAdAccountId(Integer adAccountId) {
+        return nonNull(adAccountId) ? adGroup.campaign.adAccount.id.eq(adAccountId) : null;
     }
 
     private BooleanExpression eqCampaignId(Integer campaignId) {

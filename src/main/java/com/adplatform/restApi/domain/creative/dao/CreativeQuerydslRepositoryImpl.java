@@ -16,8 +16,10 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.adplatform.restApi.domain.adgroup.domain.QAdGroup.adGroup;
+import static com.adplatform.restApi.domain.campaign.domain.QCampaign.campaign;
 import static com.adplatform.restApi.domain.creative.domain.QCreative.creative;
 import static com.adplatform.restApi.domain.creative.domain.QCreativeFile.creativeFile;
 
@@ -27,7 +29,7 @@ public class CreativeQuerydslRepositoryImpl implements CreativeQuerydslRepositor
     private final JPAQueryFactory query;
 
     @Override
-    public Page<CreativeDto.Response.Default> search(Pageable pageable, String name) {
+    public Page<CreativeDto.Response.Default> search(CreativeDto.Request.Search request, Pageable pageable) {
         List<CreativeDto.Response.Default> content = this.query.select(new QCreativeDto_Response_Default(
                         creative.id,
                         creative.name,
@@ -42,7 +44,8 @@ public class CreativeQuerydslRepositoryImpl implements CreativeQuerydslRepositor
                 .from(creative)
                 .join(creative.adGroup, adGroup)
                 .join(creative.files, creativeFile)
-                .where(this.containsName(name))
+                .join(adGroup.campaign, campaign)
+                .where(this.eqAdAccountId(request.getAdAccountId()), this.containsName(request.getName()))
                 .orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(Creative.class, "creative", pageable.getSort()).toArray(OrderSpecifier[]::new))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -52,9 +55,13 @@ public class CreativeQuerydslRepositoryImpl implements CreativeQuerydslRepositor
                 .from(creative)
                 .join(creative.adGroup, adGroup)
                 .join(creative.files, creativeFile)
-                .where(this.containsName(name));
+                .where(this.eqAdAccountId(request.getAdAccountId()), this.containsName(request.getName()));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    private BooleanExpression eqAdAccountId(Integer adAccountId) {
+        return Objects.nonNull(adAccountId) ? adGroup.campaign.adAccount.id.eq(adAccountId) : null;
     }
 
     private BooleanExpression containsName(String name) {

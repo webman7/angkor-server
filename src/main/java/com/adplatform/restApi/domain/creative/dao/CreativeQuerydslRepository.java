@@ -5,5 +5,5 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface CreativeQuerydslRepository {
-    Page<CreativeDto.Response.Default> search(Pageable pageable, String name);
+    Page<CreativeDto.Response.Default> search(CreativeDto.Request.Search request, Pageable pageable);
 }

@@ -1,5 +1,6 @@
 package com.adplatform.restApi.domain.campaign.domain;
 
+import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
 import com.adplatform.restApi.domain.adgroup.domain.AdGroup;
 import com.adplatform.restApi.global.entity.BaseUpdatedEntity;
 import lombok.AccessLevel;
@@ -79,8 +80,9 @@ public class Campaign extends BaseUpdatedEntity {
     @OneToMany(mappedBy = "campaign", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<AdGroup> adGroups = new ArrayList<>();
 
-//    @Column(name = "adaccount_info_id")
-//    private adAccount;
+    @ManyToOne
+    @JoinColumn(name = "adaccount_info_id")
+    private AdAccount adAccount;
 
     @Column(name = "name", length = 50, nullable = false)
     private String name;
@@ -114,6 +116,7 @@ public class Campaign extends BaseUpdatedEntity {
     @Builder
     public Campaign(
             AdTypeAndGoal adTypeAndGoal,
+            AdAccount adAccount,
             String name,
             Long dailyBudgetAmount,
             GoalType goalType,
@@ -123,6 +126,7 @@ public class Campaign extends BaseUpdatedEntity {
             SystemConfig systemConfig,
             Status status) {
         this.adTypeAndGoal = adTypeAndGoal;
+        this.adAccount = adAccount;
         this.name = name;
         this.dailyBudgetAmount = dailyBudgetAmount;
         this.goalType = goalType;

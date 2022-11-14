@@ -22,8 +22,8 @@ public class CampaignQueryService {
     private final CampaignRepository campaignRepository;
     private final AdGroupService adGroupService;
 
-    public Page<CampaignDto.Response.Page> search(Pageable pageable) {
-        Page<CampaignDto.Response.Page> pages = this.campaignRepository.search(pageable);
+    public Page<CampaignDto.Response.Page> search(CampaignDto.Request.Search request, Pageable pageable) {
+        Page<CampaignDto.Response.Page> pages = this.campaignRepository.search(request, pageable);
         List<Integer> campaignIds = pages.stream().map(CampaignDto.Response.Page::getId).collect(Collectors.toList());
         List<FirstStartDateAndLastEndDate> dates = this.adGroupService.findFirstStartDateAndLastEndDateByCampaignId(campaignIds);
         this.mapToFirstStartDateAndLastEndDate(pages.getContent(), dates);
@@ -42,7 +42,7 @@ public class CampaignQueryService {
                 .setAdGroupSchedulesLastEndDate(map.get(campaign.getId()).getLastEndDate()));
     }
 
-    public Page<CampaignDto.Response.ForSaveAdGroup> searchForSaveAdGroup(Pageable pageable, String name) {
-        return this.campaignRepository.searchForSaveAdGroup(pageable, name);
+    public Page<CampaignDto.Response.ForSaveAdGroup> searchForSaveAdGroup(CampaignDto.Request.Search request, Pageable pageable) {
+        return this.campaignRepository.searchForSaveAdGroup(request, pageable);
     }
 }

@@ -1,5 +1,6 @@
 package com.adplatform.restApi.domain.campaign.dto;
 
+import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountIdGetter;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupDto;
 import com.adplatform.restApi.domain.campaign.domain.Campaign;
 import com.querydsl.core.annotations.QueryProjection;
@@ -17,7 +18,9 @@ public abstract class CampaignDto {
     public static abstract class Request {
         @Getter
         @Setter
-        public static class Save {
+        public static class Save implements AdAccountIdGetter {
+            @NotNull
+            private Integer adAccountId;
             @NotNull
             @Valid
             private AdTypeAndGoalDto adTypeAndGoal;
@@ -32,6 +35,20 @@ public abstract class CampaignDto {
             private Campaign.GoalType goalType;
             private String trackingId;
             private Campaign.TrackingType trackingType;
+
+            @Override
+            public Integer getAdAccountId() {
+                return this.adAccountId;
+            }
+        }
+
+        @Getter
+        @Setter
+        public static class Search implements AdAccountIdGetter {
+            @NotNull
+            private Integer adAccountId;
+            @Size(min = 1)
+            private String name;
         }
     }
     public static abstract class Response {

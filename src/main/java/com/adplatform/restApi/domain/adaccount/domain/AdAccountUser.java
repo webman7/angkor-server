@@ -40,12 +40,12 @@ public class AdAccountUser {
     private final AdAccountUserId id = new AdAccountUserId();
 
     @MapsId("adAccountId")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "adaccount_info_id")
     private AdAccount adAccount;
 
     @MapsId("userId")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_no")
     private User user;
 

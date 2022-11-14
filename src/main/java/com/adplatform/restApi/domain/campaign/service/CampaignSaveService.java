@@ -1,5 +1,8 @@
 package com.adplatform.restApi.domain.campaign.service;
 
+import com.adplatform.restApi.domain.adaccount.dao.adaccount.AdAccountRepository;
+import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
+import com.adplatform.restApi.domain.adaccount.service.AdAccountFindUtils;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupDto;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupEventMapper;
 import com.adplatform.restApi.domain.adgroup.event.AdGroupSavedEvent;
@@ -25,6 +28,7 @@ public class CampaignSaveService {
     private final ApplicationEventPublisher eventPublisher;
     private final CampaignRepository campaignRepository;
     private final AdTypeAndGoalRepository adTypeAndGoalRepository;
+    private final AdAccountRepository adAccountRepository;
     private final CampaignMapper campaignMapper;
     private final AdGroupEventMapper adGroupEventMapper;
 
@@ -32,7 +36,8 @@ public class CampaignSaveService {
         AdTypeAndGoal adTypeAndGoal = this.findAdTypeAndGoal(
                 request.getAdTypeAndGoal().getAdTypeName(),
                 request.getAdTypeAndGoal().getAdGoalName());
-        Campaign campaign = this.campaignRepository.save(this.campaignMapper.toEntity(request, adTypeAndGoal));
+        AdAccount adAccount = AdAccountFindUtils.findById(request.getAdAccountId(), this.adAccountRepository);
+        Campaign campaign = this.campaignRepository.save(this.campaignMapper.toEntity(request, adTypeAndGoal, adAccount));
         this.mapToAdGroupSavedEvent(request.getAdGroups(), campaign).forEach(this.eventPublisher::publishEvent);
     }
 

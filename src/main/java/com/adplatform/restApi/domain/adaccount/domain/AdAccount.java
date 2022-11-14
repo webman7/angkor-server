@@ -1,5 +1,6 @@
 package com.adplatform.restApi.domain.adaccount.domain;
 
+import com.adplatform.restApi.domain.campaign.domain.Campaign;
 import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.user.domain.User;
 import com.adplatform.restApi.domain.wallet.domain.WalletMaster;
@@ -49,6 +50,9 @@ public class AdAccount extends BaseUpdatedEntity {
 
     @OneToMany(mappedBy = "adAccount", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AdAccountUser> adAccountUsers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "adAccount", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Campaign> campaigns = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "company_info_id")
