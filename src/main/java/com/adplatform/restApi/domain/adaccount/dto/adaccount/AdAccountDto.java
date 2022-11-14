@@ -2,6 +2,7 @@ package com.adplatform.restApi.domain.adaccount.dto.adaccount;
 
 import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
 import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
+import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.wallet.dto.WalletDto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
@@ -46,6 +47,7 @@ public class AdAccountDto {
         public static class ForAgencySearch {
             private Integer id;
             private String name;
+            private Company.Type companyType;
             private WalletDto.Response.WalletSpend walletSpend;
             private Integer creditLimit;
             private boolean preDeferredPayment;
@@ -57,6 +59,7 @@ public class AdAccountDto {
             public ForAgencySearch(
                     Integer id,
                     String name,
+                    Company.Type companyType,
                     WalletDto.Response.WalletSpend walletSpend,
                     Integer creditLimit,
                     boolean preDeferredPayment,
@@ -65,6 +68,7 @@ public class AdAccountDto {
                     boolean outOfBalance) {
                 this.id = id;
                 this.name = name;
+                this.companyType = companyType;
                 this.walletSpend = walletSpend;
                 this.creditLimit = creditLimit;
                 this.preDeferredPayment = preDeferredPayment;
