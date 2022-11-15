@@ -1,5 +1,6 @@
 package com.adplatform.restApi.domain.adgroup.domain;
 
+import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupDto;
 import com.adplatform.restApi.domain.campaign.domain.Campaign;
 import com.adplatform.restApi.domain.creative.domain.Creative;
 import com.adplatform.restApi.global.converter.BooleanToStringYOrNConverter;
@@ -230,5 +231,19 @@ public class AdGroup extends BaseUpdatedEntity {
             if (!this.devices.contains(d)) this.devices.add(d);
         });
         return this;
+    }
+
+    public void update(AdGroupDto.Request.Update request) {
+        this.demographicTarget.update(request.getDemographicTarget());
+        this.adGroupSchedule.update(request.getAdGroupSchedule());
+        this.name = request.getName();
+        this.pacing = request.getPacing();
+        this.bidAmount = request.getBidAmount();
+        this.bidStrategy = request.getBidStrategy();
+        this.dailyBudgetAmount = request.getDailyBudgetAmount();
+        this.fullDeviceDisplay = request.isFullDeviceDisplay();
+        this.onlyWifiDisplay = request.isOnlyWifiDisplay();
+        this.allMedia = request.isAllMedia();
+        this.onlyAdult = request.isOnlyAdult();
     }
 }

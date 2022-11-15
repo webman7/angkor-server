@@ -65,6 +65,13 @@ public abstract class AdGroupDto {
             private Integer campaignId;
             private String name;
         }
+
+        @Getter
+        @Setter
+        public static class Update extends FirstSave implements AdGroupIdGetter {
+            @NotNull
+            private Integer adGroupId;
+        }
     }
 
     public static abstract class Response {

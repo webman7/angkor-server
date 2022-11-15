@@ -1,5 +1,6 @@
 package com.adplatform.restApi.domain.adgroup.domain;
 
+import com.adplatform.restApi.domain.adgroup.dto.schedule.AdGroupScheduleDto;
 import com.adplatform.restApi.global.converter.BooleanToStringYOrNConverter;
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -100,5 +101,19 @@ public class AdGroupSchedule {
         this.fridayTime = fridayTime;
         this.saturdayTime = saturdayTime;
         this.sundayTime = sundayTime;
+    }
+
+    public void update(AdGroupScheduleDto.Request.FirstSave request) {
+        this.startDate = request.getStartDate();
+        this.endDate = request.getEndDate();
+        this.lateNightTargeting = request.isLateNightTargeting();
+        this.hasDetailTime = request.isHasDetailTime();
+        this.mondayTime.update(request.getMondayTime());
+        this.tuesdayTime.update(request.getTuesdayTime());
+        this.wednesdayTime.update(request.getWednesdayTime());
+        this.thursdayTime.update(request.getThursdayTime());
+        this.fridayTime.update(request.getFridayTime());
+        this.saturdayTime.update(request.getSaturdayTime());
+        this.sundayTime.update(request.getSundayTime());
     }
 }

@@ -1,5 +1,6 @@
 package com.adplatform.restApi.domain.adgroup.domain;
 
+import com.adplatform.restApi.domain.adgroup.dto.target.AdGroupDemographicTargetDto;
 import com.adplatform.restApi.global.constant.Gender;
 import com.adplatform.restApi.global.converter.BooleanToStringYOrNConverter;
 import com.adplatform.restApi.global.converter.StringListToStringConverter;
@@ -75,5 +76,12 @@ public class AdGroupDemographicTarget {
         this.ages = ages;
         this.allGender = allGender;
         this.gender = gender;
+    }
+
+    public void update(AdGroupDemographicTargetDto.Request.FirstSave request) {
+        this.allAge = request.isAllAge();
+        this.ages = request.getAges();
+        this.allGender = request.isAllGender();
+        this.gender = request.getGender();
     }
 }

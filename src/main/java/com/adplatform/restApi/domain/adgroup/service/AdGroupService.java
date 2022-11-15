@@ -5,6 +5,7 @@ import com.adplatform.restApi.domain.adgroup.dao.device.DeviceRepository;
 import com.adplatform.restApi.domain.adgroup.dao.media.MediaRepository;
 import com.adplatform.restApi.domain.adgroup.domain.Device;
 import com.adplatform.restApi.domain.adgroup.domain.Media;
+import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupDto;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupMapper;
 import com.adplatform.restApi.domain.adgroup.event.AdGroupSavedEvent;
 import com.adplatform.restApi.domain.adgroup.exception.DeviceNotFoundException;
@@ -60,5 +61,9 @@ public class AdGroupService {
                 firstStartDates.get(campaignId),
                 lastEndDates.get(campaignId)))
                 .collect(Collectors.toList());
+    }
+
+    public void update(AdGroupDto.Request.Update request) {
+        AdGroupFindUtils.findById(request.getAdGroupId(), this.adGroupRepository).update(request);
     }
 }

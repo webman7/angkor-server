@@ -22,4 +22,8 @@ public class ScheduleTime {
     public ScheduleTime(List<Boolean> time) {
         this.time = Collections.unmodifiableList(time);
     }
+
+    public void update(List<Boolean> time) {
+        this.time = Collections.unmodifiableList(time);
+    }
 }
