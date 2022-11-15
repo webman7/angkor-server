@@ -4,7 +4,9 @@ import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountIdGetter;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupDto;
 import com.adplatform.restApi.domain.campaign.domain.Campaign;
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
@@ -53,16 +55,7 @@ public abstract class CampaignDto {
 
         @Getter
         @Setter
-        public static class Update implements CampaignIdGetter {
-            private Integer campaignId;
-            @Size(min = 2)
-            @NotNull
-            private String name;
-            @NotNull
-            private Long dailyBudgetAmount;
-            private Campaign.GoalType goalType;
-            private String trackingId;
-            private Campaign.TrackingType trackingType;
+        public static class Update extends Response.ForUpdate implements CampaignIdGetter {
         }
     }
     public static abstract class Response {
@@ -121,6 +114,31 @@ public abstract class CampaignDto {
                 this.createdAt = createdAt;
                 this.updatedAt = updatedAt;
                 this.adTypeAndGoal = adTypeAndGoal;
+            }
+        }
+
+        @Getter
+        @Setter
+        @NoArgsConstructor(access = AccessLevel.PROTECTED)
+        public static class ForUpdate {
+            private Integer campaignId;
+            @Size(min = 2)
+            @NotNull
+            private String name;
+            @NotNull
+            private Long dailyBudgetAmount;
+            private Campaign.GoalType goalType;
+            private String trackingId;
+            private Campaign.TrackingType trackingType;
+
+            @QueryProjection
+            public ForUpdate(Integer campaignId, String name, Long dailyBudgetAmount, Campaign.GoalType goalType, String trackingId, Campaign.TrackingType trackingType) {
+                this.campaignId = campaignId;
+                this.name = name;
+                this.dailyBudgetAmount = dailyBudgetAmount;
+                this.goalType = goalType;
+                this.trackingId = trackingId;
+                this.trackingType = trackingType;
             }
         }
     }

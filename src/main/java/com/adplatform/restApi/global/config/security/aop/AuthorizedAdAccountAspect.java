@@ -48,6 +48,18 @@ public class AuthorizedAdAccountAspect {
         return joinPoint.proceed();
     }
 
+    @Around("@annotation(com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount) && args(campaignId, ..)")
+    public Object validateAuthorizedAdAccount(ProceedingJoinPoint joinPoint, Integer campaignId) throws Throwable {
+        Integer adAccountId = CampaignFindUtils.findById(campaignId, this.campaignRepository)
+                .getAdAccount()
+                .getId();
+        AdAccountUserQueryUtils.findByAdAccountIdAndUserIdOrElseThrow(
+                adAccountId,
+                SecurityUtils.getLoginUserId(),
+                this.adAccountUserRepository);
+        return joinPoint.proceed();
+    }
+
     @Around("@annotation(com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount) && args(adGroupIdGetter, ..))")
     public Object validateAuthorizedAdAccount(ProceedingJoinPoint joinPoint, AdGroupIdGetter adGroupIdGetter) throws Throwable {
         Integer adAccountId = AdGroupFindUtils.findById(adGroupIdGetter.getAdGroupId(), this.adGroupRepository)
