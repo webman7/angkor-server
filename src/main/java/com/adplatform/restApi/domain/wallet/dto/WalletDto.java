@@ -10,12 +10,16 @@ public class WalletDto {
         @Setter
         public static class WalletSpend {
             private int cash;
-//            private int todaySpend;
-//            private int yesterdaySpend;
-//            private int monthSpend;
+            private int todaySpend;
+            private int yesterdaySpend;
+            private int monthSpend;
+
             @QueryProjection
-            public WalletSpend(int cash) {
+            public WalletSpend(int cash, int todaySpend, int yesterdaySpend, int monthSpend) {
                 this.cash = cash;
+                this.todaySpend = todaySpend;
+                this.yesterdaySpend = yesterdaySpend;
+                this.monthSpend = monthSpend;
             }
         }
     }

@@ -8,6 +8,7 @@ import com.adplatform.restApi.domain.adaccount.dto.adaccount.QAdAccountDto_Respo
 import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_WalletSpend;
 import com.adplatform.restApi.global.util.QuerydslOrderSpecifierUtil;
 import com.querydsl.core.group.GroupBy;
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -22,11 +23,14 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static com.adplatform.restApi.domain.adaccount.domain.QAdAccount.adAccount;
 import static com.adplatform.restApi.domain.adaccount.domain.QAdAccountUser.adAccountUser;
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
+import static com.adplatform.restApi.domain.statistics.domain.QSaleAmountDaily.saleAmountDaily;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
 import static com.adplatform.restApi.domain.wallet.domain.QCash.cash;
 import static com.adplatform.restApi.domain.wallet.domain.QWalletCashTotal.walletCashTotal;
@@ -42,7 +46,45 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
 
     @Override
     public Page<AdAccountDto.Response.ForAgencySearch> searchForAgency(Pageable pageable, AdAccountDto.Request.ForAgencySearch request, Integer userId) {
+        LocalDate now = LocalDate.now();
+        Expression<Integer> todaySpendQuery = ExpressionUtils.as(select(saleAmountDaily.saleAmount)
+                        .from(saleAmountDaily)
+                        .where(saleAmountDaily.id.adAccountId.eq(adAccount.id),
+                                saleAmountDaily.id.statDate.eq(Integer.valueOf(now.format(DateTimeFormatter.ofPattern("yyyyMMdd")))))
+                , ExpressionUtils.path(Integer.class, "todaySpend"));
+
+        Expression<Integer> yesterdaySpendQuery = ExpressionUtils.as(select(saleAmountDaily.saleAmount)
+                        .from(saleAmountDaily)
+                        .where(saleAmountDaily.id.adAccountId.eq(adAccount.id),
+                                saleAmountDaily.id.statDate.eq(Integer.valueOf(now.minusDays(1L).format(DateTimeFormatter.ofPattern("yyyyMMdd")))))
+                , ExpressionUtils.path(Integer.class, "yesterdaySpend"));
+
+        Expression<Integer> monthSpendQuery = ExpressionUtils.as(select(saleAmountDaily.saleAmount.sum())
+                        .from(saleAmountDaily)
+                        .where(
+                                saleAmountDaily.id.adAccountId.eq(adAccount.id),
+                                saleAmountDaily.id.statDate.between(
+                                        Integer.valueOf(now.withDayOfMonth(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"))),
+                                        Integer.valueOf(now.withDayOfMonth(now.lengthOfMonth()).format(DateTimeFormatter.ofPattern("yyyyMMdd")))
+                                )
+                        ).groupBy(saleAmountDaily.id.adAccountId)
+                , ExpressionUtils.path(Integer.class, "monthSpendQuery"));
+
         List<AdAccountDto.Response.ForAgencySearch> content = this.query
+                .select(
+                        adAccount.id,
+                        adAccount.name,
+                        company.type,
+                        adAccount.creditLimit,
+                        adAccount.preDeferredPayment,
+                        adAccount.config,
+                        adAccount.adminStop,
+                        adAccount.outOfBalance,
+                        walletCashTotal.amount,
+                        todaySpendQuery,
+                        yesterdaySpendQuery,
+                        monthSpendQuery
+                )
                 .from(adAccount)
                 .join(adAccount.company, company)
                 .join(adAccount.adAccountUsers, adAccountUser)
@@ -62,7 +104,12 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                                 adAccount.id,
                                 adAccount.name,
                                 company.type,
-                                new QWalletDto_Response_WalletSpend(GroupBy.sum(walletCashTotal.amount)),
+                                new QWalletDto_Response_WalletSpend(
+                                        GroupBy.sum(walletCashTotal.amount),
+                                        todaySpendQuery,
+                                        yesterdaySpendQuery,
+                                        monthSpendQuery
+                                ),
                                 adAccount.creditLimit,
                                 adAccount.preDeferredPayment,
                                 adAccount.config,
