@@ -9,4 +9,6 @@ import org.mapstruct.Mapping;
 public interface AdGroupDemographicTargetMapper {
     @Mapping(target = "adGroup", ignore = true)
     AdGroupDemographicTarget toEntity(AdGroupDemographicTargetDto.Request.FirstSave dto);
+
+    AdGroupDemographicTargetDto.Response.Default toDefaultResponse(AdGroupDemographicTarget demographicTarget);
 }

@@ -20,9 +20,13 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.adplatform.restApi.domain.adgroup.domain.QAdGroup.adGroup;
+import static com.adplatform.restApi.domain.adgroup.domain.QAdGroupDemographicTarget.adGroupDemographicTarget;
 import static com.adplatform.restApi.domain.adgroup.domain.QAdGroupSchedule.adGroupSchedule;
+import static com.adplatform.restApi.domain.adgroup.domain.QDevice.device;
+import static com.adplatform.restApi.domain.adgroup.domain.QMedia.media;
 import static com.adplatform.restApi.domain.campaign.domain.QCampaign.campaign;
 import static java.util.Objects.nonNull;
 
@@ -115,6 +119,17 @@ public class AdGroupQuerydslRepositoryImpl implements AdGroupQuerydslRepository 
                         this.containsName(request.getName()));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public Optional<AdGroup> findByIdFetchJoin(Integer id) {
+        return Optional.ofNullable(this.query.selectFrom(adGroup)
+                .join(adGroup.demographicTarget, adGroupDemographicTarget).fetchJoin()
+                .join(adGroup.adGroupSchedule, adGroupSchedule).fetchJoin()
+                .leftJoin(adGroup.media, media)
+                .leftJoin(adGroup.devices, device).fetchJoin()
+                .where(adGroup.id.eq(id))
+                .fetchOne());
     }
 
     private BooleanExpression eqAdAccountId(Integer adAccountId) {

@@ -1,6 +1,7 @@
 package com.adplatform.restApi.domain.adgroup.dto.schedule;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
@@ -40,6 +41,12 @@ public abstract class AdGroupScheduleDto {
             @NotNull
             @Size(min = 24, max = 24)
             private List<Boolean> sundayTime;
+        }
+    }
+
+    public static abstract class Response {
+        @NoArgsConstructor
+        public static class Default extends Request.FirstSave {
         }
     }
 }

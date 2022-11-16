@@ -9,6 +9,7 @@ import com.adplatform.restApi.domain.campaign.dto.CampaignIdGetter;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.Valid;
@@ -22,6 +23,8 @@ public abstract class AdGroupDto {
     public static abstract class Request {
         @Getter
         @Setter
+        @AllArgsConstructor
+        @NoArgsConstructor
         public static class FirstSave {
             @Valid
             private AdGroupDemographicTargetDto.Request.FirstSave demographicTarget;
@@ -68,9 +71,15 @@ public abstract class AdGroupDto {
 
         @Getter
         @Setter
+        @NoArgsConstructor
         public static class Update extends FirstSave implements AdGroupIdGetter {
             @NotNull
             private Integer adGroupId;
+
+            public Update(AdGroupDemographicTargetDto.Request.@Valid FirstSave demographicTarget, AdGroupScheduleDto.Request.@Valid FirstSave adGroupSchedule, @NotNull @Size(min = 1) List<String> media, @NotNull @Size(min = 1) List<String> devices, @NotBlank @Size(min = 1, max = 50) String name, AdGroup.Pacing pacing, AdGroup.PacingType pacingType, Long bidAmount, AdGroup.BidStrategy bidStrategy, Long dailyBudgetAmount, boolean fullDeviceDisplay, boolean onlyWifiDisplay, boolean allMedia, boolean onlyAdult, Integer adGroupId) {
+                super(demographicTarget, adGroupSchedule, media, devices, name, pacing, pacingType, bidAmount, bidStrategy, dailyBudgetAmount, fullDeviceDisplay, onlyWifiDisplay, allMedia, onlyAdult);
+                this.adGroupId = adGroupId;
+            }
         }
     }
 
@@ -148,6 +157,29 @@ public abstract class AdGroupDto {
             private String name;
             private Integer campaignId;
             private String campaignName;
+        }
+
+        @Getter
+        @Setter
+        public static class Detail {
+            private Integer adGroupId;
+            private AdGroupDemographicTargetDto.Response.Default demographicTarget;
+            private AdGroupScheduleDto.Response.Default adGroupSchedule;
+            private List<String> media;
+            private List<String> devices;
+            private String name;
+            private AdGroup.Pacing pacing;
+            private AdGroup.PacingType pacingType;
+            private Long bidAmount;
+            private AdGroup.BidStrategy bidStrategy;
+            private Long dailyBudgetAmount;
+            private boolean fullDeviceDisplay;
+            private boolean onlyWifiDisplay;
+            private boolean allMedia;
+            private boolean onlyAdult;
+            private AdGroup.Config config;
+            private AdGroup.SystemConfig systemConfig;
+            private Campaign.Status status;
         }
     }
 }
