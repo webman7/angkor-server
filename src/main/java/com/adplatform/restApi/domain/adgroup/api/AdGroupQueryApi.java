@@ -6,6 +6,7 @@ import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupDto;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupMapper;
 import com.adplatform.restApi.domain.adgroup.exception.AdGroupNotFoundException;
 import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount;
+import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccountByAdGroupId;
 import com.adplatform.restApi.global.dto.PageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -44,7 +45,7 @@ public class AdGroupQueryApi {
         return PageDto.create(this.adGroupRepository.searchForSaveCreative(request, pageable));
     }
 
-    @AuthorizedAdAccount
+    @AuthorizedAdAccountByAdGroupId
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("{id}")
     public AdGroupDto.Response.Detail findByIdForUpdate(@PathVariable(name = "id") Integer adGroupId) {

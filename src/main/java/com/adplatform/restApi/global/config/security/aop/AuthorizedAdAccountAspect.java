@@ -1,7 +1,6 @@
 package com.adplatform.restApi.global.config.security.aop;
 
 import com.adplatform.restApi.domain.adaccount.dao.user.AdAccountUserRepository;
-import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountIdGetter;
 import com.adplatform.restApi.domain.adaccount.service.AdAccountUserQueryUtils;
 import com.adplatform.restApi.domain.adgroup.dao.adgroup.AdGroupRepository;
@@ -47,11 +46,6 @@ public class AuthorizedAdAccountAspect {
         return joinPoint.proceed();
     }
 
-    @Around("@annotation(com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount) && args(campaignId, ..)")
-    public Object validateAuthorizedAdAccount(ProceedingJoinPoint joinPoint, Integer campaignId) throws Throwable {
-        return this.validateAuthorizedAdAccount(joinPoint, (CampaignIdGetter) () -> campaignId);
-    }
-
     @Around("@annotation(com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount) && args(adGroupIdGetter, ..))")
     public Object validateAuthorizedAdAccount(ProceedingJoinPoint joinPoint, AdGroupIdGetter adGroupIdGetter) throws Throwable {
         Integer adAccountId = AdGroupFindUtils.findById(adGroupIdGetter.getAdGroupId(), this.adGroupRepository)
@@ -62,8 +56,8 @@ public class AuthorizedAdAccountAspect {
         return joinPoint.proceed();
     }
 
-    private AdAccountUser validateAdAccountUser(Integer adAccountId) {
-        return AdAccountUserQueryUtils.findByAdAccountIdAndUserIdOrElseThrow(
+    private void validateAdAccountUser(Integer adAccountId) {
+        AdAccountUserQueryUtils.findByAdAccountIdAndUserIdOrElseThrow(
                 adAccountId,
                 SecurityUtils.getLoginUserId(),
                 this.adAccountUserRepository);

@@ -4,6 +4,7 @@ import com.adplatform.restApi.domain.campaign.dao.CampaignRepository;
 import com.adplatform.restApi.domain.campaign.dto.CampaignDto;
 import com.adplatform.restApi.domain.campaign.service.CampaignQueryService;
 import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount;
+import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccountByCampaignId;
 import com.adplatform.restApi.global.dto.PageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -45,7 +46,7 @@ public class CampaignQueryApi {
         return PageDto.create(this.campaignRepository.searchForSaveAdGroup(request, pageable));
     }
 
-    @AuthorizedAdAccount
+    @AuthorizedAdAccountByCampaignId
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/update-for-detail")
     public CampaignDto.Response.ForUpdate searchForUpdate(Integer campaignId) {
