@@ -61,7 +61,7 @@ public class AdAccountFileApi {
                         c.getWalletSpend().getMonthSpend())
         ));
         return ResponseEntity.ok()
-                .header("Content-Disposition", "attachment; filename=\"adaccount-list.csv\"")
+                .header("Content-Disposition", "attachment; filename=adaccount-list.csv")
                 .contentType(new MediaType("text", "csv"))
                 .body(sb.toString());
     }
