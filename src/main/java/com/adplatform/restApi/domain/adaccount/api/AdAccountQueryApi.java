@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("adaccounts")
+@RequestMapping("/adaccounts")
 public class AdAccountQueryApi {
     private final AdAccountRepository adAccountRepository;
 
