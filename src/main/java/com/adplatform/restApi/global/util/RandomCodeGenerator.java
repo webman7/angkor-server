@@ -2,6 +2,10 @@ package com.adplatform.restApi.global.util;
 
 import java.util.Random;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 public class RandomCodeGenerator {
     private final char[] characterTable = {
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',

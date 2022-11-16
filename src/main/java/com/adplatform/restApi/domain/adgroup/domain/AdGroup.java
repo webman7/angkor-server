@@ -13,6 +13,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -36,14 +40,10 @@ public class AdGroup extends BaseUpdatedEntity {
      * 입찰 방식
      */
     public enum BidStrategy {
-        /**
-         * 수동 입찰
-         */
+        /** 수동 입찰 */
         MANUAL,
 
-        /**
-         * 자동 입찰
-         */
+        /** 자동 입찰 */
         AUTO
     }
 
@@ -58,17 +58,11 @@ public class AdGroup extends BaseUpdatedEntity {
      * 광고 그룹 시스템 상태
      */
     public enum SystemConfig {
-        /**
-         * 운영
-         */
+        /** 운영 */
         ON,
-        /**
-         * 관리자 정지
-         */
+        /** 관리자 정지 */
         ADMIN_STOP,
-        /**
-         * 연결 서비스 제한
-         */
+        /** 연결 서비스 제한 */
         EXTERNAL_SERVICE_STOP
     }
 
@@ -111,9 +105,7 @@ public class AdGroup extends BaseUpdatedEntity {
     @Column(name = "pacing_type", length = 6)
     private PacingType pacingType;
 
-    /**
-     * 수동 입찰 금액
-     */
+    /** 수동 입찰 금액 */
     @Column(name = "bid_amount", columnDefinition = "INT")
     private Long bidAmount;
 
@@ -121,9 +113,7 @@ public class AdGroup extends BaseUpdatedEntity {
     @Column(name = "bid_strategy", length = 10)
     private BidStrategy bidStrategy;
 
-    /**
-     * 일일 예산
-     */
+    /** 일일 예산 */
     @Column(name = "daily_budget_amount", columnDefinition = "INT")
     private Long dailyBudgetAmount;
 

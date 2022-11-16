@@ -16,6 +16,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Mapper(
         config = BaseMapperConfig.class,
         uses = {AdGroupDemographicTargetMapper.class, AdGroupScheduleMapper.class},

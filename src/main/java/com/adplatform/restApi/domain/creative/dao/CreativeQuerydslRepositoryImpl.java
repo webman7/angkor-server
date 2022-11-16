@@ -23,6 +23,10 @@ import static com.adplatform.restApi.domain.campaign.domain.QCampaign.campaign;
 import static com.adplatform.restApi.domain.creative.domain.QCreative.creative;
 import static com.adplatform.restApi.domain.creative.domain.QCreativeFile.creativeFile;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @RequiredArgsConstructor
 @Repository
 public class CreativeQuerydslRepositoryImpl implements CreativeQuerydslRepository {

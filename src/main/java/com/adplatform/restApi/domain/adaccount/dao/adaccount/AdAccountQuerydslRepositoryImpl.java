@@ -37,6 +37,10 @@ import static com.adplatform.restApi.domain.wallet.domain.QWalletCashTotal.walle
 import static com.adplatform.restApi.domain.wallet.domain.QWalletMaster.walletMaster;
 import static com.querydsl.jpa.JPAExpressions.select;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Repository

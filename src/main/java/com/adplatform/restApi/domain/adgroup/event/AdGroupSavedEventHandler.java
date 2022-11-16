@@ -5,6 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @RequiredArgsConstructor
 @Component
 public class AdGroupSavedEventHandler {

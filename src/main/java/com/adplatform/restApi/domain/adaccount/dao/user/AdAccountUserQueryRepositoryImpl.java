@@ -9,6 +9,10 @@ import java.util.Optional;
 
 import static com.adplatform.restApi.domain.adaccount.domain.QAdAccountUser.adAccountUser;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @RequiredArgsConstructor
 @Repository
 public class AdAccountUserQueryRepositoryImpl implements AdAccountUserQueryRepository{

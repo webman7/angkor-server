@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/companies")

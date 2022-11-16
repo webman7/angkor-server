@@ -7,6 +7,10 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 public interface CompanyQuerydslRepository {
     Page<CompanyDto.Response.Default> search(Pageable pageable, CompanyDto.Request.Search searchRequest);
 

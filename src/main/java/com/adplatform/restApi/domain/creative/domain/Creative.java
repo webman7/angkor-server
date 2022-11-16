@@ -12,6 +12,10 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @ToString
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -35,56 +39,32 @@ public class Creative extends BaseUpdatedEntity {
     }
 
     public enum ReviewStatus {
-        /**
-         * 승인
-         */
+        /** 승인 */
         APPROVED,
-        /**
-         * 심사중
-         */
+        /** 심사중 */
         WAITING,
-        /**
-         * 심사 보류
-         */
+        /** 심사 보류 */
         REJECTED,
-        /**
-         * 수정사항 심사중
-         */
+        /** 수정사항 심사중 */
         MODIFICATION_WAITING,
-        /**
-         * 수정사항 심사 보류
-         */
+        /** 수정사항 심사 보류 */
         MODIFICATION_REJECTED;
     }
 
     public enum Status {
-        /**
-         * 운영 가능
-         */
+        /** 운영 가능 */
         OPERATING,
-        /**
-         * 심사 미승인
-         */
+        /** 심사 미승인 */
         UNAPPROVED,
-        /**
-         * 기간 오류
-         */
+        /** 기간 오류 */
         INVALID_DATE,
-        /**
-         * 관리자 정지
-         */
+        /** 관리자 정지 */
         MONITORING_REJECTED,
-        /**
-         * 사용자 OFF
-         */
+        /** 사용자 OFF */
         OFF,
-        /**
-         * 삭제
-         */
+        /** 삭제 */
         DELETED,
-        /**
-         * 광고그룹 운영불가
-         */
+        /** 광고그룹 운영불가 */
         ADGROUP_UNAVAILABLE;
     }
 

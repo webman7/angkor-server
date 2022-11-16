@@ -11,6 +11,10 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Slf4j
 @Service
 public class Aes256Service {

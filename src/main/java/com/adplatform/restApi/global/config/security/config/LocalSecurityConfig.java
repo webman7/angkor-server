@@ -12,6 +12,10 @@ import org.springframework.security.web.header.writers.frameoptions.XFrameOption
 
 import java.util.List;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Profile("local")
 @Configuration
 public class LocalSecurityConfig extends SecurityConfig {

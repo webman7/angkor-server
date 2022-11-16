@@ -23,6 +23,10 @@ import static com.adplatform.restApi.domain.user.domain.QUserRole.userRole;
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @RequiredArgsConstructor
 @Repository
 public class UserQuerydslRepositoryImpl implements UserQuerydslRepository {

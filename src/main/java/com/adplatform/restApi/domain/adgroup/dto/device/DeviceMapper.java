@@ -6,6 +6,10 @@ import org.mapstruct.Mapper;
 
 import java.util.List;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Mapper(config = BaseMapperConfig.class)
 public interface DeviceMapper {
     List<DeviceDto.Response.Default> toDefaultResponse(List<Device> devices);

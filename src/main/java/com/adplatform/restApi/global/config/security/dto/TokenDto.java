@@ -7,6 +7,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.SneakyThrows;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Getter
 @Builder(access = AccessLevel.PROTECTED)
 public class TokenDto {

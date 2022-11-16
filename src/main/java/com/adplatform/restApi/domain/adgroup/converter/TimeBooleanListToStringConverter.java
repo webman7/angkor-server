@@ -5,6 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 public class TimeBooleanListToStringConverter implements AttributeConverter<List<Boolean>, String> {
     @Override
     public String convertToDatabaseColumn(List<Boolean> attribute) {

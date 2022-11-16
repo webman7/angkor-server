@@ -8,6 +8,10 @@ import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Getter
 @Builder(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)

@@ -11,6 +11,10 @@ import static com.adplatform.restApi.domain.campaign.domain.QAdType.adType;
 import static com.adplatform.restApi.domain.campaign.domain.QAdTypeAndGoal.adTypeAndGoal;
 import static com.adplatform.restApi.domain.campaign.domain.QCampaign.campaign;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @RequiredArgsConstructor
 @Repository
 public class AdTypeAndGoalQuerydslRepositoryImpl implements AdTypeAndGoalQuerydslRepository {

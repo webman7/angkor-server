@@ -8,6 +8,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Getter
 @Setter
 @AllArgsConstructor

@@ -7,6 +7,10 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Getter
 @Setter
 @NoArgsConstructor

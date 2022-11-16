@@ -9,6 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Component
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     @Override

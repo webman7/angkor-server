@@ -9,6 +9,10 @@ import org.springframework.stereotype.Component;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @RequiredArgsConstructor
 @Component
 public class EmailService {

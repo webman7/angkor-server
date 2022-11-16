@@ -15,6 +15,10 @@ import java.util.stream.Collectors;
 
 import static com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupDto.Response.FirstStartDateAndLastEndDate;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service

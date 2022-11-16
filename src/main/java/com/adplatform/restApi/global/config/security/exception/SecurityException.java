@@ -2,6 +2,10 @@ package com.adplatform.restApi.global.config.security.exception;
 
 import com.adplatform.restApi.global.error.exception.BaseException;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 public class SecurityException extends BaseException {
     public SecurityException() {
     }

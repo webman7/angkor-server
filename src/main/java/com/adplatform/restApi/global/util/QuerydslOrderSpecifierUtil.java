@@ -8,6 +8,10 @@ import org.springframework.data.domain.Sort;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 public class QuerydslOrderSpecifierUtil {
     public static <T> List<OrderSpecifier<?>> getOrderSpecifier(Class<T> clazz, String variable, Sort sort) {
         List<OrderSpecifier<?>> orders = new ArrayList<>();

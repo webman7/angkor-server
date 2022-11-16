@@ -7,6 +7,10 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 public abstract class UserDto {
     public static abstract class Request {
         public static class Search {

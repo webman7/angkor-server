@@ -15,6 +15,10 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -24,13 +28,9 @@ public class AdAccount extends BaseUpdatedEntity {
      * 광고 타입
      */
     public enum AdAccountType {
-        /**
-         * 회사
-         */
+        /** 회사 */
         BUSINESS,
-        /**
-         * 개인
-         */
+        /** 개인 */
         INDIVIDUAL
     }
 
@@ -38,9 +38,7 @@ public class AdAccount extends BaseUpdatedEntity {
      * 플랫폼 타입
      */
     public enum PlatformType {
-        /**
-         * 디스플레이 광고
-         */
+        /** 디스플레이 광고 */
         AD
     }
 

@@ -2,6 +2,10 @@ package com.adplatform.restApi.global.config.security.dto;
 
 import lombok.*;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Getter
 @Setter
 @NoArgsConstructor

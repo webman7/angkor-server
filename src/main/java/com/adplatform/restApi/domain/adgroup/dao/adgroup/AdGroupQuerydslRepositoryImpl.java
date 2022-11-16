@@ -30,6 +30,10 @@ import static com.adplatform.restApi.domain.adgroup.domain.QMedia.media;
 import static com.adplatform.restApi.domain.campaign.domain.QCampaign.campaign;
 import static java.util.Objects.nonNull;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @RequiredArgsConstructor
 @Repository
 public class AdGroupQuerydslRepositoryImpl implements AdGroupQuerydslRepository {

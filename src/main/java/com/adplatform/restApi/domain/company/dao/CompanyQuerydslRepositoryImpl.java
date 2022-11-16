@@ -18,6 +18,10 @@ import java.util.List;
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
 import static java.util.Objects.nonNull;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @RequiredArgsConstructor
 @Repository
 public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository {

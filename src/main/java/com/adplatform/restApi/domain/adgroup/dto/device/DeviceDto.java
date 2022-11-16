@@ -3,6 +3,10 @@ package com.adplatform.restApi.domain.adgroup.dto.device;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 public abstract class DeviceDto {
     public static abstract class Response {
         @Getter

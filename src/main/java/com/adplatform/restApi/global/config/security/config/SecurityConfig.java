@@ -19,6 +19,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import static com.adplatform.restApi.domain.user.domain.Role.Type.*;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Profile({"dev", "prod"})
 @RequiredArgsConstructor
 @Configuration

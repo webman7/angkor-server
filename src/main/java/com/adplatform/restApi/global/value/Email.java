@@ -8,6 +8,10 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

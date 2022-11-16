@@ -24,6 +24,10 @@ import java.text.MessageFormat;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Slf4j
 @RequiredArgsConstructor
 @RestControllerAdvice

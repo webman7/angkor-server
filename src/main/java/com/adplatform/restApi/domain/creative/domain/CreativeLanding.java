@@ -9,6 +9,10 @@ import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable

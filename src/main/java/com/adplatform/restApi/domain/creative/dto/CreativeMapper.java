@@ -10,6 +10,10 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Mapper(config = BaseMapperConfig.class, imports = AdGroupFindUtils.class)
 public abstract class CreativeMapper {
     @Autowired

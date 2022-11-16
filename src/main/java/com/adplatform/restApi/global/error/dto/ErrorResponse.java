@@ -5,6 +5,10 @@ import lombok.Getter;
 
 import java.util.Map;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ErrorResponse {

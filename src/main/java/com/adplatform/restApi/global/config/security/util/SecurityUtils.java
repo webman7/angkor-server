@@ -7,6 +7,10 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SecurityUtils {
     public static Integer getLoginUserId() {

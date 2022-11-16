@@ -18,6 +18,10 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Component

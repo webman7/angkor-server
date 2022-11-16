@@ -17,6 +17,10 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity

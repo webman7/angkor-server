@@ -6,6 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer>, UserQuerydslRepository {
     boolean existsByLoginId(String LoginId);

@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Slf4j
 @RequiredArgsConstructor
 @RestController

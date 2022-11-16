@@ -16,6 +16,10 @@ import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 public abstract class CampaignDto {
     public static abstract class Request {
         @Getter

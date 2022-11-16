@@ -10,6 +10,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Getter
 @RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {

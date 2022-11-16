@@ -7,6 +7,10 @@ import org.springframework.context.annotation.Profile;
 
 import java.io.File;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Profile("local")
 @Configuration
 public class LocalEnvironmentConfig implements DisposableBean {

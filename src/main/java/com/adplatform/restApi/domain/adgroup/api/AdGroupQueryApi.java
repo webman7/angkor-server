@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/adgroups")

@@ -8,6 +8,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 public abstract class AuthDto {
     public static abstract class Request {
         @Getter

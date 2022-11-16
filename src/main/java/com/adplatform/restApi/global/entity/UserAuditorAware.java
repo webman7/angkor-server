@@ -6,6 +6,10 @@ import org.springframework.data.domain.AuditorAware;
 
 import java.util.Optional;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Configuration
 public class UserAuditorAware implements AuditorAware<Integer> {
     @Override

@@ -2,6 +2,10 @@ package com.adplatform.restApi.global.converter;
 
 import javax.persistence.AttributeConverter;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 public class BooleanToStringYOrNConverter implements AttributeConverter<Boolean, String> {
     @Override
     public String convertToDatabaseColumn(Boolean attribute) {

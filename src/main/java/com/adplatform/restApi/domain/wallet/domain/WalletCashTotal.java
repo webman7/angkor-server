@@ -9,6 +9,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity

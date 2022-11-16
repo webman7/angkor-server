@@ -21,6 +21,10 @@ import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.Date;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Component

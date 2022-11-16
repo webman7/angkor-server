@@ -9,6 +9,10 @@ import lombok.Getter;
 
 import java.util.List;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Getter
 public class AdGroupSavedEvent {
     private final Campaign campaign;

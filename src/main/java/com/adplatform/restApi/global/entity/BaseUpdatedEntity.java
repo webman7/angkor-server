@@ -11,6 +11,10 @@ import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)

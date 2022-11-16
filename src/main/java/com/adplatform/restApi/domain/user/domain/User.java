@@ -10,6 +10,10 @@ import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AttributeOverride(name = "id", column = @Column(name = "user_no", columnDefinition = "INT"))

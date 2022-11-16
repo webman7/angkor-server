@@ -1,5 +1,9 @@
 package com.adplatform.restApi.global.error.exception;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 public abstract class BaseException extends RuntimeException {
     private String codeKey;
     private String messageKey;

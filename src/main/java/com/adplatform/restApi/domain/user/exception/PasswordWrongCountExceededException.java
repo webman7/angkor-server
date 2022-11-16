@@ -1,5 +1,9 @@
 package com.adplatform.restApi.domain.user.exception;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 public class PasswordWrongCountExceededException extends UserException {
     private static final String CODE_KEY = "passwordWrongCountExceededException.code";
     private static final String MESSAGE_KEY = "passwordWrongCountExceededException.message";

@@ -8,6 +8,10 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import java.util.Locale;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Configuration
 public class MessageConfiguration implements WebMvcConfigurer {
     @Bean

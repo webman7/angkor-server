@@ -11,6 +11,10 @@ import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity

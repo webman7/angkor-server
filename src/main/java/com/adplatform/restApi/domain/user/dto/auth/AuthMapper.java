@@ -11,6 +11,10 @@ import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Mapper(config = BaseMapperConfig.class)
 public abstract class AuthMapper {
     @Autowired

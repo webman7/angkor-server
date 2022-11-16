@@ -14,6 +14,10 @@ import javax.persistence.Convert;
 import javax.persistence.Embeddable;
 import java.time.LocalDateTime;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable

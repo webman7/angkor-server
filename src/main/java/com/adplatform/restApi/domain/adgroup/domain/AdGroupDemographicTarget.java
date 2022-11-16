@@ -9,6 +9,10 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.List;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -18,13 +22,9 @@ public class AdGroupDemographicTarget {
      * 청중 타입
      */
     public enum Type {
-        /**
-         * 일반 타겟팅 설정
-         */
+        /** 일반 타겟팅 설정 */
         NORMAL,
-        /**
-         * 디스플레이 오디언스 관리 기능 설정
-         */
+        /** 디스플레이 오디언스 관리 기능 설정 */
         DISPLAY
     }
 

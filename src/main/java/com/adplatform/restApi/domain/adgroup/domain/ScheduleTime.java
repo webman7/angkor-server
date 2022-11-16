@@ -11,6 +11,10 @@ import javax.persistence.Embeddable;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable

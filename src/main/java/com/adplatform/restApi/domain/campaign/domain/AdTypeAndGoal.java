@@ -8,6 +8,10 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity

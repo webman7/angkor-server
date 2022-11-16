@@ -7,6 +7,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Getter
 @MappedSuperclass
 public abstract class BaseEntity {

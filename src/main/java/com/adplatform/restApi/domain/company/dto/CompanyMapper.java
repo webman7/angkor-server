@@ -7,6 +7,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Mapper(config = BaseMapperConfig.class, imports = Email.class)
 public interface CompanyMapper {
     @Mapping(target = "type", expression = "java(Company.Type.ADVERTISER)")

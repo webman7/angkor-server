@@ -6,6 +6,10 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Getter
 @Setter
 @AllArgsConstructor

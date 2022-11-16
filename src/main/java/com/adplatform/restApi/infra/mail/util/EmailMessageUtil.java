@@ -6,6 +6,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 public class EmailMessageUtil {
     public String getFindPasswordMessage(String randomPassword) {
         try {

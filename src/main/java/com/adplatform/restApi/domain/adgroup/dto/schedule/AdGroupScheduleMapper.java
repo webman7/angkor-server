@@ -8,6 +8,10 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Mapper(config = BaseMapperConfig.class)
 public interface AdGroupScheduleMapper {
     @Mapping(target = "adGroup", ignore = true)

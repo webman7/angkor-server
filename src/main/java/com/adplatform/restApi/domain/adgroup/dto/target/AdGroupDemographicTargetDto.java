@@ -8,6 +8,10 @@ import lombok.Setter;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 public abstract class AdGroupDemographicTargetDto {
     public static abstract class Request {
         @Getter

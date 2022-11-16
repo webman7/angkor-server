@@ -17,6 +17,10 @@ import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 public abstract class CreativeDto {
     public abstract static class Request {
         @Getter
