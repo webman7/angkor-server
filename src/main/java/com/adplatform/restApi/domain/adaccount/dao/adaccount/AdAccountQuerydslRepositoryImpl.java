@@ -118,6 +118,7 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                         )));
 
         JPAQuery<Long> countQuery = this.query.select(adAccount.count())
+                .from(adAccount)
                 .join(adAccount.company, company)
                 .join(adAccount.adAccountUsers, adAccountUser)
                 .join(adAccount.walletMaster, walletMaster)
