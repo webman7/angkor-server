@@ -11,6 +11,7 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -116,12 +118,18 @@ public class AdAccountFileApi {
             }
 
             baos = new ByteArrayOutputStream();
+            baos.write(0xEF);
+            baos.write(0xBB);
+            baos.write(0xBF);
             workbook.write(baos);
         }
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Disposition", "attachment; filename=adaccount-list.xlsx");
+        headers.setAcceptCharset(List.of(StandardCharsets.UTF_8));
+        headers.setContentType(new MediaType("application", "vnd.ms-excel"));
         return ResponseEntity.ok()
-                .header("Content-Disposition", "attachment; filename=\"adaccount-list.xlsx\"")
-                .contentType(new MediaType("application", "vnd.ms-excel"))
+                .headers(headers)
                 .body(baos.toByteArray());
     }
 
