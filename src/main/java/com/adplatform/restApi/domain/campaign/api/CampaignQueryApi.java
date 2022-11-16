@@ -20,14 +20,14 @@ import javax.validation.Valid;
  */
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/campaigns/search")
+@RequestMapping("/campaigns")
 public class CampaignQueryApi {
     private final CampaignQueryService campaignQueryService;
     private final CampaignRepository campaignRepository;
 
     @AuthorizedAdAccount
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping
+    @GetMapping("/search")
     public PageDto<CampaignDto.Response.Page> search(
             @Valid CampaignDto.Request.Search request,
             @PageableDefault Pageable pageable) {
@@ -36,7 +36,7 @@ public class CampaignQueryApi {
 
     @AuthorizedAdAccount
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/for-save-adgroup")
+    @GetMapping("/search/for-save-adgroup")
     public PageDto<CampaignDto.Response.ForSaveAdGroup> searchForSaveAdGroup(
             @Valid CampaignDto.Request.Search request,
             @PageableDefault Pageable pageable) {
