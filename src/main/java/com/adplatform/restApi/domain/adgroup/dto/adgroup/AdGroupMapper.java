@@ -12,6 +12,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,12 +35,12 @@ public interface AdGroupMapper {
     AdGroupDto.Response.Detail toDetailResponse(AdGroup adGroup);
 
     @Named("mapMedia")
-    default List<String> mapMedia(List<Media> media) {
+    default List<String> mapMedia(Collection<Media> media) {
         return media.stream().map(Media::getName).collect(Collectors.toList());
     }
 
     @Named("mapDevices")
-    default List<String> mapDevice(List<Device> devices) {
+    default List<String> mapDevice(Collection<Device> devices) {
         return devices.stream().map(Device::getName).collect(Collectors.toList());
     }
 }

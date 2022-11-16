@@ -126,7 +126,7 @@ public class AdGroupQuerydslRepositoryImpl implements AdGroupQuerydslRepository 
         return Optional.ofNullable(this.query.selectFrom(adGroup)
                 .join(adGroup.demographicTarget, adGroupDemographicTarget).fetchJoin()
                 .join(adGroup.adGroupSchedule, adGroupSchedule).fetchJoin()
-                .leftJoin(adGroup.media, media)
+                .leftJoin(adGroup.media, media).fetchJoin()
                 .leftJoin(adGroup.devices, device).fetchJoin()
                 .where(adGroup.id.eq(id))
                 .fetchOne());

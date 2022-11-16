@@ -9,7 +9,9 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -86,14 +88,14 @@ public class AdGroup extends BaseUpdatedEntity {
             name = "adgroup_media_info",
             joinColumns = @JoinColumn(name = "adgroup_info_id"),
             inverseJoinColumns = @JoinColumn(name = "media_info_id"))
-    private final List<Media> media = new ArrayList<>();
+    private final Set<Media> media = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "adgroup_device_info",
             joinColumns = @JoinColumn(name = "adgroup_info_id"),
             inverseJoinColumns = @JoinColumn(name = "device_info_id"))
-    private final List<Device> devices = new ArrayList<>();
+    private final Set<Device> devices = new HashSet<>();
 
     @OneToMany(mappedBy = "adGroup", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Creative> creatives = new ArrayList<>();
