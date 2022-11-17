@@ -230,6 +230,7 @@ public class AdGroup extends BaseUpdatedEntity {
         this.adGroupSchedule.update(request.getAdGroupSchedule());
         this.name = request.getName();
         this.pacing = request.getPacing();
+        this.pacingType = request.getPacingType();
         this.bidAmount = request.getBidAmount();
         this.bidStrategy = request.getBidStrategy();
         this.dailyBudgetAmount = request.getDailyBudgetAmount();
