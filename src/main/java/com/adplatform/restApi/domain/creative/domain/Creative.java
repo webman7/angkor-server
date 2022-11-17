@@ -179,6 +179,7 @@ public class Creative extends BaseUpdatedEntity {
     }
 
     public Creative update(CreativeDto.Request.Update request) {
+        this.representativeId++;
         this.name = request.getName();
         this.title = request.getTitle();
         this.altText = request.getAltText();
