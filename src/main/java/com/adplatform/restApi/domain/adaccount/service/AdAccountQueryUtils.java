@@ -9,7 +9,7 @@ import com.adplatform.restApi.domain.adaccount.exception.AdAccountNotFoundExcept
  * @since 1.0
  */
 public class AdAccountQueryUtils {
-    public static AdAccount findById(Integer id, AdAccountRepository repository) {
+    public static AdAccount findByIdOrElseThrow(Integer id, AdAccountRepository repository) {
         return repository.findById(id).orElseThrow(AdAccountNotFoundException::new);
     }
 }

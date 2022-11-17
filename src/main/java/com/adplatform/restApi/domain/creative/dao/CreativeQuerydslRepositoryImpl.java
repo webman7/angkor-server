@@ -17,11 +17,13 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static com.adplatform.restApi.domain.adgroup.domain.QAdGroup.adGroup;
 import static com.adplatform.restApi.domain.campaign.domain.QCampaign.campaign;
 import static com.adplatform.restApi.domain.creative.domain.QCreative.creative;
 import static com.adplatform.restApi.domain.creative.domain.QCreativeFile.creativeFile;
+import static com.adplatform.restApi.domain.creative.domain.QCreativeOpinionProofFile.*;
 
 /**
  * @author Seohyun Lee
@@ -63,6 +65,15 @@ public class CreativeQuerydslRepositoryImpl implements CreativeQuerydslRepositor
                 .where(this.eqAdAccountId(request.getAdAccountId()), this.containsName(request.getName()));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public Optional<Creative> findDetailById(Integer id) {
+        return Optional.ofNullable(this.query.selectFrom(creative)
+                .leftJoin(creative.files, creativeFile).fetchJoin()
+                .leftJoin(creative.opinionProofFiles, creativeOpinionProofFile)
+                .where(creative.id.eq(id))
+                .fetchOne());
     }
 
     private BooleanExpression eqAdAccountId(Integer adAccountId) {

@@ -16,7 +16,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/creatives")
-public class CreativeApi {
+public class CreativeCommandApi {
     private final CreativeSaveService creativeSaveService;
 
     @AuthorizedAdAccount

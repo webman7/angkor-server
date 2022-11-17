@@ -40,7 +40,7 @@ public class CampaignSaveService {
         AdTypeAndGoal adTypeAndGoal = this.findAdTypeAndGoal(
                 request.getAdTypeAndGoal().getAdTypeName(),
                 request.getAdTypeAndGoal().getAdGoalName());
-        AdAccount adAccount = AdAccountFindUtils.findById(request.getAdAccountId(), this.adAccountRepository);
+        AdAccount adAccount = AdAccountFindUtils.findByIdOrElseThrow(request.getAdAccountId(), this.adAccountRepository);
         Campaign campaign = this.campaignRepository.save(this.campaignMapper.toEntity(request, adTypeAndGoal, adAccount));
         this.mapToAdGroupSavedEvent(request.getAdGroups(), campaign).forEach(this.eventPublisher::publishEvent);
     }
@@ -51,7 +51,7 @@ public class CampaignSaveService {
     }
 
     public void adGroupSave(AdGroupDto.Request.Save request) {
-        Campaign campaign = CampaignFindUtils.findById(request.getCampaignId(), this.campaignRepository);
+        Campaign campaign = CampaignFindUtils.findByIdOrElseThrow(request.getCampaignId(), this.campaignRepository);
         this.mapToAdGroupSavedEvent(request.getAdGroups(), campaign).forEach(this.eventPublisher::publishEvent);
     }
 
@@ -60,7 +60,7 @@ public class CampaignSaveService {
     }
 
     public void update(CampaignDto.Request.Update request) {
-        CampaignFindUtils.findById(request.getCampaignId(), this.campaignRepository)
+        CampaignFindUtils.findByIdOrElseThrow(request.getCampaignId(), this.campaignRepository)
                 .update(request);
     }
 }

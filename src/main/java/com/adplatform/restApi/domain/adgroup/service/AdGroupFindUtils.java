@@ -9,7 +9,7 @@ import com.adplatform.restApi.domain.adgroup.exception.AdGroupNotFoundException;
  * @since 1.0
  */
 public class AdGroupFindUtils {
-    public static AdGroup findById(Integer id, AdGroupRepository repository) {
+    public static AdGroup findByIdOrElseThrow(Integer id, AdGroupRepository repository) {
         return repository.findById(id)
                 .orElseThrow(AdGroupNotFoundException::new);
     }

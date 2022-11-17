@@ -27,10 +27,10 @@ public class CompanyService {
     }
 
     public void update(CompanyDto.Request.Update request) {
-        this.companyRepository.save(CompanyFindUtils.findById(request.getId(), this.companyRepository).update(request));
+        this.companyRepository.save(CompanyFindUtils.findByIdOrElseThrow(request.getId(), this.companyRepository).update(request));
     }
 
     public void delete(Integer id) {
-        CompanyFindUtils.findById(id, this.companyRepository).delete();
+        CompanyFindUtils.findByIdOrElseThrow(id, this.companyRepository).delete();
     }
 }

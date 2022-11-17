@@ -9,7 +9,7 @@ import com.adplatform.restApi.domain.campaign.exception.CampaignNotFoundExceptio
  * @since 1.0
  */
 public class CampaignFindUtils {
-    public static Campaign findById(Integer id, CampaignRepository repository) {
+    public static Campaign findByIdOrElseThrow(Integer id, CampaignRepository repository) {
         return repository.findById(id).orElseThrow(CampaignNotFoundException::new);
     }
 }

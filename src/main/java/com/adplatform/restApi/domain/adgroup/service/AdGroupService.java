@@ -68,6 +68,6 @@ public class AdGroupService {
     }
 
     public void update(AdGroupDto.Request.Update request) {
-        AdGroupFindUtils.findById(request.getAdGroupId(), this.adGroupRepository).update(request);
+        AdGroupFindUtils.findByIdOrElseThrow(request.getAdGroupId(), this.adGroupRepository).update(request);
     }
 }

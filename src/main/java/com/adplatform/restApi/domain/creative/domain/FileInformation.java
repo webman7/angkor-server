@@ -2,6 +2,7 @@ package com.adplatform.restApi.domain.creative.domain;
 
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
@@ -13,6 +14,7 @@ import javax.persistence.Enumerated;
  * @author Seohyun Lee
  * @since 1.0
  */
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
 public class FileInformation {

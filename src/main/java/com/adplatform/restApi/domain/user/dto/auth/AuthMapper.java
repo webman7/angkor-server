@@ -30,6 +30,6 @@ public abstract class AuthMapper {
 
     @Named("mapCompany")
     protected Company mapCompany(Integer id) {
-        return CompanyFindUtils.findById(id, this.companyRepository);
+        return CompanyFindUtils.findByIdOrElseThrow(id, this.companyRepository);
     }
 }

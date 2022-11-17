@@ -2,10 +2,7 @@ package com.adplatform.restApi.domain.creative.dto;
 
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountIdGetter;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupIdGetter;
-import com.adplatform.restApi.domain.creative.domain.Creative;
-import com.adplatform.restApi.domain.creative.domain.CreativeFile;
-import com.adplatform.restApi.domain.creative.domain.CreativeLanding;
-import com.adplatform.restApi.domain.creative.domain.FileInformation;
+import com.adplatform.restApi.domain.creative.domain.*;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
@@ -104,6 +101,51 @@ public abstract class CreativeDto {
                 this.adGroupName = adGroupName;
                 this.fileId = fileId;
                 this.fileName = fileName;
+            }
+        }
+
+        @Getter
+        @Setter
+        public static class Detail {
+            private List<CreativeFileDto> files;
+            List<CreativeOpinionProofFileDto> opinionProofFiles;
+            private String name;
+            private Creative.Format format;
+            private String altText;
+            private String title;
+            private String description;
+            private Creative.ActionButton actionButton;
+            private CreativeLanding landing;
+            private boolean frequencyType;
+            private int frequency;
+            private String opinion;
+
+            @QueryProjection
+            public Detail(
+                    List<CreativeFileDto> files,
+                    List<CreativeOpinionProofFileDto> opinionProofFiles,
+                    String name,
+                    Creative.Format format,
+                    String altText,
+                    String title,
+                    String description,
+                    Creative.ActionButton actionButton,
+                    CreativeLanding landing,
+                    boolean frequencyType,
+                    int frequency,
+                    String opinion) {
+                this.files = files;
+                this.opinionProofFiles = opinionProofFiles;
+                this.name = name;
+                this.format = format;
+                this.altText = altText;
+                this.title = title;
+                this.description = description;
+                this.actionButton = actionButton;
+                this.landing = landing;
+                this.frequencyType = frequencyType;
+                this.frequency = frequency;
+                this.opinion = opinion;
             }
         }
     }

@@ -28,7 +28,7 @@ public class CompanyQueryApi {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
     public CompanyDto.Response.Detail findById(@PathVariable Integer id) {
-        return this.companyMapper.toDetailResponse(CompanyFindUtils.findById(id, this.companyRepository));
+        return this.companyMapper.toDetailResponse(CompanyFindUtils.findByIdOrElseThrow(id, this.companyRepository));
     }
 
     @ResponseStatus(HttpStatus.OK)

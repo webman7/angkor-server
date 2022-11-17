@@ -39,7 +39,7 @@ public class AuthorizedAdAccountAspect {
 
     @Around("@annotation(com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount) && args(campaignIdGetter, ..)")
     public Object validateAuthorizedAdAccount(ProceedingJoinPoint joinPoint, CampaignIdGetter campaignIdGetter) throws Throwable {
-        Integer adAccountId = CampaignFindUtils.findById(campaignIdGetter.getCampaignId(), this.campaignRepository)
+        Integer adAccountId = CampaignFindUtils.findByIdOrElseThrow(campaignIdGetter.getCampaignId(), this.campaignRepository)
                 .getAdAccount()
                 .getId();
         this.validateAdAccountUser(adAccountId);
@@ -48,7 +48,7 @@ public class AuthorizedAdAccountAspect {
 
     @Around("@annotation(com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount) && args(adGroupIdGetter, ..))")
     public Object validateAuthorizedAdAccount(ProceedingJoinPoint joinPoint, AdGroupIdGetter adGroupIdGetter) throws Throwable {
-        Integer adAccountId = AdGroupFindUtils.findById(adGroupIdGetter.getAdGroupId(), this.adGroupRepository)
+        Integer adAccountId = AdGroupFindUtils.findByIdOrElseThrow(adGroupIdGetter.getAdGroupId(), this.adGroupRepository)
                 .getCampaign()
                 .getAdAccount()
                 .getId();

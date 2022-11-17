@@ -14,7 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Seohyun Lee
  * @since 1.0
  */
-@Mapper(config = BaseMapperConfig.class, imports = AdGroupFindUtils.class)
+@Mapper(
+        config = BaseMapperConfig.class,
+        imports = AdGroupFindUtils.class,
+        uses = CreativeFileMapper.class
+)
 public abstract class CreativeMapper {
     @Autowired
     protected AdGroupRepository adGroupRepository;
@@ -38,4 +42,6 @@ public abstract class CreativeMapper {
                 dto.getMobileLandingUrl(),
                 dto.getResponsiveLandingUrl());
     }
+
+    public abstract CreativeDto.Response.Detail toDetailResponse(Creative creative);
 }

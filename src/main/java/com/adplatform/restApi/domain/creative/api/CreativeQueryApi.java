@@ -2,7 +2,10 @@ package com.adplatform.restApi.domain.creative.api;
 
 import com.adplatform.restApi.domain.creative.dao.CreativeRepository;
 import com.adplatform.restApi.domain.creative.dto.CreativeDto;
+import com.adplatform.restApi.domain.creative.dto.CreativeMapper;
+import com.adplatform.restApi.domain.creative.exception.CreativeNotFoundException;
 import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount;
+import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccountByCreativeId;
 import com.adplatform.restApi.global.dto.PageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +24,7 @@ import javax.validation.Valid;
 @RequestMapping("/creatives")
 public class CreativeQueryApi {
     private final CreativeRepository creativeRepository;
+    private final CreativeMapper creativeMapper;
 
     @AuthorizedAdAccount
     @ResponseStatus(HttpStatus.OK)
@@ -29,5 +33,14 @@ public class CreativeQueryApi {
             @Valid CreativeDto.Request.Search request,
             @PageableDefault Pageable pageable) {
         return PageDto.create(this.creativeRepository.search(request, pageable));
+    }
+
+    @AuthorizedAdAccountByCreativeId
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}")
+    public CreativeDto.Response.Detail findById(@PathVariable(name = "id") Integer creativeId) {
+        return this.creativeMapper.toDetailResponse(
+                this.creativeRepository.findDetailById(creativeId)
+                        .orElseThrow(CreativeNotFoundException::new));
     }
 }

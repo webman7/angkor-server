@@ -24,7 +24,7 @@ public class AuthorizedAdAccountByAdGroupIdAspect {
 
     @Around("@annotation(com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccountByAdGroupId) && args(adGroupId, ..)")
     public Object validateAuthorizedAdAccount(ProceedingJoinPoint joinPoint, Integer adGroupId) throws Throwable {
-        Integer adAccountId = AdGroupFindUtils.findById(adGroupId, this.adGroupRepository)
+        Integer adAccountId = AdGroupFindUtils.findByIdOrElseThrow(adGroupId, this.adGroupRepository)
                 .getCampaign()
                 .getAdAccount()
                 .getId();
