@@ -54,6 +54,7 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
     @Getter
     @AllArgsConstructor
     private static class SearchForAgencySubQueries {
+        Expression<String> marketerNameQuery;
         Expression<Integer> todaySpendQuery;
         Expression<Integer> yesterdaySpendQuery;
         Expression<Integer> monthSpendQuery;
@@ -70,6 +71,7 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                         .list(new QAdAccountDto_Response_ForAgencySearch(
                                 adAccount.id,
                                 adAccount.name,
+                                subQueries.marketerNameQuery,
                                 company.type,
                                 new QWalletDto_Response_WalletSpend(
                                         GroupBy.sum(walletCashTotal.amount),
@@ -89,14 +91,12 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                 .join(adAccount.company, company)
                 .join(adAccount.adAccountUsers, adAccountUser)
                 .join(adAccount.walletMaster, walletMaster)
-                .leftJoin(walletMaster.cashTotals, walletCashTotal)
-                .leftJoin(walletCashTotal.cash, cash).on(cash.saleAffect.eq(true))
                 .where(
                         adAccountUser.id.userId.eq(userId),
                         this.eqId(request.getId()),
-                        this.containsName(request.getName())
-                )
-                .from(adAccount);
+                        this.containsName(request.getName()),
+                        this.eqPreDeferredPayment(request.getPreDeferredPayment())
+                );
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
@@ -110,6 +110,7 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                         .list(new QAdAccountDto_Response_ForAgencySearch(
                                 adAccount.id,
                                 adAccount.name,
+                                subQueries.getMarketerNameQuery(),
                                 company.type,
                                 new QWalletDto_Response_WalletSpend(
                                         GroupBy.sum(walletCashTotal.amount),
@@ -133,6 +134,7 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
         JPAQuery<Tuple> query = this.query.select(
                         adAccount.id,
                         adAccount.name,
+                        subQueries.getMarketerNameQuery(),
                         company.type,
                         adAccount.creditLimit,
                         adAccount.preDeferredPayment,
@@ -153,7 +155,8 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                 .where(
                         adAccountUser.id.userId.eq(userId),
                         this.eqId(request.getId()),
-                        this.containsName(request.getName())
+                        this.containsName(request.getName()),
+                        this.eqPreDeferredPayment(request.getPreDeferredPayment())
                 );
 
         return Objects.nonNull(pageable)
@@ -162,18 +165,24 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
     }
 
     private SearchForAgencySubQueries getSearchForAgencySubQueries() {
+        Expression<String> marketerNameQuery = ExpressionUtils.as(select(user.name)
+                        .from(user)
+                        .join(adAccountUser).on(user.id.eq(adAccountUser.id.userId), adAccountUser.memberType.eq(AdAccountUser.MemberType.MASTER))
+                        .where(adAccountUser.id.adAccountId.eq(adAccount.id)),
+                "marketerName");
+
         LocalDate now = LocalDate.now();
         Expression<Integer> todaySpendQuery = ExpressionUtils.as(select(saleAmountDaily.saleAmount)
                         .from(saleAmountDaily)
                         .where(saleAmountDaily.id.adAccountId.eq(adAccount.id),
-                                saleAmountDaily.id.statDate.eq(Integer.valueOf(now.format(DateTimeFormatter.ofPattern("yyyyMMdd")))))
-                , ExpressionUtils.path(Integer.class, "todaySpend"));
+                                saleAmountDaily.id.statDate.eq(Integer.valueOf(now.format(DateTimeFormatter.ofPattern("yyyyMMdd"))))),
+                ExpressionUtils.path(Integer.class, "todaySpend"));
 
         Expression<Integer> yesterdaySpendQuery = ExpressionUtils.as(select(saleAmountDaily.saleAmount)
                         .from(saleAmountDaily)
                         .where(saleAmountDaily.id.adAccountId.eq(adAccount.id),
-                                saleAmountDaily.id.statDate.eq(Integer.valueOf(now.minusDays(1L).format(DateTimeFormatter.ofPattern("yyyyMMdd")))))
-                , ExpressionUtils.path(Integer.class, "yesterdaySpend"));
+                                saleAmountDaily.id.statDate.eq(Integer.valueOf(now.minusDays(1L).format(DateTimeFormatter.ofPattern("yyyyMMdd"))))),
+                ExpressionUtils.path(Integer.class, "yesterdaySpend"));
 
         Expression<Integer> monthSpendQuery = ExpressionUtils.as(select(saleAmountDaily.saleAmount.sum())
                         .from(saleAmountDaily)
@@ -183,10 +192,10 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                                         Integer.valueOf(now.withDayOfMonth(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"))),
                                         Integer.valueOf(now.withDayOfMonth(now.lengthOfMonth()).format(DateTimeFormatter.ofPattern("yyyyMMdd")))
                                 )
-                        ).groupBy(saleAmountDaily.id.adAccountId)
-                , ExpressionUtils.path(Integer.class, "monthSpendQuery"));
+                        ).groupBy(saleAmountDaily.id.adAccountId),
+                ExpressionUtils.path(Integer.class, "monthSpendQuery"));
 
-        return new SearchForAgencySubQueries(todaySpendQuery, yesterdaySpendQuery, monthSpendQuery);
+        return new SearchForAgencySubQueries(marketerNameQuery, todaySpendQuery, yesterdaySpendQuery, monthSpendQuery);
     }
 
     @Override
@@ -236,6 +245,10 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
 
     private BooleanExpression eqId(Integer id) {
         return id != null ? adAccount.id.eq(id) : null;
+    }
+
+    private BooleanExpression eqPreDeferredPayment(Boolean preDeferredPayment) {
+        return preDeferredPayment != null ? adAccount.preDeferredPayment.eq(preDeferredPayment) : null;
     }
 
     private BooleanExpression containsName(String name) {

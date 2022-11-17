@@ -36,6 +36,7 @@ public class AdAccountDto {
         public static class ForAgencySearch {
             private Integer id;
             private String name;
+            private Boolean preDeferredPayment;
 //            private AdAccount.CompanyType companyType;
 //            private List<WalletDto.Request.WalletSpend> walletSpend;
 //            private String config;
@@ -51,6 +52,7 @@ public class AdAccountDto {
         public static class ForAgencySearch {
             private Integer id;
             private String name;
+            private String marketerName;
             private Company.Type companyType;
             private WalletDto.Response.WalletSpend walletSpend;
             private Integer creditLimit;
@@ -63,6 +65,7 @@ public class AdAccountDto {
             public ForAgencySearch(
                     Integer id,
                     String name,
+                    String marketerName,
                     Company.Type companyType,
                     WalletDto.Response.WalletSpend walletSpend,
                     Integer creditLimit,
@@ -72,6 +75,7 @@ public class AdAccountDto {
                     boolean outOfBalance) {
                 this.id = id;
                 this.name = name;
+                this.marketerName = marketerName;
                 this.companyType = companyType;
                 this.walletSpend = walletSpend;
                 this.creditLimit = creditLimit;
