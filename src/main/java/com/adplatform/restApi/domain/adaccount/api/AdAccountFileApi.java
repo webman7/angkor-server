@@ -142,11 +142,9 @@ public class AdAccountFileApi {
         if (adminStop) return "관리자정지";
         switch (config) {
             case ON:
-                if (outOfBalance) return "잔액부족";
-                return "운영중";
+                return outOfBalance ? "잔액부족" : "운영중";
             case OFF:
-                if (outOfBalance) return "사용자OFF,잔액부족";
-                return "사용자OFF";
+                return outOfBalance ? "사용자OFF,잔액부족" : "사용자OFF";
             case DEL:
                 return "-";
         }
