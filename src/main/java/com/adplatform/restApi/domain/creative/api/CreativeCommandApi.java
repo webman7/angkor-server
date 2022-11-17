@@ -25,4 +25,11 @@ public class CreativeCommandApi {
     public void save(@Valid CreativeDto.Request.Save request) {
         this.creativeSaveService.save(request);
     }
+
+    @AuthorizedAdAccount
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping
+    public void update(@Valid CreativeDto.Request.Update request) {
+        this.creativeSaveService.update(request);
+    }
 }

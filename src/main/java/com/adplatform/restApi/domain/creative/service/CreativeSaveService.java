@@ -13,6 +13,7 @@ import com.adplatform.restApi.infra.file.service.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Files;
@@ -23,6 +24,7 @@ import java.nio.file.Paths;
  * @since 1.0
  */
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class CreativeSaveService {
     private final CreativeRepository creativeRepository;
@@ -34,6 +36,13 @@ public class CreativeSaveService {
         request.getFiles().forEach(file -> creative.addFile(this.saveFile(request, creative, file)));
         request.getOpinionProofFiles().forEach(file -> creative.addOpinionProofFile(this.saveOpinionProofFile(creative, file)));
         this.creativeRepository.save(creative);
+    }
+
+    public void update(CreativeDto.Request.Update request) {
+        Creative creative = CreativeFindUtils.findByIdOrElseThrow(request.getCreativeId(), this.creativeRepository)
+                .update(request)
+                .clearOpinionProofFile();
+        request.getOpinionProofFiles().forEach(file -> creative.addOpinionProofFile(this.saveOpinionProofFile(creative, file)));
     }
 
     @SneakyThrows

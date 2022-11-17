@@ -1,6 +1,7 @@
 package com.adplatform.restApi.domain.creative.domain;
 
 import com.adplatform.restApi.domain.adgroup.domain.AdGroup;
+import com.adplatform.restApi.domain.creative.dto.CreativeDto;
 import com.adplatform.restApi.global.converter.BooleanToStringYOrNConverter;
 import com.adplatform.restApi.global.entity.BaseUpdatedEntity;
 import lombok.AccessLevel;
@@ -170,5 +171,23 @@ public class Creative extends BaseUpdatedEntity {
 
     public void addOpinionProofFile(CreativeOpinionProofFile file) {
         this.opinionProofFiles.add(file);
+    }
+
+    public Creative clearOpinionProofFile() {
+        this.opinionProofFiles.clear();
+        return this;
+    }
+
+    public Creative update(CreativeDto.Request.Update request) {
+        this.name = request.getName();
+        this.title = request.getTitle();
+        this.altText = request.getAltText();
+        this.description = request.getDescription();
+        this.actionButton = request.getActionButton();
+        this.landing.update(request.getPcLandingUrl(), request.getMobileLandingUrl(), request.getResponsiveLandingUrl());
+        this.frequencyType = request.isFrequencyType();
+        this.frequency = request.getFrequency();
+        this.opinion = request.getOpinion();
+        return this;
     }
 }

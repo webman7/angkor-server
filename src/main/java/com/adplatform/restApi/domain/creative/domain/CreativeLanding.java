@@ -44,4 +44,10 @@ public class CreativeLanding {
         this.mobileLandingUrl = mobileLandingUrl;
         this.responsiveLandingUrl = responsiveLandingUrl;
     }
+
+    public void update(String pcLandingUrl, String mobileLandingUrl, String responsiveLandingUrl) {
+        this.pcLandingUrl = pcLandingUrl;
+        this.mobileLandingUrl = mobileLandingUrl;
+        this.responsiveLandingUrl = responsiveLandingUrl;
+    }
 }

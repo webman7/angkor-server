@@ -4,6 +4,10 @@ import com.adplatform.restApi.domain.creative.domain.FileInformation;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Getter
 @Setter
 public class CreativeOpinionProofFileDto {

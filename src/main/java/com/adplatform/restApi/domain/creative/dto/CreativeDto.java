@@ -2,13 +2,16 @@ package com.adplatform.restApi.domain.creative.dto;
 
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountIdGetter;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupIdGetter;
-import com.adplatform.restApi.domain.creative.domain.*;
+import com.adplatform.restApi.domain.creative.domain.Creative;
+import com.adplatform.restApi.domain.creative.domain.CreativeFile;
+import com.adplatform.restApi.domain.creative.domain.CreativeLanding;
+import com.adplatform.restApi.domain.creative.domain.FileInformation;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
@@ -33,11 +36,12 @@ public abstract class CreativeDto {
             @Size(min = 1, max = 100)
             private List<MultipartFile> files = new ArrayList<>();
             private List<MultipartFile> opinionProofFiles = new ArrayList<>();
-            @NotEmpty
+            @NotBlank
             private String name;
             @NotNull
             private Creative.Format format;
             private String altText;
+            @NotBlank
             private String title;
             private String description;
             @NotNull
@@ -58,6 +62,28 @@ public abstract class CreativeDto {
             @NotNull
             private Integer adAccountId;
             private String name;
+        }
+
+        @Getter
+        @Setter
+        public static class Update implements CreativeIdGetter {
+            @NotNull
+            private Integer creativeId;
+            private List<MultipartFile> opinionProofFiles = new ArrayList<>();
+            @NotBlank
+            private String name;
+            @NotBlank
+            private String title;
+            private String altText;
+            private String description;
+            @NotNull
+            private Creative.ActionButton actionButton;
+            private String pcLandingUrl;
+            private String mobileLandingUrl;
+            private String responsiveLandingUrl;
+            private boolean frequencyType;
+            private int frequency;
+            private String opinion;
         }
     }
 
