@@ -4,6 +4,7 @@ import com.adplatform.restApi.domain.adgroup.domain.AdGroup;
 import com.adplatform.restApi.domain.creative.dto.CreativeDto;
 import com.adplatform.restApi.global.converter.BooleanToStringYOrNConverter;
 import com.adplatform.restApi.global.entity.BaseUpdatedEntity;
+import com.adplatform.restApi.infra.file.service.FileService;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,7 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Seohyun Lee
@@ -173,8 +175,12 @@ public class Creative extends BaseUpdatedEntity {
         this.opinionProofFiles.add(file);
     }
 
-    public Creative clearOpinionProofFile() {
-        this.opinionProofFiles.clear();
+    public Creative deleteOpinionProofFiles(List<String> deleteFilenames, FileService fileService) {
+        List<CreativeOpinionProofFile> filesToBeDeleted = this.opinionProofFiles.stream()
+                .filter(file -> deleteFilenames.contains(file.getInformation().getOriginalFileName()))
+                .collect(Collectors.toList());
+        this.opinionProofFiles.removeAll(filesToBeDeleted);
+        filesToBeDeleted.forEach(file -> fileService.delete(file.getInformation().getFilename()));
         return this;
     }
 

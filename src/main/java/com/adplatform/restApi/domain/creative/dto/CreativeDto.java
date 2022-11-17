@@ -70,6 +70,7 @@ public abstract class CreativeDto {
             @NotNull
             private Integer creativeId;
             private List<MultipartFile> opinionProofFiles = new ArrayList<>();
+            private List<String> deleteOpinionProofFilenames = new ArrayList<>();
             @NotBlank
             private String name;
             @NotBlank

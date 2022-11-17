@@ -41,7 +41,7 @@ public class CreativeSaveService {
     public void update(CreativeDto.Request.Update request) {
         Creative creative = CreativeFindUtils.findByIdOrElseThrow(request.getCreativeId(), this.creativeRepository)
                 .update(request)
-                .clearOpinionProofFile();
+                .deleteOpinionProofFiles(request.getDeleteOpinionProofFilenames(), this.fileService);
         request.getOpinionProofFiles().forEach(file -> creative.addOpinionProofFile(this.saveOpinionProofFile(creative, file)));
     }
 
@@ -72,7 +72,7 @@ public class CreativeSaveService {
             width = imageSizeHelper.getWidth(file);
             height = imageSizeHelper.getHeight(file);
         } else if (mimetype.startsWith("video")) {
-            fileType =  FileInformation.FileType.VIDEO;
+            fileType = FileInformation.FileType.VIDEO;
         } else {
             throw new UnsupportedOperationException();
         }

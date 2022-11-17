@@ -11,5 +11,5 @@ public interface FileService {
 
     byte[] findByName(String filename);
 
-    void delete(String url);
+    void delete(String filename);
 }

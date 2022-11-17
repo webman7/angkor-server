@@ -1,6 +1,7 @@
 package com.adplatform.restApi.infra.file.service;
 
 import lombok.SneakyThrows;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.context.annotation.Profile;
@@ -40,7 +41,7 @@ public class LocalFileServiceImpl implements FileService {
     }
 
     @Override
-    public void delete(String url) {
-
+    public void delete(String filename) {
+        FileUtils.deleteQuietly(new File(FILE_PATH + filename));
     }
 }
