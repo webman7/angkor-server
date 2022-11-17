@@ -74,6 +74,7 @@ public abstract class CreativeDto {
             private Creative.SystemConfig systemConfig;
             private Creative.ReviewStatus reviewStatus;
             private Creative.Status status;
+            private Integer campaignId;
             private Integer adGroupId;
             private String adGroupName;
             private Integer fileId;
@@ -87,6 +88,7 @@ public abstract class CreativeDto {
                     Creative.SystemConfig systemConfig,
                     Creative.ReviewStatus reviewStatus,
                     Creative.Status status,
+                    Integer campaignId,
                     Integer adGroupId,
                     String adGroupName,
                     Integer fileId,
@@ -97,6 +99,7 @@ public abstract class CreativeDto {
                 this.systemConfig = systemConfig;
                 this.reviewStatus = reviewStatus;
                 this.status = status;
+                this.campaignId = campaignId;
                 this.adGroupId = adGroupId;
                 this.adGroupName = adGroupName;
                 this.fileId = fileId;

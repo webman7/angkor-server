@@ -41,6 +41,7 @@ public class CreativeQuerydslRepositoryImpl implements CreativeQuerydslRepositor
                         creative.systemConfig,
                         creative.reviewStatus,
                         creative.status,
+                        campaign.id,
                         creative.adGroup.id,
                         adGroup.name,
                         creativeFile.id,

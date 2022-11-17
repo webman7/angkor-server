@@ -79,11 +79,6 @@ public abstract class AdGroupDto {
         public static class Update extends FirstSave implements AdGroupIdGetter {
             @NotNull
             private Integer adGroupId;
-
-            public Update(AdGroupDemographicTargetDto.Request.@Valid FirstSave demographicTarget, AdGroupScheduleDto.Request.@Valid FirstSave adGroupSchedule, @NotNull @Size(min = 1) List<String> media, @NotNull @Size(min = 1) List<String> devices, @NotBlank @Size(min = 1, max = 50) String name, AdGroup.Pacing pacing, AdGroup.PacingType pacingType, Long bidAmount, AdGroup.BidStrategy bidStrategy, Long dailyBudgetAmount, boolean fullDeviceDisplay, boolean onlyWifiDisplay, boolean allMedia, boolean onlyAdult, Integer adGroupId) {
-                super(demographicTarget, adGroupSchedule, media, devices, name, pacing, pacingType, bidAmount, bidStrategy, dailyBudgetAmount, fullDeviceDisplay, onlyWifiDisplay, allMedia, onlyAdult);
-                this.adGroupId = adGroupId;
-            }
         }
     }
 
