@@ -44,8 +44,9 @@ public class AdAccountFileApi {
             "이번달 소진액");
 
 
+    @SneakyThrows
     @GetMapping("/csv")
-    public ResponseEntity<String> downloadCsv() {
+    public ResponseEntity<byte[]> downloadCsv() {
         List<AdAccountDto.Response.ForAgencySearch> content = this.adAccountRepository.searchForAgency(
                 new AdAccountDto.Request.ForAgencySearch(), SecurityUtils.getLoginUserId());
         StringBuilder sb = new StringBuilder();
@@ -62,10 +63,17 @@ public class AdAccountFileApi {
                         c.getWalletSpend().getYesterdaySpend(),
                         c.getWalletSpend().getMonthSpend())
         ));
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        baos.write(0xEF);
+        baos.write(0xBB);
+        baos.write(0xBF);
+        baos.write(sb.toString().getBytes(StandardCharsets.UTF_8));
+
         return ResponseEntity.ok()
                 .header("Content-Disposition", "attachment; filename=adaccount-list.csv")
                 .contentType(new MediaType("text", "csv"))
-                .body(sb.toString());
+                .body(baos.toByteArray());
     }
 
     @SneakyThrows
@@ -118,9 +126,6 @@ public class AdAccountFileApi {
             }
 
             baos = new ByteArrayOutputStream();
-            baos.write(0xEF);
-            baos.write(0xBB);
-            baos.write(0xBF);
             workbook.write(baos);
         }
 
