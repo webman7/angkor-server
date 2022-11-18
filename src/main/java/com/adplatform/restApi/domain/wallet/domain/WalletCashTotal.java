@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -15,13 +16,14 @@ import java.time.LocalDateTime;
  */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "wallet_cash_total")
 public class WalletCashTotal {
     @EmbeddedId
-    private WalletCashTotalId id;
+    private WalletCashTotalId id = new WalletCashTotalId();
 
-    @MapsId("adAccountId")
+    @MapsId("walletMasterId")
     @ManyToOne
     @JoinColumn(name = "adaccount_info_id")
     private WalletMaster walletMaster;
@@ -32,10 +34,15 @@ public class WalletCashTotal {
     private Cash cash;
 
     @Column(name = "amount", columnDefinition = "Integer")
-    private Integer amount;
+    private int amount;
 
     @LastModifiedDate
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @Column(name = "upd_date")
     private LocalDateTime updatedAt;
+
+    public WalletCashTotal(WalletMaster walletMaster, Cash cash) {
+        this.walletMaster = walletMaster;
+        this.cash = cash;
+    }
 }

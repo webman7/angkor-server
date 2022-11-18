@@ -49,4 +49,9 @@ public class WalletMaster extends BaseEntity {
         this.adAccount = adAccount;
         return this;
     }
+
+    public WalletMaster initWalletCashTotal (List<Cash> cashes) {
+        cashes.forEach(cash -> this.cashTotals.add(new WalletCashTotal(this, cash)));
+        return this;
+    }
 }

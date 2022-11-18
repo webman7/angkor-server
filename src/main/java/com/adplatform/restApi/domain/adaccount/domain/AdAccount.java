@@ -3,6 +3,7 @@ package com.adplatform.restApi.domain.adaccount.domain;
 import com.adplatform.restApi.domain.campaign.domain.Campaign;
 import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.user.domain.User;
+import com.adplatform.restApi.domain.wallet.domain.Cash;
 import com.adplatform.restApi.domain.wallet.domain.WalletMaster;
 import com.adplatform.restApi.global.converter.BooleanToStringYOrNConverter;
 import com.adplatform.restApi.global.entity.BaseUpdatedEntity;
@@ -138,9 +139,8 @@ public class AdAccount extends BaseUpdatedEntity {
         return this;
     }
 
-    public AdAccount changeWalletMaster(WalletMaster walletMaster) {
-        this.walletMaster = walletMaster;
-        this.walletMaster.updateAdAccount(this);
+    public AdAccount changeWalletMaster(WalletMaster walletMaster, List<Cash> cashes) {
+        this.walletMaster = walletMaster.updateAdAccount(this).initWalletCashTotal(cashes);
         return this;
     }
 }
