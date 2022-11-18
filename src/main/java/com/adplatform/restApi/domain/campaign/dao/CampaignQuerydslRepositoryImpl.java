@@ -16,10 +16,14 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Objects;
 
+import static com.adplatform.restApi.domain.adgroup.domain.QAdGroup.adGroup;
+import static com.adplatform.restApi.domain.adgroup.domain.QAdGroupSchedule.adGroupSchedule;
 import static com.adplatform.restApi.domain.campaign.domain.QAdGoal.adGoal;
 import static com.adplatform.restApi.domain.campaign.domain.QAdType.adType;
 import static com.adplatform.restApi.domain.campaign.domain.QAdTypeAndGoal.adTypeAndGoal;
 import static com.adplatform.restApi.domain.campaign.domain.QCampaign.campaign;
+import static com.querydsl.core.types.ExpressionUtils.as;
+import static com.querydsl.jpa.JPAExpressions.select;
 
 /**
  * @author Seohyun Lee
@@ -41,7 +45,15 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
                         campaign.systemConfig,
                         campaign.status,
                         campaign.createdAt,
-                        campaign.updatedAt
+                        campaign.updatedAt,
+                        as(select(adGroupSchedule.startDate.min())
+                                .from(adGroupSchedule)
+                                .join(adGroupSchedule.adGroup, adGroup)
+                                .where(adGroup.campaign.id.eq(campaign.id)), "adGroupSchedulesFirstStartDate"),
+                        as(select(adGroupSchedule.endDate.max())
+                                .from(adGroupSchedule)
+                                .join(adGroupSchedule.adGroup, adGroup)
+                                .where(adGroup.campaign.id.eq(campaign.id)), "adGroupSchedulesLastEndDate")
                 ))
                 .from(campaign)
                 .join(campaign.adTypeAndGoal, adTypeAndGoal)

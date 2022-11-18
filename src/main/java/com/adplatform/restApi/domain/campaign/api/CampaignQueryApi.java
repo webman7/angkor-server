@@ -2,7 +2,6 @@ package com.adplatform.restApi.domain.campaign.api;
 
 import com.adplatform.restApi.domain.campaign.dao.CampaignRepository;
 import com.adplatform.restApi.domain.campaign.dto.CampaignDto;
-import com.adplatform.restApi.domain.campaign.service.CampaignQueryService;
 import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount;
 import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccountByCampaignId;
 import com.adplatform.restApi.global.dto.PageDto;
@@ -22,7 +21,6 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/campaigns")
 public class CampaignQueryApi {
-    private final CampaignQueryService campaignQueryService;
     private final CampaignRepository campaignRepository;
 
     @AuthorizedAdAccount
@@ -31,7 +29,7 @@ public class CampaignQueryApi {
     public PageDto<CampaignDto.Response.Page> search(
             @Valid CampaignDto.Request.Search request,
             @PageableDefault Pageable pageable) {
-        return PageDto.create(this.campaignQueryService.search(request, pageable));
+        return PageDto.create(this.campaignRepository.search(request, pageable));
     }
 
     @AuthorizedAdAccount

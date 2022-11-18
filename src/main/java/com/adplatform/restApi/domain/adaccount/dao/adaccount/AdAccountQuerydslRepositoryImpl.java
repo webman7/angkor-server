@@ -2,7 +2,6 @@ package com.adplatform.restApi.domain.adaccount.dao.adaccount;
 
 import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
 import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
-import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.QAdAccountDto_Response_ForAdvertiserSearch;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.QAdAccountDto_Response_ForAgencySearch;
 import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_WalletSpend;
@@ -27,7 +26,8 @@ import java.util.Objects;
 
 import static com.adplatform.restApi.domain.adaccount.domain.QAdAccount.adAccount;
 import static com.adplatform.restApi.domain.adaccount.domain.QAdAccountUser.adAccountUser;
-import static com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto.Request.ForAgencySearch;
+import static com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto.Request;
+import static com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto.Response;
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
 import static com.adplatform.restApi.domain.statistics.domain.QSaleAmountDaily.saleAmountDaily;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
@@ -47,8 +47,8 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
     private final JPAQueryFactory query;
 
     @Override
-    public Page<AdAccountDto.Response.ForAgencySearch> searchForAgency(Pageable pageable, ForAgencySearch request, Integer userId) {
-        List<AdAccountDto.Response.ForAgencySearch> content = this.getSearchForAgencyQuery(pageable, request, userId)
+    public Page<Response.ForAgencySearch> searchForAgency(Pageable pageable, Request.ForAgencySearch request, Integer userId) {
+        List<Response.ForAgencySearch> content = this.getSearchForAgencyQuery(pageable, request, userId)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -68,22 +68,24 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
     }
 
     @Override
-    public List<AdAccountDto.Response.ForAgencySearch> searchForAgency(ForAgencySearch request, Integer userId) {
+    public List<Response.ForAgencySearch> searchForAgency(Request.ForAgencySearch request, Integer userId) {
         return this.getSearchForAgencyQuery(null, request, userId).fetch();
     }
 
-    private JPAQuery<AdAccountDto.Response.ForAgencySearch> getSearchForAgencyQuery(
+    private JPAQuery<Response.ForAgencySearch> getSearchForAgencyQuery(
             Pageable pageable,
-            ForAgencySearch request,
+            Request.ForAgencySearch request,
             Integer userId) {
         LocalDate now = LocalDate.now();
-        JPAQuery<AdAccountDto.Response.ForAgencySearch> query = this.query.select(
+        DateTimeFormatter yyyyMMdd = DateTimeFormatter.ofPattern("yyyyMMdd");
+        JPAQuery<Response.ForAgencySearch> query = this.query.select(
                         new QAdAccountDto_Response_ForAgencySearch(
                                 adAccount.id,
                                 adAccount.name,
                                 as(select(user.name)
                                                 .from(user)
-                                                .join(adAccountUser).on(user.id.eq(adAccountUser.id.userId), adAccountUser.memberType.eq(AdAccountUser.MemberType.MASTER))
+                                                .join(adAccountUser).on(user.id.eq(adAccountUser.id.userId),
+                                                        adAccountUser.memberType.eq(AdAccountUser.MemberType.MASTER))
                                                 .where(adAccountUser.id.adAccountId.eq(adAccount.id)),
                                         "marketerName"),
                                 company.type,
@@ -96,20 +98,20 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                                         as(select(saleAmountDaily.saleAmount)
                                                         .from(saleAmountDaily)
                                                         .where(saleAmountDaily.id.adAccountId.eq(adAccount.id),
-                                                                saleAmountDaily.id.statDate.eq(Integer.valueOf(now.format(DateTimeFormatter.ofPattern("yyyyMMdd"))))),
+                                                                saleAmountDaily.id.statDate.eq(Integer.valueOf(now.format(yyyyMMdd)))),
                                                 "todaySpend"),
                                         as(select(saleAmountDaily.saleAmount)
                                                         .from(saleAmountDaily)
                                                         .where(saleAmountDaily.id.adAccountId.eq(adAccount.id),
-                                                                saleAmountDaily.id.statDate.eq(Integer.valueOf(now.minusDays(1L).format(DateTimeFormatter.ofPattern("yyyyMMdd"))))),
+                                                                saleAmountDaily.id.statDate.eq(Integer.valueOf(now.minusDays(1L).format(yyyyMMdd)))),
                                                 "yesterdaySpend"),
                                         as(select(saleAmountDaily.saleAmount.sum())
                                                         .from(saleAmountDaily)
                                                         .where(
                                                                 saleAmountDaily.id.adAccountId.eq(adAccount.id),
                                                                 saleAmountDaily.id.statDate.between(
-                                                                        Integer.valueOf(now.withDayOfMonth(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"))),
-                                                                        Integer.valueOf(now.withDayOfMonth(now.lengthOfMonth()).format(DateTimeFormatter.ofPattern("yyyyMMdd")))
+                                                                        Integer.valueOf(now.withDayOfMonth(1).format(yyyyMMdd)),
+                                                                        Integer.valueOf(now.withDayOfMonth(now.lengthOfMonth()).format(yyyyMMdd))
                                                                 )
                                                         ).groupBy(saleAmountDaily.id.adAccountId),
                                                 "monthSpendQuery")
@@ -147,9 +149,9 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
     }
 
     @Override
-    public Page<AdAccountDto.Response.ForAdvertiserSearch> searchForAdvertiser(
+    public Page<Response.ForAdvertiserSearch> searchForAdvertiser(
             Pageable pageable, Integer id, String name, Integer loginUserId, AdAccountUser.RequestStatus requestStatus) {
-        List<AdAccountDto.Response.ForAdvertiserSearch> content = this.query.select(new QAdAccountDto_Response_ForAdvertiserSearch(
+        List<Response.ForAdvertiserSearch> content = this.query.select(new QAdAccountDto_Response_ForAdvertiserSearch(
                         adAccount.id,
                         adAccount.name,
                         as(select(user.loginId)

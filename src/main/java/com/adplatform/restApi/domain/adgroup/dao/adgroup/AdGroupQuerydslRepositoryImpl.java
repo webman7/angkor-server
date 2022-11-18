@@ -5,7 +5,6 @@ import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupDto;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.QAdGroupDto_Response_Default;
 import com.adplatform.restApi.domain.campaign.domain.Campaign;
 import com.adplatform.restApi.global.util.QuerydslOrderSpecifierUtil;
-import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -19,7 +18,6 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import static com.adplatform.restApi.domain.adgroup.domain.QAdGroup.adGroup;
@@ -38,26 +36,6 @@ import static java.util.Objects.nonNull;
 @Repository
 public class AdGroupQuerydslRepositoryImpl implements AdGroupQuerydslRepository {
     private final JPAQueryFactory query;
-
-    @Override
-    public Map<Integer, Integer> findScheduleFirstStartDateByCampaignId(List<Integer> campaignIds) {
-        return this.query.select(adGroup.campaign.id, adGroupSchedule.startDate.min())
-                .from(adGroup)
-                .join(adGroup.adGroupSchedule, adGroupSchedule)
-                .where(adGroup.campaign.id.in(campaignIds))
-                .groupBy(adGroup.campaign.id)
-                .transform(GroupBy.groupBy(adGroup.campaign.id).as(adGroupSchedule.startDate.min()));
-    }
-
-    @Override
-    public Map<Integer, Integer> findScheduleLastEndDateByCampaignId(List<Integer> campaignIds) {
-        return this.query.select(adGroup.campaign.id, adGroupSchedule.endDate.max())
-                .from(adGroup)
-                .join(adGroup.adGroupSchedule, adGroupSchedule)
-                .where(adGroup.campaign.id.in(campaignIds))
-                .groupBy(adGroup.campaign.id)
-                .transform(GroupBy.groupBy(adGroup.campaign.id).as(adGroupSchedule.endDate.max()));
-    }
 
     @Override
     public Page<AdGroupDto.Response.Default> search(AdGroupDto.Request.Search request, Pageable pageable) {

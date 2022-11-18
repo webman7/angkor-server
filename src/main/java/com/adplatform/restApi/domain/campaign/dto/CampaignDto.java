@@ -89,7 +89,9 @@ public abstract class CampaignDto {
                     Campaign.SystemConfig systemConfig,
                     Campaign.Status status,
                     LocalDateTime createdAt,
-                    LocalDateTime updatedAt) {
+                    LocalDateTime updatedAt,
+                    Integer adGroupSchedulesFirstStartDate,
+                    Integer adGroupSchedulesLastEndDate) {
                 this.id = id;
                 this.adTypeAndGoal = adTypeAndGoal;
                 this.name = name;
@@ -99,6 +101,8 @@ public abstract class CampaignDto {
                 this.status = status;
                 this.createdAt = createdAt;
                 this.updatedAt = updatedAt;
+                this.adGroupSchedulesFirstStartDate = adGroupSchedulesFirstStartDate;
+                this.adGroupSchedulesLastEndDate = adGroupSchedulesLastEndDate;
             }
         }
 
