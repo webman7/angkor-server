@@ -46,16 +46,22 @@ VALUES ('ANDROID', 'N', 0, '2022-10-26 18:07:16', null, null);
 INSERT INTO device_info (name, del_yn, reg_user_no, reg_date, upd_user_no, upd_date)
 VALUES ('IOS', 'N', 0, '2022-10-26 18:07:22', null, null);
 
+-- company_info
+INSERT INTO company_info(name, company_type, registration_number, representation_name, business_category,
+                         business_item, tax_bill_email1, active, del_yn)
+VALUES ('admin_comp', 'AGENCY', 12345, 'a', 'bc1', 'bi1', 'admin@email.com', 'Y', 'N');
+
 -- user_info
 INSERT INTO user_info (user_id, company_info_id, user_password, user_name, email, phone, active, first_pwd_yn,
-                       pwd_wrong_cnt, pwd_upd_date, reg_user_no, reg_date, upd_user_no, upd_date)
-VALUES ('admin@test.com', null, '$2a$10$HADe0IGj92syHeV7z6NO0OK5Gsts.xpFCbI40cRVKj0KzRCSOpFuy',
-        'admin', null, null, 'Y', 'N', 0, '2022-10-07 13:29:03', 0, '2022-10-07 13:29:03', 0, '2022-10-07 13:29:03');
+                pwd_wrong_cnt, pwd_upd_date, reg_user_no, reg_date, upd_user_no, upd_date)
+VALUES ('admin@test.com', 1, '$2a$10$HADe0IGj92syHeV7z6NO0OK5Gsts.xpFCbI40cRVKj0KzRCSOpFuy',
+    'admin', null, null, 'Y', 'N', 0, '2022-10-07 13:29:03', 0, '2022-10-07 13:29:03', 0, '2022-10-07 13:29:03');
 
 INSERT INTO user_info (user_id, company_info_id, user_password, user_name, email, phone, active, first_pwd_yn,
                        pwd_wrong_cnt, pwd_upd_date, reg_user_no, reg_date, upd_user_no, upd_date)
-VALUES ('advertiser@test.com', null, '$2a$10$HADe0IGj92syHeV7z6NO0OK5Gsts.xpFCbI40cRVKj0KzRCSOpFuy',
-        'advertiser', null, null, 'Y', 'N', 0, '2022-10-07 13:29:03', 0, '2022-10-07 13:29:03', 0, '2022-10-07 13:29:03');
+VALUES ('advertiser@test.com', 1, '$2a$10$HADe0IGj92syHeV7z6NO0OK5Gsts.xpFCbI40cRVKj0KzRCSOpFuy',
+        'advertiser', null, null, 'Y', 'N', 0, '2022-10-07 13:29:03', 0, '2022-10-07 13:29:03', 0,
+        '2022-10-07 13:29:03');
 
 -- user_roles
 INSERT INTO user_roles (user_no, roles_info_id)
@@ -65,6 +71,9 @@ INSERT INTO user_roles (user_no, roles_info_id)
 VALUES (2, 3);
 
 -- cash_info
-INSERT INTO cash_info (id, name, sale_affect_yn, refund_yn, priority) VALUES (1, '후불캐시', 'Y', 'N', 3);
-INSERT INTO cash_info (id, name, sale_affect_yn, refund_yn, priority) VALUES (2, '선불캐시', 'Y', 'Y', 2);
-INSERT INTO cash_info (id, name, sale_affect_yn, refund_yn, priority) VALUES (3, '무상캐시', 'N', 'N', 1);
+INSERT INTO cash_info (id, name, sale_affect_yn, refund_yn, priority)
+VALUES (1, '후불캐시', 'Y', 'N', 3);
+INSERT INTO cash_info (id, name, sale_affect_yn, refund_yn, priority)
+VALUES (2, '선불캐시', 'Y', 'Y', 2);
+INSERT INTO cash_info (id, name, sale_affect_yn, refund_yn, priority)
+VALUES (3, '무상캐시', 'N', 'N', 1);

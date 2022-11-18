@@ -27,14 +27,13 @@ import java.util.Objects;
 
 import static com.adplatform.restApi.domain.adaccount.domain.QAdAccount.adAccount;
 import static com.adplatform.restApi.domain.adaccount.domain.QAdAccountUser.adAccountUser;
-import static com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto.Request.*;
+import static com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto.Request.ForAgencySearch;
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
 import static com.adplatform.restApi.domain.statistics.domain.QSaleAmountDaily.saleAmountDaily;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
 import static com.adplatform.restApi.domain.wallet.domain.QCash.cash;
 import static com.adplatform.restApi.domain.wallet.domain.QWalletCashTotal.walletCashTotal;
 import static com.querydsl.core.types.ExpressionUtils.as;
-import static com.querydsl.core.types.ExpressionUtils.path;
 import static com.querydsl.jpa.JPAExpressions.select;
 
 /**
@@ -98,12 +97,12 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                                                         .from(saleAmountDaily)
                                                         .where(saleAmountDaily.id.adAccountId.eq(adAccount.id),
                                                                 saleAmountDaily.id.statDate.eq(Integer.valueOf(now.format(DateTimeFormatter.ofPattern("yyyyMMdd"))))),
-                                                path(Integer.class, "todaySpend")),
+                                                "todaySpend"),
                                         as(select(saleAmountDaily.saleAmount)
                                                         .from(saleAmountDaily)
                                                         .where(saleAmountDaily.id.adAccountId.eq(adAccount.id),
                                                                 saleAmountDaily.id.statDate.eq(Integer.valueOf(now.minusDays(1L).format(DateTimeFormatter.ofPattern("yyyyMMdd"))))),
-                                                path(Integer.class, "yesterdaySpend")),
+                                                "yesterdaySpend"),
                                         as(select(saleAmountDaily.saleAmount.sum())
                                                         .from(saleAmountDaily)
                                                         .where(
@@ -113,7 +112,7 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                                                                         Integer.valueOf(now.withDayOfMonth(now.lengthOfMonth()).format(DateTimeFormatter.ofPattern("yyyyMMdd")))
                                                                 )
                                                         ).groupBy(saleAmountDaily.id.adAccountId),
-                                                path(Integer.class, "monthSpendQuery"))
+                                                "monthSpendQuery")
                                 ),
                                 adAccount.creditLimit,
                                 adAccount.preDeferredPayment,
