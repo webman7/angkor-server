@@ -2,6 +2,7 @@ package com.adplatform.restApi.domain.adaccount.api;
 
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto;
 import com.adplatform.restApi.domain.adaccount.service.AdAccountSaveService;
+import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount;
 import com.adplatform.restApi.global.config.security.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,5 +24,12 @@ public class AdAccountCommandApi {
     @PostMapping
     public void save(@RequestBody @Valid AdAccountDto.Request.Save request) {
         this.adAccountSaveService.save(request, SecurityUtils.getLoginUserId());
+    }
+
+    @AuthorizedAdAccount
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/credit-limit")
+    public void creditLimitUpdate(@RequestBody @Valid AdAccountDto.Request.CreditLimitUpdate request) {
+        this.adAccountSaveService.creditLimitUpdate(request);
     }
 }

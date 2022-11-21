@@ -33,6 +33,13 @@ public class AdAccountDto {
 
         @Getter
         @Setter
+        public static class CreditLimitUpdate {
+            private Integer id;
+            private Integer creditLimit;
+        }
+
+        @Getter
+        @Setter
         public static class ForAgencySearch {
             private Integer id;
             private String name;

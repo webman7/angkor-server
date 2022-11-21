@@ -1,5 +1,6 @@
 package com.adplatform.restApi.domain.adaccount.domain;
 
+import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto;
 import com.adplatform.restApi.domain.campaign.domain.Campaign;
 import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.user.domain.User;
@@ -48,10 +49,10 @@ public class AdAccount extends BaseUpdatedEntity {
     }
 
     @OneToMany(mappedBy = "adAccount", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AdAccountUser> adAccountUsers = new ArrayList<>();
+    private final List<AdAccountUser> adAccountUsers = new ArrayList<>();
 
     @OneToMany(mappedBy = "adAccount", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Campaign> campaigns = new ArrayList<>();
+    private final List<Campaign> campaigns = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "company_info_id")
@@ -141,6 +142,11 @@ public class AdAccount extends BaseUpdatedEntity {
 
     public AdAccount changeWalletMaster(WalletMaster walletMaster, List<Cash> cashes) {
         this.walletMaster = walletMaster.updateAdAccount(this).initWalletCashTotal(cashes);
+        return this;
+    }
+
+    public AdAccount creditLimitUpdate(AdAccountDto.Request.CreditLimitUpdate request) {
+        this.creditLimit = request.getCreditLimit();
         return this;
     }
 }

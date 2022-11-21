@@ -33,4 +33,8 @@ public class AdAccountSaveService {
                 .changeWalletMaster(WalletMaster.create(), this.cashRepository.findAll());
         this.adAccountRepository.save(adAccount);
     }
+
+    public void creditLimitUpdate(AdAccountDto.Request.CreditLimitUpdate request) {
+        AdAccountFindUtils.findByIdOrElseThrow(request.getId(), this.adAccountRepository).creditLimitUpdate(request);
+    }
 }
