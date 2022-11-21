@@ -59,7 +59,7 @@ public class Password {
     }
 
     public String changeToRandomPassword(PasswordEncoder passwordEncoder) {
-        String randomPassword = new RandomCodeGenerator().generateAuthCode(8);
+        String randomPassword = new RandomCodeGenerator().generate(8);
         this.value = passwordEncoder.encode(randomPassword);
         this.wrongCount = 0;
         this.needChange = true;
