@@ -43,7 +43,6 @@ public class AdAccountFileApi {
             "어제 소진액",
             "이번달 소진액");
 
-
     @SneakyThrows
     @GetMapping("/csv")
     public ResponseEntity<byte[]> downloadCsv() {

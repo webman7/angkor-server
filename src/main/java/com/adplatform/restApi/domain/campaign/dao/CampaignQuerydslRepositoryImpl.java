@@ -8,6 +8,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -125,6 +126,6 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
     }
 
     private BooleanExpression containsName(String name) {
-        return Objects.nonNull(name) ? campaign.name.contains(name) : null;
+        return StringUtils.isNotBlank(name) ? campaign.name.contains(name) : null;
     }
 }
