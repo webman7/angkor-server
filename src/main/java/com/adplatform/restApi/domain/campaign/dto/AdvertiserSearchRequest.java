@@ -25,6 +25,7 @@ public class AdvertiserSearchRequest implements AdAccountIdGetter {
     private List<AdGroup.Status> adGroupStatuses;
     private List<Integer> creativeIds;
     private String creativeName;
+    private List<Creative.Format> creativeFormats;
     private List<Creative.Config> creativeConfigs;
     private List<Creative.Status> creativeStatuses;
     private List<Creative.ReviewStatus> creativeReviewStatuses;

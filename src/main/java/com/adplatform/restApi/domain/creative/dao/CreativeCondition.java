@@ -18,6 +18,10 @@ public class CreativeCondition {
         return StringUtils.isNotBlank(name) ? creative.name.contains(name) : null;
     }
 
+    public static BooleanExpression inFormat(List<Creative.Format> formats) {
+        return nonNull(formats) && !formats.isEmpty() ? creative.format.in(formats) : null;
+    }
+
     public static BooleanExpression inConfig(List<Creative.Config> configs) {
         return nonNull(configs) && !configs.isEmpty() ? creative.config.in(configs) : null;
     }
