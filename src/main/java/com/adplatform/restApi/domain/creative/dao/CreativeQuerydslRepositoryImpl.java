@@ -9,7 +9,6 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -23,7 +22,7 @@ import static com.adplatform.restApi.domain.adgroup.domain.QAdGroup.adGroup;
 import static com.adplatform.restApi.domain.campaign.domain.QCampaign.campaign;
 import static com.adplatform.restApi.domain.creative.domain.QCreative.creative;
 import static com.adplatform.restApi.domain.creative.domain.QCreativeFile.creativeFile;
-import static com.adplatform.restApi.domain.creative.domain.QCreativeOpinionProofFile.*;
+import static com.adplatform.restApi.domain.creative.domain.QCreativeOpinionProofFile.creativeOpinionProofFile;
 
 /**
  * @author Seohyun Lee
@@ -53,7 +52,7 @@ public class CreativeQuerydslRepositoryImpl implements CreativeQuerydslRepositor
                 .join(creative.adGroup, adGroup)
                 .join(creative.files, creativeFile)
                 .join(adGroup.campaign, campaign)
-                .where(this.eqAdAccountId(request.getAdAccountId()), this.containsName(request.getName()))
+                .where(this.eqAdAccountId(request.getAdAccountId()), CreativeCondition.containsName(request.getName()))
                 .orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(Creative.class, "creative", pageable.getSort()).toArray(OrderSpecifier[]::new))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -63,7 +62,7 @@ public class CreativeQuerydslRepositoryImpl implements CreativeQuerydslRepositor
                 .from(creative)
                 .join(creative.adGroup, adGroup)
                 .join(creative.files, creativeFile)
-                .where(this.eqAdAccountId(request.getAdAccountId()), this.containsName(request.getName()));
+                .where(this.eqAdAccountId(request.getAdAccountId()), CreativeCondition.containsName(request.getName()));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
@@ -78,10 +77,6 @@ public class CreativeQuerydslRepositoryImpl implements CreativeQuerydslRepositor
     }
 
     private BooleanExpression eqAdAccountId(Integer adAccountId) {
-        return Objects.nonNull(adAccountId) ? adGroup.campaign.adAccount.id.eq(adAccountId) : null;
-    }
-
-    private BooleanExpression containsName(String name) {
-        return StringUtils.isNotBlank(name) ? creative.name.contains(name) : null;
+        return Objects.nonNull(adAccountId) ? campaign.adAccount.id.eq(adAccountId) : null;
     }
 }

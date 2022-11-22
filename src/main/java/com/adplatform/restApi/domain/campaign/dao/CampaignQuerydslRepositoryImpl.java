@@ -1,21 +1,21 @@
 package com.adplatform.restApi.domain.campaign.dao;
 
+import com.adplatform.restApi.domain.adgroup.dao.adgroup.AdGroupCondition;
 import com.adplatform.restApi.domain.campaign.domain.Campaign;
 import com.adplatform.restApi.domain.campaign.dto.*;
+import com.adplatform.restApi.domain.creative.dao.CreativeCondition;
 import com.adplatform.restApi.global.util.QuerydslOrderSpecifierUtil;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Objects;
 
 import static com.adplatform.restApi.domain.adgroup.domain.QAdGroup.adGroup;
 import static com.adplatform.restApi.domain.adgroup.domain.QAdGroupSchedule.adGroupSchedule;
@@ -23,8 +23,10 @@ import static com.adplatform.restApi.domain.campaign.domain.QAdGoal.adGoal;
 import static com.adplatform.restApi.domain.campaign.domain.QAdType.adType;
 import static com.adplatform.restApi.domain.campaign.domain.QAdTypeAndGoal.adTypeAndGoal;
 import static com.adplatform.restApi.domain.campaign.domain.QCampaign.campaign;
+import static com.adplatform.restApi.domain.creative.domain.QCreative.creative;
 import static com.querydsl.core.types.ExpressionUtils.as;
 import static com.querydsl.jpa.JPAExpressions.select;
+import static java.util.Objects.nonNull;
 
 /**
  * @author Seohyun Lee
@@ -36,7 +38,7 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
     private final JPAQueryFactory query;
 
     @Override
-    public Page<CampaignDto.Response.Page> search(CampaignDto.Request.Search request, Pageable pageable) {
+    public Page<CampaignDto.Response.Page> search(AdvertiserSearchRequest request, Pageable pageable) {
         List<CampaignDto.Response.Page> content = this.query.select(new QCampaignDto_Response_Page(
                         campaign.id,
                         new QAdTypeAndGoalDto(adType.name, adGoal.name),
@@ -60,8 +62,39 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
                 .join(campaign.adTypeAndGoal, adTypeAndGoal)
                 .join(adTypeAndGoal.adType, adType)
                 .join(adTypeAndGoal.adGoal, adGoal)
+                .leftJoin(campaign.adGroups, adGroup)
+                .leftJoin(adGroup.creatives, creative)
+                .where(
+                        this.eqAdAccountId(request.getAdAccountId()),
+                        CampaignCondition.inId(request.getCampaignIds()),
+                        CampaignCondition.containsName(request.getCampaignName()),
+                        CampaignCondition.inConfig(request.getCampaignConfigs()),
+                        CampaignCondition.inStatus(request.getCampaignStatuses()),
+                        AdGroupCondition.inId(request.getAdGroupIds()),
+                        AdGroupCondition.containsName(request.getAdGroupName()),
+                        AdGroupCondition.inConfig(request.getAdGroupConfigs()),
+                        AdGroupCondition.inStatus(request.getAdGroupStatuses()),
+                        CreativeCondition.inId(request.getCreativeIds()),
+                        CreativeCondition.containsName(request.getCreativeName()),
+                        CreativeCondition.inConfig(request.getCreativeConfigs()),
+                        CreativeCondition.inStatus(request.getCreativeStatuses()),
+                        CreativeCondition.inReviewStatus(request.getCreativeReviewStatuses()),
+                        AdTypeCondition.inName(request.getAdTypeNames()),
+                        AdGoalCondition.inName(request.getAdGoalNames())
+                )
+                .groupBy(
+                        campaign.id,
+                        adType.name,
+                        adGoal.name,
+                        campaign.name,
+                        campaign.dailyBudgetAmount,
+                        campaign.config,
+                        campaign.systemConfig,
+                        campaign.status,
+                        campaign.createdAt,
+                        campaign.updatedAt
+                )
                 .orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(Campaign.class, "campaign", pageable.getSort()).toArray(OrderSpecifier[]::new))
-                .where(this.eqAdAccountId(request.getAdAccountId()), this.containsName(request.getName()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -69,7 +102,28 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
         JPAQuery<Long> countQuery = this.query.select(campaign.count())
                 .from(campaign)
                 .join(campaign.adTypeAndGoal, adTypeAndGoal)
-                .where(this.eqAdAccountId(request.getAdAccountId()), this.containsName(request.getName()));
+                .join(adTypeAndGoal.adType, adType)
+                .join(adTypeAndGoal.adGoal, adGoal)
+                .leftJoin(campaign.adGroups, adGroup)
+                .leftJoin(adGroup.creatives, creative)
+                .where(
+                        this.eqAdAccountId(request.getAdAccountId()),
+                        CampaignCondition.inId(request.getCampaignIds()),
+                        CampaignCondition.containsName(request.getCampaignName()),
+                        CampaignCondition.inConfig(request.getCampaignConfigs()),
+                        CampaignCondition.inStatus(request.getCampaignStatuses()),
+                        AdGroupCondition.inId(request.getAdGroupIds()),
+                        AdGroupCondition.containsName(request.getAdGroupName()),
+                        AdGroupCondition.inConfig(request.getAdGroupConfigs()),
+                        AdGroupCondition.inStatus(request.getAdGroupStatuses()),
+                        CreativeCondition.inId(request.getCreativeIds()),
+                        CreativeCondition.containsName(request.getCreativeName()),
+                        CreativeCondition.inConfig(request.getCreativeConfigs()),
+                        CreativeCondition.inStatus(request.getCreativeStatuses()),
+                        CreativeCondition.inReviewStatus(request.getCreativeReviewStatuses()),
+                        AdTypeCondition.inName(request.getAdTypeNames()),
+                        AdGoalCondition.inName(request.getAdGoalNames())
+                );
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
@@ -90,7 +144,7 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
                 .where(
                         this.eqAdAccountId(request.getAdAccountId()),
                         campaign.status.ne(Campaign.Status.CANCELED),
-                        this.containsName(request.getName()))
+                        CampaignCondition.containsName(request.getName()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -101,7 +155,7 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
                 .where(
                         this.eqAdAccountId(request.getAdAccountId()),
                         campaign.status.ne(Campaign.Status.CANCELED),
-                        this.containsName(request.getName()));
+                        CampaignCondition.containsName(request.getName()));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
@@ -122,10 +176,6 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
     }
 
     private BooleanExpression eqAdAccountId(Integer adAccountId) {
-        return Objects.nonNull(adAccountId) ? campaign.adAccount.id.eq(adAccountId) : null;
-    }
-
-    private BooleanExpression containsName(String name) {
-        return StringUtils.isNotBlank(name) ? campaign.name.contains(name) : null;
+        return nonNull(adAccountId) ? campaign.adAccount.id.eq(adAccountId) : null;
     }
 }

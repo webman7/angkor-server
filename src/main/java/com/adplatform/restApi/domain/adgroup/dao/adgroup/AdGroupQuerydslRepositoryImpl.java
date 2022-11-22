@@ -3,7 +3,7 @@ package com.adplatform.restApi.domain.adgroup.dao.adgroup;
 import com.adplatform.restApi.domain.adgroup.domain.AdGroup;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupDto;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.QAdGroupDto_Response_Default;
-import com.adplatform.restApi.domain.campaign.domain.Campaign;
+import com.adplatform.restApi.domain.campaign.dao.CampaignCondition;
 import com.adplatform.restApi.global.util.QuerydslOrderSpecifierUtil;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
@@ -11,7 +11,6 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -61,8 +60,8 @@ public class AdGroupQuerydslRepositoryImpl implements AdGroupQuerydslRepository 
                 .join(adGroup.adGroupSchedule, adGroupSchedule)
                 .where(
                         this.eqAdAccountId(request.getAdAccountId()),
-                        this.eqCampaignId(request.getCampaignId()),
-                        this.containsName(request.getName()))
+                        CampaignCondition.eqId(request.getCampaignId()),
+                        AdGroupCondition.containsName(request.getName()))
                 .orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(AdGroup.class, "adGroup", pageable.getSort()).toArray(OrderSpecifier[]::new))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -72,8 +71,8 @@ public class AdGroupQuerydslRepositoryImpl implements AdGroupQuerydslRepository 
                 .from(adGroup)
                 .where(
                         this.eqAdAccountId(request.getAdAccountId()),
-                        this.eqCampaignId(request.getCampaignId()),
-                        this.containsName(request.getName()));
+                        CampaignCondition.eqId(request.getCampaignId()),
+                        AdGroupCondition.containsName(request.getName()));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
@@ -87,8 +86,8 @@ public class AdGroupQuerydslRepositoryImpl implements AdGroupQuerydslRepository 
                 .join(adGroup.campaign, campaign)
                 .where(
                         this.eqAdAccountId(request.getAdAccountId()),
-                        adGroup.status.ne(Campaign.Status.CANCELED),
-                        this.containsName(request.getName()))
+                        adGroup.status.ne(AdGroup.Status.CANCELED),
+                        AdGroupCondition.containsName(request.getName()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -97,8 +96,8 @@ public class AdGroupQuerydslRepositoryImpl implements AdGroupQuerydslRepository 
                 .from(adGroup)
                 .where(
                         this.eqAdAccountId(request.getAdAccountId()),
-                        adGroup.status.ne(Campaign.Status.CANCELED),
-                        this.containsName(request.getName()));
+                        adGroup.status.ne(AdGroup.Status.CANCELED),
+                        AdGroupCondition.containsName(request.getName()));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
@@ -116,13 +115,5 @@ public class AdGroupQuerydslRepositoryImpl implements AdGroupQuerydslRepository 
 
     private BooleanExpression eqAdAccountId(Integer adAccountId) {
         return nonNull(adAccountId) ? adGroup.campaign.adAccount.id.eq(adAccountId) : null;
-    }
-
-    private BooleanExpression eqCampaignId(Integer campaignId) {
-        return nonNull(campaignId) ? campaign.id.eq(campaignId) : null;
-    }
-
-    private BooleanExpression containsName(String name) {
-        return StringUtils.isNotBlank(name) ? adGroup.name.contains(name) : null;
     }
 }

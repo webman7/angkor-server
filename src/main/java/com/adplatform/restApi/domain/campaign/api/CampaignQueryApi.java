@@ -1,6 +1,7 @@
 package com.adplatform.restApi.domain.campaign.api;
 
 import com.adplatform.restApi.domain.campaign.dao.CampaignRepository;
+import com.adplatform.restApi.domain.campaign.dto.AdvertiserSearchRequest;
 import com.adplatform.restApi.domain.campaign.dto.CampaignDto;
 import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount;
 import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccountByCampaignId;
@@ -27,7 +28,7 @@ public class CampaignQueryApi {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/search")
     public PageDto<CampaignDto.Response.Page> search(
-            @Valid CampaignDto.Request.Search request,
+            @Valid AdvertiserSearchRequest request,
             @PageableDefault Pageable pageable) {
         return PageDto.create(this.campaignRepository.search(request, pageable));
     }

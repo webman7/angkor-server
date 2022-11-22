@@ -4,7 +4,6 @@ import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountIdGetter;
 import com.adplatform.restApi.domain.adgroup.domain.AdGroup;
 import com.adplatform.restApi.domain.adgroup.dto.schedule.AdGroupScheduleDto;
 import com.adplatform.restApi.domain.adgroup.dto.target.AdGroupDemographicTargetDto;
-import com.adplatform.restApi.domain.campaign.domain.Campaign;
 import com.adplatform.restApi.domain.campaign.dto.CampaignIdGetter;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.AllArgsConstructor;
@@ -103,7 +102,7 @@ public abstract class AdGroupDto {
             private Long dailyBudgetAmount;
             private AdGroup.Config config;
             private AdGroup.SystemConfig systemConfig;
-            private Campaign.Status status;
+            private AdGroup.Status status;
             private Integer campaignId;
             private String campaignName;
             private Integer scheduleStartDate;
@@ -122,7 +121,7 @@ public abstract class AdGroupDto {
                     Long dailyBudgetAmount,
                     AdGroup.Config config,
                     AdGroup.SystemConfig systemConfig,
-                    Campaign.Status status,
+                    AdGroup.Status status,
                     Integer campaignId,
                     String campaignName,
                     Integer scheduleStartDate,
@@ -178,7 +177,7 @@ public abstract class AdGroupDto {
             private boolean onlyAdult;
             private AdGroup.Config config;
             private AdGroup.SystemConfig systemConfig;
-            private Campaign.Status status;
+            private AdGroup.Status status;
         }
     }
 }

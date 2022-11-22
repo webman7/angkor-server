@@ -66,6 +66,34 @@ public class AdGroup extends BaseUpdatedEntity {
         EXTERNAL_SERVICE_STOP
     }
 
+    /**
+     * 광고 그룹 상태
+     */
+    public enum Status {
+        /** 집행 예정 */
+        READY,
+        /** 집행 중 */
+        LIVE,
+        /** 집행 완료 */
+        FINISHED,
+        /** 사용자 OFF */
+        OFF,
+        /** 삭제 */
+        DELETE,
+        /** 캠페인 일 예산 초과 */
+        EXCEED_DAILY_BUDGET,
+        /** 일시중지 */
+        PAUSED,
+        /** 집행 가능한 소재가 없음 */
+        NO_AVAILABLE_CREATIVE,
+        /** 계약해지 */
+        CANCELED,
+        /** 연결 서비스 제한으로 운영불가인 상태 */
+        SYSTEM_CONFIG_EXTERNAL_SERVICE_STOP,
+        /** 광고계정 운영불가 */
+        ADACCOUNT_UNAVAILABLE
+    }
+
     @Setter
     @ManyToOne
     @JoinColumn(name = "campaign_info_id")
@@ -163,7 +191,7 @@ public class AdGroup extends BaseUpdatedEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", length = 50)
-    private Campaign.Status status;
+    private Status status;
 
     @Builder
     public AdGroup(
@@ -184,7 +212,7 @@ public class AdGroup extends BaseUpdatedEntity {
             boolean onlyAdult,
             Config config,
             SystemConfig systemConfig,
-            Campaign.Status status) {
+            Status status) {
         this.campaign = campaign;
         this.demographicTarget = demographicTarget;
         this.adGroupSchedule = adGroupSchedule;
