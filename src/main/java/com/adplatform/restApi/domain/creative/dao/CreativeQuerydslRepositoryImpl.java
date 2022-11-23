@@ -1,5 +1,10 @@
 package com.adplatform.restApi.domain.creative.dao;
 
+import com.adplatform.restApi.domain.adgroup.dao.adgroup.AdGroupCondition;
+import com.adplatform.restApi.domain.campaign.dao.AdGoalCondition;
+import com.adplatform.restApi.domain.campaign.dao.AdTypeCondition;
+import com.adplatform.restApi.domain.campaign.dao.CampaignCondition;
+import com.adplatform.restApi.domain.campaign.dto.AdvertiserSearchRequest;
 import com.adplatform.restApi.domain.creative.domain.Creative;
 import com.adplatform.restApi.domain.creative.dto.CreativeDto;
 import com.adplatform.restApi.domain.creative.dto.QCreativeDto_Response_Default;
@@ -19,6 +24,9 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.adplatform.restApi.domain.adgroup.domain.QAdGroup.adGroup;
+import static com.adplatform.restApi.domain.campaign.domain.QAdGoal.adGoal;
+import static com.adplatform.restApi.domain.campaign.domain.QAdType.adType;
+import static com.adplatform.restApi.domain.campaign.domain.QAdTypeAndGoal.adTypeAndGoal;
 import static com.adplatform.restApi.domain.campaign.domain.QCampaign.campaign;
 import static com.adplatform.restApi.domain.creative.domain.QCreative.creative;
 import static com.adplatform.restApi.domain.creative.domain.QCreativeFile.creativeFile;
@@ -34,7 +42,7 @@ public class CreativeQuerydslRepositoryImpl implements CreativeQuerydslRepositor
     private final JPAQueryFactory query;
 
     @Override
-    public Page<CreativeDto.Response.Default> search(CreativeDto.Request.Search request, Pageable pageable) {
+    public Page<CreativeDto.Response.Default> search(AdvertiserSearchRequest request, Pageable pageable) {
         List<CreativeDto.Response.Default> content = this.query.select(new QCreativeDto_Response_Default(
                         creative.id,
                         creative.name,
@@ -52,7 +60,28 @@ public class CreativeQuerydslRepositoryImpl implements CreativeQuerydslRepositor
                 .join(creative.adGroup, adGroup)
                 .join(creative.files, creativeFile)
                 .join(adGroup.campaign, campaign)
-                .where(this.eqAdAccountId(request.getAdAccountId()), CreativeCondition.containsName(request.getName()))
+                .join(campaign.adTypeAndGoal, adTypeAndGoal)
+                .join(adTypeAndGoal.adType, adType)
+                .join(adTypeAndGoal.adGoal, adGoal)
+                .where(
+                        this.eqAdAccountId(request.getAdAccountId()),
+                        CampaignCondition.inId(request.getCampaignIds()),
+                        CampaignCondition.containsName(request.getCampaignName()),
+                        CampaignCondition.inConfig(request.getCampaignConfigs()),
+                        CampaignCondition.inStatus(request.getCampaignStatuses()),
+                        AdGroupCondition.inId(request.getAdGroupIds()),
+                        AdGroupCondition.containsName(request.getAdGroupName()),
+                        AdGroupCondition.inConfig(request.getAdGroupConfigs()),
+                        AdGroupCondition.inStatus(request.getAdGroupStatuses()),
+                        CreativeCondition.inId(request.getCreativeIds()),
+                        CreativeCondition.containsName(request.getCreativeName()),
+                        CreativeCondition.inFormat(request.getCreativeFormats()),
+                        CreativeCondition.inConfig(request.getCreativeConfigs()),
+                        CreativeCondition.inStatus(request.getCreativeStatuses()),
+                        CreativeCondition.inReviewStatus(request.getCreativeReviewStatuses()),
+                        AdTypeCondition.inName(request.getAdTypeNames()),
+                        AdGoalCondition.inName(request.getAdGoalNames())
+                )
                 .orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(Creative.class, "creative", pageable.getSort()).toArray(OrderSpecifier[]::new))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -62,7 +91,29 @@ public class CreativeQuerydslRepositoryImpl implements CreativeQuerydslRepositor
                 .from(creative)
                 .join(creative.adGroup, adGroup)
                 .join(creative.files, creativeFile)
-                .where(this.eqAdAccountId(request.getAdAccountId()), CreativeCondition.containsName(request.getName()));
+                .join(adGroup.campaign, campaign)
+                .join(campaign.adTypeAndGoal, adTypeAndGoal)
+                .join(adTypeAndGoal.adType, adType)
+                .join(adTypeAndGoal.adGoal, adGoal)
+                .where(
+                        this.eqAdAccountId(request.getAdAccountId()),
+                        CampaignCondition.inId(request.getCampaignIds()),
+                        CampaignCondition.containsName(request.getCampaignName()),
+                        CampaignCondition.inConfig(request.getCampaignConfigs()),
+                        CampaignCondition.inStatus(request.getCampaignStatuses()),
+                        AdGroupCondition.inId(request.getAdGroupIds()),
+                        AdGroupCondition.containsName(request.getAdGroupName()),
+                        AdGroupCondition.inConfig(request.getAdGroupConfigs()),
+                        AdGroupCondition.inStatus(request.getAdGroupStatuses()),
+                        CreativeCondition.inId(request.getCreativeIds()),
+                        CreativeCondition.containsName(request.getCreativeName()),
+                        CreativeCondition.inFormat(request.getCreativeFormats()),
+                        CreativeCondition.inConfig(request.getCreativeConfigs()),
+                        CreativeCondition.inStatus(request.getCreativeStatuses()),
+                        CreativeCondition.inReviewStatus(request.getCreativeReviewStatuses()),
+                        AdTypeCondition.inName(request.getAdTypeNames()),
+                        AdGoalCondition.inName(request.getAdGoalNames())
+                );
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }

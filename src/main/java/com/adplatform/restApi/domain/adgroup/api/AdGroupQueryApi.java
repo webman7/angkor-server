@@ -48,7 +48,7 @@ public class AdGroupQueryApi {
 
     @AuthorizedAdAccountByAdGroupId
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public AdGroupDto.Response.Detail findByIdForUpdate(@PathVariable(name = "id") Integer adGroupId) {
         AdGroup adGroup = this.adGroupRepository.findByIdFetchJoin(adGroupId)
                 .orElseThrow(AdGroupNotFoundException::new);
