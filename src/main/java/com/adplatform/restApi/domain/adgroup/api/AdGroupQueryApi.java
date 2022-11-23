@@ -5,6 +5,7 @@ import com.adplatform.restApi.domain.adgroup.domain.AdGroup;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupDto;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupMapper;
 import com.adplatform.restApi.domain.adgroup.exception.AdGroupNotFoundException;
+import com.adplatform.restApi.domain.campaign.dto.AdvertiserSearchRequest;
 import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount;
 import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccountByAdGroupId;
 import com.adplatform.restApi.global.dto.PageDto;
@@ -31,7 +32,7 @@ public class AdGroupQueryApi {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/search")
     public PageDto<AdGroupDto.Response.Default> search(
-            @Valid AdGroupDto.Request.Search request,
+            @Valid AdvertiserSearchRequest request,
             @PageableDefault Pageable pageable) {
         return PageDto.create(this.adGroupRepository.search(request, pageable));
     }

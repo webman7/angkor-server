@@ -3,7 +3,11 @@ package com.adplatform.restApi.domain.adgroup.dao.adgroup;
 import com.adplatform.restApi.domain.adgroup.domain.AdGroup;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupDto;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.QAdGroupDto_Response_Default;
+import com.adplatform.restApi.domain.campaign.dao.AdGoalCondition;
+import com.adplatform.restApi.domain.campaign.dao.AdTypeCondition;
 import com.adplatform.restApi.domain.campaign.dao.CampaignCondition;
+import com.adplatform.restApi.domain.campaign.dto.AdvertiserSearchRequest;
+import com.adplatform.restApi.domain.creative.dao.CreativeCondition;
 import com.adplatform.restApi.global.util.QuerydslOrderSpecifierUtil;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
@@ -24,7 +28,11 @@ import static com.adplatform.restApi.domain.adgroup.domain.QAdGroupDemographicTa
 import static com.adplatform.restApi.domain.adgroup.domain.QAdGroupSchedule.adGroupSchedule;
 import static com.adplatform.restApi.domain.adgroup.domain.QDevice.device;
 import static com.adplatform.restApi.domain.adgroup.domain.QMedia.media;
+import static com.adplatform.restApi.domain.campaign.domain.QAdGoal.adGoal;
+import static com.adplatform.restApi.domain.campaign.domain.QAdType.adType;
+import static com.adplatform.restApi.domain.campaign.domain.QAdTypeAndGoal.adTypeAndGoal;
 import static com.adplatform.restApi.domain.campaign.domain.QCampaign.campaign;
+import static com.adplatform.restApi.domain.creative.domain.QCreative.creative;
 import static java.util.Objects.nonNull;
 
 /**
@@ -37,7 +45,7 @@ public class AdGroupQuerydslRepositoryImpl implements AdGroupQuerydslRepository 
     private final JPAQueryFactory query;
 
     @Override
-    public Page<AdGroupDto.Response.Default> search(AdGroupDto.Request.Search request, Pageable pageable) {
+    public Page<AdGroupDto.Response.Default> search(AdvertiserSearchRequest request, Pageable pageable) {
         List<AdGroupDto.Response.Default> content = this.query.select(new QAdGroupDto_Response_Default(
                         adGroup.id,
                         adGroup.name,
@@ -57,11 +65,30 @@ public class AdGroupQuerydslRepositoryImpl implements AdGroupQuerydslRepository 
                         adGroup.updatedAt))
                 .from(adGroup)
                 .join(adGroup.campaign, campaign)
+                .leftJoin(adGroup.creatives, creative)
                 .join(adGroup.adGroupSchedule, adGroupSchedule)
+                .join(campaign.adTypeAndGoal, adTypeAndGoal)
+                .join(adTypeAndGoal.adType, adType)
+                .join(adTypeAndGoal.adGoal, adGoal)
                 .where(
                         this.eqAdAccountId(request.getAdAccountId()),
-                        CampaignCondition.eqId(request.getCampaignId()),
-                        AdGroupCondition.containsName(request.getName()))
+                        CampaignCondition.inId(request.getCampaignIds()),
+                        CampaignCondition.containsName(request.getCampaignName()),
+                        CampaignCondition.inConfig(request.getCampaignConfigs()),
+                        CampaignCondition.inStatus(request.getCampaignStatuses()),
+                        AdGroupCondition.inId(request.getAdGroupIds()),
+                        AdGroupCondition.containsName(request.getAdGroupName()),
+                        AdGroupCondition.inConfig(request.getAdGroupConfigs()),
+                        AdGroupCondition.inStatus(request.getAdGroupStatuses()),
+                        CreativeCondition.inId(request.getCreativeIds()),
+                        CreativeCondition.containsName(request.getCreativeName()),
+                        CreativeCondition.inFormat(request.getCreativeFormats()),
+                        CreativeCondition.inConfig(request.getCreativeConfigs()),
+                        CreativeCondition.inStatus(request.getCreativeStatuses()),
+                        CreativeCondition.inReviewStatus(request.getCreativeReviewStatuses()),
+                        AdTypeCondition.inName(request.getAdTypeNames()),
+                        AdGoalCondition.inName(request.getAdGoalNames())
+                )
                 .orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(AdGroup.class, "adGroup", pageable.getSort()).toArray(OrderSpecifier[]::new))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -69,10 +96,31 @@ public class AdGroupQuerydslRepositoryImpl implements AdGroupQuerydslRepository 
 
         JPAQuery<Long> countQuery = this.query.select(adGroup.count())
                 .from(adGroup)
+                .join(adGroup.campaign, campaign)
+                .leftJoin(adGroup.creatives, creative)
+                .join(adGroup.adGroupSchedule, adGroupSchedule)
+                .join(campaign.adTypeAndGoal, adTypeAndGoal)
+                .join(adTypeAndGoal.adType, adType)
+                .join(adTypeAndGoal.adGoal, adGoal)
                 .where(
                         this.eqAdAccountId(request.getAdAccountId()),
-                        CampaignCondition.eqId(request.getCampaignId()),
-                        AdGroupCondition.containsName(request.getName()));
+                        CampaignCondition.inId(request.getCampaignIds()),
+                        CampaignCondition.containsName(request.getCampaignName()),
+                        CampaignCondition.inConfig(request.getCampaignConfigs()),
+                        CampaignCondition.inStatus(request.getCampaignStatuses()),
+                        AdGroupCondition.inId(request.getAdGroupIds()),
+                        AdGroupCondition.containsName(request.getAdGroupName()),
+                        AdGroupCondition.inConfig(request.getAdGroupConfigs()),
+                        AdGroupCondition.inStatus(request.getAdGroupStatuses()),
+                        CreativeCondition.inId(request.getCreativeIds()),
+                        CreativeCondition.containsName(request.getCreativeName()),
+                        CreativeCondition.inFormat(request.getCreativeFormats()),
+                        CreativeCondition.inConfig(request.getCreativeConfigs()),
+                        CreativeCondition.inStatus(request.getCreativeStatuses()),
+                        CreativeCondition.inReviewStatus(request.getCreativeReviewStatuses()),
+                        AdTypeCondition.inName(request.getAdTypeNames()),
+                        AdGoalCondition.inName(request.getAdGoalNames())
+                );
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
