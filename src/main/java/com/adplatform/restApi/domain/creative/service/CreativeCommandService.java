@@ -26,7 +26,7 @@ import java.nio.file.Paths;
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class CreativeSaveService {
+public class CreativeCommandService {
     private final CreativeRepository creativeRepository;
     private final FileService fileService;
     private final CreativeMapper creativeMapper;
@@ -85,5 +85,9 @@ public class CreativeSaveService {
                 .height(height)
                 .mimeType(mimetype)
                 .build();
+    }
+
+    public void delete(Integer id) {
+        CreativeFindUtils.findByIdOrElseThrow(id, this.creativeRepository).delete();
     }
 }

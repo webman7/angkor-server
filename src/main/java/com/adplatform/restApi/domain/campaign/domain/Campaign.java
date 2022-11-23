@@ -63,7 +63,7 @@ public class Campaign extends BaseUpdatedEntity {
         /** 사용자 OFF */
         OFF,
         /** 삭제 */
-        DELETE,
+        DELETED,
         /** 캠페인 일 예산 초과 */
         EXCEED_DAILY_BUDGET,
         /** 일시중지 */
@@ -149,5 +149,10 @@ public class Campaign extends BaseUpdatedEntity {
         this.trackingId = request.getTrackingId();
         this.trackingType = request.getTrackingType();
         return this;
+    }
+
+    public void delete() {
+        this.status = Status.DELETED;
+        this.adGroups.forEach(AdGroup::delete);
     }
 }

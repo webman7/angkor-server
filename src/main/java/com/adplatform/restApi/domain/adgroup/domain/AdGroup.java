@@ -79,7 +79,7 @@ public class AdGroup extends BaseUpdatedEntity {
         /** 사용자 OFF */
         OFF,
         /** 삭제 */
-        DELETE,
+        DELETED,
         /** 캠페인 일 예산 초과 */
         EXCEED_DAILY_BUDGET,
         /** 일시중지 */
@@ -266,5 +266,10 @@ public class AdGroup extends BaseUpdatedEntity {
         this.onlyWifiDisplay = request.isOnlyWifiDisplay();
         this.allMedia = request.isAllMedia();
         this.onlyAdult = request.isOnlyAdult();
+    }
+
+    public void delete() {
+        this.status = Status.DELETED;
+        this.creatives.forEach(Creative::delete);
     }
 }

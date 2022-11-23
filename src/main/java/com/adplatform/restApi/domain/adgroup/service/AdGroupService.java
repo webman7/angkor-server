@@ -57,4 +57,8 @@ public class AdGroupService {
     public void update(AdGroupDto.Request.Update request) {
         AdGroupFindUtils.findByIdOrElseThrow(request.getAdGroupId(), this.adGroupRepository).update(request);
     }
+
+    public void delete(Integer id) {
+        AdGroupFindUtils.findByIdOrElseThrow(id, this.adGroupRepository).delete();
+    }
 }

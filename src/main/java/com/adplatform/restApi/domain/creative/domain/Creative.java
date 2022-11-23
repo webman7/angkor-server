@@ -38,7 +38,7 @@ public class Creative extends BaseUpdatedEntity {
     }
 
     public enum SystemConfig {
-        ON, ADMIN_STOP, EXTERNAL_SERVICE_STOP;
+        ON, ADMIN_STOP, VOID;
     }
 
     public enum ReviewStatus {
@@ -196,5 +196,9 @@ public class Creative extends BaseUpdatedEntity {
         this.frequency = request.getFrequency();
         this.opinion = request.getOpinion();
         return this;
+    }
+
+    public void delete() {
+        this.status = Status.DELETED;
     }
 }
