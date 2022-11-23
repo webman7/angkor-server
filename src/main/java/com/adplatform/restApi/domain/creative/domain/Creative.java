@@ -200,5 +200,6 @@ public class Creative extends BaseUpdatedEntity {
 
     public void delete() {
         this.status = Status.DELETED;
+        this.config = Config.DEL;
     }
 }

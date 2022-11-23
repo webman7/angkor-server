@@ -270,6 +270,7 @@ public class AdGroup extends BaseUpdatedEntity {
 
     public void delete() {
         this.status = Status.DELETED;
+        this.config = Config.DEL;
         this.creatives.forEach(Creative::delete);
     }
 }

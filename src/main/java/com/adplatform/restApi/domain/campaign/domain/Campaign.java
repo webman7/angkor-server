@@ -153,6 +153,7 @@ public class Campaign extends BaseUpdatedEntity {
 
     public void delete() {
         this.status = Status.DELETED;
+        this.config = Config.DEL;
         this.adGroups.forEach(AdGroup::delete);
     }
 }
