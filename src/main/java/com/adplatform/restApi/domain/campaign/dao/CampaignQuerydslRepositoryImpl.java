@@ -62,8 +62,14 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
                 .join(campaign.adTypeAndGoal, adTypeAndGoal)
                 .join(adTypeAndGoal.adType, adType)
                 .join(adTypeAndGoal.adGoal, adGoal)
-                .leftJoin(campaign.adGroups, adGroup)
-                .leftJoin(adGroup.creatives, creative)
+                .leftJoin(campaign.adGroups, adGroup).on(
+                        AdGroupCondition.inConfigElseWithOutStatusDel(request.getAdGroupConfigs()),
+                        AdGroupCondition.inStatusElseWithOutStatusDel(request.getAdGroupStatuses())
+                )
+                .leftJoin(adGroup.creatives, creative).on(
+                        CreativeCondition.inConfigElseWithOutStatusDel(request.getCreativeConfigs()),
+                        CreativeCondition.inStatusElseWithOutStatusDel(request.getCreativeStatuses())
+                )
                 .where(
                         this.eqAdAccountId(request.getAdAccountId()),
                         CampaignCondition.inId(request.getCampaignIds()),
@@ -72,13 +78,9 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
                         CampaignCondition.inStatusElseWithOutStatusDel(request.getCampaignStatuses()),
                         AdGroupCondition.inId(request.getAdGroupIds()),
                         AdGroupCondition.containsName(request.getAdGroupName()),
-                        AdGroupCondition.inConfig(request.getAdGroupConfigs()),
-                        AdGroupCondition.inStatusElseWithOutStatusDel(request.getAdGroupStatuses()),
                         CreativeCondition.inId(request.getCreativeIds()),
                         CreativeCondition.containsName(request.getCreativeName()),
                         CreativeCondition.inFormat(request.getCreativeFormats()),
-                        CreativeCondition.inConfig(request.getCreativeConfigs()),
-                        CreativeCondition.inStatusElseWithOutStatusDel(request.getCreativeStatuses()),
                         CreativeCondition.inReviewStatus(request.getCreativeReviewStatuses()),
                         AdTypeCondition.inName(request.getAdTypeNames()),
                         AdGoalCondition.inName(request.getAdGoalNames())
@@ -105,8 +107,14 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
                 .join(campaign.adTypeAndGoal, adTypeAndGoal)
                 .join(adTypeAndGoal.adType, adType)
                 .join(adTypeAndGoal.adGoal, adGoal)
-                .leftJoin(campaign.adGroups, adGroup)
-                .leftJoin(adGroup.creatives, creative)
+                .leftJoin(campaign.adGroups, adGroup).on(
+                        AdGroupCondition.inConfigElseWithOutStatusDel(request.getAdGroupConfigs()),
+                        AdGroupCondition.inStatusElseWithOutStatusDel(request.getAdGroupStatuses())
+                )
+                .leftJoin(adGroup.creatives, creative).on(
+                        CreativeCondition.inConfigElseWithOutStatusDel(request.getCreativeConfigs()),
+                        CreativeCondition.inStatusElseWithOutStatusDel(request.getCreativeStatuses())
+                )
                 .where(
                         this.eqAdAccountId(request.getAdAccountId()),
                         CampaignCondition.inId(request.getCampaignIds()),
@@ -115,13 +123,9 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
                         CampaignCondition.inStatusElseWithOutStatusDel(request.getCampaignStatuses()),
                         AdGroupCondition.inId(request.getAdGroupIds()),
                         AdGroupCondition.containsName(request.getAdGroupName()),
-                        AdGroupCondition.inConfig(request.getAdGroupConfigs()),
-                        AdGroupCondition.inStatusElseWithOutStatusDel(request.getAdGroupStatuses()),
                         CreativeCondition.inId(request.getCreativeIds()),
                         CreativeCondition.containsName(request.getCreativeName()),
                         CreativeCondition.inFormat(request.getCreativeFormats()),
-                        CreativeCondition.inConfig(request.getCreativeConfigs()),
-                        CreativeCondition.inStatusElseWithOutStatusDel(request.getCreativeStatuses()),
                         CreativeCondition.inReviewStatus(request.getCreativeReviewStatuses()),
                         AdTypeCondition.inName(request.getAdTypeNames()),
                         AdGoalCondition.inName(request.getAdGoalNames())

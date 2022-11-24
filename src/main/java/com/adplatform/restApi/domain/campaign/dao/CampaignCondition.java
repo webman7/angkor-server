@@ -26,6 +26,10 @@ public class CampaignCondition {
         return nonNull(configs) && !configs.isEmpty() ? campaign.config.in(configs) : null;
     }
 
+    public static BooleanExpression inConfigElseWithOutStatusDel(List<Campaign.Config> configs) {
+        return nonNull(configs) && !configs.isEmpty() ? campaign.config.in(configs) : campaign.config.ne(Campaign.Config.DEL);
+    }
+
     public static BooleanExpression inStatus(List<Campaign.Status> statuses) {
         return nonNull(statuses) && !statuses.isEmpty() ? campaign.status.in(statuses) : null;
     }

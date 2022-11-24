@@ -64,8 +64,14 @@ public class AdGroupQuerydslRepositoryImpl implements AdGroupQuerydslRepository 
                         adGroup.createdAt,
                         adGroup.updatedAt))
                 .from(adGroup)
-                .join(adGroup.campaign, campaign)
-                .leftJoin(adGroup.creatives, creative)
+                .join(adGroup.campaign, campaign).on(
+                        CampaignCondition.inConfigElseWithOutStatusDel(request.getCampaignConfigs()),
+                        CampaignCondition.inStatusElseWithOutStatusDel(request.getCampaignStatuses())
+                )
+                .leftJoin(adGroup.creatives, creative).on(
+                        CreativeCondition.inConfigElseWithOutStatusDel(request.getCreativeConfigs()),
+                        CreativeCondition.inStatusElseWithOutStatusDel(request.getCreativeStatuses())
+                )
                 .join(adGroup.adGroupSchedule, adGroupSchedule)
                 .join(campaign.adTypeAndGoal, adTypeAndGoal)
                 .join(adTypeAndGoal.adType, adType)
@@ -74,8 +80,6 @@ public class AdGroupQuerydslRepositoryImpl implements AdGroupQuerydslRepository 
                         this.eqAdAccountId(request.getAdAccountId()),
                         CampaignCondition.inId(request.getCampaignIds()),
                         CampaignCondition.containsName(request.getCampaignName()),
-                        CampaignCondition.inConfig(request.getCampaignConfigs()),
-                        CampaignCondition.inStatusElseWithOutStatusDel(request.getCampaignStatuses()),
                         AdGroupCondition.inId(request.getAdGroupIds()),
                         AdGroupCondition.containsName(request.getAdGroupName()),
                         AdGroupCondition.inConfig(request.getAdGroupConfigs()),
@@ -83,8 +87,6 @@ public class AdGroupQuerydslRepositoryImpl implements AdGroupQuerydslRepository 
                         CreativeCondition.inId(request.getCreativeIds()),
                         CreativeCondition.containsName(request.getCreativeName()),
                         CreativeCondition.inFormat(request.getCreativeFormats()),
-                        CreativeCondition.inConfig(request.getCreativeConfigs()),
-                        CreativeCondition.inStatusElseWithOutStatusDel(request.getCreativeStatuses()),
                         CreativeCondition.inReviewStatus(request.getCreativeReviewStatuses()),
                         AdTypeCondition.inName(request.getAdTypeNames()),
                         AdGoalCondition.inName(request.getAdGoalNames())
@@ -96,8 +98,14 @@ public class AdGroupQuerydslRepositoryImpl implements AdGroupQuerydslRepository 
 
         JPAQuery<Long> countQuery = this.query.select(adGroup.count())
                 .from(adGroup)
-                .join(adGroup.campaign, campaign)
-                .leftJoin(adGroup.creatives, creative)
+                .join(adGroup.campaign, campaign).on(
+                        CampaignCondition.inConfigElseWithOutStatusDel(request.getCampaignConfigs()),
+                        CampaignCondition.inStatusElseWithOutStatusDel(request.getCampaignStatuses())
+                )
+                .leftJoin(adGroup.creatives, creative).on(
+                        CreativeCondition.inConfigElseWithOutStatusDel(request.getCreativeConfigs()),
+                        CreativeCondition.inStatusElseWithOutStatusDel(request.getCreativeStatuses())
+                )
                 .join(adGroup.adGroupSchedule, adGroupSchedule)
                 .join(campaign.adTypeAndGoal, adTypeAndGoal)
                 .join(adTypeAndGoal.adType, adType)
@@ -106,8 +114,6 @@ public class AdGroupQuerydslRepositoryImpl implements AdGroupQuerydslRepository 
                         this.eqAdAccountId(request.getAdAccountId()),
                         CampaignCondition.inId(request.getCampaignIds()),
                         CampaignCondition.containsName(request.getCampaignName()),
-                        CampaignCondition.inConfig(request.getCampaignConfigs()),
-                        CampaignCondition.inStatusElseWithOutStatusDel(request.getCampaignStatuses()),
                         AdGroupCondition.inId(request.getAdGroupIds()),
                         AdGroupCondition.containsName(request.getAdGroupName()),
                         AdGroupCondition.inConfig(request.getAdGroupConfigs()),
@@ -115,8 +121,6 @@ public class AdGroupQuerydslRepositoryImpl implements AdGroupQuerydslRepository 
                         CreativeCondition.inId(request.getCreativeIds()),
                         CreativeCondition.containsName(request.getCreativeName()),
                         CreativeCondition.inFormat(request.getCreativeFormats()),
-                        CreativeCondition.inConfig(request.getCreativeConfigs()),
-                        CreativeCondition.inStatusElseWithOutStatusDel(request.getCreativeStatuses()),
                         CreativeCondition.inReviewStatus(request.getCreativeReviewStatuses()),
                         AdTypeCondition.inName(request.getAdTypeNames()),
                         AdGoalCondition.inName(request.getAdGoalNames())

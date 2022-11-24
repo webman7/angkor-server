@@ -22,11 +22,15 @@ public class AdGroupCondition {
         return nonNull(configs) && !configs.isEmpty() ? adGroup.config.in(configs) : null;
     }
 
+    public static BooleanExpression inConfigElseWithOutStatusDel(List<AdGroup.Config> configs) {
+        return nonNull(configs) && !configs.isEmpty() ? adGroup.config.in(configs) : adGroup.config.ne(AdGroup.Config.DEL);
+    }
+
     public static BooleanExpression inStatus(List<AdGroup.Status> statuses) {
         return nonNull(statuses) && !statuses.isEmpty() ? adGroup.status.in(statuses) : null;
     }
 
     public static BooleanExpression inStatusElseWithOutStatusDel(List<AdGroup.Status> statuses) {
-        return nonNull(statuses) && !statuses.isEmpty() ? adGroup.status.in(statuses) : adGroup.status.ne(AdGroup.Status.DELETED);
+         return nonNull(statuses) && !statuses.isEmpty() ? adGroup.status.in(statuses) : adGroup.status.ne(AdGroup.Status.DELETED);
     }
 }

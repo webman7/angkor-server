@@ -26,6 +26,10 @@ public class CreativeCondition {
         return nonNull(configs) && !configs.isEmpty() ? creative.config.in(configs) : null;
     }
 
+    public static BooleanExpression inConfigElseWithOutStatusDel(List<Creative.Config> configs) {
+        return nonNull(configs) && !configs.isEmpty() ? creative.config.in(configs) : creative.config.ne(Creative.Config.DEL);
+    }
+
     public static BooleanExpression inStatus(List<Creative.Status> statuses) {
         return nonNull(statuses) && !statuses.isEmpty() ? creative.status.in(statuses) : null;
     }
