@@ -30,6 +30,10 @@ public class CreativeCondition {
         return nonNull(statuses) && !statuses.isEmpty() ? creative.status.in(statuses) : null;
     }
 
+    public static BooleanExpression inStatusElseWithOutStatusDel(List<Creative.Status> statuses) {
+        return nonNull(statuses) && !statuses.isEmpty() ? creative.status.in(statuses) : creative.status.ne(Creative.Status.DELETED);
+    }
+
     public static BooleanExpression inReviewStatus(List<Creative.ReviewStatus> reviewStatuses) {
         return nonNull(reviewStatuses) && !reviewStatuses.isEmpty() ? creative.reviewStatus.in(reviewStatuses) : null;
     }

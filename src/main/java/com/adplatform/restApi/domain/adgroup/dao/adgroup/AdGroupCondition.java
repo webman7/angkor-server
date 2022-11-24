@@ -25,4 +25,8 @@ public class AdGroupCondition {
     public static BooleanExpression inStatus(List<AdGroup.Status> statuses) {
         return nonNull(statuses) && !statuses.isEmpty() ? adGroup.status.in(statuses) : null;
     }
+
+    public static BooleanExpression inStatusElseWithOutStatusDel(List<AdGroup.Status> statuses) {
+        return nonNull(statuses) && !statuses.isEmpty() ? adGroup.status.in(statuses) : adGroup.status.ne(AdGroup.Status.DELETED);
+    }
 }

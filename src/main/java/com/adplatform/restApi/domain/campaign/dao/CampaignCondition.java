@@ -29,4 +29,8 @@ public class CampaignCondition {
     public static BooleanExpression inStatus(List<Campaign.Status> statuses) {
         return nonNull(statuses) && !statuses.isEmpty() ? campaign.status.in(statuses) : null;
     }
+
+    public static BooleanExpression inStatusElseWithOutStatusDel(List<Campaign.Status> statuses) {
+        return nonNull(statuses) && !statuses.isEmpty() ? campaign.status.in(statuses) : campaign.status.ne(Campaign.Status.DELETED);
+    }
 }
