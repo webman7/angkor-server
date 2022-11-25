@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 /**
  * @author Seohyun Lee
  * @since 1.0
+ * @see com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccountByCreativeId AuthorizedAdAccountByCreativeId
  */
 @RequiredArgsConstructor
 @Component

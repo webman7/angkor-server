@@ -5,6 +5,7 @@ import java.lang.annotation.*;
 /**
  * @author Seohyun Lee
  * @since 1.0
+ * @see com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccountByCreativeIdAspect AuthorizedAdAccountByCreativeIdAspect
  */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

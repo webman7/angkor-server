@@ -1,5 +1,6 @@
 package com.adplatform.restApi.domain.adaccount.domain;
 
+import com.adplatform.restApi.domain.adaccount.exception.AdAccountUserAuthorizationException;
 import com.adplatform.restApi.domain.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -87,5 +88,9 @@ public class AdAccountUser {
         this.requestStatus = requestStatus;
         this.id.setAdAccountId(adAccount.getId());
         this.id.setUserId(user.getId());
+    }
+
+    public void validateRequestStatus() {
+        if (!this.requestStatus.equals(RequestStatus.Y)) throw new AdAccountUserAuthorizationException();
     }
 }
