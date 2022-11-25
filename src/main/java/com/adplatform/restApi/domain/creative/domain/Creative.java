@@ -202,4 +202,25 @@ public class Creative extends BaseUpdatedEntity {
         this.status = Status.DELETED;
         this.config = Config.DEL;
     }
+
+    public Creative copy(AdGroup adGroup) {
+        Creative copy = new Creative();
+        copy.adGroup = adGroup;
+        copy.files.addAll(this.files.stream().map(c -> c.copy(copy)).collect(Collectors.toList()));
+        copy.opinionProofFiles.addAll(this.opinionProofFiles.stream().map(c -> c.copy(copy)).collect(Collectors.toList()));
+        copy.name = this.name;
+        copy.format = this.format;
+        copy.altText = this.altText;
+        copy.title = this.title;
+        copy.description = this.description;
+        copy.actionButton = this.actionButton;
+        copy.landing = this.landing;
+        copy.frequencyType = this.frequencyType;
+        copy.opinion = this.opinion;
+        copy.config = this.config;
+        copy.systemConfig = this.systemConfig;
+        copy.reviewStatus = this.reviewStatus;
+        copy.status = this.status;
+        return copy;
+    }
 }

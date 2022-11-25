@@ -79,6 +79,19 @@ public abstract class AdGroupDto {
             @NotNull
             private Integer adGroupId;
         }
+
+        @Getter
+        @Setter
+        public static class Copy implements AdGroupIdGetter {
+            @NotNull
+            private Integer campaignId;
+            @NotNull
+            private Integer adGroupId;
+            private boolean onlyAdGroup;
+            private boolean changeStartEndDate;
+            private Integer startDate;
+            private Integer endDate;
+        }
     }
 
     public static abstract class Response {

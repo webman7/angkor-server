@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Seohyun Lee
@@ -272,5 +273,40 @@ public class AdGroup extends BaseUpdatedEntity {
         this.status = Status.DELETED;
         this.config = Config.DEL;
         this.creatives.forEach(Creative::delete);
+    }
+
+    public AdGroup copy(AdGroupDto.Request.Copy request, Campaign campaign) {
+        AdGroup copy = new AdGroup();
+        copy.campaign = campaign;
+        copy.demographicTarget = this.demographicTarget;
+        copy.adGroupSchedule = this.adGroupSchedule.copy();
+        copy.adGroupSchedule.setAdGroup(copy);
+        copy.media.addAll(this.media);
+        copy.devices.addAll(this.devices);
+        copy.name = this.name;
+        copy.pacing = this.pacing;
+        copy.pacingType = this.pacingType;
+        copy.bidAmount = this.bidAmount;
+        copy.bidStrategy = this.bidStrategy;
+        copy.dailyBudgetAmount = this.dailyBudgetAmount;
+        copy.fullDeviceDisplay = this.fullDeviceDisplay;
+        copy.onlyWifiDisplay = this.onlyWifiDisplay;
+        copy.allMedia = this.allMedia;
+        copy.onlyAdult = this.onlyAdult;
+        copy.config = this.config;
+        copy.systemConfig = this.systemConfig;
+        copy.status = this.status;
+
+        if (request.isChangeStartEndDate())
+            copy.adGroupSchedule.updateStartEndDate(request.getStartDate(), request.getEndDate());
+
+        if (!request.isOnlyAdGroup()) {
+            copy.creatives.addAll(this.creatives.stream()
+                    .filter(c -> c.getReviewStatus().equals(Creative.ReviewStatus.APPROVED))
+                    .map(c -> c.copy(copy))
+                    .collect(Collectors.toList()));
+        }
+
+        return copy;
     }
 }

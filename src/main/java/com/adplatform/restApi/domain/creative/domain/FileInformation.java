@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import java.io.Serializable;
 
 /**
  * @author Seohyun Lee
@@ -17,7 +18,7 @@ import javax.persistence.Enumerated;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
-public class FileInformation {
+public class FileInformation implements Serializable {
     public enum FileType {
         IMAGE, VIDEO
     }

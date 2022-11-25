@@ -33,4 +33,11 @@ public class AdGroupCommandApi {
     public void delete(@PathVariable Integer id) {
         this.adGroupService.delete(id);
     }
+
+    @AuthorizedAdAccount
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/copy")
+    public void copy(@RequestBody @Valid AdGroupDto.Request.Copy request) {
+        this.adGroupService.copy(request);
+    }
 }

@@ -3,6 +3,7 @@ package com.adplatform.restApi.domain.adgroup.service;
 import com.adplatform.restApi.domain.adgroup.dao.adgroup.AdGroupRepository;
 import com.adplatform.restApi.domain.adgroup.dao.device.DeviceRepository;
 import com.adplatform.restApi.domain.adgroup.dao.media.MediaRepository;
+import com.adplatform.restApi.domain.adgroup.domain.AdGroup;
 import com.adplatform.restApi.domain.adgroup.domain.Device;
 import com.adplatform.restApi.domain.adgroup.domain.Media;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupDto;
@@ -10,10 +11,14 @@ import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupMapper;
 import com.adplatform.restApi.domain.adgroup.event.AdGroupSavedEvent;
 import com.adplatform.restApi.domain.adgroup.exception.DeviceNotFoundException;
 import com.adplatform.restApi.domain.adgroup.exception.MediaNotFoundException;
+import com.adplatform.restApi.domain.campaign.dao.CampaignRepository;
+import com.adplatform.restApi.domain.campaign.domain.Campaign;
+import com.adplatform.restApi.domain.campaign.service.CampaignFindUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +30,7 @@ import java.util.stream.Collectors;
 @Transactional
 @Service
 public class AdGroupService {
+    private final CampaignRepository campaignRepository;
     private final AdGroupRepository adGroupRepository;
     private final MediaRepository mediaRepository;
     private final DeviceRepository deviceRepository;
@@ -60,5 +66,11 @@ public class AdGroupService {
 
     public void delete(Integer id) {
         AdGroupFindUtils.findByIdOrElseThrow(id, this.adGroupRepository).delete();
+    }
+
+    public void copy(AdGroupDto.Request.@Valid Copy request) {
+        Campaign campaign = CampaignFindUtils.findByIdOrElseThrow(request.getCampaignId(), this.campaignRepository);
+        AdGroup copiedAdGroup = AdGroupFindUtils.findByIdOrElseThrow(request.getAdGroupId(), this.adGroupRepository).copy(request, campaign);
+        this.adGroupRepository.save(copiedAdGroup);
     }
 }
