@@ -94,6 +94,8 @@ public abstract class AdGroupDto {
         @Setter
         public static class Default {
             private Integer id;
+            private String adTypeName;
+            private String adGoalName;
             private String name;
             private AdGroup.Pacing pacing;
             private AdGroup.PacingType pacingType;
@@ -113,6 +115,8 @@ public abstract class AdGroupDto {
             @QueryProjection
             public Default(
                     Integer id,
+                    String adTypeName,
+                    String adGoalName,
                     String name,
                     AdGroup.Pacing pacing,
                     AdGroup.PacingType pacingType,
@@ -129,6 +133,8 @@ public abstract class AdGroupDto {
                     LocalDateTime createdAt,
                     LocalDateTime updatedAt) {
                 this.id = id;
+                this.adTypeName = adTypeName;
+                this.adGoalName = adGoalName;
                 this.name = name;
                 this.pacing = pacing;
                 this.pacingType = pacingType;

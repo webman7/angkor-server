@@ -9,6 +9,10 @@ import java.util.List;
 import static com.adplatform.restApi.domain.campaign.domain.QCampaign.campaign;
 import static java.util.Objects.nonNull;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 public class CampaignCondition {
     public static BooleanExpression eqId(Integer id) {
         return nonNull(id) ? campaign.id.eq(id) : null;

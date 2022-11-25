@@ -7,6 +7,10 @@ import java.util.Objects;
 
 import static com.adplatform.restApi.domain.campaign.domain.QAdType.adType;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 public class AdTypeCondition {
     public static BooleanExpression inName(List<String> names) {
         return Objects.nonNull(names) && !names.isEmpty() ? adType.name.in(names) : null;

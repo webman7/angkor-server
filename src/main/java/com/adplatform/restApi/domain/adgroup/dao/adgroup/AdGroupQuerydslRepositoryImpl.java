@@ -48,6 +48,8 @@ public class AdGroupQuerydslRepositoryImpl implements AdGroupQuerydslRepository 
     public Page<AdGroupDto.Response.Default> search(AdvertiserSearchRequest request, Pageable pageable) {
         List<AdGroupDto.Response.Default> content = this.query.select(new QAdGroupDto_Response_Default(
                         adGroup.id,
+                        adType.name,
+                        adGoal.name,
                         adGroup.name,
                         adGroup.pacing,
                         adGroup.pacingType,

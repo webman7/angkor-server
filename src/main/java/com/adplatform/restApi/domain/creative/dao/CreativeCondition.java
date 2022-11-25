@@ -9,6 +9,10 @@ import java.util.List;
 import static com.adplatform.restApi.domain.creative.domain.QCreative.creative;
 import static java.util.Objects.nonNull;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 public class CreativeCondition {
     public static BooleanExpression inId(List<Integer> ids) {
         return nonNull(ids) && !ids.isEmpty() ? creative.id.in(ids) : null ;
