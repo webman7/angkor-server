@@ -150,7 +150,10 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
                 .where(
                         this.eqAdAccountId(request.getAdAccountId()),
                         campaign.status.ne(Campaign.Status.CANCELED),
-                        CampaignCondition.containsName(request.getName()))
+                        CampaignCondition.containsName(request.getName()),
+                        AdTypeCondition.eqName(request.getAdTypeName()),
+                        AdGoalCondition.eqName(request.getAdGoalName())
+                )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -161,7 +164,10 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
                 .where(
                         this.eqAdAccountId(request.getAdAccountId()),
                         campaign.status.ne(Campaign.Status.CANCELED),
-                        CampaignCondition.containsName(request.getName()));
+                        CampaignCondition.containsName(request.getName()),
+                        AdTypeCondition.eqName(request.getAdTypeName()),
+                        AdGoalCondition.eqName(request.getAdGoalName())
+                );
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }

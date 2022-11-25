@@ -54,6 +54,8 @@ public abstract class CampaignDto {
             @NotNull
             private Integer adAccountId;
             private String name;
+            private String adTypeName;
+            private String adGoalName;
         }
 
         @Getter
