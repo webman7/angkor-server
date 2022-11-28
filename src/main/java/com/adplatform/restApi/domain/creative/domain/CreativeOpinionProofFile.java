@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.SerializationUtils;
 
 import javax.persistence.*;
 
@@ -24,4 +25,11 @@ public class CreativeOpinionProofFile extends BaseEntity {
 
     @Embedded
     private FileInformation information;
+
+    public CreativeOpinionProofFile copy(Creative creative) {
+        CreativeOpinionProofFile copy = new CreativeOpinionProofFile();
+        copy.creative = creative;
+        copy.information = SerializationUtils.clone(this.information);
+        return copy;
+    }
 }

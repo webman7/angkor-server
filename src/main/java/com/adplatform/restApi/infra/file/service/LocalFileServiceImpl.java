@@ -20,6 +20,7 @@ import java.util.UUID;
 @Service
 public class LocalFileServiceImpl implements FileService {
     private static final String FILE_PATH = "./files/";
+
     @SneakyThrows
     @Override
     public String save(MultipartFile file) {

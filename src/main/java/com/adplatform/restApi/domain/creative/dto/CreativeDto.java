@@ -103,6 +103,7 @@ public abstract class CreativeDto {
             private String adGroupName;
             private Integer fileId;
             private String fileName;
+            private FileInformation.FileType fileType;
 
             @QueryProjection
             public Default(
@@ -116,7 +117,8 @@ public abstract class CreativeDto {
                     Integer adGroupId,
                     String adGroupName,
                     Integer fileId,
-                    String fileName) {
+                    String fileName,
+                    FileInformation.FileType fileType) {
                 this.id = id;
                 this.name = name;
                 this.config = config;
@@ -128,6 +130,7 @@ public abstract class CreativeDto {
                 this.adGroupName = adGroupName;
                 this.fileId = fileId;
                 this.fileName = fileName;
+                this.fileType = fileType;
             }
         }
 

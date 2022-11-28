@@ -182,6 +182,7 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                 .fetch();
 
         JPAQuery<Long> countQuery = this.query.select(Wildcard.count)
+                .from(adAccount)
                 .join(adAccount.adAccountUsers, adAccountUser)
                 .join(adAccountUser.user, user)
                 .where(

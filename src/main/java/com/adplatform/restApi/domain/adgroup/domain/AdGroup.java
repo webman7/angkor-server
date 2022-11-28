@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Seohyun Lee
@@ -64,6 +65,34 @@ public class AdGroup extends BaseUpdatedEntity {
         ADMIN_STOP,
         /** 연결 서비스 제한 */
         EXTERNAL_SERVICE_STOP
+    }
+
+    /**
+     * 광고 그룹 상태
+     */
+    public enum Status {
+        /** 집행 예정 */
+        READY,
+        /** 집행 중 */
+        LIVE,
+        /** 집행 완료 */
+        FINISHED,
+        /** 사용자 OFF */
+        OFF,
+        /** 삭제 */
+        DELETED,
+        /** 캠페인 일 예산 초과 */
+        EXCEED_DAILY_BUDGET,
+        /** 일시중지 */
+        PAUSED,
+        /** 집행 가능한 소재가 없음 */
+        NO_AVAILABLE_CREATIVE,
+        /** 계약해지 */
+        CANCELED,
+        /** 연결 서비스 제한으로 운영불가인 상태 */
+        SYSTEM_CONFIG_EXTERNAL_SERVICE_STOP,
+        /** 광고계정 운영불가 */
+        ADACCOUNT_UNAVAILABLE
     }
 
     @Setter
@@ -163,7 +192,7 @@ public class AdGroup extends BaseUpdatedEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", length = 50)
-    private Campaign.Status status;
+    private Status status;
 
     @Builder
     public AdGroup(
@@ -184,7 +213,7 @@ public class AdGroup extends BaseUpdatedEntity {
             boolean onlyAdult,
             Config config,
             SystemConfig systemConfig,
-            Campaign.Status status) {
+            Status status) {
         this.campaign = campaign;
         this.demographicTarget = demographicTarget;
         this.adGroupSchedule = adGroupSchedule;
@@ -238,5 +267,53 @@ public class AdGroup extends BaseUpdatedEntity {
         this.onlyWifiDisplay = request.isOnlyWifiDisplay();
         this.allMedia = request.isAllMedia();
         this.onlyAdult = request.isOnlyAdult();
+    }
+
+    public void delete() {
+        this.status = Status.DELETED;
+        this.config = Config.DEL;
+        this.creatives.forEach(Creative::delete);
+    }
+
+    public AdGroup copy(AdGroupDto.Request.Copy request, Campaign campaign) {
+        AdGroup copy = new AdGroup();
+        copy.campaign = campaign;
+        copy.demographicTarget = this.demographicTarget.copy(copy);
+        copy.adGroupSchedule = this.adGroupSchedule.copy(copy);
+        copy.media.addAll(this.media);
+        copy.devices.addAll(this.devices);
+        copy.name = this.name;
+        copy.pacing = this.pacing;
+        copy.pacingType = this.pacingType;
+        copy.bidAmount = this.bidAmount;
+        copy.bidStrategy = this.bidStrategy;
+        copy.dailyBudgetAmount = this.dailyBudgetAmount;
+        copy.fullDeviceDisplay = this.fullDeviceDisplay;
+        copy.onlyWifiDisplay = this.onlyWifiDisplay;
+        copy.allMedia = this.allMedia;
+        copy.onlyAdult = this.onlyAdult;
+        copy.config = this.config;
+        copy.systemConfig = this.systemConfig;
+        copy.status = this.status;
+
+        if (request.isChangeStartEndDate())
+            copy.adGroupSchedule.updateStartEndDate(request.getStartDate(), request.getEndDate());
+
+        if (!request.isOnlyAdGroup()) {
+            copy.creatives.addAll(this.creatives.stream()
+                    .filter(c -> c.getReviewStatus().equals(Creative.ReviewStatus.APPROVED))
+                    .map(c -> c.copy(copy))
+                    .collect(Collectors.toList()));
+        }
+
+        return copy;
+    }
+
+    public void changeConfigOn() {
+        this.config = Config.ON;
+    }
+
+    public void changeConfigOff() {
+        this.config = Config.OFF;
     }
 }

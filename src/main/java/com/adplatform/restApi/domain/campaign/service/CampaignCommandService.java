@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class CampaignSaveService {
+public class CampaignCommandService {
     private final ApplicationEventPublisher eventPublisher;
     private final CampaignRepository campaignRepository;
     private final AdTypeAndGoalRepository adTypeAndGoalRepository;
@@ -62,5 +62,15 @@ public class CampaignSaveService {
     public void update(CampaignDto.Request.Update request) {
         CampaignFindUtils.findByIdOrElseThrow(request.getCampaignId(), this.campaignRepository)
                 .update(request);
+    }
+
+    public void delete(Integer id) {
+        CampaignFindUtils.findByIdOrElseThrow(id, this.campaignRepository).delete();
+    }
+
+    public void changeConfig(Integer id, Campaign.Config config) {
+        Campaign campaign = CampaignFindUtils.findByIdOrElseThrow(id, this.campaignRepository);
+        if (config == Campaign.Config.ON) campaign.changeConfigOn();
+        else if (config == Campaign.Config.OFF) campaign.changeConfigOff();
     }
 }

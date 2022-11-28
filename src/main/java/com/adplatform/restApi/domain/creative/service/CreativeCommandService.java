@@ -8,7 +8,7 @@ import com.adplatform.restApi.domain.creative.domain.CreativeOpinionProofFile;
 import com.adplatform.restApi.domain.creative.domain.FileInformation;
 import com.adplatform.restApi.domain.creative.dto.CreativeDto;
 import com.adplatform.restApi.domain.creative.dto.CreativeMapper;
-import com.adplatform.restApi.infra.file.helper.ImageSizeHelper;
+import com.adplatform.restApi.infra.file.util.ImageSizeUtils;
 import com.adplatform.restApi.infra.file.service.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -26,7 +26,7 @@ import java.nio.file.Paths;
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class CreativeSaveService {
+public class CreativeCommandService {
     private final CreativeRepository creativeRepository;
     private final FileService fileService;
     private final CreativeMapper creativeMapper;
@@ -66,11 +66,10 @@ public class CreativeSaveService {
         FileInformation.FileType fileType;
         int width = 0;
         int height = 0;
-        ImageSizeHelper imageSizeHelper = new ImageSizeHelper();
         if (mimetype.startsWith("image")) {
             fileType = FileInformation.FileType.IMAGE;
-            width = imageSizeHelper.getWidth(file);
-            height = imageSizeHelper.getHeight(file);
+            width = ImageSizeUtils.getWidth(file);
+            height = ImageSizeUtils.getHeight(file);
         } else if (mimetype.startsWith("video")) {
             fileType = FileInformation.FileType.VIDEO;
         } else {
@@ -86,5 +85,15 @@ public class CreativeSaveService {
                 .height(height)
                 .mimeType(mimetype)
                 .build();
+    }
+
+    public void delete(Integer id) {
+        CreativeFindUtils.findByIdOrElseThrow(id, this.creativeRepository).delete();
+    }
+
+    public void changeConfig(Integer id, Creative.Config config) {
+        Creative creative = CreativeFindUtils.findByIdOrElseThrow(id, this.creativeRepository);
+        if (config == Creative.Config.ON) creative.changeConfigOn();
+        else if (config == Creative.Config.OFF) creative.changeConfigOff();
     }
 }

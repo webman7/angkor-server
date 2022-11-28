@@ -120,4 +120,26 @@ public class AdGroupSchedule {
         this.saturdayTime.update(request.getSaturdayTime());
         this.sundayTime.update(request.getSundayTime());
     }
+
+    public AdGroupSchedule copy(AdGroup adGroup) {
+        AdGroupSchedule copy = new AdGroupSchedule();
+        copy.adGroup = adGroup;
+        copy.startDate = this.startDate;
+        copy.endDate = this.endDate;
+        copy.lateNightTargeting = this.lateNightTargeting;
+        copy.hasDetailTime = this.hasDetailTime;
+        copy.mondayTime = this.mondayTime;
+        copy.tuesdayTime = this.tuesdayTime;
+        copy.wednesdayTime = this.wednesdayTime;
+        copy.thursdayTime = this.thursdayTime;
+        copy.fridayTime = this.fridayTime;
+        copy.saturdayTime = this.saturdayTime;
+        copy.sundayTime = this.sundayTime;
+        return copy;
+    }
+
+    public void updateStartEndDate(Integer startDate, Integer endDate) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 }

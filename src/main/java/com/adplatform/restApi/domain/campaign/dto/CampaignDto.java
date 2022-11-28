@@ -53,8 +53,9 @@ public abstract class CampaignDto {
         public static class Search implements AdAccountIdGetter {
             @NotNull
             private Integer adAccountId;
-            @Size(min = 1)
             private String name;
+            private String adTypeName;
+            private String adGoalName;
         }
 
         @Getter

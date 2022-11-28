@@ -33,6 +33,7 @@ public abstract class CreativeMapper {
     @Mapping(target = "reviewStatus", expression = "java(Creative.ReviewStatus.WAITING)")
     @Mapping(target = "status", expression = "java(Creative.Status.UNAPPROVED)")
     @Mapping(target = "update", ignore = true)
+    @Mapping(target = "copy", ignore = true)
     public abstract Creative toEntity(CreativeDto.Request.Save dto);
 
     @Named("mapCreativeLanding")

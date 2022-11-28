@@ -1,5 +1,6 @@
 package com.adplatform.restApi.domain.creative.api;
 
+import com.adplatform.restApi.domain.campaign.dto.AdvertiserSearchRequest;
 import com.adplatform.restApi.domain.creative.dao.CreativeRepository;
 import com.adplatform.restApi.domain.creative.dto.CreativeDto;
 import com.adplatform.restApi.domain.creative.dto.CreativeMapper;
@@ -30,7 +31,7 @@ public class CreativeQueryApi {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/search")
     public PageDto<CreativeDto.Response.Default> search(
-            @Valid CreativeDto.Request.Search request,
+            @Valid AdvertiserSearchRequest request,
             @PageableDefault Pageable pageable) {
         return PageDto.create(this.creativeRepository.search(request, pageable));
     }

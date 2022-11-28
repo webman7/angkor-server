@@ -4,6 +4,7 @@ import com.adplatform.restApi.global.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.SerializationUtils;
 
 import javax.persistence.*;
 
@@ -35,5 +36,13 @@ public class CreativeFile extends BaseEntity {
         this.creative = creative;
         this.type = type;
         this.information = information;
+    }
+
+    public CreativeFile copy(Creative creative) {
+        CreativeFile copy = new CreativeFile();
+        copy.creative = creative;
+        copy.type = this.type;
+        copy.information = SerializationUtils.clone(this.information);
+        return copy;
     }
 }

@@ -3,6 +3,8 @@ package com.adplatform.restApi.global.util;
 import java.util.Random;
 
 /**
+ * Random code generator class.
+ *
  * @author Seohyun Lee
  * @since 1.0
  */
@@ -13,7 +15,7 @@ public class RandomCodeGenerator {
             'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'
     };
 
-    public String generateAuthCode(int length) {
+    public String generate(int length) {
         Random random = new Random(System.currentTimeMillis());
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; i++)

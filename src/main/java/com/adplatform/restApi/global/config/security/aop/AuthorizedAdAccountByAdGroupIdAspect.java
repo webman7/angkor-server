@@ -1,19 +1,20 @@
 package com.adplatform.restApi.global.config.security.aop;
 
 import com.adplatform.restApi.domain.adaccount.dao.user.AdAccountUserRepository;
-import com.adplatform.restApi.domain.adaccount.service.AdAccountUserQueryUtils;
 import com.adplatform.restApi.domain.adgroup.dao.adgroup.AdGroupRepository;
 import com.adplatform.restApi.domain.adgroup.service.AdGroupFindUtils;
-import com.adplatform.restApi.global.config.security.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
+import static com.adplatform.restApi.global.config.security.aop.AdAccountUserValidationUtil.*;
+
 /**
  * @author Seohyun Lee
  * @since 1.0
+ * @see com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccountByAdGroupId AuthorizedAdAccountByAdGroupId
  */
 @RequiredArgsConstructor
 @Component
@@ -28,10 +29,7 @@ public class AuthorizedAdAccountByAdGroupIdAspect {
                 .getCampaign()
                 .getAdAccount()
                 .getId();
-        AdAccountUserQueryUtils.findByAdAccountIdAndUserIdOrElseThrow(
-                adAccountId,
-                SecurityUtils.getLoginUserId(),
-                this.adAccountUserRepository);
+        validateAdAccountUser(adAccountId, this.adAccountUserRepository);
         return joinPoint.proceed();
     }
 }

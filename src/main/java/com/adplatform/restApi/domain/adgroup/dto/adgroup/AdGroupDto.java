@@ -4,7 +4,6 @@ import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountIdGetter;
 import com.adplatform.restApi.domain.adgroup.domain.AdGroup;
 import com.adplatform.restApi.domain.adgroup.dto.schedule.AdGroupScheduleDto;
 import com.adplatform.restApi.domain.adgroup.dto.target.AdGroupDemographicTargetDto;
-import com.adplatform.restApi.domain.campaign.domain.Campaign;
 import com.adplatform.restApi.domain.campaign.dto.CampaignIdGetter;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.AllArgsConstructor;
@@ -80,6 +79,19 @@ public abstract class AdGroupDto {
             @NotNull
             private Integer adGroupId;
         }
+
+        @Getter
+        @Setter
+        public static class Copy implements AdGroupIdGetter {
+            @NotNull
+            private Integer campaignId;
+            @NotNull
+            private Integer adGroupId;
+            private boolean onlyAdGroup;
+            private boolean changeStartEndDate;
+            private Integer startDate;
+            private Integer endDate;
+        }
     }
 
     public static abstract class Response {
@@ -95,6 +107,8 @@ public abstract class AdGroupDto {
         @Setter
         public static class Default {
             private Integer id;
+            private String adTypeName;
+            private String adGoalName;
             private String name;
             private AdGroup.Pacing pacing;
             private AdGroup.PacingType pacingType;
@@ -103,7 +117,7 @@ public abstract class AdGroupDto {
             private Long dailyBudgetAmount;
             private AdGroup.Config config;
             private AdGroup.SystemConfig systemConfig;
-            private Campaign.Status status;
+            private AdGroup.Status status;
             private Integer campaignId;
             private String campaignName;
             private Integer scheduleStartDate;
@@ -114,6 +128,8 @@ public abstract class AdGroupDto {
             @QueryProjection
             public Default(
                     Integer id,
+                    String adTypeName,
+                    String adGoalName,
                     String name,
                     AdGroup.Pacing pacing,
                     AdGroup.PacingType pacingType,
@@ -122,7 +138,7 @@ public abstract class AdGroupDto {
                     Long dailyBudgetAmount,
                     AdGroup.Config config,
                     AdGroup.SystemConfig systemConfig,
-                    Campaign.Status status,
+                    AdGroup.Status status,
                     Integer campaignId,
                     String campaignName,
                     Integer scheduleStartDate,
@@ -130,6 +146,8 @@ public abstract class AdGroupDto {
                     LocalDateTime createdAt,
                     LocalDateTime updatedAt) {
                 this.id = id;
+                this.adTypeName = adTypeName;
+                this.adGoalName = adGoalName;
                 this.name = name;
                 this.pacing = pacing;
                 this.pacingType = pacingType;
@@ -178,7 +196,7 @@ public abstract class AdGroupDto {
             private boolean onlyAdult;
             private AdGroup.Config config;
             private AdGroup.SystemConfig systemConfig;
-            private Campaign.Status status;
+            private AdGroup.Status status;
         }
     }
 }

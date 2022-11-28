@@ -1,9 +1,11 @@
 package com.adplatform.restApi.domain.campaign.api;
 
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupDto;
+import com.adplatform.restApi.domain.campaign.domain.Campaign;
 import com.adplatform.restApi.domain.campaign.dto.CampaignDto;
-import com.adplatform.restApi.domain.campaign.service.CampaignSaveService;
+import com.adplatform.restApi.domain.campaign.service.CampaignCommandService;
 import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount;
+import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccountByCampaignId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,26 +20,47 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/campaigns")
 public class CampaignCommandApi {
-    private final CampaignSaveService campaignSaveService;
+    private final CampaignCommandService campaignCommandService;
 
     @AuthorizedAdAccount
     @ResponseStatus(HttpStatus.OK)
     @PostMapping
     public void save(@RequestBody @Valid CampaignDto.Request.Save request) {
-        this.campaignSaveService.save(request);
+        this.campaignCommandService.save(request);
     }
 
     @AuthorizedAdAccount
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping
     public void update(@RequestBody @Valid CampaignDto.Request.Update request) {
-        this.campaignSaveService.update(request);
+        this.campaignCommandService.update(request);
     }
 
     @AuthorizedAdAccount
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/adgroups")
     public void adGroupSave(@RequestBody @Valid AdGroupDto.Request.Save request) {
-        this.campaignSaveService.adGroupSave(request);
+        this.campaignCommandService.adGroupSave(request);
+    }
+
+    @AuthorizedAdAccountByCampaignId
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Integer id) {
+        this.campaignCommandService.delete(id);
+    }
+
+    @AuthorizedAdAccountByCampaignId
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{id}/config/on")
+    public void changeConfigOn(@PathVariable Integer id) {
+        this.campaignCommandService.changeConfig(id, Campaign.Config.ON);
+    }
+
+    @AuthorizedAdAccountByCampaignId
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{id}/config/off")
+    public void changeConfigOff(@PathVariable Integer id) {
+        this.campaignCommandService.changeConfig(id, Campaign.Config.OFF);
     }
 }
