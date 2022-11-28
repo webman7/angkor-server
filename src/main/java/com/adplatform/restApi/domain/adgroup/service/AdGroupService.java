@@ -73,4 +73,10 @@ public class AdGroupService {
         AdGroup copiedAdGroup = AdGroupFindUtils.findByIdOrElseThrow(request.getAdGroupId(), this.adGroupRepository).copy(request, campaign);
         this.adGroupRepository.save(copiedAdGroup);
     }
+
+    public void changeConfig(Integer id, AdGroup.Config config) {
+        AdGroup adGroup = AdGroupFindUtils.findByIdOrElseThrow(id, this.adGroupRepository);
+        if (config == AdGroup.Config.ON) adGroup.changeConfigOn();
+        else if (config == AdGroup.Config.OFF) adGroup.changeConfigOff();
+    }
 }

@@ -1,6 +1,7 @@
 package com.adplatform.restApi.domain.campaign.api;
 
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupDto;
+import com.adplatform.restApi.domain.campaign.domain.Campaign;
 import com.adplatform.restApi.domain.campaign.dto.CampaignDto;
 import com.adplatform.restApi.domain.campaign.service.CampaignCommandService;
 import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount;
@@ -47,5 +48,19 @@ public class CampaignCommandApi {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Integer id) {
         this.campaignCommandService.delete(id);
+    }
+
+    @AuthorizedAdAccountByCampaignId
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{id}/config/on")
+    public void changeConfigOn(@PathVariable Integer id) {
+        this.campaignCommandService.changeConfig(id, Campaign.Config.ON);
+    }
+
+    @AuthorizedAdAccountByCampaignId
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{id}/config/off")
+    public void changeConfigOff(@PathVariable Integer id) {
+        this.campaignCommandService.changeConfig(id, Campaign.Config.OFF);
     }
 }

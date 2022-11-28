@@ -1,5 +1,6 @@
 package com.adplatform.restApi.domain.creative.api;
 
+import com.adplatform.restApi.domain.creative.domain.Creative;
 import com.adplatform.restApi.domain.creative.dto.CreativeDto;
 import com.adplatform.restApi.domain.creative.service.CreativeCommandService;
 import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount;
@@ -39,5 +40,19 @@ public class CreativeCommandApi {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Integer id) {
         this.creativeCommandService.delete(id);
+    }
+
+    @AuthorizedAdAccountByCreativeId
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{id}/config/on")
+    public void changeConfigOn(@PathVariable Integer id) {
+        this.creativeCommandService.changeConfig(id, Creative.Config.ON);
+    }
+
+    @AuthorizedAdAccountByCreativeId
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{id}/config/off")
+    public void changeConfigOff(@PathVariable Integer id) {
+        this.creativeCommandService.changeConfig(id, Creative.Config.OFF);
     }
 }

@@ -90,4 +90,10 @@ public class CreativeCommandService {
     public void delete(Integer id) {
         CreativeFindUtils.findByIdOrElseThrow(id, this.creativeRepository).delete();
     }
+
+    public void changeConfig(Integer id, Creative.Config config) {
+        Creative creative = CreativeFindUtils.findByIdOrElseThrow(id, this.creativeRepository);
+        if (config == Creative.Config.ON) creative.changeConfigOn();
+        else if (config == Creative.Config.OFF) creative.changeConfigOff();
+    }
 }

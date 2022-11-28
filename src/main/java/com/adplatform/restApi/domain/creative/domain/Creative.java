@@ -223,4 +223,12 @@ public class Creative extends BaseUpdatedEntity {
         copy.status = this.status;
         return copy;
     }
+
+    public void changeConfigOn() {
+        this.config = Config.ON;
+    }
+
+    public void changeConfigOff() {
+        this.config = Config.OFF;
+    }
 }

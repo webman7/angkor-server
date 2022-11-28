@@ -156,4 +156,12 @@ public class Campaign extends BaseUpdatedEntity {
         this.config = Config.DEL;
         this.adGroups.forEach(AdGroup::delete);
     }
+
+    public void changeConfigOn() {
+        this.config = Config.ON;
+    }
+
+    public void changeConfigOff() {
+        this.config = Config.OFF;
+    }
 }

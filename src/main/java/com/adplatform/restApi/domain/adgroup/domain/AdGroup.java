@@ -309,4 +309,12 @@ public class AdGroup extends BaseUpdatedEntity {
 
         return copy;
     }
+
+    public void changeConfigOn() {
+        this.config = Config.ON;
+    }
+
+    public void changeConfigOff() {
+        this.config = Config.OFF;
+    }
 }

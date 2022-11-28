@@ -67,4 +67,10 @@ public class CampaignCommandService {
     public void delete(Integer id) {
         CampaignFindUtils.findByIdOrElseThrow(id, this.campaignRepository).delete();
     }
+
+    public void changeConfig(Integer id, Campaign.Config config) {
+        Campaign campaign = CampaignFindUtils.findByIdOrElseThrow(id, this.campaignRepository);
+        if (config == Campaign.Config.ON) campaign.changeConfigOn();
+        else if (config == Campaign.Config.OFF) campaign.changeConfigOff();
+    }
 }
