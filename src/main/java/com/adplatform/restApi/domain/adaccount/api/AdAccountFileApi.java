@@ -32,8 +32,9 @@ import java.util.List;
 public class AdAccountFileApi {
     private final AdAccountRepository adAccountRepository;
 
-    private static final List<String> HEADER_ITEMS = List.of(
-            "광고계정(ID)",
+    private static final List<String> HEADER_MY_ITEMS = List.of(
+            "광고계정 ID",
+            "광고계정",
             "상태",
             "광고계정 유형",
             "지불방식",
@@ -43,17 +44,25 @@ public class AdAccountFileApi {
             "어제 소진액",
             "이번달 소진액");
 
+    private static final List<String> HEADER_PAYBALANCE_ITEMS = List.of(
+            "광고계정 ID",
+            "광고계정",
+            "상태",
+            "마케터명",
+            "후불한도",
+            "유상캐시 잔액");
 
     @SneakyThrows
-    @GetMapping("/csv")
-    public ResponseEntity<byte[]> downloadCsv() {
+    @GetMapping("/my/csv")
+    public ResponseEntity<byte[]> downloadMyCsv() {
         List<AdAccountDto.Response.ForAgencySearch> content = this.adAccountRepository.searchForAgency(
                 new AdAccountDto.Request.ForAgencySearch(), SecurityUtils.getLoginUserId());
         StringBuilder sb = new StringBuilder();
-        sb.append(String.join(",", HEADER_ITEMS)).append("\n");
+        sb.append(String.join(",", HEADER_MY_ITEMS)).append("\n");
         content.forEach(c -> sb.append(
-                String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
+                String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
                         c.getId(),
+                        c.getName(),
                         this.getStatus(c.getConfig(), c.isAdminStop(), c.isOutOfBalance()),
                         this.getCompanyType(c.getCompanyType()),
                         c.isPreDeferredPayment() ? "후불" : "선불",
@@ -71,22 +80,22 @@ public class AdAccountFileApi {
         baos.write(sb.toString().getBytes(StandardCharsets.UTF_8));
 
         return ResponseEntity.ok()
-                .header("Content-Disposition", "attachment; filename=adaccount-list.csv")
+                .header("Content-Disposition", "attachment; filename=adaccount-my-list.csv")
                 .contentType(new MediaType("text", "csv"))
                 .body(baos.toByteArray());
     }
 
     @SneakyThrows
-    @GetMapping("/excel")
-    public ResponseEntity<byte[]> downloadExcel() {
+    @GetMapping("/my/excel")
+    public ResponseEntity<byte[]> downloadMyExcel() {
         ByteArrayOutputStream baos;
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
             XSSFSheet sheet = workbook.createSheet("adaccount");
 
             XSSFRow headerRow = sheet.createRow(0);
-            for (int i = 0; i < HEADER_ITEMS.size(); i++) {
+            for (int i = 0; i < HEADER_MY_ITEMS.size(); i++) {
                 XSSFCell cell = headerRow.createCell(i);
-                cell.setCellValue(HEADER_ITEMS.get(i));
+                cell.setCellValue(HEADER_MY_ITEMS.get(i));
             }
 
             List<AdAccountDto.Response.ForAgencySearch> content = this.adAccountRepository.searchForAgency(
@@ -99,6 +108,9 @@ public class AdAccountFileApi {
                 int columnNum = 0;
                 XSSFCell cell = row.createCell(columnNum++);
                 cell.setCellValue(data.getId());
+
+                XSSFCell cell1 = row.createCell(columnNum++);
+                cell1.setCellValue(data.getName());
 
                 XSSFCell cell2 = row.createCell(columnNum++);
                 cell2.setCellValue(this.getStatus(data.getConfig(), data.isAdminStop(), data.isOutOfBalance()));
@@ -130,7 +142,89 @@ public class AdAccountFileApi {
         }
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Disposition", "attachment; filename=adaccount-list.xlsx");
+        headers.set("Content-Disposition", "attachment; filename=adaccount-my-list.xlsx");
+        headers.setAcceptCharset(List.of(StandardCharsets.UTF_8));
+        headers.setContentType(new MediaType("application", "vnd.ms-excel"));
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(baos.toByteArray());
+    }
+
+    @SneakyThrows
+    @GetMapping("/paybalance/csv")
+    public ResponseEntity<byte[]> downloadPayBalanceCsv() {
+        List<AdAccountDto.Response.ForAgencySearch> content = this.adAccountRepository.searchForAgency(
+                new AdAccountDto.Request.ForAgencySearch(), SecurityUtils.getLoginUserId());
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.join(",", HEADER_PAYBALANCE_ITEMS)).append("\n");
+        content.forEach(c -> sb.append(
+                String.format("%s,%s,%s,%s,%s,%s\n",
+                        c.getId(),
+                        c.getName(),
+                        this.getStatus(c.getConfig(), c.isAdminStop(), c.isOutOfBalance()),
+                        c.getMarketerName(),
+                        c.getCreditLimit(),
+                        c.getWalletSpend().getCash())
+        ));
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        baos.write(0xEF);
+        baos.write(0xBB);
+        baos.write(0xBF);
+        baos.write(sb.toString().getBytes(StandardCharsets.UTF_8));
+
+        return ResponseEntity.ok()
+                .header("Content-Disposition", "attachment; filename=adaccount-my-list.csv")
+                .contentType(new MediaType("text", "csv"))
+                .body(baos.toByteArray());
+    }
+
+    @SneakyThrows
+    @GetMapping("/paybalance/excel")
+    public ResponseEntity<byte[]> downloadPayBalanceExcel() {
+        ByteArrayOutputStream baos;
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+            XSSFSheet sheet = workbook.createSheet("adaccount");
+
+            XSSFRow headerRow = sheet.createRow(0);
+            for (int i = 0; i < HEADER_PAYBALANCE_ITEMS.size(); i++) {
+                XSSFCell cell = headerRow.createCell(i);
+                cell.setCellValue(HEADER_PAYBALANCE_ITEMS.get(i));
+            }
+
+            List<AdAccountDto.Response.ForAgencySearch> content = this.adAccountRepository.searchForAgency(
+                    new AdAccountDto.Request.ForAgencySearch(), SecurityUtils.getLoginUserId());
+
+            int rowNum = 1;
+            for (AdAccountDto.Response.ForAgencySearch data : content) {
+                XSSFRow row = sheet.createRow(rowNum++);
+
+                int columnNum = 0;
+                XSSFCell cell = row.createCell(columnNum++);
+                cell.setCellValue(data.getId());
+
+                XSSFCell cell1 = row.createCell(columnNum++);
+                cell1.setCellValue(data.getName());
+
+                XSSFCell cell2 = row.createCell(columnNum++);
+                cell2.setCellValue(this.getStatus(data.getConfig(), data.isAdminStop(), data.isOutOfBalance()));
+
+                XSSFCell cell3 = row.createCell(columnNum++);
+                cell3.setCellValue(data.getMarketerName());
+
+                XSSFCell cell4 = row.createCell(columnNum++);
+                cell4.setCellValue(data.getCreditLimit());
+
+                XSSFCell cell5 = row.createCell(columnNum++);
+                cell5.setCellValue(data.getWalletSpend().getCash());
+            }
+
+            baos = new ByteArrayOutputStream();
+            workbook.write(baos);
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Disposition", "attachment; filename=adaccount-paybalance-list.xlsx");
         headers.setAcceptCharset(List.of(StandardCharsets.UTF_8));
         headers.setContentType(new MediaType("application", "vnd.ms-excel"));
         return ResponseEntity.ok()
