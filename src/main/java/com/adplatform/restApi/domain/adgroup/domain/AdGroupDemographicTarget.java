@@ -7,6 +7,7 @@ import com.adplatform.restApi.global.converter.StringListToStringConverter;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,7 +50,7 @@ public class AdGroupDemographicTarget {
 
     @Convert(converter = StringListToStringConverter.class)
     @Column(name = "ages", length = 100)
-    private List<String> ages;
+    private final List<String> ages = new ArrayList<>();
 
     /**
      * 전체 성별 여부.<br/>
@@ -73,15 +74,25 @@ public class AdGroupDemographicTarget {
             Gender gender) {
         this.adGroup = adGroup;
         this.allAge = allAge;
-        this.ages = ages;
+        this.ages.addAll(ages);
         this.allGender = allGender;
         this.gender = gender;
     }
 
     public void update(AdGroupDemographicTargetDto.Request.FirstSave request) {
         this.allAge = request.isAllAge();
-        this.ages = request.getAges();
+        this.ages.addAll(request.getAges());
         this.allGender = request.isAllGender();
         this.gender = request.getGender();
+    }
+
+    public AdGroupDemographicTarget copy(AdGroup adGroup) {
+        AdGroupDemographicTarget copy = new AdGroupDemographicTarget();
+        copy.adGroup = adGroup;
+        copy.allAge = this.allAge;
+        copy.ages.addAll(this.ages);
+        copy.allGender = this.allGender;
+        copy.gender = this.gender;
+        return copy;
     }
 }

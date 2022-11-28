@@ -278,9 +278,8 @@ public class AdGroup extends BaseUpdatedEntity {
     public AdGroup copy(AdGroupDto.Request.Copy request, Campaign campaign) {
         AdGroup copy = new AdGroup();
         copy.campaign = campaign;
-        copy.demographicTarget = this.demographicTarget;
-        copy.adGroupSchedule = this.adGroupSchedule.copy();
-        copy.adGroupSchedule.setAdGroup(copy);
+        copy.demographicTarget = this.demographicTarget.copy(copy);
+        copy.adGroupSchedule = this.adGroupSchedule.copy(copy);
         copy.media.addAll(this.media);
         copy.devices.addAll(this.devices);
         copy.name = this.name;

@@ -121,8 +121,9 @@ public class AdGroupSchedule {
         this.sundayTime.update(request.getSundayTime());
     }
 
-    public AdGroupSchedule copy() {
+    public AdGroupSchedule copy(AdGroup adGroup) {
         AdGroupSchedule copy = new AdGroupSchedule();
+        copy.adGroup = adGroup;
         copy.startDate = this.startDate;
         copy.endDate = this.endDate;
         copy.lateNightTargeting = this.lateNightTargeting;
