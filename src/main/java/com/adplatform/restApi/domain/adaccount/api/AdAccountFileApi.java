@@ -32,7 +32,7 @@ import java.util.List;
 public class AdAccountFileApi {
     private final AdAccountRepository adAccountRepository;
 
-    private static final List<String> MY_HEADER_ITEMS = List.of(
+    private static final List<String> HEADER_MY_ITEMS = List.of(
             "광고계정 ID",
             "광고계정",
             "상태",
@@ -44,7 +44,7 @@ public class AdAccountFileApi {
             "어제 소진액",
             "이번달 소진액");
 
-    private static final List<String> PAYBALNCE_HEADER_ITEMS = List.of(
+    private static final List<String> HEADER_PAYBALANCE_ITEMS = List.of(
             "광고계정 ID",
             "광고계정",
             "상태",
@@ -58,7 +58,7 @@ public class AdAccountFileApi {
         List<AdAccountDto.Response.ForAgencySearch> content = this.adAccountRepository.searchForAgency(
                 new AdAccountDto.Request.ForAgencySearch(), SecurityUtils.getLoginUserId());
         StringBuilder sb = new StringBuilder();
-        sb.append(String.join(",", MY_HEADER_ITEMS)).append("\n");
+        sb.append(String.join(",", HEADER_MY_ITEMS)).append("\n");
         content.forEach(c -> sb.append(
                 String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
                         c.getId(),
@@ -93,9 +93,9 @@ public class AdAccountFileApi {
             XSSFSheet sheet = workbook.createSheet("adaccount");
 
             XSSFRow headerRow = sheet.createRow(0);
-            for (int i = 0; i < MY_HEADER_ITEMS.size(); i++) {
+            for (int i = 0; i < HEADER_MY_ITEMS.size(); i++) {
                 XSSFCell cell = headerRow.createCell(i);
-                cell.setCellValue(MY_HEADER_ITEMS.get(i));
+                cell.setCellValue(HEADER_MY_ITEMS.get(i));
             }
 
             List<AdAccountDto.Response.ForAgencySearch> content = this.adAccountRepository.searchForAgency(
@@ -156,7 +156,7 @@ public class AdAccountFileApi {
         List<AdAccountDto.Response.ForAgencySearch> content = this.adAccountRepository.searchForAgency(
                 new AdAccountDto.Request.ForAgencySearch(), SecurityUtils.getLoginUserId());
         StringBuilder sb = new StringBuilder();
-        sb.append(String.join(",", PAYBALNCE_HEADER_ITEMS)).append("\n");
+        sb.append(String.join(",", HEADER_PAYBALANCE_ITEMS)).append("\n");
         content.forEach(c -> sb.append(
                 String.format("%s,%s,%s,%s,%s,%s\n",
                         c.getId(),
@@ -174,7 +174,7 @@ public class AdAccountFileApi {
         baos.write(sb.toString().getBytes(StandardCharsets.UTF_8));
 
         return ResponseEntity.ok()
-                .header("Content-Disposition", "attachment; filename=adaccount-paybalance-list.csv")
+                .header("Content-Disposition", "attachment; filename=adaccount-my-list.csv")
                 .contentType(new MediaType("text", "csv"))
                 .body(baos.toByteArray());
     }
@@ -187,9 +187,9 @@ public class AdAccountFileApi {
             XSSFSheet sheet = workbook.createSheet("adaccount");
 
             XSSFRow headerRow = sheet.createRow(0);
-            for (int i = 0; i < PAYBALNCE_HEADER_ITEMS.size(); i++) {
+            for (int i = 0; i < HEADER_PAYBALANCE_ITEMS.size(); i++) {
                 XSSFCell cell = headerRow.createCell(i);
-                cell.setCellValue(PAYBALNCE_HEADER_ITEMS.get(i));
+                cell.setCellValue(HEADER_PAYBALANCE_ITEMS.get(i));
             }
 
             List<AdAccountDto.Response.ForAgencySearch> content = this.adAccountRepository.searchForAgency(
