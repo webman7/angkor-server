@@ -39,4 +39,11 @@ public class AdAccountQueryApi {
         return PageDto.create(this.adAccountRepository.searchForAdvertiser(
                 pageable, id, name, SecurityUtils.getLoginUserId(), requestStatus));
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/count")
+    public AdAccountDto.Response.AdAccountCount getCounts() {
+        return this.adAccountRepository.countRequestStatusYN(SecurityUtils.getLoginUserId())
+                .orElse(new AdAccountDto.Response.AdAccountCount(0L, 0L));
+    }
 }

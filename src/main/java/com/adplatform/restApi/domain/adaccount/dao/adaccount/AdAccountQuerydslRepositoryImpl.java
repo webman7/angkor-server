@@ -2,6 +2,7 @@ package com.adplatform.restApi.domain.adaccount.dao.adaccount;
 
 import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
 import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
+import com.adplatform.restApi.domain.adaccount.dto.adaccount.QAdAccountDto_Response_AdAccountCount;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.QAdAccountDto_Response_ForAdvertiserSearch;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.QAdAccountDto_Response_ForAgencySearch;
 import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_WalletSpend;
@@ -23,6 +24,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static com.adplatform.restApi.domain.adaccount.domain.QAdAccount.adAccount;
 import static com.adplatform.restApi.domain.adaccount.domain.QAdAccountUser.adAccountUser;
@@ -192,6 +194,24 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                         this.containsName(name));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public Optional<Response.AdAccountCount> countRequestStatusYN(Integer loginUserId) {
+        return Optional.ofNullable(this.query.select(new QAdAccountDto_Response_AdAccountCount(
+                        as(select(adAccountUser.id.userId.count())
+                                        .from(adAccountUser)
+                                        .where(adAccountUser.id.userId.eq(adAccountUser.id.userId), adAccountUser.requestStatus.eq(AdAccountUser.RequestStatus.Y)),
+                                "requestStatusYCount"),
+                        as(select(adAccountUser.id.userId.count())
+                                        .from(adAccountUser)
+                                        .where(adAccountUser.id.userId.eq(adAccountUser.id.userId), adAccountUser.requestStatus.eq(AdAccountUser.RequestStatus.N)),
+                                "requestStatusNCount")
+                ))
+                .from(adAccountUser)
+                .where(adAccountUser.id.userId.eq(loginUserId))
+                .groupBy(adAccountUser.id.userId)
+                .fetchOne());
     }
 
     private BooleanExpression eqId(Integer id) {
