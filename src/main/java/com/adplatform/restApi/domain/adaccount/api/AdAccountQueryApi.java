@@ -41,7 +41,7 @@ public class AdAccountQueryApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/count")
+    @GetMapping("/counts")
     public AdAccountDto.Response.AdAccountCount getCounts() {
         return this.adAccountRepository.countRequestStatusYN(SecurityUtils.getLoginUserId())
                 .orElse(new AdAccountDto.Response.AdAccountCount(0L, 0L));
