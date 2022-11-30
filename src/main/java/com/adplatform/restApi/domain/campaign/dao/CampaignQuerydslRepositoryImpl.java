@@ -162,7 +162,7 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
                         CreativeCondition.inReviewStatus(request.getCreativeReviewStatuses()),
                         AdTypeCondition.inName(request.getAdTypeNames()),
                         AdGoalCondition.inName(request.getAdGoalNames())
-                );
+                ).groupBy(campaign.id);
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
