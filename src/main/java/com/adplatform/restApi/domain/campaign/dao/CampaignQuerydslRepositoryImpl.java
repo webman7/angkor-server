@@ -4,9 +4,13 @@ import com.adplatform.restApi.domain.adgroup.dao.adgroup.AdGroupCondition;
 import com.adplatform.restApi.domain.campaign.domain.Campaign;
 import com.adplatform.restApi.domain.campaign.dto.*;
 import com.adplatform.restApi.domain.creative.dao.CreativeCondition;
+import com.adplatform.restApi.domain.statistics.dto.QReportConversionInformationResponse;
+import com.adplatform.restApi.domain.statistics.dto.QReportInformationResponse;
 import com.adplatform.restApi.global.util.QuerydslOrderSpecifierUtil;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +28,8 @@ import static com.adplatform.restApi.domain.campaign.domain.QAdType.adType;
 import static com.adplatform.restApi.domain.campaign.domain.QAdTypeAndGoal.adTypeAndGoal;
 import static com.adplatform.restApi.domain.campaign.domain.QCampaign.campaign;
 import static com.adplatform.restApi.domain.creative.domain.QCreative.creative;
+import static com.adplatform.restApi.domain.statistics.domain.QReportAdGroupConversionDaily.reportAdGroupConversionDaily;
+import static com.adplatform.restApi.domain.statistics.domain.QReportAdGroupDaily.reportAdGroupDaily;
 import static com.querydsl.core.types.ExpressionUtils.as;
 import static com.querydsl.jpa.JPAExpressions.select;
 import static java.util.Objects.nonNull;
@@ -56,7 +62,34 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
                         as(select(adGroupSchedule.endDate.max())
                                 .from(adGroupSchedule)
                                 .join(adGroupSchedule.adGroup, adGroup)
-                                .where(adGroup.campaign.id.eq(campaign.id)), "adGroupSchedulesLastEndDate")
+                                .where(adGroup.campaign.id.eq(campaign.id)), "adGroupSchedulesLastEndDate"),
+                        new QReportInformationResponse(
+                                this.getReportSubQuery(reportAdGroupDaily.information.cost, request),
+                                this.getReportSubQuery(reportAdGroupDaily.information.impression, request),
+                                this.getReportSubQuery(reportAdGroupDaily.information.click, request),
+                                this.getReportSubQuery(reportAdGroupDaily.information.reach, request),
+                                this.getReportSubQuery(reportAdGroupDaily.information.videoAutoPlay, request),
+                                this.getReportSubQuery(reportAdGroupDaily.information.videoTouches, request),
+                                this.getReportSubQuery(reportAdGroupDaily.information.videoUnmute, request),
+                                this.getReportSubQuery(reportAdGroupDaily.information.videPlay3Seconds, request),
+                                this.getReportSubQuery(reportAdGroupDaily.information.videPlay5Seconds, request),
+                                this.getReportSubQuery(reportAdGroupDaily.information.videPlay10Seconds, request),
+                                this.getReportSubQuery(reportAdGroupDaily.information.videPlay15Seconds, request),
+                                this.getReportSubQuery(reportAdGroupDaily.information.videPlay30Seconds, request),
+                                this.getReportSubQuery(reportAdGroupDaily.information.videPlay60Seconds, request),
+                                this.getReportSubQuery(reportAdGroupDaily.information.videPlay25Percent, request),
+                                this.getReportSubQuery(reportAdGroupDaily.information.videPlay50Percent, request),
+                                this.getReportSubQuery(reportAdGroupDaily.information.videPlay75Percent, request),
+                                this.getReportSubQuery(reportAdGroupDaily.information.videPlay100Percent, request)
+                        ),
+                        new QReportConversionInformationResponse(
+                                this.getReportConversionSubQuery(reportAdGroupConversionDaily.information.signUpDay1, request),
+                                this.getReportConversionSubQuery(reportAdGroupConversionDaily.information.signUpDay7, request),
+                                this.getReportConversionSubQuery(reportAdGroupConversionDaily.information.purchaseDay1, request),
+                                this.getReportConversionSubQuery(reportAdGroupConversionDaily.information.purchaseDay7, request),
+                                this.getReportConversionSubQuery(reportAdGroupConversionDaily.information.viewCartDay1, request),
+                                this.getReportConversionSubQuery(reportAdGroupConversionDaily.information.viewCartDay7, request)
+                        )
                 ))
                 .from(campaign)
                 .join(campaign.adTypeAndGoal, adTypeAndGoal)
@@ -102,7 +135,7 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        JPAQuery<Long> countQuery = this.query.select(campaign.count())
+        JPAQuery<Long> countQuery = this.query.select(campaign.id.countDistinct())
                 .from(campaign)
                 .join(campaign.adTypeAndGoal, adTypeAndGoal)
                 .join(adTypeAndGoal.adType, adType)
@@ -132,6 +165,20 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
                 );
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    private JPQLQuery<Integer> getReportSubQuery(NumberPath<Integer> path, AdvertiserSearchRequest request) {
+        return select(path.sum())
+                .from(reportAdGroupDaily)
+                .where(campaign.id.eq(reportAdGroupDaily.campaignId),
+                        reportAdGroupDaily.reportDate.between(request.getReportStartDate(), request.getReportEndDate()));
+    }
+
+    private JPQLQuery<Integer> getReportConversionSubQuery(NumberPath<Integer> path, AdvertiserSearchRequest request) {
+        return select(path.sum())
+                .from(reportAdGroupConversionDaily)
+                .where(campaign.id.eq(reportAdGroupConversionDaily.campaignId),
+                        reportAdGroupConversionDaily.reportDate.between(request.getReportStartDate(), request.getReportEndDate()));
     }
 
     @Override

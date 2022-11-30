@@ -122,5 +122,17 @@ public class AdAccountDto {
                 this.requestStatus = requestStatus;
             }
         }
+        @Getter
+        @Setter
+        public static class AdAccountCount {
+            private long requestStatusYCount;
+            private long requestStatusNCount;
+
+            @QueryProjection
+            public AdAccountCount(long requestStatusYCount, long requestStatusNCount) {
+                this.requestStatusYCount = requestStatusYCount;
+                this.requestStatusNCount = requestStatusNCount;
+            }
+        }
     }
 }

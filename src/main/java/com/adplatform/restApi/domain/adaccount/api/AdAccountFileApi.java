@@ -11,6 +11,7 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -80,7 +81,7 @@ public class AdAccountFileApi {
         baos.write(sb.toString().getBytes(StandardCharsets.UTF_8));
 
         return ResponseEntity.ok()
-                .header("Content-Disposition", "attachment; filename=adaccount-my-list.csv")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=adaccount-my-list.csv")
                 .contentType(new MediaType("text", "csv"))
                 .body(baos.toByteArray());
     }
@@ -133,7 +134,7 @@ public class AdAccountFileApi {
                 XSSFCell cell8 = row.createCell(columnNum++);
                 cell8.setCellValue(data.getWalletSpend().getYesterdaySpend());
 
-                XSSFCell cell9 = row.createCell(columnNum++);
+                XSSFCell cell9 = row.createCell(columnNum);
                 cell9.setCellValue(data.getWalletSpend().getMonthSpend());
             }
 
@@ -142,7 +143,7 @@ public class AdAccountFileApi {
         }
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Disposition", "attachment; filename=adaccount-my-list.xlsx");
+        headers.setContentDisposition(ContentDisposition.attachment().filename("adaccount-my-list.xlsx").build());
         headers.setAcceptCharset(List.of(StandardCharsets.UTF_8));
         headers.setContentType(new MediaType("application", "vnd.ms-excel"));
         return ResponseEntity.ok()
@@ -174,7 +175,7 @@ public class AdAccountFileApi {
         baos.write(sb.toString().getBytes(StandardCharsets.UTF_8));
 
         return ResponseEntity.ok()
-                .header("Content-Disposition", "attachment; filename=adaccount-my-list.csv")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=adaccount-paybalance-list.csv")
                 .contentType(new MediaType("text", "csv"))
                 .body(baos.toByteArray());
     }
@@ -215,7 +216,7 @@ public class AdAccountFileApi {
                 XSSFCell cell4 = row.createCell(columnNum++);
                 cell4.setCellValue(data.getCreditLimit());
 
-                XSSFCell cell5 = row.createCell(columnNum++);
+                XSSFCell cell5 = row.createCell(columnNum);
                 cell5.setCellValue(data.getWalletSpend().getCash());
             }
 
@@ -224,7 +225,7 @@ public class AdAccountFileApi {
         }
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Disposition", "attachment; filename=adaccount-paybalance-list.xlsx");
+        headers.setContentDisposition(ContentDisposition.attachment().filename("adaccount-paybalance-list.xlsx").build());
         headers.setAcceptCharset(List.of(StandardCharsets.UTF_8));
         headers.setContentType(new MediaType("application", "vnd.ms-excel"));
         return ResponseEntity.ok()

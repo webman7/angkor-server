@@ -3,6 +3,8 @@ package com.adplatform.restApi.domain.campaign.dto;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountIdGetter;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupDto;
 import com.adplatform.restApi.domain.campaign.domain.Campaign;
+import com.adplatform.restApi.domain.statistics.dto.ReportConversionInformationResponse;
+import com.adplatform.restApi.domain.statistics.dto.ReportInformationResponse;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -79,6 +81,8 @@ public abstract class CampaignDto {
             private LocalDateTime updatedAt;
             private Integer adGroupSchedulesFirstStartDate;
             private Integer adGroupSchedulesLastEndDate;
+            private ReportInformationResponse reportInformation;
+            private ReportConversionInformationResponse reportConversionInformation;
 
             @QueryProjection
             public Page(
@@ -92,7 +96,9 @@ public abstract class CampaignDto {
                     LocalDateTime createdAt,
                     LocalDateTime updatedAt,
                     Integer adGroupSchedulesFirstStartDate,
-                    Integer adGroupSchedulesLastEndDate) {
+                    Integer adGroupSchedulesLastEndDate,
+                    ReportInformationResponse reportInformation,
+                    ReportConversionInformationResponse reportConversionInformation) {
                 this.id = id;
                 this.adTypeAndGoal = adTypeAndGoal;
                 this.name = name;
@@ -104,6 +110,8 @@ public abstract class CampaignDto {
                 this.updatedAt = updatedAt;
                 this.adGroupSchedulesFirstStartDate = adGroupSchedulesFirstStartDate;
                 this.adGroupSchedulesLastEndDate = adGroupSchedulesLastEndDate;
+                this.reportInformation = reportInformation;
+                this.reportConversionInformation = reportConversionInformation;
             }
         }
 

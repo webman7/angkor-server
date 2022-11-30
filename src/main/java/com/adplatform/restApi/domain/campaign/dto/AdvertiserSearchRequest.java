@@ -10,11 +10,19 @@ import lombok.Setter;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 @Getter
 @Setter
 public class AdvertiserSearchRequest implements AdAccountIdGetter {
     @NotNull
     private Integer adAccountId;
+    @NotNull
+    private Integer reportStartDate;
+    @NotNull
+    private Integer reportEndDate;
     private List<Integer> campaignIds;
     private String campaignName;
     private List<Campaign.Config> campaignConfigs;
