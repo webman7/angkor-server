@@ -150,7 +150,6 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
                 )
                 .where(
                         this.eqAdAccountId(request.getAdAccountId()),
-                        reportAdGroupDaily.reportDate.eq(reportAdGroupConversionDaily.reportDate),
                         CampaignCondition.inId(request.getCampaignIds()),
                         CampaignCondition.containsName(request.getCampaignName()),
                         CampaignCondition.inConfigElseWithOutStatusDel(request.getCampaignConfigs()),
