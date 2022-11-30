@@ -15,7 +15,6 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
@@ -33,7 +32,6 @@ import static com.adplatform.restApi.domain.statistics.domain.QReportAdGroupConv
 import static com.adplatform.restApi.domain.statistics.domain.QReportAdGroupDaily.reportAdGroupDaily;
 import static com.querydsl.core.types.ExpressionUtils.as;
 import static com.querydsl.jpa.JPAExpressions.select;
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 /**
@@ -137,7 +135,7 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        Long count = this.query.select(campaign.id.countDistinct())
+        JPAQuery<Long> countQuery = this.query.select(campaign.id.countDistinct())
                 .from(campaign)
                 .join(campaign.adTypeAndGoal, adTypeAndGoal)
                 .join(adTypeAndGoal.adType, adType)
@@ -164,10 +162,9 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
                         CreativeCondition.inReviewStatus(request.getCreativeReviewStatuses()),
                         AdTypeCondition.inName(request.getAdTypeNames()),
                         AdGoalCondition.inName(request.getAdGoalNames())
-                )
-                .fetchOne();
+                );
 
-        return new PageImpl<>(content, pageable, isNull(count) ? 0L : count);
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
     private JPQLQuery<Integer> getReportSubQuery(NumberPath<Integer> path, AdvertiserSearchRequest request) {
