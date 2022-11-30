@@ -43,7 +43,7 @@ public class ReportInformation {
     private int videPlay5Seconds;
 
     @Column(name = "video_play_10s")
-    private int videPlay7Seconds;
+    private int videPlay10Seconds;
 
     @Column(name = "video_play_15s")
     private int videPlay15Seconds;

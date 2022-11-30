@@ -18,7 +18,7 @@ public class ReportInformationResponse {
     private int videoUnmute;
     private int videPlay3Seconds;
     private int videPlay5Seconds;
-    private int videPlay7Seconds;
+    private int videPlay10Seconds;
     private int videPlay15Seconds;
     private int videPlay30Seconds;
     private int videPlay60Seconds;
@@ -38,7 +38,7 @@ public class ReportInformationResponse {
             int videoUnmute,
             int videPlay3Seconds,
             int videPlay5Seconds,
-            int videPlay7Seconds,
+            int videPlay10Seconds,
             int videPlay15Seconds,
             int videPlay30Seconds,
             int videPlay60Seconds,
@@ -55,7 +55,7 @@ public class ReportInformationResponse {
         this.videoUnmute = videoUnmute;
         this.videPlay3Seconds = videPlay3Seconds;
         this.videPlay5Seconds = videPlay5Seconds;
-        this.videPlay7Seconds = videPlay7Seconds;
+        this.videPlay10Seconds = videPlay10Seconds;
         this.videPlay15Seconds = videPlay15Seconds;
         this.videPlay30Seconds = videPlay30Seconds;
         this.videPlay60Seconds = videPlay60Seconds;
