@@ -4,6 +4,8 @@ import com.adplatform.restApi.domain.adgroup.dao.adgroup.AdGroupCondition;
 import com.adplatform.restApi.domain.campaign.domain.Campaign;
 import com.adplatform.restApi.domain.campaign.dto.*;
 import com.adplatform.restApi.domain.creative.dao.CreativeCondition;
+import com.adplatform.restApi.domain.statistics.dto.QReportConversionInformationResponse;
+import com.adplatform.restApi.domain.statistics.dto.QReportInformationResponse;
 import com.adplatform.restApi.global.util.QuerydslOrderSpecifierUtil;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -24,6 +26,8 @@ import static com.adplatform.restApi.domain.campaign.domain.QAdType.adType;
 import static com.adplatform.restApi.domain.campaign.domain.QAdTypeAndGoal.adTypeAndGoal;
 import static com.adplatform.restApi.domain.campaign.domain.QCampaign.campaign;
 import static com.adplatform.restApi.domain.creative.domain.QCreative.creative;
+import static com.adplatform.restApi.domain.statistics.domain.QReportAdGroupConversionDaily.reportAdGroupConversionDaily;
+import static com.adplatform.restApi.domain.statistics.domain.QReportAdGroupDaily.reportAdGroupDaily;
 import static com.querydsl.core.types.ExpressionUtils.as;
 import static com.querydsl.jpa.JPAExpressions.select;
 import static java.util.Objects.nonNull;
@@ -56,7 +60,34 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
                         as(select(adGroupSchedule.endDate.max())
                                 .from(adGroupSchedule)
                                 .join(adGroupSchedule.adGroup, adGroup)
-                                .where(adGroup.campaign.id.eq(campaign.id)), "adGroupSchedulesLastEndDate")
+                                .where(adGroup.campaign.id.eq(campaign.id)), "adGroupSchedulesLastEndDate"),
+                        new QReportInformationResponse(
+                                reportAdGroupDaily.information.cost.sum(),
+                                reportAdGroupDaily.information.impression.sum(),
+                                reportAdGroupDaily.information.click.sum(),
+                                reportAdGroupDaily.information.reach.sum(),
+                                reportAdGroupDaily.information.videoAutoPlay.sum(),
+                                reportAdGroupDaily.information.videoTouches.sum(),
+                                reportAdGroupDaily.information.videoUnmute.sum(),
+                                reportAdGroupDaily.information.videPlay3Seconds.sum(),
+                                reportAdGroupDaily.information.videPlay5Seconds.sum(),
+                                reportAdGroupDaily.information.videPlay7Seconds.sum(),
+                                reportAdGroupDaily.information.videPlay15Seconds.sum(),
+                                reportAdGroupDaily.information.videPlay30Seconds.sum(),
+                                reportAdGroupDaily.information.videPlay60Seconds.sum(),
+                                reportAdGroupDaily.information.videPlay25Percent.sum(),
+                                reportAdGroupDaily.information.videPlay50Percent.sum(),
+                                reportAdGroupDaily.information.videPlay75Percent.sum(),
+                                reportAdGroupDaily.information.videPlay100Percent.sum()
+                        ),
+                        new QReportConversionInformationResponse(
+                                reportAdGroupConversionDaily.information.signUpDay1.sum(),
+                                reportAdGroupConversionDaily.information.signUpDay7.sum(),
+                                reportAdGroupConversionDaily.information.purchaseDay1.sum(),
+                                reportAdGroupConversionDaily.information.purchaseDay7.sum(),
+                                reportAdGroupConversionDaily.information.viewCartDay1.sum(),
+                                reportAdGroupConversionDaily.information.viewCartDay7.sum()
+                        )
                 ))
                 .from(campaign)
                 .join(campaign.adTypeAndGoal, adTypeAndGoal)
@@ -70,8 +101,18 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
                         CreativeCondition.inConfigElseWithOutStatusDel(request.getCreativeConfigs()),
                         CreativeCondition.inStatusElseWithOutStatusDel(request.getCreativeStatuses())
                 )
+                .leftJoin(reportAdGroupDaily).on(
+                        campaign.id.eq(reportAdGroupDaily.campaignId),
+                        reportAdGroupDaily.reportDate.between(request.getReportStartDate(), request.getReportEndDate())
+                )
+                .leftJoin(reportAdGroupConversionDaily).on(
+                        campaign.id.eq(reportAdGroupConversionDaily.campaignId),
+                        reportAdGroupConversionDaily.reportDate.between(request.getReportStartDate(), request.getReportEndDate())
+                )
                 .where(
                         this.eqAdAccountId(request.getAdAccountId()),
+                        reportAdGroupDaily.adGroupId.eq(reportAdGroupConversionDaily.adGroupId),
+                        reportAdGroupDaily.reportDate.eq(reportAdGroupConversionDaily.reportDate),
                         CampaignCondition.inId(request.getCampaignIds()),
                         CampaignCondition.containsName(request.getCampaignName()),
                         CampaignCondition.inConfigElseWithOutStatusDel(request.getCampaignConfigs()),
@@ -115,8 +156,18 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
                         CreativeCondition.inConfigElseWithOutStatusDel(request.getCreativeConfigs()),
                         CreativeCondition.inStatusElseWithOutStatusDel(request.getCreativeStatuses())
                 )
+                .leftJoin(reportAdGroupDaily).on(
+                        campaign.id.eq(reportAdGroupDaily.campaignId),
+                        reportAdGroupDaily.reportDate.between(request.getReportStartDate(), request.getReportEndDate())
+                )
+                .leftJoin(reportAdGroupConversionDaily).on(
+                        campaign.id.eq(reportAdGroupConversionDaily.campaignId),
+                        reportAdGroupConversionDaily.reportDate.between(request.getReportStartDate(), request.getReportEndDate())
+                )
                 .where(
                         this.eqAdAccountId(request.getAdAccountId()),
+                        reportAdGroupDaily.adGroupId.eq(reportAdGroupConversionDaily.adGroupId),
+                        reportAdGroupDaily.reportDate.eq(reportAdGroupConversionDaily.reportDate),
                         CampaignCondition.inId(request.getCampaignIds()),
                         CampaignCondition.containsName(request.getCampaignName()),
                         CampaignCondition.inConfigElseWithOutStatusDel(request.getCampaignConfigs()),
