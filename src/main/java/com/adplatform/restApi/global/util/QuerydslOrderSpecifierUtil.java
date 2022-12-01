@@ -32,7 +32,7 @@ public class QuerydslOrderSpecifierUtil {
      * @param sort     sort
      * @return List
      */
-    public static <T> List getOrderSpecifier(Class<T> clazz, String variable, Sort sort) {
+    public static <T> List<OrderSpecifier> getOrderSpecifier(Class<T> clazz, String variable, Sort sort) {
         return sort.stream().map(order -> {
             Order direction = order.isAscending() ? Order.ASC : Order.DESC;
             String property = order.getProperty();
