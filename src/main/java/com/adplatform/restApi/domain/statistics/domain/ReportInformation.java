@@ -37,32 +37,32 @@ public class ReportInformation {
     private int videoUnmute;
 
     @Column(name = "video_play_3s")
-    private int videPlay3Seconds;
+    private int videoPlay3Seconds;
 
     @Column(name = "video_play_5s")
-    private int videPlay5Seconds;
+    private int videoPlay5Seconds;
 
     @Column(name = "video_play_10s")
-    private int videPlay10Seconds;
+    private int videoPlay10Seconds;
 
     @Column(name = "video_play_15s")
-    private int videPlay15Seconds;
+    private int videoPlay15Seconds;
 
     @Column(name = "video_play_30s")
-    private int videPlay30Seconds;
+    private int videoPlay30Seconds;
 
     @Column(name = "video_play_60s")
-    private int videPlay60Seconds;
+    private int videoPlay60Seconds;
 
     @Column(name = "video_play_25p")
-    private int videPlay25Percent;
+    private int videoPlay25Percent;
 
     @Column(name = "video_play_50p")
-    private int videPlay50Percent;
+    private int videoPlay50Percent;
 
     @Column(name = "video_play_75p")
-    private int videPlay75Percent;
+    private int videoPlay75Percent;
 
     @Column(name = "video_play_100p")
-    private int videPlay100Percent;
+    private int videoPlay100Percent;
 }

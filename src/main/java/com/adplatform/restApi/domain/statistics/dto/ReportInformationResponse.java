@@ -9,23 +9,23 @@ import lombok.Getter;
  */
 @Getter
 public class ReportInformationResponse {
-    private int cost;
-    private int impression;
-    private int click;
-    private int reach;
-    private int videoAutoPlay;
-    private int videoTouches;
-    private int videoUnmute;
-    private int videPlay3Seconds;
-    private int videPlay5Seconds;
-    private int videPlay10Seconds;
-    private int videPlay15Seconds;
-    private int videPlay30Seconds;
-    private int videPlay60Seconds;
-    private int videPlay25Percent;
-    private int videPlay50Percent;
-    private int videPlay75Percent;
-    private int videPlay100Percent;
+    private final int cost;
+    private final int impression;
+    private final int click;
+    private final int reach;
+    private final int videoAutoPlay;
+    private final int videoTouches;
+    private final int videoUnmute;
+    private final int videoPlay3Seconds;
+    private final int videoPlay5Seconds;
+    private final int videoPlay10Seconds;
+    private final int videoPlay15Seconds;
+    private final int videoPlay30Seconds;
+    private final int videoPlay60Seconds;
+    private final int videoPlay25Percent;
+    private final int videoPlay50Percent;
+    private final int videoPlay75Percent;
+    private final int videoPlay100Percent;
 
     @QueryProjection
     public ReportInformationResponse(
@@ -36,16 +36,16 @@ public class ReportInformationResponse {
             int videoAutoPlay,
             int videoTouches,
             int videoUnmute,
-            int videPlay3Seconds,
-            int videPlay5Seconds,
-            int videPlay10Seconds,
-            int videPlay15Seconds,
-            int videPlay30Seconds,
-            int videPlay60Seconds,
-            int videPlay25Percent,
-            int videPlay50Percent,
-            int videPlay75Percent,
-            int videPlay100Percent) {
+            int videoPlay3Seconds,
+            int videoPlay5Seconds,
+            int videoPlay10Seconds,
+            int videoPlay15Seconds,
+            int videoPlay30Seconds,
+            int videoPlay60Seconds,
+            int videoPlay25Percent,
+            int videoPlay50Percent,
+            int videoPlay75Percent,
+            int videoPlay100Percent) {
         this.cost = cost;
         this.impression = impression;
         this.click = click;
@@ -53,15 +53,15 @@ public class ReportInformationResponse {
         this.videoAutoPlay = videoAutoPlay;
         this.videoTouches = videoTouches;
         this.videoUnmute = videoUnmute;
-        this.videPlay3Seconds = videPlay3Seconds;
-        this.videPlay5Seconds = videPlay5Seconds;
-        this.videPlay10Seconds = videPlay10Seconds;
-        this.videPlay15Seconds = videPlay15Seconds;
-        this.videPlay30Seconds = videPlay30Seconds;
-        this.videPlay60Seconds = videPlay60Seconds;
-        this.videPlay25Percent = videPlay25Percent;
-        this.videPlay50Percent = videPlay50Percent;
-        this.videPlay75Percent = videPlay75Percent;
-        this.videPlay100Percent = videPlay100Percent;
+        this.videoPlay3Seconds = videoPlay3Seconds;
+        this.videoPlay5Seconds = videoPlay5Seconds;
+        this.videoPlay10Seconds = videoPlay10Seconds;
+        this.videoPlay15Seconds = videoPlay15Seconds;
+        this.videoPlay30Seconds = videoPlay30Seconds;
+        this.videoPlay60Seconds = videoPlay60Seconds;
+        this.videoPlay25Percent = videoPlay25Percent;
+        this.videoPlay50Percent = videoPlay50Percent;
+        this.videoPlay75Percent = videoPlay75Percent;
+        this.videoPlay100Percent = videoPlay100Percent;
     }
 }
