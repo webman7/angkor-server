@@ -1,4 +1,4 @@
-package com.adplatform.restApi.domain.statistics.domain;
+package com.adplatform.restApi.domain.statistics.domain.sale;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

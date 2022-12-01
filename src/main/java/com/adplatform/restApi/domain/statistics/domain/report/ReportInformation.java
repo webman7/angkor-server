@@ -1,4 +1,4 @@
-package com.adplatform.restApi.domain.statistics.domain;
+package com.adplatform.restApi.domain.statistics.domain.report;
 
 import lombok.AccessLevel;
 import lombok.Getter;

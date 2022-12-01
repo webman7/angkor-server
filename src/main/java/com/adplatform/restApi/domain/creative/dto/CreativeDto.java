@@ -6,6 +6,8 @@ import com.adplatform.restApi.domain.creative.domain.Creative;
 import com.adplatform.restApi.domain.creative.domain.CreativeFile;
 import com.adplatform.restApi.domain.creative.domain.CreativeLanding;
 import com.adplatform.restApi.domain.creative.domain.FileInformation;
+import com.adplatform.restApi.domain.statistics.dto.ReportConversionInformationResponse;
+import com.adplatform.restApi.domain.statistics.dto.ReportInformationResponse;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
@@ -104,6 +106,8 @@ public abstract class CreativeDto {
             private Integer fileId;
             private String fileName;
             private FileInformation.FileType fileType;
+            private ReportInformationResponse reportInformation;
+            private ReportConversionInformationResponse reportConversionInformation;
 
             @QueryProjection
             public Default(
@@ -118,7 +122,9 @@ public abstract class CreativeDto {
                     String adGroupName,
                     Integer fileId,
                     String fileName,
-                    FileInformation.FileType fileType) {
+                    FileInformation.FileType fileType,
+                    ReportInformationResponse reportInformation,
+                    ReportConversionInformationResponse reportConversionInformation) {
                 this.id = id;
                 this.name = name;
                 this.config = config;
@@ -131,6 +137,8 @@ public abstract class CreativeDto {
                 this.fileId = fileId;
                 this.fileName = fileName;
                 this.fileType = fileType;
+                this.reportInformation = reportInformation;
+                this.reportConversionInformation = reportConversionInformation;
             }
         }
 

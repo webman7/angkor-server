@@ -31,7 +31,7 @@ import static com.adplatform.restApi.domain.adaccount.domain.QAdAccountUser.adAc
 import static com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto.Request;
 import static com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto.Response;
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
-import static com.adplatform.restApi.domain.statistics.domain.QSaleAmountDaily.saleAmountDaily;
+import static com.adplatform.restApi.domain.statistics.domain.sale.QSaleAmountDaily.saleAmountDaily;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
 import static com.adplatform.restApi.domain.wallet.domain.QCash.cash;
 import static com.adplatform.restApi.domain.wallet.domain.QWalletCashTotal.walletCashTotal;

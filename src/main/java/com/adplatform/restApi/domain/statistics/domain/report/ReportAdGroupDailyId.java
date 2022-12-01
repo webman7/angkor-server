@@ -1,4 +1,4 @@
-package com.adplatform.restApi.domain.statistics.domain;
+package com.adplatform.restApi.domain.statistics.domain.report;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Getter
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ReportAdGroupConversionDailyId implements Serializable {
+public class ReportAdGroupDailyId implements Serializable {
     private Integer adAccountId;
     private Integer campaignId;
     private Integer adGroupId;
