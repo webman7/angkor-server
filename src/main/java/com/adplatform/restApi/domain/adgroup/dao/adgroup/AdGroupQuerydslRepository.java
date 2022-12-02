@@ -13,7 +13,7 @@ import java.util.Optional;
  * @since 1.0
  */
 public interface AdGroupQuerydslRepository {
-    Page<AdGroupDto.Response.Default> search(AdvertiserSearchRequest request, Pageable pageable);
+    Page<AdGroupDto.Response.AdvertiserSearch> search(AdvertiserSearchRequest request, Pageable pageable);
 
     Page<AdGroupDto.Response.ForSaveCreative> searchForSaveCreative(AdGroupDto.Request.Search request, Pageable pageable);
 

@@ -5,6 +5,8 @@ import com.adplatform.restApi.domain.adgroup.domain.AdGroup;
 import com.adplatform.restApi.domain.adgroup.dto.schedule.AdGroupScheduleDto;
 import com.adplatform.restApi.domain.adgroup.dto.target.AdGroupDemographicTargetDto;
 import com.adplatform.restApi.domain.campaign.dto.CampaignIdGetter;
+import com.adplatform.restApi.domain.statistics.dto.ReportConversionInformationResponse;
+import com.adplatform.restApi.domain.statistics.dto.ReportInformationResponse;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -105,7 +107,7 @@ public abstract class AdGroupDto {
 
         @Getter
         @Setter
-        public static class Default {
+        public static class AdvertiserSearch {
             private Integer id;
             private String adTypeName;
             private String adGoalName;
@@ -124,9 +126,11 @@ public abstract class AdGroupDto {
             private Integer scheduleEndDate;
             private LocalDateTime createdAt;
             private LocalDateTime updatedAt;
+            private ReportInformationResponse reportInformation;
+            private ReportConversionInformationResponse reportConversionInformation;
 
             @QueryProjection
-            public Default(
+            public AdvertiserSearch(
                     Integer id,
                     String adTypeName,
                     String adGoalName,
@@ -144,7 +148,9 @@ public abstract class AdGroupDto {
                     Integer scheduleStartDate,
                     Integer scheduleEndDate,
                     LocalDateTime createdAt,
-                    LocalDateTime updatedAt) {
+                    LocalDateTime updatedAt,
+                    ReportInformationResponse reportInformation,
+                    ReportConversionInformationResponse reportConversionInformation) {
                 this.id = id;
                 this.adTypeName = adTypeName;
                 this.adGoalName = adGoalName;
@@ -163,6 +169,8 @@ public abstract class AdGroupDto {
                 this.scheduleEndDate = scheduleEndDate;
                 this.createdAt = createdAt;
                 this.updatedAt = updatedAt;
+                this.reportInformation = reportInformation;
+                this.reportConversionInformation = reportConversionInformation;
             }
         }
 

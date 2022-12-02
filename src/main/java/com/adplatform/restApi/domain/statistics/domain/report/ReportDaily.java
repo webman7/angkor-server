@@ -1,4 +1,4 @@
-package com.adplatform.restApi.domain.statistics.domain;
+package com.adplatform.restApi.domain.statistics.domain.report;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -14,10 +14,10 @@ import javax.persistence.*;
 @Getter
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@IdClass(ReportAdGroupConversionDailyId.class)
+@IdClass(ReportDailyId.class)
 @Entity
-@Table(name = "report_adgroup_daily")
-public class ReportAdGroupDaily {
+@Table(name = "report_daily")
+public class ReportDaily {
     @Id
     @Column(name = "adaccount_info_id")
     private Integer adAccountId;
@@ -33,6 +33,10 @@ public class ReportAdGroupDaily {
     @Id
     @Column(name = "report_date")
     private Integer reportDate;
+
+    @Id
+    @Column(name = "creative_info_id")
+    private Integer creativeId;
 
     @Embedded
     private ReportInformation information;

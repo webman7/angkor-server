@@ -28,8 +28,8 @@ import static com.adplatform.restApi.domain.campaign.domain.QAdType.adType;
 import static com.adplatform.restApi.domain.campaign.domain.QAdTypeAndGoal.adTypeAndGoal;
 import static com.adplatform.restApi.domain.campaign.domain.QCampaign.campaign;
 import static com.adplatform.restApi.domain.creative.domain.QCreative.creative;
-import static com.adplatform.restApi.domain.statistics.domain.QReportAdGroupConversionDaily.reportAdGroupConversionDaily;
-import static com.adplatform.restApi.domain.statistics.domain.QReportAdGroupDaily.reportAdGroupDaily;
+import static com.adplatform.restApi.domain.statistics.domain.report.QReportAdGroupConversionDaily.reportAdGroupConversionDaily;
+import static com.adplatform.restApi.domain.statistics.domain.report.QReportAdGroupDaily.reportAdGroupDaily;
 import static com.querydsl.core.types.ExpressionUtils.as;
 import static com.querydsl.jpa.JPAExpressions.select;
 import static java.util.Objects.nonNull;
@@ -71,16 +71,16 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
                                 this.getReportSubQuery(reportAdGroupDaily.information.videoAutoPlay, request),
                                 this.getReportSubQuery(reportAdGroupDaily.information.videoTouches, request),
                                 this.getReportSubQuery(reportAdGroupDaily.information.videoUnmute, request),
-                                this.getReportSubQuery(reportAdGroupDaily.information.videPlay3Seconds, request),
-                                this.getReportSubQuery(reportAdGroupDaily.information.videPlay5Seconds, request),
-                                this.getReportSubQuery(reportAdGroupDaily.information.videPlay10Seconds, request),
-                                this.getReportSubQuery(reportAdGroupDaily.information.videPlay15Seconds, request),
-                                this.getReportSubQuery(reportAdGroupDaily.information.videPlay30Seconds, request),
-                                this.getReportSubQuery(reportAdGroupDaily.information.videPlay60Seconds, request),
-                                this.getReportSubQuery(reportAdGroupDaily.information.videPlay25Percent, request),
-                                this.getReportSubQuery(reportAdGroupDaily.information.videPlay50Percent, request),
-                                this.getReportSubQuery(reportAdGroupDaily.information.videPlay75Percent, request),
-                                this.getReportSubQuery(reportAdGroupDaily.information.videPlay100Percent, request)
+                                this.getReportSubQuery(reportAdGroupDaily.information.videoPlay3Seconds, request),
+                                this.getReportSubQuery(reportAdGroupDaily.information.videoPlay5Seconds, request),
+                                this.getReportSubQuery(reportAdGroupDaily.information.videoPlay10Seconds, request),
+                                this.getReportSubQuery(reportAdGroupDaily.information.videoPlay15Seconds, request),
+                                this.getReportSubQuery(reportAdGroupDaily.information.videoPlay30Seconds, request),
+                                this.getReportSubQuery(reportAdGroupDaily.information.videoPlay60Seconds, request),
+                                this.getReportSubQuery(reportAdGroupDaily.information.videoPlay25Percent, request),
+                                this.getReportSubQuery(reportAdGroupDaily.information.videoPlay50Percent, request),
+                                this.getReportSubQuery(reportAdGroupDaily.information.videoPlay75Percent, request),
+                                this.getReportSubQuery(reportAdGroupDaily.information.videoPlay100Percent, request)
                         ),
                         new QReportConversionInformationResponse(
                                 this.getReportConversionSubQuery(reportAdGroupConversionDaily.information.signUpDay1, request),
