@@ -24,8 +24,8 @@ public class ReportAdGroupDaily {
 
     @Id
     @Column(name = "campaign_info_id")
-
     private Integer campaignId;
+
     @Id
     @Column(name = "adgroup_info_id")
     private Integer adGroupId;

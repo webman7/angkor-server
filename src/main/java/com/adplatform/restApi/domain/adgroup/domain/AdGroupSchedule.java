@@ -4,6 +4,7 @@ import com.adplatform.restApi.domain.adgroup.dto.schedule.AdGroupScheduleDto;
 import com.adplatform.restApi.global.converter.BooleanToStringYOrNConverter;
 import lombok.*;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 
@@ -14,6 +15,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@DynamicInsert
 @Table(name = "adgroup_schedule")
 public class AdGroupSchedule {
     @Id
@@ -29,7 +31,7 @@ public class AdGroupSchedule {
     @Column(name = "start_date")
     private Integer startDate;
 
-    @Column(name = "end_date")
+    @Column(name = "end_date", columnDefinition = "int DEFAULT 29991231")
     private Integer endDate;
 
     /**

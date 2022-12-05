@@ -11,3 +11,8 @@ spring:
     web:
       pageable:
         one-indexed-parameters: true
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapper/**/*.xml

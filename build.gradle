@@ -27,7 +27,6 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
@@ -35,6 +34,12 @@ dependencies {
 	// DATABASE
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+	// JPA
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// MYBATIS
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.0'
 
 	// QUERYDSL
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
