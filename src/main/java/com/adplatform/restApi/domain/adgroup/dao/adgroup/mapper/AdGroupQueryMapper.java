@@ -1,7 +1,7 @@
-package com.adplatform.restApi.domain.campaign.dao.campaign.mapper;
+package com.adplatform.restApi.domain.adgroup.dao.adgroup.mapper;
 
+import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupDto;
 import com.adplatform.restApi.domain.campaign.dto.AdvertiserSearchRequest;
-import com.adplatform.restApi.domain.campaign.dto.CampaignDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
@@ -13,8 +13,8 @@ import java.util.List;
  * @since 1.0
  */
 @Mapper
-public interface CampaignQueryMapper {
-    List<CampaignDto.Response.Page> search(
+public interface AdGroupQueryMapper {
+    List<AdGroupDto.Response.AdvertiserSearch> search(
             @Param("request") AdvertiserSearchRequest request,
             @Param("pageable") Pageable pageable
     );

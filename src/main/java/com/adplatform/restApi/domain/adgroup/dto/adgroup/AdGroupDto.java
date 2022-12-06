@@ -5,9 +5,7 @@ import com.adplatform.restApi.domain.adgroup.domain.AdGroup;
 import com.adplatform.restApi.domain.adgroup.dto.schedule.AdGroupScheduleDto;
 import com.adplatform.restApi.domain.adgroup.dto.target.AdGroupDemographicTargetDto;
 import com.adplatform.restApi.domain.campaign.dto.CampaignIdGetter;
-import com.adplatform.restApi.domain.statistics.dto.ReportConversionInformationResponse;
-import com.adplatform.restApi.domain.statistics.dto.ReportInformationResponse;
-import com.querydsl.core.annotations.QueryProjection;
+import com.adplatform.restApi.domain.statistics.dto.ReportDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -126,52 +124,7 @@ public abstract class AdGroupDto {
             private Integer scheduleEndDate;
             private LocalDateTime createdAt;
             private LocalDateTime updatedAt;
-            private ReportInformationResponse reportInformation;
-            private ReportConversionInformationResponse reportConversionInformation;
-
-            @QueryProjection
-            public AdvertiserSearch(
-                    Integer id,
-                    String adTypeName,
-                    String adGoalName,
-                    String name,
-                    AdGroup.Pacing pacing,
-                    AdGroup.PacingType pacingType,
-                    Long bidAmount,
-                    AdGroup.BidStrategy bidStrategy,
-                    Long dailyBudgetAmount,
-                    AdGroup.Config config,
-                    AdGroup.SystemConfig systemConfig,
-                    AdGroup.Status status,
-                    Integer campaignId,
-                    String campaignName,
-                    Integer scheduleStartDate,
-                    Integer scheduleEndDate,
-                    LocalDateTime createdAt,
-                    LocalDateTime updatedAt,
-                    ReportInformationResponse reportInformation,
-                    ReportConversionInformationResponse reportConversionInformation) {
-                this.id = id;
-                this.adTypeName = adTypeName;
-                this.adGoalName = adGoalName;
-                this.name = name;
-                this.pacing = pacing;
-                this.pacingType = pacingType;
-                this.bidAmount = bidAmount;
-                this.bidStrategy = bidStrategy;
-                this.dailyBudgetAmount = dailyBudgetAmount;
-                this.config = config;
-                this.systemConfig = systemConfig;
-                this.status = status;
-                this.campaignId = campaignId;
-                this.campaignName = campaignName;
-                this.scheduleStartDate = scheduleStartDate;
-                this.scheduleEndDate = scheduleEndDate;
-                this.createdAt = createdAt;
-                this.updatedAt = updatedAt;
-                this.reportInformation = reportInformation;
-                this.reportConversionInformation = reportConversionInformation;
-            }
+            private ReportDto.Response report;
         }
 
         @Getter

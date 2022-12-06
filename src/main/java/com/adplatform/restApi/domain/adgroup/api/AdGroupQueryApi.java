@@ -1,6 +1,7 @@
 package com.adplatform.restApi.domain.adgroup.api;
 
 import com.adplatform.restApi.domain.adgroup.dao.adgroup.AdGroupRepository;
+import com.adplatform.restApi.domain.adgroup.dao.adgroup.mapper.AdGroupQueryMapper;
 import com.adplatform.restApi.domain.adgroup.domain.AdGroup;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupDto;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupMapper;
@@ -10,6 +11,7 @@ import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount;
 import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccountByAdGroupId;
 import com.adplatform.restApi.global.dto.PageDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,7 @@ import javax.validation.Valid;
 @RequestMapping("/adgroups")
 public class AdGroupQueryApi {
     private final AdGroupRepository adGroupRepository;
+    private final AdGroupQueryMapper adGroupQueryMapper;
     private final AdGroupMapper adGroupMapper;
 
     @AuthorizedAdAccount
@@ -34,7 +37,11 @@ public class AdGroupQueryApi {
     public PageDto<AdGroupDto.Response.AdvertiserSearch> search(
             @Valid AdvertiserSearchRequest request,
             @PageableDefault Pageable pageable) {
-        return PageDto.create(this.adGroupRepository.search(request, pageable));
+        return PageDto.create(new PageImpl<>(
+                this.adGroupQueryMapper.search(request, pageable),
+                pageable,
+                this.adGroupQueryMapper.countSearch(request)
+        ));
     }
 
     @AuthorizedAdAccount

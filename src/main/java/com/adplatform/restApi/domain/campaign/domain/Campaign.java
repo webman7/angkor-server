@@ -107,7 +107,7 @@ public class Campaign extends BaseUpdatedEntity {
     private TrackingType trackingType;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "config")
+    @Column(name = "config", columnDefinition = "VARCHAR(5)")
     private Config config;
 
     @Enumerated(EnumType.STRING)

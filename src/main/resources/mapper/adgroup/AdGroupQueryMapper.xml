@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+author Seohyun Lee
+since 1.0
+-->
+<mapper namespace="com.adplatform.restApi.domain.adgroup.dao.adgroup.mapper.AdGroupQueryMapper">
+    <resultMap id="mapSearch" type="com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupDto$Response$AdvertiserSearch">
+        <id column="id" property="id"/>
+        <result column="adTypeName" property="adTypeName"/>
+        <result column="adGoalName" property="adGoalName"/>
+        <result column="name" property="name"/>
+        <result column="pacing" property="pacing"/>
+        <result column="pacingType" property="pacingType"/>
+        <result column="bidAmount" property="bidAmount"/>
+        <result column="bidStrategy" property="bidStrategy"/>
+        <result column="dailyBudgetAmount" property="dailyBudgetAmount"/>
+        <result column="config" property="config"/>
+        <result column="systemConfig" property="systemConfig"/>
+        <result column="status" property="status"/>
+        <result column="campaignId" property="campaignId"/>
+        <result column="campaignName" property="campaignName"/>
+        <result column="scheduleStartDate" property="scheduleStartDate"/>
+        <result column="scheduleEndDate" property="scheduleEndDate"/>
+        <association property="report" javaType="com.adplatform.restApi.domain.statistics.dto.ReportDto$Response">
+            <result column="cost" property="cost"/>
+            <result column="impression" property="impression"/>
+            <result column="click" property="click"/>
+            <result column="reach" property="reach"/>
+            <result column="videoAutoPlay" property="videoAutoPlay"/>
+            <result column="videoTouches" property="videoTouches"/>
+            <result column="videoUnmute" property="videoUnmute"/>
+            <result column="videoPlay3Seconds" property="videoPlay3Seconds"/>
+            <result column="videoPlay5Seconds" property="videoPlay5Seconds"/>
+            <result column="videoPlay10Seconds" property="videoPlay10Seconds"/>
+            <result column="videoPlay15Seconds" property="videoPlay15Seconds"/>
+            <result column="videoPlay30Seconds" property="videoPlay30Seconds"/>
+            <result column="videoPlay60Seconds" property="videoPlay60Seconds"/>
+            <result column="videoPlay25Percent" property="videoPlay25Percent"/>
+            <result column="videoPlay50Percent" property="videoPlay50Percent"/>
+            <result column="videoPlay75Percent" property="videoPlay75Percent"/>
+            <result column="videoPlay100Percent" property="videoPlay100Percent"/>
+            <result column="signUpDay1" property="signUpDay1"/>
+            <result column="purchaseDay1" property="purchaseDay1"/>
+            <result column="viewCartDay1" property="viewCartDay1"/>
+            <result column="signUpDay7" property="signUpDay7"/>
+            <result column="purchaseDay7" property="purchaseDay7"/>
+            <result column="viewCartDay7" property="viewCartDay7"/>
+            <result column="ctr" property="ctr"/>
+            <result column="cpm" property="cpm"/>
+            <result column="cpc" property="cpc"/>
+            <result column="reachRate" property="reachRate"/>
+            <result column="videoPlayRate" property="videoPlayRate"/>
+        </association>
+    </resultMap>
+
+    <select id="search" resultMap="mapSearch">
+        SELECT a.id,
+               type_goal.type_name                                                                AS adTypeName,
+               type_goal.goal_name                                                                AS adGoalName,
+               a.name,
+               a.pacing,
+               a.pacing_type                                                                      AS pacingType,
+               a.bid_amount                                                                       AS bidAmount,
+               a.bid_strategy                                                                     AS bidStrategy,
+               a.daily_budget_amount                                                              AS dailyBudgetAmount,
+               a.config,
+               a.system_config                                                                    AS systemConfig,
+               a.status,
+               a.campaign_info_id                                                                 AS campaignId,
+               c.name                                                                             AS campaignName,
+               schedule.start_date                                                                AS scheduleStartDate,
+               schedule.end_date                                                                  AS scheduleEndDate,
+               a.reg_date                                                                         AS createdAt,
+               a.upd_date                                                                         AS updatedAt,
+               report.cost,
+               report.impression,
+               report.click,
+               report.reach,
+               report.video_play_auto                                                             AS videoAutoPlay,
+               report.video_play_touch                                                            AS videoTouches,
+               report.video_unmute                                                                AS videoUnmute,
+               report.video_play_3s                                                               AS videoPlay3Seconds,
+               report.video_play_5s                                                               AS videoPlay5Seconds,
+               report.video_play_10s                                                              AS videoPlay10Seconds,
+               report.video_play_15s                                                              AS videoPlay15Seconds,
+               report.video_play_30s                                                              AS videoPlay30Seconds,
+               report.video_play_60s                                                              AS videoPlay60Seconds,
+               report.video_play_25p                                                              AS videoPlay25Percent,
+               report.video_play_50p                                                              AS videoPlay50Percent,
+               report.video_play_75p                                                              AS videoPlay75Percent,
+               report.video_play_100p                                                             AS videoPlay100Percent,
+               report.signup_1d                                                                   AS signUpDay1,
+               report.signup_7d                                                                   AS signUpDay7,
+               report.purchase_1d                                                                 AS purchaseDay1,
+               report.purchase_7d                                                                 AS purchaseDay7,
+               report.view_cart_1d                                                                AS viewCartDay1,
+               report.view_cart_7d                                                                AS viewCartDay7,
+               ROUND(CASE WHEN impression = 0 THEN 0 ELSE (click / impression) * 100 END, 2)      AS ctr,
+               ROUND(CASE WHEN impression = 0 THEN 0 ELSE (cost / impression) * 100 END, 2)       AS cpm,
+               ROUND(CASE WHEN click = 0 THEN 0 ELSE (cost / click) * 100 END, 2)                 AS cpc,
+               ROUND(CASE WHEN reach = 0 THEN 0 ELSE (cost / reach) * 100 END, 2)                 AS reachRate,
+               ROUND(CASE WHEN video_play_3s = 0 THEN 0 ELSE (cost / video_play_3s) * 100 END, 2) AS videoPlayRate
+        FROM (SELECT g1.id, g2.name AS type_name, g3.name AS goal_name
+              FROM ad_type_goal_info g1,
+                   ad_type_info g2,
+                   ad_goal_info g3
+              WHERE g1.ad_type_info_id = g2.id
+                AND g1.ad_goal_info_id = g3.id
+                AND g1.del_yn = 'N'
+                AND g2.del_yn = 'N'
+                AND g3.del_yn = 'N'
+            <if test="request.adTypeNames != null">
+                <foreach collection="request.adTypeNames" item="adTypeName" index="index" open="AND g2.name IN (" separator="," close=")">
+                    #{adTypeName}
+                </foreach>
+            </if>
+            <if test="request.adGoalNames != null">
+                <foreach collection="request.adGoalNames" item="adGoalName" index="index" open="AND g3.name IN (" separator="," close=")">
+                    #{adGoalName}
+                </foreach>
+            </if>
+              ) type_goal,
+             (SELECT a.id AS adgroup_id
+              FROM adgroup_info a
+                       INNER JOIN campaign_info c ON a.campaign_info_id = c.id
+                       LEFT JOIN creative_info ci ON a.id = ci.adgroup_info_id
+                <trim prefix="WHERE" prefixOverrides="AND | OR ">
+                    c.adaccount_info_id = #{request.adAccountId}
+                    <if test="request.creativeIds != null">
+                        <foreach collection="request.creativeIds" item="creativeId" open="AND ci.id IN (" separator="," close=")">
+                            #{creativeId}
+                        </foreach>
+                    </if>
+                    <if test="request.creativeName">
+                        AND ci.name LIKE CONCAT('%', #{request.creativeName}, '%')
+                    </if>
+                    <if test="request.creativeFormats != null">
+                        <foreach collection="request.creativeFormats" item="creativeFormat" open="AND ci.format IN (" separator="," close=")">
+                            #{creativeFormat}
+                        </foreach>
+                    </if>
+                    <if test="request.creativeConfigs != null">
+                        <foreach collection="request.creativeConfigs" item="creativeConfig" open="AND ci.config IN (" separator="," close=")">
+                            #{creativeConfig}
+                        </foreach>
+                    </if>
+                    <if test="request.creativeStatuses != null">
+                        <foreach collection="request.creativeStatuses" item="creativeStatus" open="AND ci.creative_status IN (" separator="," close=")">
+                            #{creativeStatus}
+                        </foreach>
+                    </if>
+                    <if test="request.creativeReviewStatuses != null">
+                        <foreach collection="request.creativeReviewStatuses" item="creativeReviewStatus" open="AND ci.review_status IN (" separator="," close=")">
+                            #{creativeReviewStatus}
+                        </foreach>
+                    </if>
+                </trim>
+              ) creative,
+             adgroup_info a
+                 LEFT JOIN (SELECT adaccount_info_id,
+                                   campaign_info_id,
+                                   adgroup_info_id,
+                                   report_date,
+                                   SUM(IFNULL(cost, 0))             AS cost,
+                                   SUM(IFNULL(impression, 0))       AS impression,
+                                   SUM(IFNULL(click, 0))            AS click,
+                                   SUM(IFNULL(reach, 0))            AS reach,
+                                   SUM(IFNULL(video_play_auto, 0))  AS video_play_auto,
+                                   SUM(IFNULL(video_play_touch, 0)) AS video_play_touch,
+                                   SUM(IFNULL(video_unmute, 0))     AS video_unmute,
+                                   SUM(IFNULL(video_play_3s, 0))    AS video_play_3s,
+                                   SUM(IFNULL(video_play_5s, 0))    AS video_play_5s,
+                                   SUM(IFNULL(video_play_10s, 0))   AS video_play_10s,
+                                   SUM(IFNULL(video_play_15s, 0))   AS video_play_15s,
+                                   SUM(IFNULL(video_play_30s, 0))   AS video_play_30s,
+                                   SUM(IFNULL(video_play_60s, 0))   AS video_play_60s,
+                                   SUM(IFNULL(video_play_25p, 0))   AS video_play_25p,
+                                   SUM(IFNULL(video_play_50p, 0))   AS video_play_50p,
+                                   SUM(IFNULL(video_play_75p, 0))   AS video_play_75p,
+                                   SUM(IFNULL(video_play_100p, 0))  AS video_play_100p,
+                                   SUM(IFNULL(signup_1d, 0))        AS signup_1d,
+                                   SUM(IFNULL(purchase_1d, 0))      AS purchase_1d,
+                                   SUM(IFNULL(view_cart_1d, 0))     AS view_cart_1d,
+                                   SUM(IFNULL(signup_7d, 0))        AS signup_7d,
+                                   SUM(IFNULL(purchase_7d, 0))      AS purchase_7d,
+                                   SUM(IFNULL(view_cart_7d, 0))     AS view_cart_7d
+                            FROM (SELECT adaccount_info_id,
+                                         campaign_info_id,
+                                         adgroup_info_id,
+                                         report_date,
+                                         cost,
+                                         impression,
+                                         click,
+                                         reach,
+                                         video_play_auto,
+                                         video_play_touch,
+                                         video_unmute,
+                                         video_play_3s,
+                                         video_play_5s,
+                                         video_play_10s,
+                                         video_play_15s,
+                                         video_play_30s,
+                                         video_play_60s,
+                                         video_play_25p,
+                                         video_play_50p,
+                                         video_play_75p,
+                                         video_play_100p,
+                                         0 AS signup_1d,
+                                         0 AS purchase_1d,
+                                         0 AS view_cart_1d,
+                                         0 AS signup_7d,
+                                         0 AS purchase_7d,
+                                         0 AS view_cart_7d
+                                  FROM report_adgroup_daily rad
+                                  WHERE adaccount_info_id = #{request.adAccountId}
+                                    AND rad.report_date BETWEEN #{request.reportStartDate} AND #{request.reportEndDate}
+                                  UNION
+                                  SELECT adaccount_info_id,
+                                         campaign_info_id,
+                                         adgroup_info_id,
+                                         report_date,
+                                         0 AS cost,
+                                         0 AS impression,
+                                         0 AS click,
+                                         0 AS reach,
+                                         0 AS video_play_auto,
+                                         0 AS video_play_touch,
+                                         0 AS video_unmute,
+                                         0 AS video_play_3s,
+                                         0 AS video_play_5s,
+                                         0 AS video_play_10s,
+                                         0 AS video_play_15s,
+                                         0 AS video_play_30s,
+                                         0 AS video_play_60s,
+                                         0 AS video_play_25p,
+                                         0 AS video_play_50p,
+                                         0 AS video_play_75p,
+                                         0 AS video_play_100p,
+                                         signup_1d,
+                                         purchase_1d,
+                                         view_cart_1d,
+                                         signup_7d,
+                                         purchase_7d,
+                                         view_cart_7d
+                                  FROM report_adgroup_conversion_daily rac
+                                  WHERE adaccount_info_id = #{request.adAccountId}
+                                    AND report_date BETWEEN #{request.reportStartDate} AND #{request.reportEndDate}) inner_report
+                            GROUP BY adaccount_info_id, campaign_info_id, adgroup_info_id) report
+                           ON report.adgroup_info_id = a.id
+                 INNER JOIN adgroup_schedule schedule ON schedule.adgroup_info_id = a.id
+                 INNER JOIN campaign_info c ON a.campaign_info_id = c.id
+        <trim prefix="WHERE" prefixOverrides="AND | OR ">
+            c.adaccount_info_id = #{request.adAccountId}
+            AND c.ad_type_goal_info_id = type_goal.id
+            AND a.id = creative.adgroup_id
+            <if test="request.campaignIds != null">
+                <foreach collection="request.campaignIds" item="id" open="AND c.id IN (" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="request.campaignName != null">
+                AND c.name LIKE CONCAT('%', #{request.campaignName}, '%')
+            </if>
+            <if test="request.campaignConfigs">
+                <foreach collection="request.campaignConfigs" item="config" open="AND c.config IN (" separator="," close=")">
+                    #{config}
+                </foreach>
+            </if>
+            <if test="request.campaignStatuses">
+                <foreach collection="request.campaignStatuses" item="status" open="AND c.status IN (" separator="," close=")">
+                    #{status}
+                </foreach>
+            </if>
+            <if test="request.adGroupIds">
+                <foreach collection="request.adGroupIds" item="id" open="AND a.id IN (" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="request.adGroupName">
+                AND a.name LIKE CONCAT('%', #{request.adGroupName}, '%')
+            </if>
+            <if test="request.adGroupConfigs">
+                <foreach collection="request.adGroupConfigs" item="config" open="AND a.config IN (" separator="," close=")">
+                    #{config}
+                </foreach>
+            </if>
+            <if test="request.adGroupStatuses">
+                <foreach collection="request.adGroupStatuses" item="status" open="AND a.status IN (" separator="," close=")">
+                    #{status}
+                </foreach>
+            </if>
+        </trim>
+        GROUP BY a.id
+        LIMIT ${pageable.getPageSize()} OFFSET ${pageable.getOffset()}
+    </select>
+
+    <select id="countSearch" resultType="long">
+        SELECT count(*)
+        FROM (SELECT a.id
+        FROM (SELECT g1.id, g2.name AS type_name, g3.name AS goal_name
+        FROM ad_type_goal_info g1,
+        ad_type_info g2,
+        ad_goal_info g3
+        WHERE g1.ad_type_info_id = g2.id
+        AND g1.ad_goal_info_id = g3.id
+        AND g1.del_yn = 'N'
+        AND g2.del_yn = 'N'
+        AND g3.del_yn = 'N'
+        <if test="request.adTypeNames != null">
+            <foreach collection="request.adTypeNames" item="adTypeName" index="index" open="AND g2.name IN (" separator="," close=")">
+                #{adTypeName}
+            </foreach>
+        </if>
+        <if test="request.adGoalNames != null">
+            <foreach collection="request.adGoalNames" item="adGoalName" index="index" open="AND g3.name IN (" separator="," close=")">
+                #{adGoalName}
+            </foreach>
+        </if>
+        ) type_goal,
+        (SELECT a.id AS adgroup_id
+        FROM adgroup_info a
+        INNER JOIN campaign_info c ON a.campaign_info_id = c.id
+        LEFT JOIN creative_info ci ON a.id = ci.adgroup_info_id
+        <trim prefix="WHERE" prefixOverrides="AND | OR ">
+            c.adaccount_info_id = #{request.adAccountId}
+            <if test="request.creativeIds != null">
+                <foreach collection="request.creativeIds" item="creativeId" open="AND ci.id IN (" separator="," close=")">
+                    #{creativeId}
+                </foreach>
+            </if>
+            <if test="request.creativeName">
+                AND ci.name LIKE CONCAT('%', #{request.creativeName}, '%')
+            </if>
+            <if test="request.creativeFormats != null">
+                <foreach collection="request.creativeFormats" item="creativeFormat" open="AND ci.format IN (" separator="," close=")">
+                    #{creativeFormat}
+                </foreach>
+            </if>
+            <if test="request.creativeConfigs != null">
+                <foreach collection="request.creativeConfigs" item="creativeConfig" open="AND ci.config IN (" separator="," close=")">
+                    #{creativeConfig}
+                </foreach>
+            </if>
+            <if test="request.creativeStatuses != null">
+                <foreach collection="request.creativeStatuses" item="creativeStatus" open="AND ci.creative_status IN (" separator="," close=")">
+                    #{creativeStatus}
+                </foreach>
+            </if>
+            <if test="request.creativeReviewStatuses != null">
+                <foreach collection="request.creativeReviewStatuses" item="creativeReviewStatus" open="AND ci.review_status IN (" separator="," close=")">
+                    #{creativeReviewStatus}
+                </foreach>
+            </if>
+        </trim>
+        ) creative,
+        adgroup_info a
+        INNER JOIN adgroup_schedule schedule ON schedule.adgroup_info_id = a.id
+        INNER JOIN campaign_info c ON a.campaign_info_id = c.id
+        <trim prefix="WHERE" prefixOverrides="AND | OR ">
+            c.adaccount_info_id = #{request.adAccountId}
+            AND c.ad_type_goal_info_id = type_goal.id
+            AND a.id = creative.adgroup_id
+            <if test="request.campaignIds != null">
+                <foreach collection="request.campaignIds" item="id" open="AND c.id IN (" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="request.campaignName != null">
+                AND c.name LIKE CONCAT('%', #{request.campaignName}, '%')
+            </if>
+            <if test="request.campaignConfigs">
+                <foreach collection="request.campaignConfigs" item="config" open="AND c.config IN (" separator="," close=")">
+                    #{config}
+                </foreach>
+            </if>
+            <if test="request.campaignStatuses">
+                <foreach collection="request.campaignStatuses" item="status" open="AND c.status IN (" separator="," close=")">
+                    #{status}
+                </foreach>
+            </if>
+            <if test="request.adGroupIds">
+                <foreach collection="request.adGroupIds" item="id" open="AND a.id IN (" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="request.adGroupName">
+                AND a.name LIKE CONCAT('%', #{request.adGroupName}, '%')
+            </if>
+            <if test="request.adGroupConfigs">
+                <foreach collection="request.adGroupConfigs" item="config" open="AND a.config IN (" separator="," close=")">
+                    #{config}
+                </foreach>
+            </if>
+            <if test="request.adGroupStatuses">
+                <foreach collection="request.adGroupStatuses" item="status" open="AND a.status IN (" separator="," close=")">
+                    #{status}
+                </foreach>
+            </if>
+        </trim>
+        GROUP BY a.id) a
+    </select>
+</mapper>
