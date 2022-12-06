@@ -1,6 +1,6 @@
 package com.adplatform.restApi.domain.campaign.service;
 
-import com.adplatform.restApi.domain.campaign.dao.CampaignRepository;
+import com.adplatform.restApi.domain.campaign.dao.campaign.CampaignRepository;
 import com.adplatform.restApi.domain.campaign.domain.Campaign;
 import com.adplatform.restApi.domain.campaign.exception.CampaignNotFoundException;
 

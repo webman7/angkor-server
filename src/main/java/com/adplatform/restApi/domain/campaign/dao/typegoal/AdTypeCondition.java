@@ -1,4 +1,4 @@
-package com.adplatform.restApi.domain.campaign.dao;
+package com.adplatform.restApi.domain.campaign.dao.typegoal;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.apache.commons.lang3.StringUtils;

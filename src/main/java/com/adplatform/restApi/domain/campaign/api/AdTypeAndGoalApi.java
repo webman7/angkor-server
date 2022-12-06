@@ -1,6 +1,6 @@
 package com.adplatform.restApi.domain.campaign.api;
 
-import com.adplatform.restApi.domain.campaign.dao.AdTypeAndGoalRepository;
+import com.adplatform.restApi.domain.campaign.dao.typegoal.AdTypeAndGoalRepository;
 import com.adplatform.restApi.domain.campaign.dto.AdTypeAndGoalDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,7 +1,7 @@
 package com.adplatform.restApi.global.config.security.aop;
 
 import com.adplatform.restApi.domain.adaccount.dao.user.AdAccountUserRepository;
-import com.adplatform.restApi.domain.campaign.dao.CampaignRepository;
+import com.adplatform.restApi.domain.campaign.dao.campaign.CampaignRepository;
 import com.adplatform.restApi.domain.campaign.service.CampaignFindUtils;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;

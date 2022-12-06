@@ -5,7 +5,7 @@ import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountIdGetter;
 import com.adplatform.restApi.domain.adgroup.dao.adgroup.AdGroupRepository;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupIdGetter;
 import com.adplatform.restApi.domain.adgroup.service.AdGroupFindUtils;
-import com.adplatform.restApi.domain.campaign.dao.CampaignRepository;
+import com.adplatform.restApi.domain.campaign.dao.campaign.CampaignRepository;
 import com.adplatform.restApi.domain.campaign.dto.CampaignIdGetter;
 import com.adplatform.restApi.domain.campaign.service.CampaignFindUtils;
 import com.adplatform.restApi.domain.creative.dao.CreativeRepository;

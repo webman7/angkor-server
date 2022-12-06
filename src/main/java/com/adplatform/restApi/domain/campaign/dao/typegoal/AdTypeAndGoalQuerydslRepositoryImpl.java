@@ -1,4 +1,4 @@
-package com.adplatform.restApi.domain.campaign.dao;
+package com.adplatform.restApi.domain.campaign.dao.typegoal;
 
 import com.adplatform.restApi.domain.campaign.dto.AdTypeAndGoalDto;
 import com.adplatform.restApi.domain.campaign.dto.QAdTypeAndGoalDto;
