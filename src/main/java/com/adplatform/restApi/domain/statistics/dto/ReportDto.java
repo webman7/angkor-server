@@ -34,6 +34,6 @@ public abstract class ReportDto {
         private int cpm;
         private int cpc;
         private int reachRate;
-        private int videoPlatRate;
+        private int videoPlayRate;
     }
 }

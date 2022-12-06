@@ -50,7 +50,7 @@ since 1.0
             <result column="cpm" property="cpm"/>
             <result column="cpc" property="cpc"/>
             <result column="reachRate" property="reachRate"/>
-            <result column="videoPlatRate" property="videoPlatRate"/>
+            <result column="videoPlayRate" property="videoPlayRate"/>
         </association>
     </resultMap>
 
@@ -95,7 +95,7 @@ since 1.0
                ROUND(IF(t1.impression = 0, 0, (t1.cost / t1.impression) * 100), 2)       AS cpm,
                ROUND(IF(t1.click = 0, 0, (t1.cost / t1.click) * 100), 2)                 AS cpc,
                ROUND(IF(t1.reach = 0, 0, (t1.cost / t1.reach) * 100), 2)                 AS reachRate,
-               ROUND(IF(t1.video_play_3s = 0, 0, (t1.cost / t1.video_play_3s) * 100), 2) AS videoPlatRate
+               ROUND(IF(t1.video_play_3s = 0, 0, (t1.cost / t1.video_play_3s) * 100), 2) AS videoPlayRate
         FROM (SELECT a.id,
                      a.name,
                      a.adaccount_info_id,
