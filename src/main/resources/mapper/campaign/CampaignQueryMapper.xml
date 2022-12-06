@@ -91,11 +91,11 @@ since 1.0
                t1.goal_name AS adGoalName,
                t1.reg_date as createdAt,
                t1.upd_date AS updatedAt,
-               ROUND(IF(t1.impression = 0, 0, (t1.click / t1.impression) * 100), 2)      AS ctr,
-               ROUND(IF(t1.impression = 0, 0, (t1.cost / t1.impression) * 100), 2)       AS cpm,
-               ROUND(IF(t1.click = 0, 0, (t1.cost / t1.click) * 100), 2)                 AS cpc,
-               ROUND(IF(t1.reach = 0, 0, (t1.cost / t1.reach) * 100), 2)                 AS reachRate,
-               ROUND(IF(t1.video_play_3s = 0, 0, (t1.cost / t1.video_play_3s) * 100), 2) AS videoPlayRate
+               ROUND(CASE WHEN t1.impression = 0 THEN 0 ELSE (t1.click / t1.impression) * 100 END, 2)      AS ctr,
+               ROUND(CASE WHEN t1.impression = 0 THEN 0 ELSE (t1.cost / t1.impression) * 100 END, 2)       AS cpm,
+               ROUND(CASE WHEN t1.click = 0 THEN 0 ELSE (t1.cost / t1.click) * 100 END, 2)                 AS cpc,
+               ROUND(CASE WHEN t1.reach = 0 THEN 0 ELSE (t1.cost / t1.reach) * 100 END, 2)                 AS reachRate,
+               ROUND(CASE WHEN t1.video_play_3s = 0 THEN 0 ELSE (t1.cost / t1.video_play_3s) * 100 END, 2) AS videoPlayRate
         FROM (SELECT a.id,
                      a.name,
                      a.adaccount_info_id,
