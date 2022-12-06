@@ -296,6 +296,13 @@ since 1.0
             </if>
         </trim>
         GROUP BY a.id
+        <if test="pageable.sort.sorted">
+            <trim prefix="ORDER BY">
+                <foreach collection="pageable.sort" item="order" index="i" separator=", ">
+                    ${order.property} ${order.direction}
+                </foreach>
+            </trim>
+        </if>
         LIMIT ${pageable.getPageSize()} OFFSET ${pageable.getOffset()}
     </select>
 
