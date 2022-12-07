@@ -134,5 +134,29 @@ public class AdAccountDto {
                 this.requestStatusNCount = requestStatusNCount;
             }
         }
+        @Getter
+        @Setter
+        public static class AdAccountInfo {
+            private Integer id;
+            private String name;
+            private AdAccount.Config config;
+
+            private boolean adminStop;
+            private boolean outOfBalance;
+
+            @QueryProjection
+            public AdAccountInfo(
+                    Integer id,
+                    String name,
+                    AdAccount.Config config,
+                    boolean adminStop,
+                    boolean outOfBalance) {
+                this.id = id;
+                this.name = name;
+                this.config = config;
+                this.adminStop = adminStop;
+                this.outOfBalance = outOfBalance;
+            }
+        }
     }
 }

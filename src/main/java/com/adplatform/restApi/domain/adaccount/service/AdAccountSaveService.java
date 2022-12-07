@@ -37,4 +37,10 @@ public class AdAccountSaveService {
     public void creditLimitUpdate(AdAccountDto.Request.CreditLimitUpdate request) {
         AdAccountFindUtils.findByIdOrElseThrow(request.getId(), this.adAccountRepository).creditLimitUpdate(request);
     }
+
+    public void changeConfig(Integer id, AdAccount.Config config) {
+        AdAccount adAccount = AdAccountFindUtils.findByIdOrElseThrow(id, this.adAccountRepository);
+        if (config == AdAccount.Config.ON) adAccount.changeConfigOn();
+        else if (config == AdAccount.Config.OFF) adAccount.changeConfigOff();
+    }
 }

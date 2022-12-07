@@ -149,4 +149,12 @@ public class AdAccount extends BaseUpdatedEntity {
         this.creditLimit = request.getCreditLimit();
         return this;
     }
+
+    public void changeConfigOn() {
+        this.config = AdAccount.Config.ON;
+    }
+
+    public void changeConfigOff() {
+        this.config = AdAccount.Config.OFF;
+    }
 }

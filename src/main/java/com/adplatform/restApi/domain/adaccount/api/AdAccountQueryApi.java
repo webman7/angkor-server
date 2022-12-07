@@ -46,4 +46,10 @@ public class AdAccountQueryApi {
         return this.adAccountRepository.countRequestStatusYN(SecurityUtils.getLoginUserId())
                 .orElse(new AdAccountDto.Response.AdAccountCount(0L, 0L));
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}")
+    public AdAccountDto.Response.AdAccountInfo adAccountInfo(@PathVariable(name = "id") Integer adAccountId) {
+        return this.adAccountRepository.adAccountInfo(adAccountId);
+    }
 }

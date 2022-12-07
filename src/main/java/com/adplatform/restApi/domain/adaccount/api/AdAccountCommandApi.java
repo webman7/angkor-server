@@ -1,5 +1,6 @@
 package com.adplatform.restApi.domain.adaccount.api;
 
+import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto;
 import com.adplatform.restApi.domain.adaccount.service.AdAccountSaveService;
 import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount;
@@ -31,5 +32,16 @@ public class AdAccountCommandApi {
     @PostMapping("/credit-limit")
     public void creditLimitUpdate(@RequestBody @Valid AdAccountDto.Request.CreditLimitUpdate request) {
         this.adAccountSaveService.creditLimitUpdate(request);
+    }
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{id}/config/on")
+    public void changeConfigOn(@PathVariable Integer id) {
+        this.adAccountSaveService.changeConfig(id, AdAccount.Config.ON);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{id}/config/off")
+    public void changeConfigOff(@PathVariable Integer id) {
+        this.adAccountSaveService.changeConfig(id, AdAccount.Config.OFF);
     }
 }

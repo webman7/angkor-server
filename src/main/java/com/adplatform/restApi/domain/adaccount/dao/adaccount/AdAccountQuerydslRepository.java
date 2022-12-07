@@ -21,4 +21,6 @@ public interface AdAccountQuerydslRepository {
             Pageable pageable, Integer id, String name, Integer loginUserId, AdAccountUser.RequestStatus requestStatus);
 
     Optional<AdAccountDto.Response.AdAccountCount> countRequestStatusYN(Integer loginUserId);
+
+    AdAccountDto.Response.AdAccountInfo adAccountInfo(Integer adAccountId);
 }

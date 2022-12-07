@@ -2,9 +2,7 @@ package com.adplatform.restApi.domain.adaccount.dao.adaccount;
 
 import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
 import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
-import com.adplatform.restApi.domain.adaccount.dto.adaccount.QAdAccountDto_Response_AdAccountCount;
-import com.adplatform.restApi.domain.adaccount.dto.adaccount.QAdAccountDto_Response_ForAdvertiserSearch;
-import com.adplatform.restApi.domain.adaccount.dto.adaccount.QAdAccountDto_Response_ForAgencySearch;
+import com.adplatform.restApi.domain.adaccount.dto.adaccount.*;
 import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_WalletSpend;
 import com.adplatform.restApi.global.util.QuerydslOrderSpecifierUtil;
 import com.querydsl.core.types.OrderSpecifier;
@@ -212,6 +210,20 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                 .where(adAccountUser.id.userId.eq(loginUserId))
                 .groupBy(adAccountUser.id.userId)
                 .fetchOne());
+    }
+
+    @Override
+    public AdAccountDto.Response.AdAccountInfo adAccountInfo(Integer adAccountId) {
+        return this.query.select(new QAdAccountDto_Response_AdAccountInfo(
+                        adAccount.id,
+                        adAccount.name,
+                        adAccount.config,
+                        adAccount.adminStop,
+                        adAccount.outOfBalance
+                ))
+                .from(adAccount)
+                .where(adAccount.id.eq(adAccountId))
+                .fetchOne();
     }
 
     private BooleanExpression eqId(Integer id) {
