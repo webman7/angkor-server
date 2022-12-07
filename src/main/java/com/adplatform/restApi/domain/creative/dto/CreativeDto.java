@@ -6,8 +6,7 @@ import com.adplatform.restApi.domain.creative.domain.Creative;
 import com.adplatform.restApi.domain.creative.domain.CreativeFile;
 import com.adplatform.restApi.domain.creative.domain.CreativeLanding;
 import com.adplatform.restApi.domain.creative.domain.FileInformation;
-import com.adplatform.restApi.domain.statistics.dto.ReportConversionInformationResponse;
-import com.adplatform.restApi.domain.statistics.dto.ReportInformationResponse;
+import com.adplatform.restApi.domain.statistics.dto.ReportDto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
@@ -96,50 +95,17 @@ public abstract class CreativeDto {
         public static class Default {
             private Integer id;
             private String name;
-            private Creative.Config config;
-            private Creative.SystemConfig systemConfig;
-            private Creative.ReviewStatus reviewStatus;
-            private Creative.Status status;
+            private String config;
+            private String systemConfig;
+            private String reviewStatus;
+            private String status;
             private Integer campaignId;
             private Integer adGroupId;
             private String adGroupName;
             private Integer fileId;
             private String fileName;
             private FileInformation.FileType fileType;
-            private ReportInformationResponse reportInformation;
-            private ReportConversionInformationResponse reportConversionInformation;
-
-            @QueryProjection
-            public Default(
-                    Integer id,
-                    String name,
-                    Creative.Config config,
-                    Creative.SystemConfig systemConfig,
-                    Creative.ReviewStatus reviewStatus,
-                    Creative.Status status,
-                    Integer campaignId,
-                    Integer adGroupId,
-                    String adGroupName,
-                    Integer fileId,
-                    String fileName,
-                    FileInformation.FileType fileType,
-                    ReportInformationResponse reportInformation,
-                    ReportConversionInformationResponse reportConversionInformation) {
-                this.id = id;
-                this.name = name;
-                this.config = config;
-                this.systemConfig = systemConfig;
-                this.reviewStatus = reviewStatus;
-                this.status = status;
-                this.campaignId = campaignId;
-                this.adGroupId = adGroupId;
-                this.adGroupName = adGroupName;
-                this.fileId = fileId;
-                this.fileName = fileName;
-                this.fileType = fileType;
-                this.reportInformation = reportInformation;
-                this.reportConversionInformation = reportConversionInformation;
-            }
+            private ReportDto.Response report;
         }
 
         @Getter

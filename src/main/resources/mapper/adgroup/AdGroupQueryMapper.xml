@@ -60,6 +60,7 @@ since 1.0
 
     <select id="search" resultMap="mapSearch">
         SELECT a.id,
+               type_goal.id                                                                       AS adTypeGoalId,
                type_goal.type_name                                                                AS adTypeName,
                type_goal.goal_name                                                                AS adGoalName,
                a.name,
