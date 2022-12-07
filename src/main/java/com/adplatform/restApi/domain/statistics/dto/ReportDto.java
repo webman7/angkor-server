@@ -3,7 +3,21 @@ package com.adplatform.restApi.domain.statistics.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.Valid;
+import java.util.List;
+
+/**
+ * @author Seohyun Lee
+ * @since 1.0
+ */
 public abstract class ReportDto {
+    @Getter
+    @Setter
+    public static class Request {
+        @Valid
+        List<ReportCondition> reportConditions;
+    }
+
     @Getter
     @Setter
     public static class Response {
