@@ -11,15 +11,15 @@ since 1.0
         <id column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="config" property="config"/>
-        <result column="system_config" property="systemConfig"/>
-        <result column="review_status" property="reviewStatus"/>
+        <result column="systemConfig" property="systemConfig"/>
+        <result column="reviewStatus" property="reviewStatus"/>
         <result column="status" property="status"/>
-        <result column="campaign_id" property="campaignId"/>
-        <result column="adgroup_info_id" property="adGroupId"/>
-        <result column="adgroup_name" property="adGroupName"/>
-        <result column="file_id" property="fileId"/>
-        <result column="file_name" property="fileName"/>
-        <result column="file_type" property="fileType"/>
+        <result column="campaignId" property="campaignId"/>
+        <result column="adGroupId" property="adGroupId"/>
+        <result column="adGroupName" property="adGroupName"/>
+        <result column="fileId" property="fileId"/>
+        <result column="fileName" property="fileName"/>
+        <result column="fileType" property="fileType"/>
         <association property="report" javaType="com.adplatform.restApi.domain.statistics.dto.ReportDto$Response">
             <result column="cost" property="cost"/>
             <result column="impression" property="impression"/>
@@ -56,15 +56,15 @@ since 1.0
         SELECT creative.id,
                creative.name,
                creative.config,
-               creative.system_config,
-               creative.review_status,
+               creative.system_config                                                             AS systemConfig,
+               creative.review_status                                                             AS reviewStatus,
                creative.creative_status                                                           AS status,
-               c.id                                                                               AS campaign_id,
-               creative.adgroup_info_id,
-               a.name                                                                             AS adgroup_name,
-               cf.id                                                                              AS file_id,
-               cf.file_name,
-               cf.file_type,
+               c.id                                                                               AS campaignId,
+               creative.adgroup_info_id                                                           AS adGroupId,
+               a.name                                                                             AS adgroupName,
+               cf.id                                                                              AS fileId,
+               cf.file_name                                                                       AS fileName,
+               cf.file_type                                                                       AS fileType,
                atgi.id                                                                            AS adTypeGoalId,
                IFNULL(report.cost, 0)                                                             AS cost,
                IFNULL(report.impression, 0)                                                       AS impression,
