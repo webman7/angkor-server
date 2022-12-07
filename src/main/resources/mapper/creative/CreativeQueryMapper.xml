@@ -65,6 +65,7 @@ since 1.0
                cf.id                                                                              AS file_id,
                cf.file_name,
                cf.file_type,
+               atgi.id                                                                            AS adTypeGoalId,
                IFNULL(report.cost, 0)                                                             AS cost,
                IFNULL(report.impression, 0)                                                       AS impression,
                IFNULL(report.click, 0)                                                            AS click,
