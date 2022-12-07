@@ -1,4 +1,4 @@
-package com.adplatform.restApi.domain.campaign.dao;
+package com.adplatform.restApi.domain.campaign.dao.typegoal;
 
 import com.adplatform.restApi.domain.campaign.domain.AdTypeAndGoal;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -183,7 +183,7 @@ public class AdGroup extends BaseUpdatedEntity {
     private boolean onlyAdult;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "config", columnDefinition = "CHAR(5)")
+    @Column(name = "config", columnDefinition = "VARCHAR(5)")
     private Config config;
 
     @Enumerated(EnumType.STRING)

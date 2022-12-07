@@ -1,4 +1,4 @@
-package com.adplatform.restApi.domain.campaign.dao;
+package com.adplatform.restApi.domain.campaign.dao.campaign;
 
 import com.adplatform.restApi.domain.campaign.domain.Campaign;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -3,14 +3,12 @@ package com.adplatform.restApi.domain.campaign.dto;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountIdGetter;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupDto;
 import com.adplatform.restApi.domain.campaign.domain.Campaign;
-import com.adplatform.restApi.domain.statistics.dto.ReportConversionInformationResponse;
-import com.adplatform.restApi.domain.statistics.dto.ReportInformationResponse;
+import com.adplatform.restApi.domain.statistics.dto.ReportDto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -68,51 +66,19 @@ public abstract class CampaignDto {
     public static abstract class Response {
         @Getter
         @Setter
-        @Accessors(chain = true)
         public static class Page {
             private Integer id;
             private AdTypeAndGoalDto adTypeAndGoal;
             private String name;
             private Long dailyBudgetAmount;
-            private Campaign.Config config;
-            private Campaign.SystemConfig systemConfig;
-            private Campaign.Status status;
+            private String config;
+            private String systemConfig;
+            private String status;
             private LocalDateTime createdAt;
             private LocalDateTime updatedAt;
             private Integer adGroupSchedulesFirstStartDate;
             private Integer adGroupSchedulesLastEndDate;
-            private ReportInformationResponse reportInformation;
-            private ReportConversionInformationResponse reportConversionInformation;
-
-            @QueryProjection
-            public Page(
-                    Integer id,
-                    AdTypeAndGoalDto adTypeAndGoal,
-                    String name,
-                    Long dailyBudgetAmount,
-                    Campaign.Config config,
-                    Campaign.SystemConfig systemConfig,
-                    Campaign.Status status,
-                    LocalDateTime createdAt,
-                    LocalDateTime updatedAt,
-                    Integer adGroupSchedulesFirstStartDate,
-                    Integer adGroupSchedulesLastEndDate,
-                    ReportInformationResponse reportInformation,
-                    ReportConversionInformationResponse reportConversionInformation) {
-                this.id = id;
-                this.adTypeAndGoal = adTypeAndGoal;
-                this.name = name;
-                this.dailyBudgetAmount = dailyBudgetAmount;
-                this.config = config;
-                this.systemConfig = systemConfig;
-                this.status = status;
-                this.createdAt = createdAt;
-                this.updatedAt = updatedAt;
-                this.adGroupSchedulesFirstStartDate = adGroupSchedulesFirstStartDate;
-                this.adGroupSchedulesLastEndDate = adGroupSchedulesLastEndDate;
-                this.reportInformation = reportInformation;
-                this.reportConversionInformation = reportConversionInformation;
-            }
+            private ReportDto.Response report;
         }
 
         @Getter

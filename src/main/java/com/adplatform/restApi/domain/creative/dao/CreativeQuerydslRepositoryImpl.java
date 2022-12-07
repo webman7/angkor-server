@@ -1,9 +1,9 @@
 package com.adplatform.restApi.domain.creative.dao;
 
 import com.adplatform.restApi.domain.adgroup.dao.adgroup.AdGroupCondition;
-import com.adplatform.restApi.domain.campaign.dao.AdGoalCondition;
-import com.adplatform.restApi.domain.campaign.dao.AdTypeCondition;
-import com.adplatform.restApi.domain.campaign.dao.CampaignCondition;
+import com.adplatform.restApi.domain.campaign.dao.typegoal.AdGoalCondition;
+import com.adplatform.restApi.domain.campaign.dao.typegoal.AdTypeCondition;
+import com.adplatform.restApi.domain.campaign.dao.campaign.CampaignCondition;
 import com.adplatform.restApi.domain.campaign.dto.AdvertiserSearchRequest;
 import com.adplatform.restApi.domain.creative.domain.Creative;
 import com.adplatform.restApi.domain.creative.dto.CreativeDto;

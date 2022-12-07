@@ -11,7 +11,7 @@ import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupMapper;
 import com.adplatform.restApi.domain.adgroup.event.AdGroupSavedEvent;
 import com.adplatform.restApi.domain.adgroup.exception.DeviceNotFoundException;
 import com.adplatform.restApi.domain.adgroup.exception.MediaNotFoundException;
-import com.adplatform.restApi.domain.campaign.dao.CampaignRepository;
+import com.adplatform.restApi.domain.campaign.dao.campaign.CampaignRepository;
 import com.adplatform.restApi.domain.campaign.domain.Campaign;
 import com.adplatform.restApi.domain.campaign.service.CampaignFindUtils;
 import lombok.RequiredArgsConstructor;
