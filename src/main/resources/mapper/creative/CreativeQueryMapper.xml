@@ -13,9 +13,10 @@ since 1.0
         <result column="config" property="config"/>
         <result column="system_config" property="systemConfig"/>
         <result column="review_status" property="reviewStatus"/>
-        <result column="config" property="config"/>
+        <result column="status" property="status"/>
         <result column="campaign_id" property="campaignId"/>
         <result column="adgroup_info_id" property="adGroupId"/>
+        <result column="adgroup_name" property="adGroupName"/>
         <result column="file_id" property="fileId"/>
         <result column="file_name" property="fileName"/>
         <result column="file_type" property="fileType"/>
@@ -57,9 +58,10 @@ since 1.0
                creative.config,
                creative.system_config,
                creative.review_status,
-               creative.config,
+               creative.creative_status                                                           AS status,
                c.id                                                                               AS campaign_id,
                creative.adgroup_info_id,
+               a.name                                                                             AS adgroup_name,
                cf.id                                                                              AS file_id,
                cf.file_name,
                cf.file_type,
