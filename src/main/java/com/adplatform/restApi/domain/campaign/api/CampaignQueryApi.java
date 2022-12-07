@@ -1,9 +1,10 @@
 package com.adplatform.restApi.domain.campaign.api;
 
-import com.adplatform.restApi.domain.campaign.dao.campaign.mapper.CampaignQueryMapper;
 import com.adplatform.restApi.domain.campaign.dao.campaign.CampaignRepository;
+import com.adplatform.restApi.domain.campaign.dao.campaign.mapper.CampaignQueryMapper;
 import com.adplatform.restApi.domain.campaign.dto.AdvertiserSearchRequest;
 import com.adplatform.restApi.domain.campaign.dto.CampaignDto;
+import com.adplatform.restApi.domain.statistics.dto.ReportDto;
 import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount;
 import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccountByCampaignId;
 import com.adplatform.restApi.global.dto.PageDto;
@@ -29,14 +30,15 @@ public class CampaignQueryApi {
 
     @AuthorizedAdAccount
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/search")
+    @PostMapping("/search")
     public PageDto<CampaignDto.Response.Page> search(
             @Valid AdvertiserSearchRequest request,
-            @PageableDefault Pageable pageable) {
+            @PageableDefault Pageable pageable,
+            @RequestBody @Valid ReportDto.Request reportRequest) {
         return PageDto.create(new PageImpl<>(
-                this.campaignQueryMapper.search(request, pageable),
+                this.campaignQueryMapper.search(request, pageable, reportRequest),
                 pageable,
-                this.campaignQueryMapper.countSearch(request)));
+                this.campaignQueryMapper.countSearch(request, reportRequest)));
     }
 
     @AuthorizedAdAccount
