@@ -282,7 +282,7 @@ since 1.0
                                       </if>
                                       <if test="request.adGroupCondition.reportConditions and request.adGroupCondition.reportConditions.size() > 0">
                                           <foreach collection="request.adGroupCondition.reportConditions" item="condition">
-                                              AND ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value}
+                                              AND ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value.getValue()}
                                           </foreach>
                                       </if>
                                  </if>
@@ -397,7 +397,7 @@ since 1.0
                                     </if>
                                     <if test="request.campaignCondition.reportConditions and request.campaignCondition.reportConditions.size() > 0">
                                         <foreach collection="request.campaignCondition.reportConditions" item="condition">
-                                            AND ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value}
+                                            AND ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value.getValue()}
                                         </foreach>
                                     </if>
                                 </if>
@@ -454,7 +454,7 @@ since 1.0
                  </if>
                  <if test="request.creativeCondition.reportConditions and request.creativeCondition.reportConditions.size() > 0">
                      <foreach collection="request.creativeCondition.reportConditions" item="condition">
-                         AND ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value}
+                         AND ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value.getValue()}
                      </foreach>
                  </if>
             </if>
@@ -701,7 +701,7 @@ since 1.0
                                               </if>
                                               <if test="request.adGroupCondition.reportConditions and request.adGroupCondition.reportConditions.size() > 0">
                                                   <foreach collection="request.adGroupCondition.reportConditions" item="condition">
-                                                      AND ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value}
+                                                      AND ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value.getValue()}
                                                   </foreach>
                                               </if>
                                          </if>
@@ -816,7 +816,7 @@ since 1.0
                                             </if>
                                             <if test="request.campaignCondition.reportConditions and request.campaignCondition.reportConditions.size() > 0">
                                                 <foreach collection="request.campaignCondition.reportConditions" item="condition">
-                                                    AND ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value}
+                                                    AND ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value.getValue()}
                                                 </foreach>
                                             </if>
                                         </if>
@@ -873,7 +873,7 @@ since 1.0
                          </if>
                          <if test="request.creativeCondition.reportConditions and request.creativeCondition.reportConditions.size() > 0">
                              <foreach collection="request.creativeCondition.reportConditions" item="condition">
-                                 AND ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value}
+                                 AND ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value.getValue()}
                              </foreach>
                          </if>
                     </if>
