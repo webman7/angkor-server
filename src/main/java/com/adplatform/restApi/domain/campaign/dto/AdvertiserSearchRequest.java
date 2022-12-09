@@ -1,9 +1,8 @@
 package com.adplatform.restApi.domain.campaign.dto;
 
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountIdGetter;
-import com.adplatform.restApi.domain.adgroup.domain.AdGroup;
-import com.adplatform.restApi.domain.campaign.domain.Campaign;
-import com.adplatform.restApi.domain.creative.domain.Creative;
+import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdvertiserSearchAdGroupCondition;
+import com.adplatform.restApi.domain.creative.dto.AdvertiserSearchCreativeCondition;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,20 +22,9 @@ public class AdvertiserSearchRequest implements AdAccountIdGetter {
     private Integer reportStartDate;
     @NotNull
     private Integer reportEndDate;
-    private List<Integer> campaignIds;
-    private String campaignName;
-    private List<Campaign.Config> campaignConfigs;
-    private List<Campaign.Status> campaignStatuses;
-    private List<Integer> adGroupIds;
-    private String adGroupName;
-    private List<AdGroup.Config> adGroupConfigs;
-    private List<AdGroup.Status> adGroupStatuses;
-    private List<Integer> creativeIds;
-    private String creativeName;
-    private List<Creative.Format> creativeFormats;
-    private List<Creative.Config> creativeConfigs;
-    private List<Creative.Status> creativeStatuses;
-    private List<Creative.ReviewStatus> creativeReviewStatuses;
     private List<String> adTypeNames;
     private List<String> adGoalNames;
+    private AdvertiserSearchCampaignCondition campaignCondition;
+    private AdvertiserSearchAdGroupCondition adGroupCondition;
+    private AdvertiserSearchCreativeCondition creativeCondition;
 }
