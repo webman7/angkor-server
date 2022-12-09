@@ -11,6 +11,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author Seohyun Lee
  * @since 1.0
@@ -20,6 +22,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/adaccounts")
 public class AdAccountQueryApi {
     private final AdAccountRepository adAccountRepository;
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/all")
+    public List<AdAccountDto.Response.ForAdvertiserSearch> searchForAdvertiser(
+            @RequestParam(required = false) Integer id,
+            @RequestParam(required = false) String name,
+            @RequestParam AdAccountUser.RequestStatus requestStatus) {
+        return this.adAccountRepository.searchForAdvertiser(
+                id, name, SecurityUtils.getLoginUserId(), requestStatus);
+    }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/search-for-agency")

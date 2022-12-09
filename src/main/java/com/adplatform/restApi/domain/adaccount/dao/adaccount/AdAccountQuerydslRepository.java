@@ -20,6 +20,9 @@ public interface AdAccountQuerydslRepository {
     Page<AdAccountDto.Response.ForAdvertiserSearch> searchForAdvertiser(
             Pageable pageable, Integer id, String name, Integer loginUserId, AdAccountUser.RequestStatus requestStatus);
 
+    List<AdAccountDto.Response.ForAdvertiserSearch> searchForAdvertiser(
+            Integer id, String name, Integer loginUserId, AdAccountUser.RequestStatus requestStatus);
+
     Optional<AdAccountDto.Response.AdAccountCount> countRequestStatusYN(Integer loginUserId);
 
     AdAccountDto.Response.AdAccountInfo adAccountInfo(Integer adAccountId);

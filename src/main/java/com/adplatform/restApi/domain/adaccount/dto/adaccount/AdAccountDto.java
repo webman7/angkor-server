@@ -101,6 +101,7 @@ public class AdAccountDto {
             private String masterEmail;
             private long memberSize;
             private AdAccount.Config config;
+            private boolean adminStop;
             private boolean outOfBalance;
             private AdAccountUser.RequestStatus requestStatus;
 
@@ -111,6 +112,7 @@ public class AdAccountDto {
                     String masterEmail,
                     long memberSize,
                     AdAccount.Config config,
+                    boolean adminStop,
                     boolean outOfBalance,
                     AdAccountUser.RequestStatus requestStatus) {
                 this.id = id;
@@ -118,6 +120,7 @@ public class AdAccountDto {
                 this.masterEmail = masterEmail;
                 this.memberSize = memberSize;
                 this.config = config;
+                this.adminStop = adminStop;
                 this.outOfBalance = outOfBalance;
                 this.requestStatus = requestStatus;
             }

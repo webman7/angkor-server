@@ -151,32 +151,7 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
     @Override
     public Page<Response.ForAdvertiserSearch> searchForAdvertiser(
             Pageable pageable, Integer id, String name, Integer loginUserId, AdAccountUser.RequestStatus requestStatus) {
-        List<Response.ForAdvertiserSearch> content = this.query.select(new QAdAccountDto_Response_ForAdvertiserSearch(
-                        adAccount.id,
-                        adAccount.name,
-                        as(select(user.loginId)
-                                        .from(user)
-                                        .where(user.id.in(select(adAccountUser.id.userId)
-                                                .from(adAccountUser)
-                                                .where(adAccountUser.id.adAccountId.eq(adAccount.id),
-                                                        adAccountUser.memberType.eq(AdAccountUser.MemberType.MASTER)))),
-                                "masterEmail"),
-                        as(select(Wildcard.count)
-                                        .from(adAccountUser)
-                                        .where(adAccountUser.id.adAccountId.eq(adAccount.id),
-                                                adAccountUser.requestStatus.eq(requestStatus)),
-                                "memberSize"),
-                        adAccount.config,
-                        adAccount.outOfBalance,
-                        adAccountUser.requestStatus))
-                .from(adAccount)
-                .join(adAccount.adAccountUsers, adAccountUser)
-                .join(adAccountUser.user, user)
-                .where(
-                        adAccountUser.id.userId.eq(loginUserId),
-                        adAccountUser.requestStatus.eq(requestStatus),
-                        this.eqId(id),
-                        this.containsName(name))
+        List<Response.ForAdvertiserSearch> content = this.getSearchForAdvertiserQuery(pageable, id, name, loginUserId, requestStatus)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -192,6 +167,49 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                         this.containsName(name));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public List<Response.ForAdvertiserSearch> searchForAdvertiser(
+            Integer id, String name, Integer loginUserId, AdAccountUser.RequestStatus requestStatus) {
+        return this.getSearchForAdvertiserQuery(null, id, name, loginUserId, requestStatus).fetch();
+    }
+
+    private JPAQuery<Response.ForAdvertiserSearch> getSearchForAdvertiserQuery(
+            Pageable pageable,
+            Integer id, String name, Integer loginUserId, AdAccountUser.RequestStatus requestStatus) {
+
+        JPAQuery<Response.ForAdvertiserSearch> query = this.query.select(new QAdAccountDto_Response_ForAdvertiserSearch(
+                        adAccount.id,
+                        adAccount.name,
+                        as(select(user.loginId)
+                                        .from(user)
+                                        .where(user.id.in(select(adAccountUser.id.userId)
+                                                .from(adAccountUser)
+                                                .where(adAccountUser.id.adAccountId.eq(adAccount.id),
+                                                        adAccountUser.memberType.eq(AdAccountUser.MemberType.MASTER)))),
+                                "masterEmail"),
+                        as(select(Wildcard.count)
+                                        .from(adAccountUser)
+                                        .where(adAccountUser.id.adAccountId.eq(adAccount.id),
+                                                adAccountUser.requestStatus.eq(requestStatus)),
+                                "memberSize"),
+                        adAccount.config,
+                        adAccount.adminStop,
+                        adAccount.outOfBalance,
+                        adAccountUser.requestStatus))
+                .from(adAccount)
+                .join(adAccount.adAccountUsers, adAccountUser)
+                .join(adAccountUser.user, user)
+                .where(
+                        adAccountUser.id.userId.eq(loginUserId),
+                        adAccountUser.requestStatus.eq(requestStatus),
+                        this.eqId(id),
+                        this.containsName(name));
+
+        return Objects.nonNull(pageable)
+                ? query.orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(AdAccount.class, "adAccount", pageable.getSort()).toArray(OrderSpecifier[]::new))
+                : query;
     }
 
     @Override
