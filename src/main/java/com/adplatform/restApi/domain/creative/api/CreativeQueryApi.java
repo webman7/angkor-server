@@ -32,9 +32,9 @@ public class CreativeQueryApi {
 
     @AuthorizedAdAccount
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/search")
+    @PostMapping("/search")
     public PageDto<CreativeDto.Response.Default> search(
-            @Valid AdvertiserSearchRequest request,
+            @RequestBody @Valid AdvertiserSearchRequest request,
             @PageableDefault Pageable pageable) {
         return PageDto.create(new PageImpl<>(
                 this.creativeQueryMapper.search(request, pageable),

@@ -53,218 +53,410 @@ since 1.0
     </resultMap>
 
     <select id="search" resultMap="mapSearch">
-        SELECT creative.id,
-               creative.name,
-               creative.config,
-               creative.system_config                                                             AS systemConfig,
-               creative.review_status                                                             AS reviewStatus,
-               creative.creative_status                                                           AS status,
-               c.id                                                                               AS campaignId,
-               creative.adgroup_info_id                                                           AS adGroupId,
-               a.name                                                                             AS adgroupName,
-               cf.id                                                                              AS fileId,
-               cf.file_name                                                                       AS fileName,
-               cf.file_type                                                                       AS fileType,
-               atgi.id                                                                            AS adTypeGoalId,
-               IFNULL(report.cost, 0)                                                             AS cost,
-               IFNULL(report.impression, 0)                                                       AS impression,
-               IFNULL(report.click, 0)                                                            AS click,
-               IFNULL(report.reach, 0)                                                            AS reach,
-               IFNULL(report.video_play_auto, 0)                                                  AS videoAutoPlay,
-               IFNULL(report.video_play_touch, 0)                                                 AS videoTouches,
-               IFNULL(report.video_unmute, 0)                                                     AS videoUnmute,
-               IFNULL(report.video_play_3s, 0)                                                    AS videoPlay3Seconds,
-               IFNULL(report.video_play_5s, 0)                                                    AS videoPlay5Seconds,
-               IFNULL(report.video_play_10s, 0)                                                   AS videoPlay10Seconds,
-               IFNULL(report.video_play_15s, 0)                                                   AS videoPlay15Seconds,
-               IFNULL(report.video_play_30s, 0)                                                   AS videoPlay30Seconds,
-               IFNULL(report.video_play_60s, 0)                                                   AS videoPlay60Seconds,
-               IFNULL(report.video_play_25p, 0)                                                   AS videoPlay25Percent,
-               IFNULL(report.video_play_50p, 0)                                                   AS videoPlay50Percent,
-               IFNULL(report.video_play_75p, 0)                                                   AS videoPlay75Percent,
-               IFNULL(report.video_play_100p, 0)                                                  AS videoPlay100Percent,
-               IFNULL(report.signup_1d, 0)                                                        AS signUpDay1,
-               IFNULL(report.signup_7d, 0)                                                        AS signUpDay7,
-               IFNULL(report.purchase_1d, 0)                                                      AS purchaseDay1,
-               IFNULL(report.purchase_7d, 0)                                                      AS purchaseDay7,
-               IFNULL(report.view_cart_1d, 0)                                                     AS viewCartDay1,
-               IFNULL(report.view_cart_7d, 0)                                                     AS viewCartDay7,
-               ROUND(CASE WHEN impression = 0 THEN 0 ELSE (click / impression) * 100 END, 2)      AS ctr,
-               ROUND(CASE WHEN impression = 0 THEN 0 ELSE (cost / impression) * 100 END, 2)       AS cpm,
-               ROUND(CASE WHEN click = 0 THEN 0 ELSE (cost / click) * 100 END, 2)                 AS cpc,
-               ROUND(CASE WHEN reach = 0 THEN 0 ELSE (cost / reach) * 100 END, 2)                 AS reachRate,
-               ROUND(CASE WHEN video_play_3s = 0 THEN 0 ELSE (cost / video_play_3s) * 100 END, 2) AS videoPlayRate
-        FROM creative_info creative
-                 LEFT JOIN creative_files cf ON creative.id = cf.creative_info_id
-                 LEFT JOIN (SELECT adaccount_info_id,
-                                   campaign_info_id,
-                                   adgroup_info_id,
-                                   creative_info_id,
-                                   SUM(IFNULL(cost, 0))             AS cost,
-                                   SUM(IFNULL(impression, 0))       AS impression,
-                                   SUM(IFNULL(click, 0))            AS click,
-                                   SUM(IFNULL(reach, 0))            AS reach,
-                                   SUM(IFNULL(video_play_auto, 0))  AS video_play_auto,
-                                   SUM(IFNULL(video_play_touch, 0)) AS video_play_touch,
-                                   SUM(IFNULL(video_unmute, 0))     AS video_unmute,
-                                   SUM(IFNULL(video_play_3s, 0))    AS video_play_3s,
-                                   SUM(IFNULL(video_play_5s, 0))    AS video_play_5s,
-                                   SUM(IFNULL(video_play_10s, 0))   AS video_play_10s,
-                                   SUM(IFNULL(video_play_15s, 0))   AS video_play_15s,
-                                   SUM(IFNULL(video_play_30s, 0))   AS video_play_30s,
-                                   SUM(IFNULL(video_play_60s, 0))   AS video_play_60s,
-                                   SUM(IFNULL(video_play_25p, 0))   AS video_play_25p,
-                                   SUM(IFNULL(video_play_50p, 0))   AS video_play_50p,
-                                   SUM(IFNULL(video_play_75p, 0))   AS video_play_75p,
-                                   SUM(IFNULL(video_play_100p, 0))  AS video_play_100p,
-                                   SUM(IFNULL(signup_1d, 0))        AS signup_1d,
-                                   SUM(IFNULL(purchase_1d, 0))      AS purchase_1d,
-                                   SUM(IFNULL(view_cart_1d, 0))     AS view_cart_1d,
-                                   SUM(IFNULL(signup_7d, 0))        AS signup_7d,
-                                   SUM(IFNULL(purchase_7d, 0))      AS purchase_7d,
-                                   SUM(IFNULL(view_cart_7d, 0))     AS view_cart_7d
-                            FROM (SELECT adaccount_info_id,
-                                         campaign_info_id,
-                                         adgroup_info_id,
-                                         creative_info_id,
-                                         cost,
-                                         impression,
-                                         click,
-                                         reach,
-                                         video_play_auto,
-                                         video_play_touch,
-                                         video_unmute,
-                                         video_play_3s,
-                                         video_play_5s,
-                                         video_play_10s,
-                                         video_play_15s,
-                                         video_play_30s,
-                                         video_play_60s,
-                                         video_play_25p,
-                                         video_play_50p,
-                                         video_play_75p,
-                                         video_play_100p,
-                                         0 AS signup_1d,
-                                         0 AS purchase_1d,
-                                         0 AS view_cart_1d,
-                                         0 AS signup_7d,
-                                         0 AS purchase_7d,
-                                         0 AS view_cart_7d
-                                  FROM report_daily rad
-                                  WHERE adaccount_info_id = #{request.adAccountId}
-                                    AND rad.report_date BETWEEN #{request.reportStartDate} AND #{request.reportEndDate}
+        SELECT cr.id,
+               cr.name,
+               cr.config,
+               cr.system_config               AS systemConfig,
+               cr.review_status               AS reviewStatus,
+               cr.creative_status             AS status,
+               c.id                           AS campaignId,
+               cr.adgroup_info_id             AS adGroupId,
+               a.name                         AS adGroupName,
+               cf.id                          AS fileId,
+               cf.file_name                   AS fileName,
+               cf.file_type                   AS fileType,
+               IFNULL(cost, 0)                AS cost,
+               IFNULL(impression, 0)          AS impression,
+               IFNULL(click, 0)               AS click,
+               IFNULL(reach, 0)               AS reach,
+               IFNULL(videoPlay3Seconds, 0)   AS videoPlay3Seconds,
+               IFNULL(videoPlay5Seconds, 0)   AS videoPlay5Seconds,
+               IFNULL(videoPlay10Seconds, 0)  AS videoPlay10Seconds,
+               IFNULL(videoPlay15Seconds, 0)  AS videoPlay15Seconds,
+               IFNULL(videoPlay30Seconds, 0)  AS videoPlay30Seconds,
+               IFNULL(videoPlay60Seconds, 0)  AS videoPlay60Seconds,
+               IFNULL(videoPlay25Percent, 0)  AS videoPlay25Percent,
+               IFNULL(videoPlay50Percent, 0)  AS videoPlay50Percent,
+               IFNULL(videoPlay75Percent, 0)  AS videoPlay75Percent,
+               IFNULL(videoPlay100Percent, 0) AS videoPlay100Percent,
+               IFNULL(signUpDay1, 0)          AS signUpDay1,
+               IFNULL(signUpDay7, 0)          AS signUpDay7,
+               IFNULL(purchaseDay1, 0)        AS purchaseDay1,
+               IFNULL(purchaseDay7, 0)        AS purchaseDay7,
+               IFNULL(viewCartDay1, 0)        AS viewCartDay1,
+               IFNULL(viewCartDay7, 0)        AS viewCartDay7,
+               IFNULL(ctr, 0)                 AS ctr,
+               IFNULL(cpm, 0)                 AS cpm,
+               IFNULL(cpc, 0)                 AS cpc,
+               IFNULL(reachRate, 0)           AS reachRate,
+               IFNULL(videoPlayRate, 0)       AS videoPlayRate
+        FROM creative_info cr
+                 LEFT JOIN creative_files cf ON cr.id = cf.creative_info_id
+                 LEFT JOIN (SELECT creative_info_id,
+                                   IFNULL(SUM(cost), 0)                                                                       AS cost,
+                                   IFNULL(SUM(impression), 0)                                                                 AS impression,
+                                   IFNULL(SUM(click), 0)                                                                      AS click,
+                                   IFNULL(SUM(reach), 0)                                                                      AS reach,
+                                   IFNULL(SUM(videoPlay3Seconds), 0)                                                          AS videoPlay3Seconds,
+                                   IFNULL(SUM(videoPlay5Seconds), 0)                                                          AS videoPlay5Seconds,
+                                   IFNULL(SUM(videoPlay10Seconds), 0)                                                         AS videoPlay10Seconds,
+                                   IFNULL(SUM(videoPlay15Seconds), 0)                                                         AS videoPlay15Seconds,
+                                   IFNULL(SUM(videoPlay30Seconds), 0)                                                         AS videoPlay30Seconds,
+                                   IFNULL(SUM(videoPlay60Seconds), 0)                                                         AS videoPlay60Seconds,
+                                   IFNULL(SUM(videoPlay25Percent), 0)                                                         AS videoPlay25Percent,
+                                   IFNULL(SUM(videoPlay50Percent), 0)                                                         AS videoPlay50Percent,
+                                   IFNULL(SUM(videoPlay75Percent), 0)                                                         AS videoPlay75Percent,
+                                   IFNULL(SUM(videoPlay100Percent), 0)                                                        AS videoPlay100Percent,
+                                   IFNULL(SUM(signUpDay1), 0)                                                                 AS signUpDay1,
+                                   IFNULL(SUM(signUpDay7), 0)                                                                 AS signUpDay7,
+                                   IFNULL(SUM(purchaseDay1), 0)                                                               AS purchaseDay1,
+                                   IFNULL(SUM(purchaseDay7), 0)                                                               AS purchaseDay7,
+                                   IFNULL(SUM(viewCartDay1), 0)                                                               AS viewCartDay1,
+                                   IFNULL(SUM(viewCartDay7), 0)                                                               AS viewCartDay7,
+                                   ROUND(CASE WHEN impression = 0 THEN 0 ELSE (click / impression) * 100 END, 2)              AS ctr,
+                                   ROUND(CASE WHEN impression = 0 THEN 0 ELSE (cost / impression) * 100 END, 2)               AS cpm,
+                                   ROUND(CASE WHEN click = 0 THEN 0 ELSE (cost / click) * 100 END, 2)                         AS cpc,
+                                   ROUND(CASE WHEN reach = 0 THEN 0 ELSE (cost / reach) * 100 END, 2)                         AS reachRate,
+                                   ROUND(CASE WHEN videoPlay3Seconds = 0 THEN 0 ELSE (cost / videoPlay3Seconds) * 100 END, 2) AS videoPlayRate
+                            FROM (SELECT creative_info_id,
+                                         IFNULL(SUM(cost), 0)            AS cost,
+                                         IFNULL(SUM(impression), 0)      AS impression,
+                                         IFNULL(SUM(click), 0)           AS click,
+                                         IFNULL(SUM(reach), 0)           AS reach,
+                                         IFNULL(SUM(video_play_3s), 0)   AS videoPlay3Seconds,
+                                         IFNULL(SUM(video_play_5s), 0)   AS videoPlay5Seconds,
+                                         IFNULL(SUM(video_play_10s), 0)  AS videoPlay10Seconds,
+                                         IFNULL(SUM(video_play_15s), 0)  AS videoPlay15Seconds,
+                                         IFNULL(SUM(video_play_30s), 0)  AS videoPlay30Seconds,
+                                         IFNULL(SUM(video_play_60s), 0)  AS videoPlay60Seconds,
+                                         IFNULL(SUM(video_play_25p), 0)  AS videoPlay25Percent,
+                                         IFNULL(SUM(video_play_50p), 0)  AS videoPlay50Percent,
+                                         IFNULL(SUM(video_play_75p), 0)  AS videoPlay75Percent,
+                                         IFNULL(SUM(video_play_100p), 0) AS videoPlay100Percent,
+                                         0                               AS signUpDay1,
+                                         0                               AS signUpDay7,
+                                         0                               AS purchaseDay1,
+                                         0                               AS purchaseDay7,
+                                         0                               AS viewCartDay1,
+                                         0                               AS viewCartDay7
+                                  FROM report_daily rd
+                                  WHERE rd.adaccount_info_id = #{request.adAccountId}
+                                    AND rd.report_date BETWEEN #{request.reportStartDate} AND #{request.reportEndDate}
+                                  GROUP BY rd.creative_info_id
                                   UNION
-                                  SELECT adaccount_info_id,
-                                         campaign_info_id,
-                                         adgroup_info_id,
-                                         creative_info_id,
-                                         0 AS cost,
-                                         0 AS impression,
-                                         0 AS click,
-                                         0 AS reach,
-                                         0 AS video_play_auto,
-                                         0 AS video_play_touch,
-                                         0 AS video_unmute,
-                                         0 AS video_play_3s,
-                                         0 AS video_play_5s,
-                                         0 AS video_play_10s,
-                                         0 AS video_play_15s,
-                                         0 AS video_play_30s,
-                                         0 AS video_play_60s,
-                                         0 AS video_play_25p,
-                                         0 AS video_play_50p,
-                                         0 AS video_play_75p,
-                                         0 AS video_play_100p,
-                                         signup_1d,
-                                         purchase_1d,
-                                         view_cart_1d,
-                                         signup_7d,
-                                         purchase_7d,
-                                         view_cart_7d
-                                  FROM report_conversion_daily rac
-                                  WHERE adaccount_info_id = #{request.adAccountId}
-                                    AND rac.report_date BETWEEN #{request.reportStartDate} AND #{request.reportEndDate}) inner_report
-                            GROUP BY adaccount_info_id, campaign_info_id, adgroup_info_id, creative_info_id) report
-                           ON report.creative_info_id = creative.id
-                 INNER JOIN adgroup_info a ON creative.adgroup_info_id = a.id
-                 INNER JOIN campaign_info c ON a.campaign_info_id = c.id AND c.adaccount_info_id = #{request.adAccountId}
-                 INNER JOIN ad_type_goal_info atgi ON c.ad_type_goal_info_id = atgi.id
-                 INNER JOIN ad_type_info ati ON atgi.ad_type_info_id = ati.id
-                 INNER JOIN ad_goal_info agi ON atgi.ad_goal_info_id = agi.id
-        <trim prefix="WHERE" prefixOverrides="AND | OR |">
-            <if test="request.campaignIds">
-                <foreach collection="request.campaignIds" item="id" open="AND c.id IN (" separator=", " close=")">
-                    #{id}
+                                  SELECT creative_info_id,
+                                         0                            AS cost,
+                                         0                            AS impression,
+                                         0                            AS click,
+                                         0                            AS reach,
+                                         0                            AS videoPlay3Seconds,
+                                         0                            AS videoPlay5Seconds,
+                                         0                            AS videoPlay10Seconds,
+                                         0                            AS videoPlay15Seconds,
+                                         0                            AS videoPlay30Seconds,
+                                         0                            AS videoPlay60Seconds,
+                                         0                            AS videoPlay25Percent,
+                                         0                            AS videoPlay50Percent,
+                                         0                            AS videoPlay75Percent,
+                                         0                            AS videoPlay100Percent,
+                                         IFNULL(SUM(signup_1d), 0)    AS signUpDay1,
+                                         IFNULL(SUM(signup_7d), 0)    AS signUpDay7,
+                                         IFNULL(SUM(purchase_1d), 0)  AS purchaseDay1,
+                                         IFNULL(SUM(purchase_7d), 0)  AS purchaseDay7,
+                                         IFNULL(SUM(view_cart_1d), 0) AS viewCartDay1,
+                                         IFNULL(SUM(view_cart_7d), 0) AS viewCartDay7
+                                  FROM report_conversion_daily rcd
+                                  WHERE rcd.adaccount_info_id = #{request.adAccountId}
+                                    AND rcd.report_date BETWEEN #{request.reportStartDate} AND #{request.reportEndDate}
+                                  GROUP BY rcd.creative_info_id) inner_report
+                            GROUP BY creative_info_id) creativeReport ON creativeReport.creative_info_id = cr.id
+                 INNER JOIN (SELECT a.id AS adGroupId, c.adaccount_info_id, at.name AS adTypeName, ag.name AS adGoalName
+                             FROM ad_type_goal_info atg
+                                      INNER JOIN ad_type_info at ON atg.ad_type_info_id = at.id
+                                      INNER JOIN ad_goal_info ag ON atg.ad_goal_info_id = ag.id
+                                      INNER JOIN campaign_info c ON atg.id = c.ad_type_goal_info_id
+                                      INNER JOIN adgroup_info a ON a.campaign_info_id = c.id
+                             GROUP BY adGroupId) tg ON tg.adGroupId = cr.adgroup_info_id
+                 INNER JOIN (SELECT a.id, a.name, a.campaign_info_id
+                             FROM adgroup_info a
+                                      INNER JOIN adgroup_schedule s ON a.id = s.adgroup_info_id
+                                      LEFT JOIN (SELECT adgroup_info_id,
+                                                        IFNULL(SUM(cost), 0)                                                          AS cost,
+                                                        IFNULL(SUM(impression), 0)                                                    AS impression,
+                                                        IFNULL(SUM(click), 0)                                                         AS click,
+                                                        IFNULL(SUM(reach), 0)                                                         AS reach,
+                                                        IFNULL(SUM(videoPlay3Seconds), 0)                                             AS videoPlay3Seconds,
+                                                        IFNULL(SUM(videoPlay5Seconds), 0)                                             AS videoPlay5Seconds,
+                                                        IFNULL(SUM(videoPlay10Seconds), 0)                                            AS videoPlay10Seconds,
+                                                        IFNULL(SUM(videoPlay15Seconds), 0)                                            AS videoPlay15Seconds,
+                                                        IFNULL(SUM(videoPlay30Seconds), 0)                                            AS videoPlay30Seconds,
+                                                        IFNULL(SUM(videoPlay60Seconds), 0)                                            AS videoPlay60Seconds,
+                                                        IFNULL(SUM(videoPlay25Percent), 0)                                            AS videoPlay25Percent,
+                                                        IFNULL(SUM(videoPlay50Percent), 0)                                            AS videoPlay50Percent,
+                                                        IFNULL(SUM(videoPlay75Percent), 0)                                            AS videoPlay75Percent,
+                                                        IFNULL(SUM(videoPlay100Percent), 0)                                           AS videoPlay100Percent,
+                                                        IFNULL(SUM(signUpDay1), 0)                                                    AS signUpDay1,
+                                                        IFNULL(SUM(signUpDay7), 0)                                                    AS signUpDay7,
+                                                        IFNULL(SUM(purchaseDay1), 0)                                                  AS purchaseDay1,
+                                                        IFNULL(SUM(purchaseDay7), 0)                                                  AS purchaseDay7,
+                                                        IFNULL(SUM(viewCartDay1), 0)                                                  AS viewCartDay1,
+                                                        IFNULL(SUM(viewCartDay7), 0)                                                  AS viewCartDay7,
+                                                        ROUND(CASE WHEN impression = 0 THEN 0 ELSE (click / impression) * 100 END, 2) AS ctr,
+                                                        ROUND(CASE WHEN impression = 0 THEN 0 ELSE (cost / impression) * 100 END, 2)  AS cpm,
+                                                        ROUND(CASE WHEN click = 0 THEN 0 ELSE (cost / click) * 100 END, 2)            AS cpc,
+                                                        ROUND(CASE WHEN reach = 0 THEN 0 ELSE (cost / reach) * 100 END, 2)            AS reachRate,
+                                                        ROUND(CASE WHEN videoPlay3Seconds = 0 THEN 0 ELSE (cost / videoPlay3Seconds) * 100 END, 2) AS videoPlayRate
+                                                 FROM (SELECT adgroup_info_id,
+                                                              IFNULL(SUM(cost), 0)            AS cost,
+                                                              IFNULL(SUM(impression), 0)      AS impression,
+                                                              IFNULL(SUM(click), 0)           AS click,
+                                                              IFNULL(SUM(reach), 0)           AS reach,
+                                                              IFNULL(SUM(video_play_3s), 0)   AS videoPlay3Seconds,
+                                                              IFNULL(SUM(video_play_5s), 0)   AS videoPlay5Seconds,
+                                                              IFNULL(SUM(video_play_10s), 0)  AS videoPlay10Seconds,
+                                                              IFNULL(SUM(video_play_15s), 0)  AS videoPlay15Seconds,
+                                                              IFNULL(SUM(video_play_30s), 0)  AS videoPlay30Seconds,
+                                                              IFNULL(SUM(video_play_60s), 0)  AS videoPlay60Seconds,
+                                                              IFNULL(SUM(video_play_25p), 0)  AS videoPlay25Percent,
+                                                              IFNULL(SUM(video_play_50p), 0)  AS videoPlay50Percent,
+                                                              IFNULL(SUM(video_play_75p), 0)  AS videoPlay75Percent,
+                                                              IFNULL(SUM(video_play_100p), 0) AS videoPlay100Percent,
+                                                              0                               AS signUpDay1,
+                                                              0                               AS signUpDay7,
+                                                              0                               AS purchaseDay1,
+                                                              0                               AS purchaseDay7,
+                                                              0                               AS viewCartDay1,
+                                                              0                               AS viewCartDay7
+                                                       FROM report_adgroup_daily rad
+                                                       WHERE rad.adaccount_info_id = #{request.adAccountId}
+                                                         AND rad.report_date BETWEEN #{request.reportStartDate} AND #{request.reportEndDate}
+                                                       GROUP BY rad.adgroup_info_id
+                                                       UNION
+                                                       SELECT adgroup_info_id,
+                                                              0                            AS cost,
+                                                              0                            AS impression,
+                                                              0                            AS click,
+                                                              0                            AS reach,
+                                                              0                            AS videoPlay3Seconds,
+                                                              0                            AS videoPlay5Seconds,
+                                                              0                            AS videoPlay10Seconds,
+                                                              0                            AS videoPlay15Seconds,
+                                                              0                            AS videoPlay30Seconds,
+                                                              0                            AS videoPlay60Seconds,
+                                                              0                            AS videoPlay25Percent,
+                                                              0                            AS videoPlay50Percent,
+                                                              0                            AS videoPlay75Percent,
+                                                              0                            AS videoPlay100Percent,
+                                                              IFNULL(SUM(signup_1d), 0)    AS signUpDay1,
+                                                              IFNULL(SUM(signup_7d), 0)    AS signUpDay7,
+                                                              IFNULL(SUM(purchase_1d), 0)  AS purchaseDay1,
+                                                              IFNULL(SUM(purchase_7d), 0)  AS purchaseDay7,
+                                                              IFNULL(SUM(view_cart_1d), 0) AS viewCartDay1,
+                                                              IFNULL(SUM(view_cart_7d), 0) AS viewCartDay7
+                                                       FROM report_adgroup_conversion_daily rac
+                                                       WHERE rac.adaccount_info_id = #{request.adAccountId}
+                                                         AND rac.report_date BETWEEN #{request.reportStartDate} AND #{request.reportEndDate}
+                                                       GROUP BY rac.adgroup_info_id) inner_report
+                                                 GROUP BY adgroup_info_id) adGroupReport ON adGroupReport.adgroup_info_id = a.id
+                                      INNER JOIN campaign_info c ON c.id = a.campaign_info_id
+                            <trim prefix="WHERE" prefixOverrides="AND | OR ">
+                                c.adaccount_info_id = #{request.adAccountId}
+                                 <if test="request.adGroupCondition">
+                                     <if test="request.adGroupCondition.ids and request.adGroupCondition.ids.size() > 0">
+                                          <foreach collection="request.adGroupCondition.ids" item="id" open="AND a.id IN (" separator=", " close=")">
+                                              #{id}
+                                          </foreach>
+                                      </if>
+                                      <if test="request.adGroupCondition.name">
+                                          AND a.name LIKE CONCAT('%', #{request.adGroupCondition.name}, '%')
+                                      </if>
+                                      <if test="request.adGroupCondition.configs and request.adGroupCondition.configs.size() > 0">
+                                          <foreach collection="request.adGroupCondition.configs" item="config" open="AND a.config IN (" separator=", " close=")">
+                                              #{config}
+                                          </foreach>
+                                      </if>
+                                      <if test="request.adGroupCondition.statuses and request.adGroupCondition.statuses.size() > 0">
+                                          <foreach collection="request.adGroupCondition.statuses" item="status" open="AND a.status IN (" separator=", " close=")">
+                                              #{status}
+                                          </foreach>
+                                      </if>
+                                      <if test="request.adGroupCondition.reportConditions and request.adGroupCondition.reportConditions.size() > 0">
+                                          <foreach collection="request.adGroupCondition.reportConditions" item="condition">
+                                              AND ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value}
+                                          </foreach>
+                                      </if>
+                                 </if>
+                            </trim>) a ON a.id = cr.adgroup_info_id
+                 INNER JOIN (SELECT c.id
+                             FROM campaign_info c
+                                      LEFT JOIN (SELECT campaign_info_id,
+                                                        IFNULL(SUM(cost), 0)                                                          AS cost,
+                                                        IFNULL(SUM(impression), 0)                                                    AS impression,
+                                                        IFNULL(SUM(click), 0)                                                         AS click,
+                                                        IFNULL(SUM(reach), 0)                                                         AS reach,
+                                                        IFNULL(SUM(videoPlay3Seconds), 0)                                             AS videoPlay3Seconds,
+                                                        IFNULL(SUM(videoPlay5Seconds), 0)                                             AS videoPlay5Seconds,
+                                                        IFNULL(SUM(videoPlay10Seconds), 0)                                            AS videoPlay10Seconds,
+                                                        IFNULL(SUM(videoPlay15Seconds), 0)                                            AS videoPlay15Seconds,
+                                                        IFNULL(SUM(videoPlay30Seconds), 0)                                            AS videoPlay30Seconds,
+                                                        IFNULL(SUM(videoPlay60Seconds), 0)                                            AS videoPlay60Seconds,
+                                                        IFNULL(SUM(videoPlay25Percent), 0)                                            AS videoPlay25Percent,
+                                                        IFNULL(SUM(videoPlay50Percent), 0)                                            AS videoPlay50Percent,
+                                                        IFNULL(SUM(videoPlay75Percent), 0)                                            AS videoPlay75Percent,
+                                                        IFNULL(SUM(videoPlay100Percent), 0)                                           AS videoPlay100Percent,
+                                                        IFNULL(SUM(signUpDay1), 0)                                                    AS signUpDay1,
+                                                        IFNULL(SUM(signUpDay7), 0)                                                    AS signUpDay7,
+                                                        IFNULL(SUM(purchaseDay1), 0)                                                  AS purchaseDay1,
+                                                        IFNULL(SUM(purchaseDay7), 0)                                                  AS purchaseDay7,
+                                                        IFNULL(SUM(viewCartDay1), 0)                                                  AS viewCartDay1,
+                                                        IFNULL(SUM(viewCartDay7), 0)                                                  AS viewCartDay7,
+                                                        ROUND(CASE WHEN impression = 0 THEN 0 ELSE (click / impression) * 100 END, 2) AS ctr,
+                                                        ROUND(CASE WHEN impression = 0 THEN 0 ELSE (cost / impression) * 100 END, 2)  AS cpm,
+                                                        ROUND(CASE WHEN click = 0 THEN 0 ELSE (cost / click) * 100 END, 2)            AS cpc,
+                                                        ROUND(CASE WHEN reach = 0 THEN 0 ELSE (cost / reach) * 100 END, 2)            AS reachRate,
+                                                        ROUND(CASE WHEN videoPlay3Seconds = 0 THEN 0 ELSE (cost / videoPlay3Seconds) * 100 END,
+                                                              2)                                                                      AS videoPlayRate
+                                                 FROM (SELECT campaign_info_id,
+                                                              IFNULL(SUM(cost), 0)            AS cost,
+                                                              IFNULL(SUM(impression), 0)      AS impression,
+                                                              IFNULL(SUM(click), 0)           AS click,
+                                                              IFNULL(SUM(reach), 0)           AS reach,
+                                                              IFNULL(SUM(video_play_3s), 0)   AS videoPlay3Seconds,
+                                                              IFNULL(SUM(video_play_5s), 0)   AS videoPlay5Seconds,
+                                                              IFNULL(SUM(video_play_10s), 0)  AS videoPlay10Seconds,
+                                                              IFNULL(SUM(video_play_15s), 0)  AS videoPlay15Seconds,
+                                                              IFNULL(SUM(video_play_30s), 0)  AS videoPlay30Seconds,
+                                                              IFNULL(SUM(video_play_60s), 0)  AS videoPlay60Seconds,
+                                                              IFNULL(SUM(video_play_25p), 0)  AS videoPlay25Percent,
+                                                              IFNULL(SUM(video_play_50p), 0)  AS videoPlay50Percent,
+                                                              IFNULL(SUM(video_play_75p), 0)  AS videoPlay75Percent,
+                                                              IFNULL(SUM(video_play_100p), 0) AS videoPlay100Percent,
+                                                              0                               AS signUpDay1,
+                                                              0                               AS signUpDay7,
+                                                              0                               AS purchaseDay1,
+                                                              0                               AS purchaseDay7,
+                                                              0                               AS viewCartDay1,
+                                                              0                               AS viewCartDay7
+                                                       FROM report_adgroup_daily rad
+                                                       WHERE rad.adaccount_info_id = 1
+                                                         AND rad.report_date BETWEEN 20221128 AND 20221129
+                                                       GROUP BY rad.campaign_info_id
+                                                       UNION
+                                                       SELECT campaign_info_id,
+                                                              0                            AS cost,
+                                                              0                            AS impression,
+                                                              0                            AS click,
+                                                              0                            AS reach,
+                                                              0                            AS videoPlay3Seconds,
+                                                              0                            AS videoPlay5Seconds,
+                                                              0                            AS videoPlay10Seconds,
+                                                              0                            AS videoPlay15Seconds,
+                                                              0                            AS videoPlay30Seconds,
+                                                              0                            AS videoPlay60Seconds,
+                                                              0                            AS videoPlay25Percent,
+                                                              0                            AS videoPlay50Percent,
+                                                              0                            AS videoPlay75Percent,
+                                                              0                            AS videoPlay100Percent,
+                                                              IFNULL(SUM(signup_1d), 0)    AS signUpDay1,
+                                                              IFNULL(SUM(signup_7d), 0)    AS signUpDay7,
+                                                              IFNULL(SUM(purchase_1d), 0)  AS purchaseDay1,
+                                                              IFNULL(SUM(purchase_7d), 0)  AS purchaseDay7,
+                                                              IFNULL(SUM(view_cart_1d), 0) AS viewCartDay1,
+                                                              IFNULL(SUM(view_cart_7d), 0) AS viewCartDay7
+                                                       FROM report_adgroup_conversion_daily rac
+                                                       WHERE rac.adaccount_info_id = 1
+                                                         AND rac.report_date BETWEEN 20221128 AND 20221129
+                                                       GROUP BY rac.campaign_info_id) inner_report
+                                                 GROUP BY campaign_info_id) campaignReport
+                                                ON campaignReport.campaign_info_id = c.id
+                            <trim prefix="WHERE" prefixOverrides="AND | OR ">
+                                c.adaccount_info_id = #{request.adAccountId}
+                                <choose>
+                                    <when test="request.campaignCondition and request.campaignCondition.configs and request.campaignCondition.configs.size() > 0">
+                                        <foreach collection="request.campaignCondition.configs" item="config" open="AND c.config IN (" separator=", " close=")">
+                                            #{config}
+                                        </foreach>
+                                    </when>
+                                    <otherwise>
+                                        AND c.config IN ('ON', 'OFF')
+                                    </otherwise>
+                                </choose>
+                                <if test="request.campaignCondition">
+                                    <if test="request.campaignCondition.ids and request.campaignCondition.ids.size() > 0">
+                                        <foreach collection="request.campaignCondition.ids" item="id" open="AND c.id IN (" separator=", " close=")">
+                                            #{id}
+                                        </foreach>
+                                    </if>
+                                    <if test="request.campaignCondition.name">
+                                        AND c.name LIKE CONCAT('%', #{request.campaignCondition.name}, '%')
+                                    </if>
+                                    <if test="request.campaignCondition.statuses and request.campaignCondition.statuses.size() > 0">
+                                        <foreach collection="request.campaignCondition.statuses" item="status" open="AND c.status IN (" separator=", " close=")">
+                                            #{status}
+                                        </foreach>
+                                    </if>
+                                    <if test="request.campaignCondition.reportConditions and request.campaignCondition.reportConditions.size() > 0">
+                                        <foreach collection="request.campaignCondition.reportConditions" item="condition">
+                                            AND ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value}
+                                        </foreach>
+                                    </if>
+                                </if>
+                            </trim>) c ON c.id = a.campaign_info_id
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="request.adTypeNames and request.adTypeNames.size() > 0">
+                <foreach collection="request.adTypeNames" item="name" open="AND tg.adTypeName IN (" separator=", " close=")">
+                    #{name}
                 </foreach>
             </if>
-            <if test="request.campaignName">
-                AND c.name LIKE CONCAT('%', #{request.campaignName}, '%')
-            </if>
-            <if test="request.campaignConfigs">
-                <foreach collection="request.campaignConfigs" item="config" open="AND c.config IN (" separator=", " close=")">
-                    #{config}
+            <if test="request.adGoalNames and request.adGoalNames.size() > 0">
+                <foreach collection="request.adGoalNames" item="name" open="AND tg.adGoalName IN (" separator=", " close=")">
+                    #{name}
                 </foreach>
             </if>
-            <if test="request.campaignStatuses">
-                <foreach collection="request.campaignStatuses" item="status" open="AND c.status IN (" separator=", " close=")">
-                    #{status}
-                </foreach>
-            </if>
-            <if test="request.adGroupIds">
-                <foreach collection="request.adGroupIds" item="id" open="AND a.id IN (" separator=", " close=")">
-                    #{id}
-                </foreach>
-            </if>
-            <if test="request.adGroupName">
-                AND a.name LIKE CONCAT('%', #{adGroupName}, '%')
-            </if>
-            <if test="request.adGroupConfigs">
-                <foreach collection="request.adGroupConfigs" item="config" open="AND a.config IN (" separator=", " close=")">
-                    #{config}
-                </foreach>
-            </if>
-            <if test="request.adGroupStatuses">
-                <foreach collection="request.adGroupStatuses" item="status" open="AND a.status IN (" separator=", " close=")">
-                    #{status}
-                </foreach>
-            </if>
-            <if test="request.creativeIds">
-                <foreach collection="request.creativeIds" item="id" open="AND creative.id IN (" separator=", " close=")">
-                    #{id}
-                </foreach>
-            </if>
-            <if test="request.creativeName">
-                AND creative.name LIKE CONCAT('%', #{request.creativeName}, '%')
-            </if>
-            <if test="request.creativeFormats">
-                <foreach collection="request.creativeFormats" item="creativeFormat" open="AND creative.format IN (" separator="," close=")">
-                    #{creativeFormat}
-                </foreach>
-            </if>
-            <if test="request.creativeConfigs">
-                <foreach collection="request.creativeConfigs" item="creativeConfig" open="AND creative.config IN (" separator="," close=")">
-                    #{creativeConfig}
-                </foreach>
-            </if>
-            <if test="request.creativeStatuses">
-                <foreach collection="request.creativeStatuses" item="creativeStatus" open="AND creative.creative_status IN (" separator="," close=")">
-                    #{creativeStatus}
-                </foreach>
-            </if>
-            <if test="request.creativeReviewStatuses">
-                <foreach collection="request.creativeReviewStatuses" item="creativeReviewStatus" open="AND creative.review_status IN (" separator="," close=")">
-                    #{creativeReviewStatus}
-                </foreach>
-            </if>
-            <if test="request.adTypeNames">
-                <foreach collection="request.adTypeNames" item="adTypeName" index="index" open="AND ati.name IN (" separator="," close=")">
-                    #{adTypeName}
-                </foreach>
-            </if>
-            <if test="request.adGoalNames">
-                <foreach collection="request.adGoalNames" item="adGoalName" index="index" open="AND agi.name IN (" separator="," close=")">
-                    #{adGoalName}
-                </foreach>
+            <choose>
+                <when test="request.creativeCondition and request.creativeCondition.configs and request.creativeCondition.configs.size() > 0">
+                    <foreach collection="request.creativeCondition.configs" item="config" open="AND cr.config IN (" separator=", " close=")">
+                        #{config}
+                    </foreach>
+                </when>
+                <otherwise>
+                    AND cr.config IN ('ON', 'OFF')
+                </otherwise>
+            </choose>
+            <if test="request.creativeCondition">
+                <if test="request.creativeCondition.ids and request.creativeCondition.ids.size() > 0">
+                     <foreach collection="request.creativeCondition.ids" item="id" open="AND cr.id IN (" separator=", " close=")">
+                         #{id}
+                     </foreach>
+                 </if>
+                 <if test="request.creativeCondition.name">
+                     AND cr.name LIKE CONCAT('%', #{request.creativeCondition.name}, '%')
+                 </if>
+                <if test="request.creativeCondition.formats and request.creativeCondition.formats.size() > 0">
+                     <foreach collection="request.creativeCondition.formats" item="format" open="AND cr.format IN (" separator=", " close=")">
+                         #{format}
+                     </foreach>
+                 </if>
+                 <if test="request.creativeCondition.configs and request.creativeCondition.configs.size() > 0">
+                     <foreach collection="request.creativeCondition.configs" item="config" open="AND cr.config IN (" separator=", " close=")">
+                         #{config}
+                     </foreach>
+                 </if>
+                 <if test="request.creativeCondition.statuses and request.creativeCondition.statuses.size() > 0">
+                     <foreach collection="request.creativeCondition.statuses" item="status" open="AND cr.status IN (" separator=", " close=")">
+                         #{status}
+                     </foreach>
+                 </if>
+                <if test="request.creativeCondition.reviewStatuses and request.creativeCondition.reviewStatuses.size() > 0">
+                     <foreach collection="request.creativeCondition.reviewStatuses" item="reviewStatus" open="AND cr.review_status IN (" separator=", " close=")">
+                         #{reviewStatus}
+                     </foreach>
+                 </if>
+                 <if test="request.creativeCondition.reportConditions and request.creativeCondition.reportConditions.size() > 0">
+                     <foreach collection="request.creativeCondition.reportConditions" item="condition">
+                         AND ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value}
+                     </foreach>
+                 </if>
             </if>
         </trim>
         <if test="pageable.sort.sorted">
@@ -280,88 +472,411 @@ since 1.0
 
     <select id="countSearch" resultType="long">
         SELECT COUNT(*)
-        FROM creative_info creative
-                 LEFT JOIN creative_files cf ON creative.id = cf.creative_info_id
-                 INNER JOIN adgroup_info a ON creative.adgroup_info_id = a.id
-                 INNER JOIN campaign_info c ON a.campaign_info_id = c.id AND c.adaccount_info_id = #{request.adAccountId}
-                 INNER JOIN ad_type_goal_info atgi ON c.ad_type_goal_info_id = atgi.id
-                 INNER JOIN ad_type_info ati ON atgi.ad_type_info_id = ati.id
-                 INNER JOIN ad_goal_info agi ON atgi.ad_goal_info_id = agi.id
-        <trim prefix="WHERE" prefixOverrides="AND | OR |">
-            <if test="request.campaignIds">
-                <foreach collection="request.campaignIds" item="id" open="AND c.id IN (" separator=", " close=")">
-                    #{id}
-                </foreach>
-            </if>
-            <if test="request.campaignName">
-                AND c.name LIKE CONCAT('%', #{request.campaignName}, '%')
-            </if>
-            <if test="request.campaignConfigs">
-                <foreach collection="request.campaignConfigs" item="config" open="AND c.config IN (" separator=", " close=")">
-                    #{config}
-                </foreach>
-            </if>
-            <if test="request.campaignStatuses">
-                <foreach collection="request.campaignStatuses" item="status" open="AND c.status IN (" separator=", " close=")">
-                    #{status}
-                </foreach>
-            </if>
-            <if test="request.adGroupIds">
-                <foreach collection="request.adGroupIds" item="id" open="AND a.id IN (" separator=", " close=")">
-                    #{id}
-                </foreach>
-            </if>
-            <if test="request.adGroupName">
-                AND a.name LIKE CONCAT('%', #{adGroupName}, '%')
-            </if>
-            <if test="request.adGroupConfigs">
-                <foreach collection="request.adGroupConfigs" item="config" open="AND a.config IN (" separator=", " close=")">
-                    #{config}
-                </foreach>
-            </if>
-            <if test="request.adGroupStatuses">
-                <foreach collection="request.adGroupStatuses" item="status" open="AND a.status IN (" separator=", " close=")">
-                    #{status}
-                </foreach>
-            </if>
-            <if test="request.creativeIds">
-                <foreach collection="request.creativeIds" item="id" open="AND creative.id IN (" separator=", " close=")">
-                    #{id}
-                </foreach>
-            </if>
-            <if test="request.creativeName">
-                AND creative.name LIKE CONCAT('%', #{request.creativeName}, '%')
-            </if>
-            <if test="request.creativeFormats">
-                <foreach collection="request.creativeFormats" item="creativeFormat" open="AND creative.format IN (" separator="," close=")">
-                    #{creativeFormat}
-                </foreach>
-            </if>
-            <if test="request.creativeConfigs">
-                <foreach collection="request.creativeConfigs" item="creativeConfig" open="AND creative.config IN (" separator="," close=")">
-                    #{creativeConfig}
-                </foreach>
-            </if>
-            <if test="request.creativeStatuses">
-                <foreach collection="request.creativeStatuses" item="creativeStatus" open="AND creative.creative_status IN (" separator="," close=")">
-                    #{creativeStatus}
-                </foreach>
-            </if>
-            <if test="request.creativeReviewStatuses">
-                <foreach collection="request.creativeReviewStatuses" item="creativeReviewStatus" open="AND creative.review_status IN (" separator="," close=")">
-                    #{creativeReviewStatus}
-                </foreach>
-            </if>
-            <if test="request.adTypeNames">
-                <foreach collection="request.adTypeNames" item="adTypeName" index="index" open="AND ati.name IN (" separator="," close=")">
-                    #{adTypeName}
-                </foreach>
-            </if>
-            <if test="request.adGoalNames">
-                <foreach collection="request.adGoalNames" item="adGoalName" index="index" open="AND agi.name IN (" separator="," close=")">
-                    #{adGoalName}
-                </foreach>
-            </if>
-        </trim>
+        FROM (SELECT cr.id,
+                       cr.name,
+                       cr.config,
+                       cr.system_config               AS systemConfig,
+                       cr.review_status               AS reviewStatus,
+                       cr.creative_status             AS status,
+                       c.id                           AS campaignId,
+                       cr.adgroup_info_id             AS adGroupId,
+                       a.name                         AS adGroupName,
+                       cf.id                          AS fileId,
+                       cf.file_name                   AS fileName,
+                       cf.file_type                   AS fileType,
+                       IFNULL(cost, 0)                AS cost,
+                       IFNULL(impression, 0)          AS impression,
+                       IFNULL(click, 0)               AS click,
+                       IFNULL(reach, 0)               AS reach,
+                       IFNULL(videoPlay3Seconds, 0)   AS videoPlay3Seconds,
+                       IFNULL(videoPlay5Seconds, 0)   AS videoPlay5Seconds,
+                       IFNULL(videoPlay10Seconds, 0)  AS videoPlay10Seconds,
+                       IFNULL(videoPlay15Seconds, 0)  AS videoPlay15Seconds,
+                       IFNULL(videoPlay30Seconds, 0)  AS videoPlay30Seconds,
+                       IFNULL(videoPlay60Seconds, 0)  AS videoPlay60Seconds,
+                       IFNULL(videoPlay25Percent, 0)  AS videoPlay25Percent,
+                       IFNULL(videoPlay50Percent, 0)  AS videoPlay50Percent,
+                       IFNULL(videoPlay75Percent, 0)  AS videoPlay75Percent,
+                       IFNULL(videoPlay100Percent, 0) AS videoPlay100Percent,
+                       IFNULL(signUpDay1, 0)          AS signUpDay1,
+                       IFNULL(signUpDay7, 0)          AS signUpDay7,
+                       IFNULL(purchaseDay1, 0)        AS purchaseDay1,
+                       IFNULL(purchaseDay7, 0)        AS purchaseDay7,
+                       IFNULL(viewCartDay1, 0)        AS viewCartDay1,
+                       IFNULL(viewCartDay7, 0)        AS viewCartDay7,
+                       IFNULL(ctr, 0)                 AS ctr,
+                       IFNULL(cpm, 0)                 AS cpm,
+                       IFNULL(cpc, 0)                 AS cpc,
+                       IFNULL(reachRate, 0)           AS reachRate,
+                       IFNULL(videoPlayRate, 0)       AS videoPlayRate
+                FROM creative_info cr
+                         LEFT JOIN creative_files cf ON cr.id = cf.creative_info_id
+                         LEFT JOIN (SELECT creative_info_id,
+                                           IFNULL(SUM(cost), 0)                                                                       AS cost,
+                                           IFNULL(SUM(impression), 0)                                                                 AS impression,
+                                           IFNULL(SUM(click), 0)                                                                      AS click,
+                                           IFNULL(SUM(reach), 0)                                                                      AS reach,
+                                           IFNULL(SUM(videoPlay3Seconds), 0)                                                          AS videoPlay3Seconds,
+                                           IFNULL(SUM(videoPlay5Seconds), 0)                                                          AS videoPlay5Seconds,
+                                           IFNULL(SUM(videoPlay10Seconds), 0)                                                         AS videoPlay10Seconds,
+                                           IFNULL(SUM(videoPlay15Seconds), 0)                                                         AS videoPlay15Seconds,
+                                           IFNULL(SUM(videoPlay30Seconds), 0)                                                         AS videoPlay30Seconds,
+                                           IFNULL(SUM(videoPlay60Seconds), 0)                                                         AS videoPlay60Seconds,
+                                           IFNULL(SUM(videoPlay25Percent), 0)                                                         AS videoPlay25Percent,
+                                           IFNULL(SUM(videoPlay50Percent), 0)                                                         AS videoPlay50Percent,
+                                           IFNULL(SUM(videoPlay75Percent), 0)                                                         AS videoPlay75Percent,
+                                           IFNULL(SUM(videoPlay100Percent), 0)                                                        AS videoPlay100Percent,
+                                           IFNULL(SUM(signUpDay1), 0)                                                                 AS signUpDay1,
+                                           IFNULL(SUM(signUpDay7), 0)                                                                 AS signUpDay7,
+                                           IFNULL(SUM(purchaseDay1), 0)                                                               AS purchaseDay1,
+                                           IFNULL(SUM(purchaseDay7), 0)                                                               AS purchaseDay7,
+                                           IFNULL(SUM(viewCartDay1), 0)                                                               AS viewCartDay1,
+                                           IFNULL(SUM(viewCartDay7), 0)                                                               AS viewCartDay7,
+                                           ROUND(CASE WHEN impression = 0 THEN 0 ELSE (click / impression) * 100 END, 2)              AS ctr,
+                                           ROUND(CASE WHEN impression = 0 THEN 0 ELSE (cost / impression) * 100 END, 2)               AS cpm,
+                                           ROUND(CASE WHEN click = 0 THEN 0 ELSE (cost / click) * 100 END, 2)                         AS cpc,
+                                           ROUND(CASE WHEN reach = 0 THEN 0 ELSE (cost / reach) * 100 END, 2)                         AS reachRate,
+                                           ROUND(CASE WHEN videoPlay3Seconds = 0 THEN 0 ELSE (cost / videoPlay3Seconds) * 100 END, 2) AS videoPlayRate
+                                    FROM (SELECT creative_info_id,
+                                                 IFNULL(SUM(cost), 0)            AS cost,
+                                                 IFNULL(SUM(impression), 0)      AS impression,
+                                                 IFNULL(SUM(click), 0)           AS click,
+                                                 IFNULL(SUM(reach), 0)           AS reach,
+                                                 IFNULL(SUM(video_play_3s), 0)   AS videoPlay3Seconds,
+                                                 IFNULL(SUM(video_play_5s), 0)   AS videoPlay5Seconds,
+                                                 IFNULL(SUM(video_play_10s), 0)  AS videoPlay10Seconds,
+                                                 IFNULL(SUM(video_play_15s), 0)  AS videoPlay15Seconds,
+                                                 IFNULL(SUM(video_play_30s), 0)  AS videoPlay30Seconds,
+                                                 IFNULL(SUM(video_play_60s), 0)  AS videoPlay60Seconds,
+                                                 IFNULL(SUM(video_play_25p), 0)  AS videoPlay25Percent,
+                                                 IFNULL(SUM(video_play_50p), 0)  AS videoPlay50Percent,
+                                                 IFNULL(SUM(video_play_75p), 0)  AS videoPlay75Percent,
+                                                 IFNULL(SUM(video_play_100p), 0) AS videoPlay100Percent,
+                                                 0                               AS signUpDay1,
+                                                 0                               AS signUpDay7,
+                                                 0                               AS purchaseDay1,
+                                                 0                               AS purchaseDay7,
+                                                 0                               AS viewCartDay1,
+                                                 0                               AS viewCartDay7
+                                          FROM report_daily rd
+                                          WHERE rd.adaccount_info_id = #{request.adAccountId}
+                                            AND rd.report_date BETWEEN #{request.reportStartDate} AND #{request.reportEndDate}
+                                          GROUP BY rd.creative_info_id
+                                          UNION
+                                          SELECT creative_info_id,
+                                                 0                            AS cost,
+                                                 0                            AS impression,
+                                                 0                            AS click,
+                                                 0                            AS reach,
+                                                 0                            AS videoPlay3Seconds,
+                                                 0                            AS videoPlay5Seconds,
+                                                 0                            AS videoPlay10Seconds,
+                                                 0                            AS videoPlay15Seconds,
+                                                 0                            AS videoPlay30Seconds,
+                                                 0                            AS videoPlay60Seconds,
+                                                 0                            AS videoPlay25Percent,
+                                                 0                            AS videoPlay50Percent,
+                                                 0                            AS videoPlay75Percent,
+                                                 0                            AS videoPlay100Percent,
+                                                 IFNULL(SUM(signup_1d), 0)    AS signUpDay1,
+                                                 IFNULL(SUM(signup_7d), 0)    AS signUpDay7,
+                                                 IFNULL(SUM(purchase_1d), 0)  AS purchaseDay1,
+                                                 IFNULL(SUM(purchase_7d), 0)  AS purchaseDay7,
+                                                 IFNULL(SUM(view_cart_1d), 0) AS viewCartDay1,
+                                                 IFNULL(SUM(view_cart_7d), 0) AS viewCartDay7
+                                          FROM report_conversion_daily rcd
+                                          WHERE rcd.adaccount_info_id = #{request.adAccountId}
+                                            AND rcd.report_date BETWEEN #{request.reportStartDate} AND #{request.reportEndDate}
+                                          GROUP BY rcd.creative_info_id) inner_report
+                                    GROUP BY creative_info_id) creativeReport ON creativeReport.creative_info_id = cr.id
+                         INNER JOIN (SELECT a.id AS adGroupId, c.adaccount_info_id, at.name AS adTypeName, ag.name AS adGoalName
+                                     FROM ad_type_goal_info atg
+                                              INNER JOIN ad_type_info at ON atg.ad_type_info_id = at.id
+                                              INNER JOIN ad_goal_info ag ON atg.ad_goal_info_id = ag.id
+                                              INNER JOIN campaign_info c ON atg.id = c.ad_type_goal_info_id
+                                              INNER JOIN adgroup_info a ON a.campaign_info_id = c.id
+                                     GROUP BY adGroupId) tg ON tg.adGroupId = cr.adgroup_info_id
+                         INNER JOIN (SELECT a.id, a.name, a.campaign_info_id
+                                     FROM adgroup_info a
+                                              INNER JOIN adgroup_schedule s ON a.id = s.adgroup_info_id
+                                              LEFT JOIN (SELECT adgroup_info_id,
+                                                                IFNULL(SUM(cost), 0)                                                          AS cost,
+                                                                IFNULL(SUM(impression), 0)                                                    AS impression,
+                                                                IFNULL(SUM(click), 0)                                                         AS click,
+                                                                IFNULL(SUM(reach), 0)                                                         AS reach,
+                                                                IFNULL(SUM(videoPlay3Seconds), 0)                                             AS videoPlay3Seconds,
+                                                                IFNULL(SUM(videoPlay5Seconds), 0)                                             AS videoPlay5Seconds,
+                                                                IFNULL(SUM(videoPlay10Seconds), 0)                                            AS videoPlay10Seconds,
+                                                                IFNULL(SUM(videoPlay15Seconds), 0)                                            AS videoPlay15Seconds,
+                                                                IFNULL(SUM(videoPlay30Seconds), 0)                                            AS videoPlay30Seconds,
+                                                                IFNULL(SUM(videoPlay60Seconds), 0)                                            AS videoPlay60Seconds,
+                                                                IFNULL(SUM(videoPlay25Percent), 0)                                            AS videoPlay25Percent,
+                                                                IFNULL(SUM(videoPlay50Percent), 0)                                            AS videoPlay50Percent,
+                                                                IFNULL(SUM(videoPlay75Percent), 0)                                            AS videoPlay75Percent,
+                                                                IFNULL(SUM(videoPlay100Percent), 0)                                           AS videoPlay100Percent,
+                                                                IFNULL(SUM(signUpDay1), 0)                                                    AS signUpDay1,
+                                                                IFNULL(SUM(signUpDay7), 0)                                                    AS signUpDay7,
+                                                                IFNULL(SUM(purchaseDay1), 0)                                                  AS purchaseDay1,
+                                                                IFNULL(SUM(purchaseDay7), 0)                                                  AS purchaseDay7,
+                                                                IFNULL(SUM(viewCartDay1), 0)                                                  AS viewCartDay1,
+                                                                IFNULL(SUM(viewCartDay7), 0)                                                  AS viewCartDay7,
+                                                                ROUND(CASE WHEN impression = 0 THEN 0 ELSE (click / impression) * 100 END, 2) AS ctr,
+                                                                ROUND(CASE WHEN impression = 0 THEN 0 ELSE (cost / impression) * 100 END, 2)  AS cpm,
+                                                                ROUND(CASE WHEN click = 0 THEN 0 ELSE (cost / click) * 100 END, 2)            AS cpc,
+                                                                ROUND(CASE WHEN reach = 0 THEN 0 ELSE (cost / reach) * 100 END, 2)            AS reachRate,
+                                                                ROUND(CASE WHEN videoPlay3Seconds = 0 THEN 0 ELSE (cost / videoPlay3Seconds) * 100 END, 2) AS videoPlayRate
+                                                         FROM (SELECT adgroup_info_id,
+                                                                      IFNULL(SUM(cost), 0)            AS cost,
+                                                                      IFNULL(SUM(impression), 0)      AS impression,
+                                                                      IFNULL(SUM(click), 0)           AS click,
+                                                                      IFNULL(SUM(reach), 0)           AS reach,
+                                                                      IFNULL(SUM(video_play_3s), 0)   AS videoPlay3Seconds,
+                                                                      IFNULL(SUM(video_play_5s), 0)   AS videoPlay5Seconds,
+                                                                      IFNULL(SUM(video_play_10s), 0)  AS videoPlay10Seconds,
+                                                                      IFNULL(SUM(video_play_15s), 0)  AS videoPlay15Seconds,
+                                                                      IFNULL(SUM(video_play_30s), 0)  AS videoPlay30Seconds,
+                                                                      IFNULL(SUM(video_play_60s), 0)  AS videoPlay60Seconds,
+                                                                      IFNULL(SUM(video_play_25p), 0)  AS videoPlay25Percent,
+                                                                      IFNULL(SUM(video_play_50p), 0)  AS videoPlay50Percent,
+                                                                      IFNULL(SUM(video_play_75p), 0)  AS videoPlay75Percent,
+                                                                      IFNULL(SUM(video_play_100p), 0) AS videoPlay100Percent,
+                                                                      0                               AS signUpDay1,
+                                                                      0                               AS signUpDay7,
+                                                                      0                               AS purchaseDay1,
+                                                                      0                               AS purchaseDay7,
+                                                                      0                               AS viewCartDay1,
+                                                                      0                               AS viewCartDay7
+                                                               FROM report_adgroup_daily rad
+                                                               WHERE rad.adaccount_info_id = #{request.adAccountId}
+                                                                 AND rad.report_date BETWEEN #{request.reportStartDate} AND #{request.reportEndDate}
+                                                               GROUP BY rad.adgroup_info_id
+                                                               UNION
+                                                               SELECT adgroup_info_id,
+                                                                      0                            AS cost,
+                                                                      0                            AS impression,
+                                                                      0                            AS click,
+                                                                      0                            AS reach,
+                                                                      0                            AS videoPlay3Seconds,
+                                                                      0                            AS videoPlay5Seconds,
+                                                                      0                            AS videoPlay10Seconds,
+                                                                      0                            AS videoPlay15Seconds,
+                                                                      0                            AS videoPlay30Seconds,
+                                                                      0                            AS videoPlay60Seconds,
+                                                                      0                            AS videoPlay25Percent,
+                                                                      0                            AS videoPlay50Percent,
+                                                                      0                            AS videoPlay75Percent,
+                                                                      0                            AS videoPlay100Percent,
+                                                                      IFNULL(SUM(signup_1d), 0)    AS signUpDay1,
+                                                                      IFNULL(SUM(signup_7d), 0)    AS signUpDay7,
+                                                                      IFNULL(SUM(purchase_1d), 0)  AS purchaseDay1,
+                                                                      IFNULL(SUM(purchase_7d), 0)  AS purchaseDay7,
+                                                                      IFNULL(SUM(view_cart_1d), 0) AS viewCartDay1,
+                                                                      IFNULL(SUM(view_cart_7d), 0) AS viewCartDay7
+                                                               FROM report_adgroup_conversion_daily rac
+                                                               WHERE rac.adaccount_info_id = #{request.adAccountId}
+                                                                 AND rac.report_date BETWEEN #{request.reportStartDate} AND #{request.reportEndDate}
+                                                               GROUP BY rac.adgroup_info_id) inner_report
+                                                         GROUP BY adgroup_info_id) adGroupReport ON adGroupReport.adgroup_info_id = a.id
+                                              INNER JOIN campaign_info c ON c.id = a.campaign_info_id
+                                    <trim prefix="WHERE" prefixOverrides="AND | OR ">
+                                        c.adaccount_info_id = #{request.adAccountId}
+                                         <if test="request.adGroupCondition">
+                                             <if test="request.adGroupCondition.ids and request.adGroupCondition.ids.size() > 0">
+                                                  <foreach collection="request.adGroupCondition.ids" item="id" open="AND a.id IN (" separator=", " close=")">
+                                                      #{id}
+                                                  </foreach>
+                                              </if>
+                                              <if test="request.adGroupCondition.name">
+                                                  AND a.name LIKE CONCAT('%', #{request.adGroupCondition.name}, '%')
+                                              </if>
+                                              <if test="request.adGroupCondition.configs and request.adGroupCondition.configs.size() > 0">
+                                                  <foreach collection="request.adGroupCondition.configs" item="config" open="AND a.config IN (" separator=", " close=")">
+                                                      #{config}
+                                                  </foreach>
+                                              </if>
+                                              <if test="request.adGroupCondition.statuses and request.adGroupCondition.statuses.size() > 0">
+                                                  <foreach collection="request.adGroupCondition.statuses" item="status" open="AND a.status IN (" separator=", " close=")">
+                                                      #{status}
+                                                  </foreach>
+                                              </if>
+                                              <if test="request.adGroupCondition.reportConditions and request.adGroupCondition.reportConditions.size() > 0">
+                                                  <foreach collection="request.adGroupCondition.reportConditions" item="condition">
+                                                      AND ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value}
+                                                  </foreach>
+                                              </if>
+                                         </if>
+                                    </trim>) a ON a.id = cr.adgroup_info_id
+                         INNER JOIN (SELECT c.id
+                                     FROM campaign_info c
+                                              LEFT JOIN (SELECT campaign_info_id,
+                                                                IFNULL(SUM(cost), 0)                                                          AS cost,
+                                                                IFNULL(SUM(impression), 0)                                                    AS impression,
+                                                                IFNULL(SUM(click), 0)                                                         AS click,
+                                                                IFNULL(SUM(reach), 0)                                                         AS reach,
+                                                                IFNULL(SUM(videoPlay3Seconds), 0)                                             AS videoPlay3Seconds,
+                                                                IFNULL(SUM(videoPlay5Seconds), 0)                                             AS videoPlay5Seconds,
+                                                                IFNULL(SUM(videoPlay10Seconds), 0)                                            AS videoPlay10Seconds,
+                                                                IFNULL(SUM(videoPlay15Seconds), 0)                                            AS videoPlay15Seconds,
+                                                                IFNULL(SUM(videoPlay30Seconds), 0)                                            AS videoPlay30Seconds,
+                                                                IFNULL(SUM(videoPlay60Seconds), 0)                                            AS videoPlay60Seconds,
+                                                                IFNULL(SUM(videoPlay25Percent), 0)                                            AS videoPlay25Percent,
+                                                                IFNULL(SUM(videoPlay50Percent), 0)                                            AS videoPlay50Percent,
+                                                                IFNULL(SUM(videoPlay75Percent), 0)                                            AS videoPlay75Percent,
+                                                                IFNULL(SUM(videoPlay100Percent), 0)                                           AS videoPlay100Percent,
+                                                                IFNULL(SUM(signUpDay1), 0)                                                    AS signUpDay1,
+                                                                IFNULL(SUM(signUpDay7), 0)                                                    AS signUpDay7,
+                                                                IFNULL(SUM(purchaseDay1), 0)                                                  AS purchaseDay1,
+                                                                IFNULL(SUM(purchaseDay7), 0)                                                  AS purchaseDay7,
+                                                                IFNULL(SUM(viewCartDay1), 0)                                                  AS viewCartDay1,
+                                                                IFNULL(SUM(viewCartDay7), 0)                                                  AS viewCartDay7,
+                                                                ROUND(CASE WHEN impression = 0 THEN 0 ELSE (click / impression) * 100 END, 2) AS ctr,
+                                                                ROUND(CASE WHEN impression = 0 THEN 0 ELSE (cost / impression) * 100 END, 2)  AS cpm,
+                                                                ROUND(CASE WHEN click = 0 THEN 0 ELSE (cost / click) * 100 END, 2)            AS cpc,
+                                                                ROUND(CASE WHEN reach = 0 THEN 0 ELSE (cost / reach) * 100 END, 2)            AS reachRate,
+                                                                ROUND(CASE WHEN videoPlay3Seconds = 0 THEN 0 ELSE (cost / videoPlay3Seconds) * 100 END,
+                                                                      2)                                                                      AS videoPlayRate
+                                                         FROM (SELECT campaign_info_id,
+                                                                      IFNULL(SUM(cost), 0)            AS cost,
+                                                                      IFNULL(SUM(impression), 0)      AS impression,
+                                                                      IFNULL(SUM(click), 0)           AS click,
+                                                                      IFNULL(SUM(reach), 0)           AS reach,
+                                                                      IFNULL(SUM(video_play_3s), 0)   AS videoPlay3Seconds,
+                                                                      IFNULL(SUM(video_play_5s), 0)   AS videoPlay5Seconds,
+                                                                      IFNULL(SUM(video_play_10s), 0)  AS videoPlay10Seconds,
+                                                                      IFNULL(SUM(video_play_15s), 0)  AS videoPlay15Seconds,
+                                                                      IFNULL(SUM(video_play_30s), 0)  AS videoPlay30Seconds,
+                                                                      IFNULL(SUM(video_play_60s), 0)  AS videoPlay60Seconds,
+                                                                      IFNULL(SUM(video_play_25p), 0)  AS videoPlay25Percent,
+                                                                      IFNULL(SUM(video_play_50p), 0)  AS videoPlay50Percent,
+                                                                      IFNULL(SUM(video_play_75p), 0)  AS videoPlay75Percent,
+                                                                      IFNULL(SUM(video_play_100p), 0) AS videoPlay100Percent,
+                                                                      0                               AS signUpDay1,
+                                                                      0                               AS signUpDay7,
+                                                                      0                               AS purchaseDay1,
+                                                                      0                               AS purchaseDay7,
+                                                                      0                               AS viewCartDay1,
+                                                                      0                               AS viewCartDay7
+                                                               FROM report_adgroup_daily rad
+                                                               WHERE rad.adaccount_info_id = 1
+                                                                 AND rad.report_date BETWEEN 20221128 AND 20221129
+                                                               GROUP BY rad.campaign_info_id
+                                                               UNION
+                                                               SELECT campaign_info_id,
+                                                                      0                            AS cost,
+                                                                      0                            AS impression,
+                                                                      0                            AS click,
+                                                                      0                            AS reach,
+                                                                      0                            AS videoPlay3Seconds,
+                                                                      0                            AS videoPlay5Seconds,
+                                                                      0                            AS videoPlay10Seconds,
+                                                                      0                            AS videoPlay15Seconds,
+                                                                      0                            AS videoPlay30Seconds,
+                                                                      0                            AS videoPlay60Seconds,
+                                                                      0                            AS videoPlay25Percent,
+                                                                      0                            AS videoPlay50Percent,
+                                                                      0                            AS videoPlay75Percent,
+                                                                      0                            AS videoPlay100Percent,
+                                                                      IFNULL(SUM(signup_1d), 0)    AS signUpDay1,
+                                                                      IFNULL(SUM(signup_7d), 0)    AS signUpDay7,
+                                                                      IFNULL(SUM(purchase_1d), 0)  AS purchaseDay1,
+                                                                      IFNULL(SUM(purchase_7d), 0)  AS purchaseDay7,
+                                                                      IFNULL(SUM(view_cart_1d), 0) AS viewCartDay1,
+                                                                      IFNULL(SUM(view_cart_7d), 0) AS viewCartDay7
+                                                               FROM report_adgroup_conversion_daily rac
+                                                               WHERE rac.adaccount_info_id = 1
+                                                                 AND rac.report_date BETWEEN 20221128 AND 20221129
+                                                               GROUP BY rac.campaign_info_id) inner_report
+                                                         GROUP BY campaign_info_id) campaignReport
+                                                        ON campaignReport.campaign_info_id = c.id
+                                    <trim prefix="WHERE" prefixOverrides="AND | OR ">
+                                        c.adaccount_info_id = #{request.adAccountId}
+                                        <choose>
+                                            <when test="request.campaignCondition and request.campaignCondition.configs and request.campaignCondition.configs.size() > 0">
+                                                <foreach collection="request.campaignCondition.configs" item="config" open="AND c.config IN (" separator=", " close=")">
+                                                    #{config}
+                                                </foreach>
+                                            </when>
+                                            <otherwise>
+                                                AND c.config IN ('ON', 'OFF')
+                                            </otherwise>
+                                        </choose>
+                                        <if test="request.campaignCondition">
+                                            <if test="request.campaignCondition.ids and request.campaignCondition.ids.size() > 0">
+                                                <foreach collection="request.campaignCondition.ids" item="id" open="AND c.id IN (" separator=", " close=")">
+                                                    #{id}
+                                                </foreach>
+                                            </if>
+                                            <if test="request.campaignCondition.name">
+                                                AND c.name LIKE CONCAT('%', #{request.campaignCondition.name}, '%')
+                                            </if>
+                                            <if test="request.campaignCondition.statuses and request.campaignCondition.statuses.size() > 0">
+                                                <foreach collection="request.campaignCondition.statuses" item="status" open="AND c.status IN (" separator=", " close=")">
+                                                    #{status}
+                                                </foreach>
+                                            </if>
+                                            <if test="request.campaignCondition.reportConditions and request.campaignCondition.reportConditions.size() > 0">
+                                                <foreach collection="request.campaignCondition.reportConditions" item="condition">
+                                                    AND ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value}
+                                                </foreach>
+                                            </if>
+                                        </if>
+                                    </trim>) c ON c.id = a.campaign_info_id
+                <trim prefix="WHERE" prefixOverrides="AND | OR">
+                    <if test="request.adTypeNames and request.adTypeNames.size() > 0">
+                        <foreach collection="request.adTypeNames" item="name" open="AND tg.adTypeName IN (" separator=", " close=")">
+                            #{name}
+                        </foreach>
+                    </if>
+                    <if test="request.adGoalNames and request.adGoalNames.size() > 0">
+                        <foreach collection="request.adGoalNames" item="name" open="AND tg.adGoalName IN (" separator=", " close=")">
+                            #{name}
+                        </foreach>
+                    </if>
+                    <choose>
+                        <when test="request.creativeCondition and request.creativeCondition.configs and request.creativeCondition.configs.size() > 0">
+                            <foreach collection="request.creativeCondition.configs" item="config" open="AND cr.config IN (" separator=", " close=")">
+                                #{config}
+                            </foreach>
+                        </when>
+                        <otherwise>
+                            AND cr.config IN ('ON', 'OFF')
+                        </otherwise>
+                    </choose>
+                    <if test="request.creativeCondition">
+                        <if test="request.creativeCondition.ids and request.creativeCondition.ids.size() > 0">
+                             <foreach collection="request.creativeCondition.ids" item="id" open="AND cr.id IN (" separator=", " close=")">
+                                 #{id}
+                             </foreach>
+                         </if>
+                         <if test="request.creativeCondition.name">
+                             AND cr.name LIKE CONCAT('%', #{request.creativeCondition.name}, '%')
+                         </if>
+                        <if test="request.creativeCondition.formats and request.creativeCondition.formats.size() > 0">
+                             <foreach collection="request.creativeCondition.formats" item="format" open="AND cr.format IN (" separator=", " close=")">
+                                 #{format}
+                             </foreach>
+                         </if>
+                         <if test="request.creativeCondition.configs and request.creativeCondition.configs.size() > 0">
+                             <foreach collection="request.creativeCondition.configs" item="config" open="AND cr.config IN (" separator=", " close=")">
+                                 #{config}
+                             </foreach>
+                         </if>
+                         <if test="request.creativeCondition.statuses and request.creativeCondition.statuses.size() > 0">
+                             <foreach collection="request.creativeCondition.statuses" item="status" open="AND cr.status IN (" separator=", " close=")">
+                                 #{status}
+                             </foreach>
+                         </if>
+                        <if test="request.creativeCondition.reviewStatuses and request.creativeCondition.reviewStatuses.size() > 0">
+                             <foreach collection="request.creativeCondition.reviewStatuses" item="reviewStatus" open="AND cr.review_status IN (" separator=", " close=")">
+                                 #{reviewStatus}
+                             </foreach>
+                         </if>
+                         <if test="request.creativeCondition.reportConditions and request.creativeCondition.reportConditions.size() > 0">
+                             <foreach collection="request.creativeCondition.reportConditions" item="condition">
+                                 AND ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value}
+                             </foreach>
+                         </if>
+                    </if>
+                </trim>) a
     </select>
 </mapper>
