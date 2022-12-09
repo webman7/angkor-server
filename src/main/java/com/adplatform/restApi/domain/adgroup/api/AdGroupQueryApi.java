@@ -33,9 +33,9 @@ public class AdGroupQueryApi {
 
     @AuthorizedAdAccount
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/search")
+    @PostMapping("/search")
     public PageDto<AdGroupDto.Response.AdvertiserSearch> search(
-            @Valid AdvertiserSearchRequest request,
+            @RequestBody @Valid AdvertiserSearchRequest request,
             @PageableDefault Pageable pageable) {
         return PageDto.create(new PageImpl<>(
                 this.adGroupQueryMapper.search(request, pageable),

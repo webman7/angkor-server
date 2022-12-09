@@ -5,6 +5,7 @@ import com.adplatform.restApi.domain.statistics.dto.ReportCondition;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -18,5 +19,6 @@ public class AdvertiserSearchCampaignCondition {
     private String name;
     private List<Campaign.Config> configs;
     private List<Campaign.Status> statuses;
+    @Valid
     private List<ReportCondition> reportConditions;
 }

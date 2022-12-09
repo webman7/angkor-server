@@ -287,8 +287,8 @@ since 1.0
                                      </foreach>
                                  </if>
                                  <if test="request.adGroupCondition.reportConditions and request.adGroupCondition.reportConditions.size() > 0">
-                                     <foreach collection="request.adGroupCondition.reportConditions" item="condition" open="AND">
-                                         ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value}
+                                     <foreach collection="request.adGroupCondition.reportConditions" item="condition">
+                                         AND ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value}
                                      </foreach>
                                  </if>
                              </trim>
@@ -410,8 +410,8 @@ since 1.0
                                      </foreach>
                                  </if>
                                  <if test="request.creativeCondition.reportConditions and request.creativeCondition.reportConditions.size() > 0">
-                                     <foreach collection="request.creativeCondition.reportConditions" item="condition" open="AND">
-                                         ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value}
+                                     <foreach collection="request.creativeCondition.reportConditions" item="condition">
+                                         AND ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value}
                                      </foreach>
                                  </if>
                              </trim>
@@ -454,8 +454,8 @@ since 1.0
                     </foreach>
                 </if>
                 <if test="request.campaignCondition.reportConditions and request.campaignCondition.reportConditions.size() > 0">
-                    <foreach collection="request.campaignCondition.reportConditions" item="condition" open="AND">
-                        ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value}
+                    <foreach collection="request.campaignCondition.reportConditions" item="condition">
+                        AND ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value}
                     </foreach>
                 </if>
             </if>
@@ -705,8 +705,8 @@ since 1.0
                                              </foreach>
                                          </if>
                                          <if test="request.adGroupCondition.reportConditions and request.adGroupCondition.reportConditions.size() > 0">
-                                             <foreach collection="request.adGroupCondition.reportConditions" item="condition" open="AND">
-                                                 ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value}
+                                             <foreach collection="request.adGroupCondition.reportConditions" item="condition">
+                                                 AND ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value}
                                              </foreach>
                                          </if>
                                      </trim>
@@ -828,8 +828,8 @@ since 1.0
                                              </foreach>
                                          </if>
                                          <if test="request.creativeCondition.reportConditions and request.creativeCondition.reportConditions.size() > 0">
-                                             <foreach collection="request.creativeCondition.reportConditions" item="condition" open="AND">
-                                                 ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value}
+                                             <foreach collection="request.creativeCondition.reportConditions" item="condition">
+                                                 AND ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value}
                                              </foreach>
                                          </if>
                                      </trim>
@@ -872,8 +872,8 @@ since 1.0
                             </foreach>
                         </if>
                         <if test="request.campaignCondition.reportConditions and request.campaignCondition.reportConditions.size() > 0">
-                            <foreach collection="request.campaignCondition.reportConditions" item="condition" open="AND">
-                                ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value}
+                            <foreach collection="request.campaignCondition.reportConditions" item="condition">
+                                AND ${condition.indicator} ${condition.conditionFunction.getValue()} ${condition.value}
                             </foreach>
                         </if>
                     </if>

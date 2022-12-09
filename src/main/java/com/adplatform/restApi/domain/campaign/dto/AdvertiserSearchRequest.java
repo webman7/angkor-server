@@ -6,6 +6,7 @@ import com.adplatform.restApi.domain.creative.dto.AdvertiserSearchCreativeCondit
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -24,7 +25,10 @@ public class AdvertiserSearchRequest implements AdAccountIdGetter {
     private Integer reportEndDate;
     private List<String> adTypeNames;
     private List<String> adGoalNames;
+    @Valid
     private AdvertiserSearchCampaignCondition campaignCondition;
+    @Valid
     private AdvertiserSearchAdGroupCondition adGroupCondition;
+    @Valid
     private AdvertiserSearchCreativeCondition creativeCondition;
 }
