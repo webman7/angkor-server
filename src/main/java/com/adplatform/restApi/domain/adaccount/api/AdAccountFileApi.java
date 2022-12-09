@@ -5,8 +5,10 @@ import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto;
 import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.global.config.security.util.SecurityUtils;
+import com.adplatform.restApi.global.util.ExcelUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -92,11 +94,19 @@ public class AdAccountFileApi {
         ByteArrayOutputStream baos;
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
             XSSFSheet sheet = workbook.createSheet("adaccount");
+            XSSFCell cell = null;
+            XSSFRow row = null;
+
+            //테이블 헤더 스타일 적용
+            CellStyle headerStyle = ExcelUtils.CellStyleSetting(workbook, "header");
+            //테이블 데이터 스타일 적용
+            CellStyle dataStyle = ExcelUtils.CellStyleSetting(workbook, "data");
 
             XSSFRow headerRow = sheet.createRow(0);
             for (int i = 0; i < HEADER_MY_ITEMS.size(); i++) {
-                XSSFCell cell = headerRow.createCell(i);
+                cell = headerRow.createCell(i);
                 cell.setCellValue(HEADER_MY_ITEMS.get(i));
+                cell.setCellStyle(headerStyle);
             }
 
             List<AdAccountDto.Response.ForAgencySearch> content = this.adAccountRepository.searchForAgency(
@@ -104,38 +114,54 @@ public class AdAccountFileApi {
 
             int rowNum = 1;
             for (AdAccountDto.Response.ForAgencySearch data : content) {
-                XSSFRow row = sheet.createRow(rowNum++);
+                row = sheet.createRow(rowNum++);
 
                 int columnNum = 0;
-                XSSFCell cell = row.createCell(columnNum++);
+                cell = row.createCell(columnNum++);
                 cell.setCellValue(data.getId());
+                cell.setCellStyle(dataStyle);
 
-                XSSFCell cell1 = row.createCell(columnNum++);
-                cell1.setCellValue(data.getName());
+                cell = row.createCell(columnNum++);
+                cell.setCellValue(data.getName());
+                cell.setCellStyle(dataStyle);
 
-                XSSFCell cell2 = row.createCell(columnNum++);
-                cell2.setCellValue(this.getStatus(data.getConfig(), data.isAdminStop(), data.isOutOfBalance()));
+                cell = row.createCell(columnNum++);
+                cell.setCellValue(this.getStatus(data.getConfig(), data.isAdminStop(), data.isOutOfBalance()));
+                cell.setCellStyle(dataStyle);
 
-                XSSFCell cell3 = row.createCell(columnNum++);
-                cell3.setCellValue(this.getCompanyType(data.getCompanyType()));
+                cell = row.createCell(columnNum++);
+                cell.setCellValue(this.getCompanyType(data.getCompanyType()));
+                cell.setCellStyle(dataStyle);
 
-                XSSFCell cell4 = row.createCell(columnNum++);
-                cell4.setCellValue(data.isPreDeferredPayment() ? "후불" : "선불");
+                cell = row.createCell(columnNum++);
+                cell.setCellValue(data.isPreDeferredPayment() ? "후불" : "선불");
+                cell.setCellStyle(dataStyle);
 
-                XSSFCell cell5 = row.createCell(columnNum++);
-                cell5.setCellValue(data.getCreditLimit());
+                cell = row.createCell(columnNum++);
+                cell.setCellValue(data.getCreditLimit());
+                cell.setCellStyle(dataStyle);
 
-                XSSFCell cell6 = row.createCell(columnNum++);
-                cell6.setCellValue(data.getWalletSpend().getCash());
+                cell = row.createCell(columnNum++);
+                cell.setCellValue(data.getWalletSpend().getCash());
+                cell.setCellStyle(dataStyle);
 
-                XSSFCell cell7 = row.createCell(columnNum++);
-                cell7.setCellValue(data.getWalletSpend().getTodaySpend());
+                cell = row.createCell(columnNum++);
+                cell.setCellValue(data.getWalletSpend().getTodaySpend());
+                cell.setCellStyle(dataStyle);
 
-                XSSFCell cell8 = row.createCell(columnNum++);
-                cell8.setCellValue(data.getWalletSpend().getYesterdaySpend());
+                cell = row.createCell(columnNum++);
+                cell.setCellValue(data.getWalletSpend().getYesterdaySpend());
+                cell.setCellStyle(dataStyle);
 
-                XSSFCell cell9 = row.createCell(columnNum);
-                cell9.setCellValue(data.getWalletSpend().getMonthSpend());
+                cell = row.createCell(columnNum);
+                cell.setCellValue(data.getWalletSpend().getMonthSpend());
+                cell.setCellStyle(dataStyle);
+            }
+
+            //셀 넓이 자동 조정
+            for (int i = 0; i < HEADER_MY_ITEMS.size(); i++) {
+                sheet.autoSizeColumn(i);
+                sheet.setColumnWidth(i, sheet.getColumnWidth(i));
             }
 
             baos = new ByteArrayOutputStream();
@@ -186,11 +212,19 @@ public class AdAccountFileApi {
         ByteArrayOutputStream baos;
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
             XSSFSheet sheet = workbook.createSheet("adaccount");
+            XSSFCell cell = null;
+            XSSFRow row = null;
+
+            //테이블 헤더 스타일 적용
+            CellStyle headerStyle = ExcelUtils.CellStyleSetting(workbook, "header");
+            //테이블 데이터 스타일 적용
+            CellStyle dataStyle = ExcelUtils.CellStyleSetting(workbook, "data");
 
             XSSFRow headerRow = sheet.createRow(0);
             for (int i = 0; i < HEADER_PAYBALANCE_ITEMS.size(); i++) {
-                XSSFCell cell = headerRow.createCell(i);
+                cell = headerRow.createCell(i);
                 cell.setCellValue(HEADER_PAYBALANCE_ITEMS.get(i));
+                cell.setCellStyle(headerStyle);
             }
 
             List<AdAccountDto.Response.ForAgencySearch> content = this.adAccountRepository.searchForAgency(
@@ -198,26 +232,38 @@ public class AdAccountFileApi {
 
             int rowNum = 1;
             for (AdAccountDto.Response.ForAgencySearch data : content) {
-                XSSFRow row = sheet.createRow(rowNum++);
+                row = sheet.createRow(rowNum++);
 
                 int columnNum = 0;
-                XSSFCell cell = row.createCell(columnNum++);
+                cell = row.createCell(columnNum++);
                 cell.setCellValue(data.getId());
+                cell.setCellStyle(dataStyle);
 
-                XSSFCell cell1 = row.createCell(columnNum++);
-                cell1.setCellValue(data.getName());
+                cell = row.createCell(columnNum++);
+                cell.setCellValue(data.getName());
+                cell.setCellStyle(dataStyle);
 
-                XSSFCell cell2 = row.createCell(columnNum++);
-                cell2.setCellValue(this.getStatus(data.getConfig(), data.isAdminStop(), data.isOutOfBalance()));
+                cell = row.createCell(columnNum++);
+                cell.setCellValue(this.getStatus(data.getConfig(), data.isAdminStop(), data.isOutOfBalance()));
+                cell.setCellStyle(dataStyle);
 
-                XSSFCell cell3 = row.createCell(columnNum++);
-                cell3.setCellValue(data.getMarketerName());
+                cell = row.createCell(columnNum++);
+                cell.setCellValue(data.getMarketerName());
+                cell.setCellStyle(dataStyle);
 
-                XSSFCell cell4 = row.createCell(columnNum++);
-                cell4.setCellValue(data.getCreditLimit());
+                cell = row.createCell(columnNum++);
+                cell.setCellValue(data.getCreditLimit());
+                cell.setCellStyle(dataStyle);
 
-                XSSFCell cell5 = row.createCell(columnNum);
-                cell5.setCellValue(data.getWalletSpend().getCash());
+                cell = row.createCell(columnNum);
+                cell.setCellValue(data.getWalletSpend().getCash());
+                cell.setCellStyle(dataStyle);
+            }
+
+            //셀 넓이 자동 조정
+            for (int i = 0; i < HEADER_PAYBALANCE_ITEMS.size(); i++) {
+                sheet.autoSizeColumn(i);
+                sheet.setColumnWidth(i, sheet.getColumnWidth(i));
             }
 
             baos = new ByteArrayOutputStream();
