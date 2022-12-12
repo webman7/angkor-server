@@ -83,7 +83,7 @@ since 1.0
                  </foreach>
              </if>
              <if test="request.creativeCondition.statuses and request.creativeCondition.statuses.size() > 0">
-                 <foreach collection="request.creativeCondition.statuses" item="status" open="AND cr.status IN (" separator=", " close=")">
+                 <foreach collection="request.creativeCondition.statuses" item="status" open="AND cr.creative_status IN (" separator=", " close=")">
                      #{status}
                  </foreach>
              </if>
