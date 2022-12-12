@@ -167,14 +167,14 @@ since 1.0
                                                                   <include refid="ReportCommonMapper.reportColumns"/>
                                                            FROM report_daily rd
                                                            WHERE rd.adaccount_info_id = #{request.adAccountId}
-                                                             AND rd.report_date #{request.reportStartDate} AND #{request.reportEndDate}
+                                                             AND rd.report_date BETWEEN #{request.reportStartDate} AND #{request.reportEndDate}
                                                            GROUP BY rd.creative_info_id
                                                            UNION
                                                            SELECT creative_info_id,
                                                                   <include refid="ReportCommonMapper.reportConversionColumns"/>
                                                            FROM report_conversion_daily rcd
                                                            WHERE rcd.adaccount_info_id = #{request.adAccountId}
-                                                             AND rcd.report_date #{request.reportStartDate} AND #{request.reportEndDate}
+                                                             AND rcd.report_date BETWEEN #{request.reportStartDate} AND #{request.reportEndDate}
                                                            GROUP BY rcd.creative_info_id) inner_report
                                                      GROUP BY creative_info_id) creativeReport ON creativeReport.creative_info_id = cr.id
                                     INNER JOIN adgroup_info a ON cr.adgroup_info_id = a.id
