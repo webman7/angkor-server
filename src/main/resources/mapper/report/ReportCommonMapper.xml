@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+author Seohyun Lee
+since 1.0
+-->
+<!--suppress MybatisXMapperXmlInspection -->
+<mapper namespace="ReportCommonMapper">
+    <sql id="searchReportColumns">
+            IFNULL(cost, 0)                AS cost,
+            IFNULL(impression, 0)          AS impression,
+            IFNULL(click, 0)               AS click,
+            IFNULL(reach, 0)               AS reach,
+            IFNULL(videoPlay3Seconds, 0)   AS videoPlay3Seconds,
+            IFNULL(videoPlay5Seconds, 0)   AS videoPlay5Seconds,
+            IFNULL(videoPlay10Seconds, 0)  AS videoPlay10Seconds,
+            IFNULL(videoPlay15Seconds, 0)  AS videoPlay15Seconds,
+            IFNULL(videoPlay30Seconds, 0)  AS videoPlay30Seconds,
+            IFNULL(videoPlay60Seconds, 0)  AS videoPlay60Seconds,
+            IFNULL(videoPlay25Percent, 0)  AS videoPlay25Percent,
+            IFNULL(videoPlay50Percent, 0)  AS videoPlay50Percent,
+            IFNULL(videoPlay75Percent, 0)  AS videoPlay75Percent,
+            IFNULL(videoPlay100Percent, 0) AS videoPlay100Percent,
+            IFNULL(signUpDay1, 0)          AS signUpDay1,
+            IFNULL(signUpDay7, 0)          AS signUpDay7,
+            IFNULL(purchaseDay1, 0)        AS purchaseDay1,
+            IFNULL(purchaseDay7, 0)        AS purchaseDay7,
+            IFNULL(viewCartDay1, 0)        AS viewCartDay1,
+            IFNULL(viewCartDay7, 0)        AS viewCartDay7,
+            IFNULL(ctr, 0)                 AS ctr,
+            IFNULL(cpm, 0)                 AS cpm,
+            IFNULL(cpc, 0)                 AS cpc,
+            IFNULL(reachRate, 0)           AS reachRate,
+            IFNULL(videoPlayRate, 0)       AS videoPlayRate
+        </sql>
+
+        <sql id="reportUnionColumns">
+            IFNULL(SUM(cost), 0)                                                                       AS cost,
+            IFNULL(SUM(impression), 0)                                                                 AS impression,
+            IFNULL(SUM(click), 0)                                                                      AS click,
+            IFNULL(SUM(reach), 0)                                                                      AS reach,
+            IFNULL(SUM(videoPlay3Seconds), 0)                                                          AS videoPlay3Seconds,
+            IFNULL(SUM(videoPlay5Seconds), 0)                                                          AS videoPlay5Seconds,
+            IFNULL(SUM(videoPlay10Seconds), 0)                                                         AS videoPlay10Seconds,
+            IFNULL(SUM(videoPlay15Seconds), 0)                                                         AS videoPlay15Seconds,
+            IFNULL(SUM(videoPlay30Seconds), 0)                                                         AS videoPlay30Seconds,
+            IFNULL(SUM(videoPlay60Seconds), 0)                                                         AS videoPlay60Seconds,
+            IFNULL(SUM(videoPlay25Percent), 0)                                                         AS videoPlay25Percent,
+            IFNULL(SUM(videoPlay50Percent), 0)                                                         AS videoPlay50Percent,
+            IFNULL(SUM(videoPlay75Percent), 0)                                                         AS videoPlay75Percent,
+            IFNULL(SUM(videoPlay100Percent), 0)                                                        AS videoPlay100Percent,
+            IFNULL(SUM(signUpDay1), 0)                                                                 AS signUpDay1,
+            IFNULL(SUM(signUpDay7), 0)                                                                 AS signUpDay7,
+            IFNULL(SUM(purchaseDay1), 0)                                                               AS purchaseDay1,
+            IFNULL(SUM(purchaseDay7), 0)                                                               AS purchaseDay7,
+            IFNULL(SUM(viewCartDay1), 0)                                                               AS viewCartDay1,
+            IFNULL(SUM(viewCartDay7), 0)                                                               AS viewCartDay7,
+            ROUND(CASE WHEN impression = 0 THEN 0 ELSE (click / impression) * 100 END, 2)              AS ctr,
+            ROUND(CASE WHEN impression = 0 THEN 0 ELSE (cost / impression) * 100 END, 2)               AS cpm,
+            ROUND(CASE WHEN click = 0 THEN 0 ELSE (cost / click) * 100 END, 2)                         AS cpc,
+            ROUND(CASE WHEN reach = 0 THEN 0 ELSE (cost / reach) * 100 END, 2)                         AS reachRate,
+            ROUND(CASE WHEN videoPlay3Seconds = 0 THEN 0 ELSE (cost / videoPlay3Seconds) * 100 END, 2) AS videoPlayRate
+        </sql>
+
+        <sql id="reportColumns">
+            IFNULL(SUM(cost), 0)            AS cost,
+            IFNULL(SUM(impression), 0)      AS impression,
+            IFNULL(SUM(click), 0)           AS click,
+            IFNULL(SUM(reach), 0)           AS reach,
+            IFNULL(SUM(video_play_3s), 0)   AS videoPlay3Seconds,
+            IFNULL(SUM(video_play_5s), 0)   AS videoPlay5Seconds,
+            IFNULL(SUM(video_play_10s), 0)  AS videoPlay10Seconds,
+            IFNULL(SUM(video_play_15s), 0)  AS videoPlay15Seconds,
+            IFNULL(SUM(video_play_30s), 0)  AS videoPlay30Seconds,
+            IFNULL(SUM(video_play_60s), 0)  AS videoPlay60Seconds,
+            IFNULL(SUM(video_play_25p), 0)  AS videoPlay25Percent,
+            IFNULL(SUM(video_play_50p), 0)  AS videoPlay50Percent,
+            IFNULL(SUM(video_play_75p), 0)  AS videoPlay75Percent,
+            IFNULL(SUM(video_play_100p), 0) AS videoPlay100Percent,
+            0                               AS signUpDay1,
+            0                               AS signUpDay7,
+            0                               AS purchaseDay1,
+            0                               AS purchaseDay7,
+            0                               AS viewCartDay1,
+            0                               AS viewCartDay7
+        </sql>
+
+        <sql id="reportConversionColumns">
+            0                            AS cost,
+            0                            AS impression,
+            0                            AS click,
+            0                            AS reach,
+            0                            AS videoPlay3Seconds,
+            0                            AS videoPlay5Seconds,
+            0                            AS videoPlay10Seconds,
+            0                            AS videoPlay15Seconds,
+            0                            AS videoPlay30Seconds,
+            0                            AS videoPlay60Seconds,
+            0                            AS videoPlay25Percent,
+            0                            AS videoPlay50Percent,
+            0                            AS videoPlay75Percent,
+            0                            AS videoPlay100Percent,
+            IFNULL(SUM(signup_1d), 0)    AS signUpDay1,
+            IFNULL(SUM(signup_7d), 0)    AS signUpDay7,
+            IFNULL(SUM(purchase_1d), 0)  AS purchaseDay1,
+            IFNULL(SUM(purchase_7d), 0)  AS purchaseDay7,
+            IFNULL(SUM(view_cart_1d), 0) AS viewCartDay1,
+            IFNULL(SUM(view_cart_7d), 0) AS viewCartDay7
+        </sql>
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+author Seohyun Lee
+since 1.0
+-->
+<mapper namespace="AdTypeAndGoalCondition">
+    <sql id="adTypeGoalNames">
+        <if test="request.adTypeNames and request.adTypeNames.size() > 0">
+            <foreach collection="request.adTypeNames" item="name" open="AND tg.adTypeName IN (" separator=", " close=")">
+                #{name}
+            </foreach>
+        </if>
+        <if test="request.adGoalNames and request.adGoalNames.size() > 0">
+            <foreach collection="request.adGoalNames" item="name" open="AND tg.adGoalName IN (" separator=", " close=")">
+                #{name}
+            </foreach>
+        </if>
+    </sql>
+</mapper>
