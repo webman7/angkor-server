@@ -139,9 +139,7 @@ since 1.0
                                                  GROUP BY campaign_info_id) campaignReport ON campaignReport.campaign_info_id = c.id
                              <trim prefix="WHERE" prefixOverrides="AND | OR ">
                                 c.adaccount_info_id = #{request.adAccountId}
-                                 <if test="request.campaignCondition">
-                                     <include refid="com.adplatform.restApi.domain.campaign.dao.campaign.mapper.CampaignQueryMapper.campaignCondition"/>
-                                 </if>
+                                <include refid="com.adplatform.restApi.domain.campaign.dao.campaign.mapper.CampaignQueryMapper.campaignCondition"/>
                              </trim>) c ON a.campaign_info_id = c.id
                  LEFT JOIN (SELECT adgroup_info_id,
                                    <include refid="ReportCommonMapper.reportUnionColumns"/>

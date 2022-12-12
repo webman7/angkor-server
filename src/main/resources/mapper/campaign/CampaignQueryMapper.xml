@@ -180,7 +180,7 @@ since 1.0
                                       INNER JOIN campaign_info c ON a.campaign_info_id = c.id
                             <trim prefix="WHERE" prefixOverrides="AND | OR ">
                                 c.adaccount_info_id = #{request.adAccountId}
-                                 <include refid="com.adplatform.restApi.domain.creative.dao.mapper.CreativeQueryMapper.creativeCondition"/>
+                                <include refid="com.adplatform.restApi.domain.creative.dao.mapper.CreativeQueryMapper.creativeCondition"/>
                             </trim>
                              GROUP BY campaignId) cr ON cr.campaignId = c.id
             </if>

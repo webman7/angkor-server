@@ -161,9 +161,7 @@ since 1.0
                                       INNER JOIN campaign_info c ON c.id = a.campaign_info_id
                             <trim prefix="WHERE" prefixOverrides="AND | OR ">
                                 c.adaccount_info_id = #{request.adAccountId}
-                                 <if test="request.adGroupCondition">
-                                     <include refid="com.adplatform.restApi.domain.adgroup.dao.adgroup.mapper.AdGroupQueryMapper.adGroupCondition"/>
-                                 </if>
+                                <include refid="com.adplatform.restApi.domain.adgroup.dao.adgroup.mapper.AdGroupQueryMapper.adGroupCondition"/>
                             </trim>) a ON a.id = cr.adgroup_info_id
                  INNER JOIN (SELECT c.id
                              FROM campaign_info c
