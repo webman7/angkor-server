@@ -79,7 +79,7 @@ since 1.0
                 AND a.name LIKE CONCAT('%', #{request.campaignCondition.name}, '%')
             </if>
             <if test="request.adGroupCondition.statuses and request.adGroupCondition.statuses.size() > 0">
-                <foreach collection="request.campaignCondition.statuses" item="status" open="AND a.status IN (" separator=", " close=")">
+                <foreach collection="request.adGroupCondition.statuses" item="status" open="AND a.status IN (" separator=", " close=")">
                     #{status}
                 </foreach>
             </if>
