@@ -117,6 +117,7 @@ public class Creative extends BaseUpdatedEntity {
     @Column(name = "opinion", length = 1000)
     private String opinion;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "config", columnDefinition = "CHAR(5)")
     private Config config;
 
