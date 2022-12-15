@@ -12,12 +12,12 @@ import java.util.stream.Collectors;
 public class TimeBooleanListToStringConverter implements AttributeConverter<List<Boolean>, String> {
     @Override
     public String convertToDatabaseColumn(List<Boolean> attribute) {
-        return attribute.stream().map(a -> a ? "1" : "0").collect(Collectors.joining(","));
+        return attribute.stream().map(a -> a ? "1" : "0").collect(Collectors.joining(""));
     }
 
     @Override
     public List<Boolean> convertToEntityAttribute(String dbData) {
-        return Arrays.stream(dbData.split(","))
+        return Arrays.stream(dbData.split(""))
                 .map(d -> d.equals("1") ? Boolean.TRUE : Boolean.FALSE)
                 .collect(Collectors.toList());
     }
