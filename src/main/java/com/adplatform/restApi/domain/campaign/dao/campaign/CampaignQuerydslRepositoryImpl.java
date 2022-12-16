@@ -1,12 +1,10 @@
 package com.adplatform.restApi.domain.campaign.dao.campaign;
 
+import com.adplatform.restApi.domain.adgroup.domain.AdGroup;
 import com.adplatform.restApi.domain.campaign.dao.typegoal.AdGoalCondition;
 import com.adplatform.restApi.domain.campaign.dao.typegoal.AdTypeCondition;
 import com.adplatform.restApi.domain.campaign.domain.Campaign;
-import com.adplatform.restApi.domain.campaign.dto.CampaignDto;
-import com.adplatform.restApi.domain.campaign.dto.QAdTypeAndGoalDto;
-import com.adplatform.restApi.domain.campaign.dto.QCampaignDto_Response_ForSaveAdGroup;
-import com.adplatform.restApi.domain.campaign.dto.QCampaignDto_Response_ForUpdate;
+import com.adplatform.restApi.domain.campaign.dto.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -18,6 +16,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.adplatform.restApi.domain.adgroup.domain.QAdGroup.adGroup;
+import static com.adplatform.restApi.domain.adgroup.domain.QAdGroupSchedule.adGroupSchedule;
 import static com.adplatform.restApi.domain.campaign.domain.QAdGoal.adGoal;
 import static com.adplatform.restApi.domain.campaign.domain.QAdType.adType;
 import static com.adplatform.restApi.domain.campaign.domain.QAdTypeAndGoal.adTypeAndGoal;
@@ -83,6 +83,40 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
                 ))
                 .from(campaign)
                 .where(campaign.id.eq(campaignId))
+                .fetchOne();
+    }
+
+    @Override
+    public CampaignDto.Response.ForDateSave dateForSave(Integer campaignId) {
+        return this.query.select(new QCampaignDto_Response_ForDateSave(
+                        campaign.id,
+                        adGroupSchedule.startDate.min(),
+                        adGroupSchedule.endDate.max()
+                ))
+                .from(campaign, adGroup)
+                .leftJoin(adGroupSchedule)
+                .on(adGroup.id.eq(adGroupSchedule.adGroup.id))
+                .where(campaign.id.eq(adGroup.campaign.id),
+                       campaign.id.eq(campaignId),
+                       campaign.config.ne(Campaign.Config.DEL),
+                       adGroup.config.ne(AdGroup.Config.DEL))
+                .fetchOne();
+    }
+
+    @Override
+    public CampaignDto.Response.ForDateUpdate dateForUpdate(Integer adGroupId) {
+        return this.query.select(new QCampaignDto_Response_ForDateUpdate(
+                        campaign.id,
+                        adGroupSchedule.startDate.min(),
+                        adGroupSchedule.endDate.max()
+                ))
+                .from(campaign, adGroup)
+                .leftJoin(adGroupSchedule)
+                .on(adGroup.id.eq(adGroupSchedule.adGroup.id))
+                .where(campaign.id.eq(adGroup.campaign.id),
+                       adGroup.id.eq(adGroupId),
+                       campaign.config.ne(Campaign.Config.DEL),
+                       adGroup.config.ne(AdGroup.Config.DEL))
                 .fetchOne();
     }
 

@@ -38,6 +38,9 @@ public abstract class CampaignDto {
             private String name;
             @NotNull
             private Long dailyBudgetAmount;
+            @NotNull
+            private Integer startDate;
+            private Integer endDate;
             private Campaign.GoalType goalType;
             private String trackingId;
             private Campaign.TrackingType trackingType;
@@ -62,6 +65,20 @@ public abstract class CampaignDto {
         @Setter
         public static class Update extends Response.ForUpdate implements CampaignIdGetter {
         }
+
+        @Getter
+        @Setter
+        public static class DateUpdate implements CampaignIdGetter {
+            @NotNull
+            private Integer campaignId;
+            private Integer startDate;
+            private Integer endDate;
+        }
+
+//        @Getter
+//        @Setter
+//        public static class UpdateDate extends Response.ForDateUpdate implements CampaignIdGetter {
+//        }
     }
     public static abstract class Response {
         @Getter
@@ -71,6 +88,8 @@ public abstract class CampaignDto {
             private AdTypeAndGoalDto adTypeAndGoal;
             private String name;
             private Long dailyBudgetAmount;
+            private Integer startDate;
+            private Integer endDate;
             private String config;
             private String systemConfig;
             private String status;
@@ -122,6 +141,38 @@ public abstract class CampaignDto {
                 this.goalType = goalType;
                 this.trackingId = trackingId;
                 this.trackingType = trackingType;
+            }
+        }
+
+        @Getter
+        @Setter
+        @NoArgsConstructor(access = AccessLevel.PROTECTED)
+        public static class ForDateSave {
+            private Integer campaignId;
+            private Integer startDate;
+            private Integer endDate;
+
+            @QueryProjection
+            public ForDateSave(Integer campaignId, Integer startDate, Integer endDate) {
+                this.campaignId = campaignId;
+                this.startDate = startDate;
+                this.endDate = endDate;
+            }
+        }
+
+        @Getter
+        @Setter
+        @NoArgsConstructor(access = AccessLevel.PROTECTED)
+        public static class ForDateUpdate {
+            private Integer campaignId;
+            private Integer startDate;
+            private Integer endDate;
+
+            @QueryProjection
+            public ForDateUpdate(Integer campaignId, Integer startDate, Integer endDate) {
+                this.campaignId = campaignId;
+                this.startDate = startDate;
+                this.endDate = endDate;
             }
         }
     }

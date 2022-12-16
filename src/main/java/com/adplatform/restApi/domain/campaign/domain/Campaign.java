@@ -95,6 +95,12 @@ public class Campaign extends BaseUpdatedEntity {
     @Column(name = "daily_budget_amount", columnDefinition = "INT")
     private Long dailyBudgetAmount;
 
+    @Column(name = "start_date")
+    private Integer startDate;
+
+    @Column(name = "end_date", columnDefinition = "int DEFAULT 29991231")
+    private Integer endDate;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "goal_type", length = 20)
     private GoalType goalType;
@@ -123,6 +129,8 @@ public class Campaign extends BaseUpdatedEntity {
             AdTypeAndGoal adTypeAndGoal,
             AdAccount adAccount,
             String name,
+            Integer startDate,
+            Integer endDate,
             Long dailyBudgetAmount,
             GoalType goalType,
             String trackingId,
@@ -133,6 +141,8 @@ public class Campaign extends BaseUpdatedEntity {
         this.adTypeAndGoal = adTypeAndGoal;
         this.adAccount = adAccount;
         this.name = name;
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.dailyBudgetAmount = dailyBudgetAmount;
         this.goalType = goalType;
         this.trackingId = trackingId;
@@ -155,6 +165,16 @@ public class Campaign extends BaseUpdatedEntity {
         this.status = Status.DELETED;
         this.config = Config.DEL;
         this.adGroups.forEach(AdGroup::delete);
+    }
+
+    public void saveStartEndDate(CampaignDto.Response.ForDateSave request) {
+        this.startDate = request.getStartDate();
+        this.endDate = request.getEndDate();
+    }
+
+    public void updateStartEndDate(CampaignDto.Response.ForDateUpdate request) {
+        this.startDate = request.getStartDate();
+        this.endDate = request.getEndDate();
     }
 
     public void changeConfigOn() {

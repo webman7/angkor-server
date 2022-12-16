@@ -13,6 +13,7 @@ import com.adplatform.restApi.domain.adgroup.exception.DeviceNotFoundException;
 import com.adplatform.restApi.domain.adgroup.exception.MediaNotFoundException;
 import com.adplatform.restApi.domain.campaign.dao.campaign.CampaignRepository;
 import com.adplatform.restApi.domain.campaign.domain.Campaign;
+import com.adplatform.restApi.domain.campaign.dto.CampaignDto;
 import com.adplatform.restApi.domain.campaign.service.CampaignFindUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,9 @@ public class AdGroupService {
         List<Media> media = this.findByMediaName(event.getMedia());
         List<Device> devices = this.findByDeviceName(event.getDevices());
         this.adGroupRepository.save(this.adGroupMapper.toEntity(event, media, devices));
+
+        CampaignDto.Response.ForDateSave campaign = this.campaignRepository.dateForSave(event.getCampaign().getId());
+        CampaignFindUtils.findByIdOrElseThrow(campaign.getCampaignId(), this.campaignRepository).saveStartEndDate(campaign);
     }
 
     private List<Media> findByMediaName(List<String> mediaNames) {
@@ -62,6 +66,9 @@ public class AdGroupService {
 
     public void update(AdGroupDto.Request.Update request) {
         AdGroupFindUtils.findByIdOrElseThrow(request.getAdGroupId(), this.adGroupRepository).update(request);
+
+        CampaignDto.Response.ForDateUpdate campaign = this.campaignRepository.dateForUpdate(request.getAdGroupId());
+        CampaignFindUtils.findByIdOrElseThrow(campaign.getCampaignId(), this.campaignRepository).updateStartEndDate(campaign);
     }
 
     public void delete(Integer id) {

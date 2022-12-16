@@ -99,20 +99,20 @@ since 1.0
                c.status                       AS status,
                c.reg_date                     AS createdAt,
                c.upd_date                     AS updatedAt,
-               startEndDate.adGroupSchedulesFirstStartDate,
-               startEndDate.adGroupSchedulesLastEndDate,
+               c.start_date                   AS adGroupSchedulesFirstStartDate,
+               c.end_date                     AS adGroupSchedulesLastEndDate,
                <include refid="ReportCommonMapper.searchReportColumns"/>
         FROM campaign_info c
                  INNER JOIN (SELECT atg.id, at.name AS adTypeName, ag.name AS adGoalName
                              FROM ad_type_goal_info atg
                                       INNER JOIN ad_type_info at ON atg.ad_type_info_id = at.id
                                       INNER JOIN ad_goal_info ag ON atg.ad_goal_info_id = ag.id) tg ON tg.id = c.ad_type_goal_info_id
-                 LEFT JOIN (SELECT a.campaign_info_id AS campaignId,
+                 /*LEFT JOIN (SELECT a.campaign_info_id AS campaignId,
                                    MIN(s.start_date)  AS adGroupSchedulesFirstStartDate,
                                    MAX(s.end_date)    AS adGroupSchedulesLastEndDate
                             FROM adgroup_schedule s
                                      INNER JOIN adgroup_info a ON a.id = s.adgroup_info_id
-                            GROUP BY a.campaign_info_id) startEndDate ON startEndDate.campaignId = c.id
+                            GROUP BY a.campaign_info_id) startEndDate ON startEndDate.campaignId = c.id*/
                  LEFT JOIN (SELECT campaign_info_id,
                                    <include refid="ReportCommonMapper.reportUnionColumns"/>
                             FROM (SELECT campaign_info_id,
