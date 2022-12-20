@@ -8,6 +8,9 @@ import com.adplatform.restApi.domain.creative.domain.CreativeOpinionProofFile;
 import com.adplatform.restApi.domain.creative.domain.FileInformation;
 import com.adplatform.restApi.domain.creative.dto.CreativeDto;
 import com.adplatform.restApi.domain.creative.dto.CreativeMapper;
+import com.adplatform.restApi.domain.placement.dao.PlacementRepository;
+import com.adplatform.restApi.domain.placement.domain.Placement;
+import com.adplatform.restApi.domain.placement.exception.PlacementNotFoundException;
 import com.adplatform.restApi.infra.file.util.ImageSizeUtils;
 import com.adplatform.restApi.infra.file.service.FileService;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Seohyun Lee
@@ -28,17 +33,27 @@ import java.nio.file.Paths;
 @Service
 public class CreativeCommandService {
     private final CreativeRepository creativeRepository;
+    private final PlacementRepository placementRepository;
     private final FileService fileService;
     private final CreativeMapper creativeMapper;
 
     public void save(CreativeDto.Request.Save request) {
-        Creative creative = this.creativeMapper.toEntity(request);
-        request.getFiles().forEach(file -> creative.addFile(this.saveFile(request, creative, file)));
-        request.getOpinionProofFiles().forEach(file -> creative.addOpinionProofFile(this.saveOpinionProofFile(creative, file)));
+        List<Placement> placement = this.findByPlacementId(request.getPlacements());
+        Creative creative = this.creativeMapper.toEntity(request, placement);
         this.creativeRepository.save(creative);
     }
 
+    private List<Placement> findByPlacementId(List<Integer> placementId) {
+        return placementId.stream().map(this::findByPlacementIdOrElseThrow).collect(Collectors.toList());
+    }
+
+    private Placement findByPlacementIdOrElseThrow(Integer placementId) {
+        return this.placementRepository.findById(placementId)
+                .orElseThrow(PlacementNotFoundException::new);
+    }
+
     public void update(CreativeDto.Request.Update request) {
+//        List<Placement> placement = this.findByPlacementId(request.getPlacements());
         Creative creative = CreativeFindUtils.findByIdOrElseThrow(request.getCreativeId(), this.creativeRepository)
                 .update(request)
                 .deleteOpinionProofFiles(request.getDeleteOpinionProofFilenames(), this.fileService);

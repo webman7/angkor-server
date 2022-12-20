@@ -23,6 +23,12 @@ public class Media extends BaseUpdatedEntity {
     @Column(name = "name", length = 20)
     private String name;
 
+    @Column(name = "app_key", length = 30)
+    private String appKey;
+
+    @Column(name = "app_secret", length = 128)
+    private String appSecret;
+
     @Convert(converter = BooleanToStringYOrNConverter.class)
     @Column(name = "del_yn", columnDefinition = "CHAR")
     private boolean deleted;

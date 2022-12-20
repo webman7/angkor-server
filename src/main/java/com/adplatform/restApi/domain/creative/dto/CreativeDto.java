@@ -6,6 +6,7 @@ import com.adplatform.restApi.domain.creative.domain.Creative;
 import com.adplatform.restApi.domain.creative.domain.CreativeFile;
 import com.adplatform.restApi.domain.creative.domain.CreativeLanding;
 import com.adplatform.restApi.domain.creative.domain.FileInformation;
+import com.adplatform.restApi.domain.placement.dto.placement.PlacementDto;
 import com.adplatform.restApi.domain.statistics.dto.ReportDto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
@@ -52,8 +53,9 @@ public abstract class CreativeDto {
             private String pcLandingUrl;
             private String mobileLandingUrl;
             private String responsiveLandingUrl;
-            private boolean frequencyType;
+            private int frequencyType;
             private int frequency;
+            private List<Integer> placements;
             private String opinion;
         }
 
@@ -83,8 +85,9 @@ public abstract class CreativeDto {
             private String pcLandingUrl;
             private String mobileLandingUrl;
             private String responsiveLandingUrl;
-            private boolean frequencyType;
+            private int frequencyType;
             private int frequency;
+            private List<Integer> placements;
             private String opinion;
         }
     }
@@ -120,8 +123,9 @@ public abstract class CreativeDto {
             private String description;
             private Creative.ActionButton actionButton;
             private CreativeLanding landing;
-            private boolean frequencyType;
+            private int frequencyType;
             private int frequency;
+            private List<Integer> placements;
             private String opinion;
 
             @QueryProjection
@@ -135,8 +139,9 @@ public abstract class CreativeDto {
                     String description,
                     Creative.ActionButton actionButton,
                     CreativeLanding landing,
-                    boolean frequencyType,
+                    int frequencyType,
                     int frequency,
+                    List<Integer> placements,
                     String opinion) {
                 this.files = files;
                 this.opinionProofFiles = opinionProofFiles;
@@ -149,6 +154,7 @@ public abstract class CreativeDto {
                 this.landing = landing;
                 this.frequencyType = frequencyType;
                 this.frequency = frequency;
+                this.placements = placements;
                 this.opinion = opinion;
             }
         }

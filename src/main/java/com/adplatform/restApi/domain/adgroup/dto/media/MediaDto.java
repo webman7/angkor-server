@@ -14,6 +14,8 @@ public abstract class MediaDto {
         public static class Default {
             private Integer id;
             private String name;
+            private String appKey;
+            private String appSecret;
         }
     }
 }

@@ -1,7 +1,10 @@
 package com.adplatform.restApi.domain.creative.domain;
 
 import com.adplatform.restApi.domain.adgroup.domain.AdGroup;
+import com.adplatform.restApi.domain.adgroup.domain.Media;
 import com.adplatform.restApi.domain.creative.dto.CreativeDto;
+import com.adplatform.restApi.domain.placement.domain.Placement;
+import com.adplatform.restApi.domain.placement.domain.PlacementCreative;
 import com.adplatform.restApi.global.converter.BooleanToStringYOrNConverter;
 import com.adplatform.restApi.global.entity.BaseUpdatedEntity;
 import com.adplatform.restApi.infra.file.service.FileService;
@@ -11,8 +14,12 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -100,6 +107,13 @@ public class Creative extends BaseUpdatedEntity {
     @Column(name = "description", length = 45)
     private String description;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "placement_creative_info",
+            joinColumns = @JoinColumn(name = "creative_info_id"),
+            inverseJoinColumns = @JoinColumn(name = "placement_info_id"))
+    private final Set<Placement> placements = new HashSet<>();
+
     @Enumerated(EnumType.STRING)
     @Column(name = "action_button", length = 20)
     private ActionButton actionButton;
@@ -107,9 +121,8 @@ public class Creative extends BaseUpdatedEntity {
     @Embedded
     private CreativeLanding landing;
 
-    @Convert(converter = BooleanToStringYOrNConverter.class)
-    @Column(name = "frequency_cap_type_yn", columnDefinition = "CHAR")
-    private boolean frequencyType;
+    @Column(name = "frequency_cap_type")
+    private int frequencyType;
 
     @Column(name = "frequency_cap")
     private int frequency;
@@ -141,9 +154,10 @@ public class Creative extends BaseUpdatedEntity {
             String altText,
             String title,
             String description,
+            List<Placement> placements,
             ActionButton actionButton,
             CreativeLanding landing,
-            boolean frequencyType,
+            int frequencyType,
             int frequency,
             String opinion,
             Config config,
@@ -157,6 +171,7 @@ public class Creative extends BaseUpdatedEntity {
         this.altText = altText;
         this.title = title;
         this.description = description;
+        this.placements.addAll(placements);
         this.actionButton = actionButton;
         this.landing = landing;
         this.frequencyType = frequencyType;
@@ -191,9 +206,10 @@ public class Creative extends BaseUpdatedEntity {
         this.title = request.getTitle();
         this.altText = request.getAltText();
         this.description = request.getDescription();
+//        this.placements.update(request.getPlacements());
         this.actionButton = request.getActionButton();
         this.landing.update(request.getPcLandingUrl(), request.getMobileLandingUrl(), request.getResponsiveLandingUrl());
-        this.frequencyType = request.isFrequencyType();
+        this.frequencyType = request.getFrequencyType();
         this.frequency = request.getFrequency();
         this.opinion = request.getOpinion();
         return this;
@@ -214,6 +230,7 @@ public class Creative extends BaseUpdatedEntity {
         copy.altText = this.altText;
         copy.title = this.title;
         copy.description = this.description;
+        copy.placements.addAll(this.placements);
         copy.actionButton = this.actionButton;
         copy.landing = this.landing;
         copy.frequencyType = this.frequencyType;
