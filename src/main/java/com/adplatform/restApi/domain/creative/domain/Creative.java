@@ -1,21 +1,15 @@
 package com.adplatform.restApi.domain.creative.domain;
 
 import com.adplatform.restApi.domain.adgroup.domain.AdGroup;
-import com.adplatform.restApi.domain.adgroup.domain.Media;
 import com.adplatform.restApi.domain.creative.dto.CreativeDto;
 import com.adplatform.restApi.domain.placement.domain.Placement;
-import com.adplatform.restApi.domain.placement.domain.PlacementCreative;
-import com.adplatform.restApi.global.converter.BooleanToStringYOrNConverter;
 import com.adplatform.restApi.global.entity.BaseUpdatedEntity;
 import com.adplatform.restApi.infra.file.service.FileService;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -200,13 +194,13 @@ public class Creative extends BaseUpdatedEntity {
         return this;
     }
 
-    public Creative update(CreativeDto.Request.Update request) {
+    public Creative update(CreativeDto.Request.Update request, List<Placement> placements) {
         this.representativeId++;
         this.name = request.getName();
         this.title = request.getTitle();
         this.altText = request.getAltText();
         this.description = request.getDescription();
-//        this.placements.update(request.getPlacements());
+        this.placements.addAll(placements);
         this.actionButton = request.getActionButton();
         this.landing.update(request.getPcLandingUrl(), request.getMobileLandingUrl(), request.getResponsiveLandingUrl());
         this.frequencyType = request.getFrequencyType();
@@ -219,6 +213,10 @@ public class Creative extends BaseUpdatedEntity {
         this.status = Status.DELETED;
         this.config = Config.DEL;
     }
+
+//    public void deletePlacement(Integer creativeId) {
+////        this.creativeId = creativeId;
+//    }
 
     public Creative copy(AdGroup adGroup) {
         Creative copy = new Creative();
@@ -248,5 +246,38 @@ public class Creative extends BaseUpdatedEntity {
 
     public void changeConfigOff() {
         this.config = Config.OFF;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @Entity
+    @EntityListeners(AuditingEntityListener.class)
+    @Table(name = "placement_creative_info")
+    public static class PlacementCreative {
+        @EmbeddedId
+        private final PlacementCreativeId id = new PlacementCreativeId();
+
+        @MapsId("placementId")
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "placement_info_id")
+        private Placement placement;
+
+        @MapsId("creativeId")
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "creative_info_id")
+        private Creative creative;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @Embeddable
+    public static class PlacementCreativeId implements Serializable {
+        @Column(name = "placement_info_id")
+        private Integer placementId;
+
+        @Column(name = "creative_info_id")
+        private Integer creativeId;
     }
 }

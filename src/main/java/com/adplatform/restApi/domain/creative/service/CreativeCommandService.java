@@ -2,12 +2,11 @@
 package com.adplatform.restApi.domain.creative.service;
 
 import com.adplatform.restApi.domain.creative.dao.CreativeRepository;
-import com.adplatform.restApi.domain.creative.domain.Creative;
-import com.adplatform.restApi.domain.creative.domain.CreativeFile;
-import com.adplatform.restApi.domain.creative.domain.CreativeOpinionProofFile;
-import com.adplatform.restApi.domain.creative.domain.FileInformation;
+import com.adplatform.restApi.domain.creative.dao.PlacementCreativeRepository;
+import com.adplatform.restApi.domain.creative.domain.*;
 import com.adplatform.restApi.domain.creative.dto.CreativeDto;
 import com.adplatform.restApi.domain.creative.dto.CreativeMapper;
+import com.adplatform.restApi.domain.creative.exception.CreativeUpdateException;
 import com.adplatform.restApi.domain.placement.dao.PlacementRepository;
 import com.adplatform.restApi.domain.placement.domain.Placement;
 import com.adplatform.restApi.domain.placement.exception.PlacementNotFoundException;
@@ -34,6 +33,8 @@ import java.util.stream.Collectors;
 public class CreativeCommandService {
     private final CreativeRepository creativeRepository;
     private final PlacementRepository placementRepository;
+
+    private final PlacementCreativeRepository placementCreativeRepository;
     private final FileService fileService;
     private final CreativeMapper creativeMapper;
 
@@ -53,11 +54,17 @@ public class CreativeCommandService {
     }
 
     public void update(CreativeDto.Request.Update request) {
-//        List<Placement> placement = this.findByPlacementId(request.getPlacements());
-        Creative creative = CreativeFindUtils.findByIdOrElseThrow(request.getCreativeId(), this.creativeRepository)
-                .update(request)
-                .deleteOpinionProofFiles(request.getDeleteOpinionProofFilenames(), this.fileService);
-        request.getOpinionProofFiles().forEach(file -> creative.addOpinionProofFile(this.saveOpinionProofFile(creative, file)));
+        try{
+            // placement_creative_info delete
+            this.placementCreativeRepository.deletePlacementCreative(request.getCreativeId());
+            List<Placement> placement = this.findByPlacementId(request.getPlacements());
+            Creative creative = CreativeFindUtils.findByIdOrElseThrow(request.getCreativeId(), this.creativeRepository)
+                    .update(request, placement)
+                    .deleteOpinionProofFiles(request.getDeleteOpinionProofFilenames(), this.fileService);
+            request.getOpinionProofFiles().forEach(file -> creative.addOpinionProofFile(this.saveOpinionProofFile(creative, file)));
+        }catch (Exception e){
+            throw new CreativeUpdateException();
+        }
     }
 
     @SneakyThrows
@@ -103,6 +110,10 @@ public class CreativeCommandService {
     }
 
     public void delete(Integer id) {
+        CreativeFindUtils.findByIdOrElseThrow(id, this.creativeRepository).delete();
+    }
+
+    public void deletePlacement(Integer id) {
         CreativeFindUtils.findByIdOrElseThrow(id, this.creativeRepository).delete();
     }
 
