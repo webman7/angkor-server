@@ -41,6 +41,8 @@ public class CreativeCommandService {
     public void save(CreativeDto.Request.Save request) {
         List<Placement> placement = this.findByPlacementId(request.getPlacements());
         Creative creative = this.creativeMapper.toEntity(request, placement);
+        request.getFiles().forEach(file -> creative.addFile(this.saveFile(request, creative, file)));
+        request.getOpinionProofFiles().forEach(file -> creative.addOpinionProofFile(this.saveOpinionProofFile(creative, file)));
         this.creativeRepository.save(creative);
     }
 
