@@ -65,7 +65,12 @@ public class AdGroupService {
     }
 
     public void update(AdGroupDto.Request.Update request) {
-        AdGroupFindUtils.findByIdOrElseThrow(request.getAdGroupId(), this.adGroupRepository).update(request);
+        this.mediaRepository.deleteByAdGroupId(request.getAdGroupId());
+        this.deviceRepository.deleteByAdGroupId(request.getAdGroupId());
+
+        List<Media> media = this.findByMediaName(request.getMedia());
+        List<Device> devices = this.findByDeviceName(request.getDevices());
+        AdGroupFindUtils.findByIdOrElseThrow(request.getAdGroupId(), this.adGroupRepository).update(request, media, devices);
 
         CampaignDto.Response.ForDateUpdate campaign = this.campaignRepository.dateForUpdate(request.getAdGroupId());
         CampaignFindUtils.findByIdOrElseThrow(campaign.getCampaignId(), this.campaignRepository).updateStartEndDate(campaign);

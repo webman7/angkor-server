@@ -9,6 +9,6 @@ import java.util.Optional;
  * @author Seohyun Lee
  * @since 1.0
  */
-public interface DeviceRepository extends JpaRepository<Device, Integer> {
+public interface DeviceRepository extends JpaRepository<Device, Integer>, DeviceQuerydslRepository {
     Optional<Device> findByName(String name);
 }

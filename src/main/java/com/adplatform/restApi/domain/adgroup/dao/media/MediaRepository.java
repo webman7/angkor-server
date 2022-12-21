@@ -9,6 +9,6 @@ import java.util.Optional;
  * @author Seohyun Lee
  * @since 1.0
  */
-public interface MediaRepository extends JpaRepository<Media, Integer> {
+public interface MediaRepository extends JpaRepository<Media, Integer>, MediaQuerydslRepository {
     Optional<Media> findByName(String name);
 }

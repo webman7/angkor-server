@@ -254,9 +254,11 @@ public class AdGroup extends BaseUpdatedEntity {
         return this;
     }
 
-    public void update(AdGroupDto.Request.Update request) {
+    public void update(AdGroupDto.Request.Update request, List<Media> media, List<Device> devices) {
         this.demographicTarget.update(request.getDemographicTarget());
         this.adGroupSchedule.update(request.getAdGroupSchedule());
+        this.media.addAll(media);
+        this.devices.addAll(devices);
         this.name = request.getName();
         this.pacing = request.getPacing();
         this.pacingType = request.getPacingType();
