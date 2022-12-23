@@ -20,7 +20,7 @@ import java.io.Serializable;
 @Embeddable
 public class FileInformation implements Serializable {
     public enum FileType {
-        IMAGE, VIDEO
+        IMAGE, VIDEO, PDF
     }
 
     @Column(name = "url", length = 1000)
