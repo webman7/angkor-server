@@ -1,6 +1,7 @@
 package com.adplatform.restApi.domain.adgroup.dto.adgroup;
 
 import com.adplatform.restApi.domain.adgroup.domain.AdGroup;
+import com.adplatform.restApi.domain.adgroup.domain.AdGroupMedia;
 import com.adplatform.restApi.domain.adgroup.domain.Device;
 import com.adplatform.restApi.domain.adgroup.domain.Media;
 import com.adplatform.restApi.domain.adgroup.dto.schedule.AdGroupScheduleMapper;
@@ -12,6 +13,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;

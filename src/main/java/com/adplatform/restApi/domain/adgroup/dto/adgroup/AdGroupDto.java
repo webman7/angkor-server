@@ -2,6 +2,7 @@ package com.adplatform.restApi.domain.adgroup.dto.adgroup;
 
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountIdGetter;
 import com.adplatform.restApi.domain.adgroup.domain.AdGroup;
+import com.adplatform.restApi.domain.adgroup.domain.AdGroupMedia;
 import com.adplatform.restApi.domain.adgroup.dto.schedule.AdGroupScheduleDto;
 import com.adplatform.restApi.domain.adgroup.dto.target.AdGroupDemographicTargetDto;
 import com.adplatform.restApi.domain.campaign.dto.CampaignIdGetter;
