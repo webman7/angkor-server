@@ -96,7 +96,7 @@ public class CreativeCommandService {
             height = ImageSizeUtils.getHeight(file);
         } else if (mimetype.startsWith("video")) {
             fileType = FileInformation.FileType.VIDEO;
-        } else if (mimetype.startsWith("pdf")) {
+        } else if (mimetype.startsWith("application/pdf")) {
             fileType = FileInformation.FileType.PDF;
         } else {
             throw new UnsupportedOperationException();
