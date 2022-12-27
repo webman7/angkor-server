@@ -43,5 +43,19 @@ public abstract class UserDto {
                 this.company = company;
             }
         }
+
+        @Getter
+        @Setter
+        public static class Search {
+            private Integer id;
+            private String loginId;
+            private String name;
+            private String email;
+            private String phone;
+            private String active;
+            private String roles;
+            private String company;
+
+        }
     }
 }

@@ -12,7 +12,7 @@ import java.util.Optional;
  * @since 1.0
  */
 public interface UserQuerydslRepository {
-    Page<UserDto.Response.Detail> search(Pageable pageable);
+//    Page<UserDto.Response.Detail> search(Pageable pageable);
 
     Optional<User> findByLoginId(String loginId);
 }

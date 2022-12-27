@@ -4,7 +4,9 @@ import com.adplatform.restApi.domain.user.domain.User;
 import com.adplatform.restApi.domain.user.dto.user.QUserDto_Response_Detail;
 import com.adplatform.restApi.domain.user.dto.user.UserDto;
 import com.adplatform.restApi.global.util.QuerydslOrderSpecifierUtil;
+import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -41,34 +43,73 @@ public class UserQuerydslRepositoryImpl implements UserQuerydslRepository {
                 .fetchOne());
     }
 
-    @Override
-    public Page<UserDto.Response.Detail> search(Pageable pageable) {
-        List<UserDto.Response.Detail> content = this.query.from(user)
-                .join(user.roles, userRole)
-                .join(userRole.role, role)
-                .join(user.company, company)
-                .orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(User.class, "user", pageable.getSort()).toArray(OrderSpecifier[]::new))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .transform(groupBy(user.id)
-                        .list(new QUserDto_Response_Detail(
-                                user.id,
-                                user.loginId,
-                                user.name,
-                                user.email.address,
-                                user.phone,
-                                user.active,
-                                list(userRole.role.value.stringValue()),
-                                user.company.name
-                        )));
+//    @Override
+//    public Page<UserDto.Response.Detail> search(Pageable pageable) {
+//        List<UserDto.Response.Detail> content = this.query.select(
+//                        new QUserDto_Response_Detail(
+//                                user.id,
+//                                user.loginId,
+//                                user.name,
+//                                user.email.address,
+//                                user.phone,
+//                                user.active,
+//                                list(userRole.role.value.stringValue()),
+////                                Expressions.stringTemplate("group_concat({0})", list(userRole.role.value.stringValue())),
+////                                Expressions.stringTemplate("group_concat({0})", list(userRole.role.value.stringValue())),
+////                                        .groupConcat(list(userRole.role.value.stringValue())),
+//                                user.company.name
+//                        )
+//                ).from(user)
+//                .join(user.roles, userRole)
+//                .join(userRole.role, role)
+//                .join(user.company, company)
+//                .groupBy(user.id)
+//                .orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(User.class, "user", pageable.getSort()).toArray(OrderSpecifier[]::new))
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize());
+//
+//        JPAQuery<Long> countQuery = this.query.select(user.count())
+//                .from(user)
+//                .join(user.roles, userRole)
+//                .join(userRole.role, role)
+//                .join(user.company, company);
+//
+//
+//        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+//    }
 
-        JPAQuery<Long> countQuery = this.query.select(user.count())
-                .from(user)
-                .join(user.roles, userRole)
-                .join(userRole.role, role)
-                .join(user.company, company);
-
-
-        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
-    }
+//    @Override
+//    public Page<UserDto.Response.Detail> search(Pageable pageable) {
+//        List<UserDto.Response.Detail> content = this.query.from(user).select()
+//                .join(user.roles, userRole)
+//                .join(userRole.role, role)
+//                .join(user.company, company)
+//                .groupBy(user.id)
+//                .orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(User.class, "user", pageable.getSort()).toArray(OrderSpecifier[]::new))
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize())
+//                .transform(groupBy(user.id)
+//                        .list(new QUserDto_Response_Detail(
+//                                user.id,
+//                                user.loginId,
+//                                user.name,
+//                                user.email.address,
+//                                user.phone,
+//                                user.active,
+//                                list(userRole.role.value.stringValue()),
+////                                Expressions.stringTemplate("group_concat({0})", list(userRole.role.value.stringValue())),
+////                                Expressions.stringTemplate("group_concat({0})", list(userRole.role.value.stringValue())),
+////                                        .groupConcat(list(userRole.role.value.stringValue())),
+//                                user.company.name
+//                        )));
+//
+//        JPAQuery<Long> countQuery = this.query.select(user.count())
+//                .from(user)
+//                .join(user.roles, userRole)
+//                .join(userRole.role, role)
+//                .join(user.company, company);
+//
+//
+//        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+//    }
 }

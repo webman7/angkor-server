@@ -36,6 +36,12 @@ public class WalletCashTotal {
     @Column(name = "amount", columnDefinition = "Integer")
     private int amount;
 
+    @Column(name = "availableAmount", columnDefinition = "Integer")
+    private int availableAmount;
+
+    @Column(name = "reserveAmount", columnDefinition = "Integer")
+    private int reserveAmount;
+
     @LastModifiedDate
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @Column(name = "upd_date")
