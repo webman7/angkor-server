@@ -7,10 +7,8 @@ import com.adplatform.restApi.domain.adgroup.dto.schedule.AdGroupScheduleDto;
 import com.adplatform.restApi.domain.adgroup.dto.target.AdGroupDemographicTargetDto;
 import com.adplatform.restApi.domain.campaign.dto.CampaignIdGetter;
 import com.adplatform.restApi.domain.statistics.dto.ReportDto;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.querydsl.core.annotations.QueryProjection;
+import lombok.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -162,6 +160,20 @@ public abstract class AdGroupDto {
             private AdGroup.Config config;
             private AdGroup.SystemConfig systemConfig;
             private AdGroup.Status status;
+        }
+
+        @Getter
+        @Setter
+        @NoArgsConstructor(access = AccessLevel.PROTECTED)
+        public static class Budget {
+            private Integer adGroupId;
+            private Long budgetAmount;
+
+            @QueryProjection
+            public Budget(Integer adGroupId, Long budgetAmount) {
+                this.adGroupId = adGroupId;
+                this.budgetAmount = budgetAmount;
+            }
         }
     }
 }

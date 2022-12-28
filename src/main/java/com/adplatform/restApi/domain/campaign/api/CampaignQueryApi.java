@@ -1,8 +1,11 @@
 package com.adplatform.restApi.domain.campaign.api;
 
+import com.adplatform.restApi.domain.adgroup.dao.adgroup.AdGroupRepository;
 import com.adplatform.restApi.domain.campaign.dao.campaign.CampaignRepository;
 import com.adplatform.restApi.domain.campaign.dao.campaign.mapper.CampaignQueryMapper;
+import com.adplatform.restApi.domain.campaign.dto.AdTypeAndGoalDto;
 import com.adplatform.restApi.domain.campaign.dto.AdvertiserSearchRequest;
+import com.adplatform.restApi.domain.campaign.dto.BudgetDto;
 import com.adplatform.restApi.domain.campaign.dto.CampaignDto;
 import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount;
 import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccountByCampaignId;
@@ -26,6 +29,8 @@ import javax.validation.Valid;
 public class CampaignQueryApi {
     private final CampaignRepository campaignRepository;
     private final CampaignQueryMapper campaignQueryMapper;
+
+    private final AdGroupRepository adGroupRepository;
 
     @AuthorizedAdAccount
     @ResponseStatus(HttpStatus.OK)
@@ -53,5 +58,12 @@ public class CampaignQueryApi {
     @GetMapping("/{id}/update-for-detail")
     public CampaignDto.Response.ForUpdate searchForUpdate(@PathVariable(name = "id") Integer campaignId) {
         return this.campaignRepository.searchForUpdate(campaignId);
+    }
+
+    @AuthorizedAdAccountByCampaignId
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}/budget")
+    public BudgetDto getBudget(@PathVariable(name = "id") Integer campaignId) {
+        return BudgetDto.create(this.campaignRepository.getBudget(campaignId), this.adGroupRepository.getBudget(campaignId));
     }
 }

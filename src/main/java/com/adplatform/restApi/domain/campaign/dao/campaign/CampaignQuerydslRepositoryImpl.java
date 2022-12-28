@@ -5,6 +5,7 @@ import com.adplatform.restApi.domain.campaign.dao.typegoal.AdGoalCondition;
 import com.adplatform.restApi.domain.campaign.dao.typegoal.AdTypeCondition;
 import com.adplatform.restApi.domain.campaign.domain.Campaign;
 import com.adplatform.restApi.domain.campaign.dto.*;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -119,6 +120,14 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
                        campaign.config.ne(Campaign.Config.DEL),
                        adGroup.config.ne(AdGroup.Config.DEL))
                 .fetchOne();
+    }
+
+    @Override
+    public List<CampaignDto.Response.Budget> getBudget(Integer id) {
+        return this.query.select(new QCampaignDto_Response_Budget(campaign.id, campaign.budgetAmount))
+                .from(campaign)
+                .where(campaign.id.eq(id))
+                .fetch();
     }
 
     private BooleanExpression eqAdAccountId(Integer adAccountId) {

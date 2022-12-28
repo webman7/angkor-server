@@ -2,6 +2,8 @@ package com.adplatform.restApi.domain.adgroup.dao.adgroup;
 
 import com.adplatform.restApi.domain.adgroup.domain.AdGroup;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupDto;
+import com.adplatform.restApi.domain.adgroup.dto.adgroup.QAdGroupDto_Response_Budget;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -66,6 +68,14 @@ public class AdGroupQuerydslRepositoryImpl implements AdGroupQuerydslRepository 
                 .leftJoin(adGroup.devices, device).fetchJoin()
                 .where(adGroup.id.eq(id))
                 .fetchOne());
+    }
+
+    @Override
+    public List<AdGroupDto.Response.Budget> getBudget(Integer id) {
+        return this.query.select(new QAdGroupDto_Response_Budget(adGroup.id, adGroup.budgetAmount))
+                .from(adGroup)
+                .where(adGroup.campaign.id.eq(id))
+                .fetch();
     }
 
     private BooleanExpression eqAdAccountId(Integer adAccountId) {

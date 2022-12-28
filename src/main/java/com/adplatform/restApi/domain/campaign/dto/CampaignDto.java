@@ -181,5 +181,19 @@ public abstract class CampaignDto {
                 this.endDate = endDate;
             }
         }
+
+        @Getter
+        @Setter
+        @NoArgsConstructor(access = AccessLevel.PROTECTED)
+        public static class Budget {
+            private Integer campaignId;
+            private Long budgetAmount;
+
+            @QueryProjection
+            public Budget(Integer campaignId, Long budgetAmount) {
+                this.campaignId = campaignId;
+                this.budgetAmount = budgetAmount;
+            }
+        }
     }
 }
