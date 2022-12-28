@@ -48,6 +48,7 @@ public abstract class AdGroupDto {
             private Long bidAmount;
             private AdGroup.BidStrategy bidStrategy;
             private Long dailyBudgetAmount;
+            private Long budgetAmount;
             private boolean fullDeviceDisplay;
             private boolean onlyWifiDisplay;
             private boolean allMedia;
@@ -116,6 +117,7 @@ public abstract class AdGroupDto {
             private Long bidAmount;
             private AdGroup.BidStrategy bidStrategy;
             private Long dailyBudgetAmount;
+            private Long budgetAmount;
             private AdGroup.Config config;
             private AdGroup.SystemConfig systemConfig;
             private AdGroup.Status status;
@@ -152,6 +154,7 @@ public abstract class AdGroupDto {
             private Long bidAmount;
             private AdGroup.BidStrategy bidStrategy;
             private Long dailyBudgetAmount;
+            private Long budgetAmount;
             private boolean fullDeviceDisplay;
             private boolean onlyWifiDisplay;
             private boolean allMedia;

@@ -17,6 +17,7 @@ since 1.0
         <result column="bidAmount" property="bidAmount"/>
         <result column="bidStrategy" property="bidStrategy"/>
         <result column="dailyBudgetAmount" property="dailyBudgetAmount"/>
+        <result column="budgetAmount" property="budgetAmount"/>
         <result column="config" property="config"/>
         <result column="systemConfig" property="systemConfig"/>
         <result column="status" property="status"/>
@@ -102,6 +103,7 @@ since 1.0
                a.bid_amount                   AS bidAmount,
                a.bid_strategy                 AS bidStrategy,
                a.daily_budget_amount          AS dailyBudgetAmount,
+               a.budget_amount                AS budgetAmount,
                a.config,
                a.system_config                AS systemConfig,
                a.status,

@@ -26,6 +26,7 @@ public class AdGroupSavedEvent {
     private final Long bidAmount;
     private final AdGroup.BidStrategy bidStrategy;
     private final Long dailyBudgetAmount;
+    private final Long budgetAmount;
     private final boolean fullDeviceDisplay;
     private final boolean onlyWifiDisplay;
     private final boolean allMedia;
@@ -44,6 +45,7 @@ public class AdGroupSavedEvent {
             Long bidAmount,
             AdGroup.BidStrategy bidStrategy,
             Long dailyBudgetAmount,
+            Long budgetAmount,
             boolean fullDeviceDisplay,
             boolean onlyWifiDisplay,
             boolean allMedia,
@@ -59,6 +61,7 @@ public class AdGroupSavedEvent {
         this.bidAmount = bidAmount;
         this.bidStrategy = bidStrategy;
         this.dailyBudgetAmount = dailyBudgetAmount;
+        this.budgetAmount = budgetAmount;
         this.fullDeviceDisplay = fullDeviceDisplay;
         this.onlyWifiDisplay = onlyWifiDisplay;
         this.allMedia = allMedia;

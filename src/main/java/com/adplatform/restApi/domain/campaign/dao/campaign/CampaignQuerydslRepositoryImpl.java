@@ -77,6 +77,7 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
                         campaign.id,
                         campaign.name,
                         campaign.dailyBudgetAmount,
+                        campaign.budgetAmount,
                         campaign.goalType,
                         campaign.trackingId,
                         campaign.trackingType

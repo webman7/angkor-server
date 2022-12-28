@@ -146,6 +146,10 @@ public class AdGroup extends BaseUpdatedEntity {
     @Column(name = "daily_budget_amount", columnDefinition = "INT")
     private Long dailyBudgetAmount;
 
+    /** 총 예산 */
+    @Column(name = "budget_amount", columnDefinition = "INT")
+    private Long budgetAmount;
+
     /**
      * 전체 디바이스 노출 여부.<br/>
      * {@link Boolean#TRUE true}: 전체 디바이스 노출.<br/>
@@ -207,6 +211,7 @@ public class AdGroup extends BaseUpdatedEntity {
             Long bidAmount,
             BidStrategy bidStrategy,
             Long dailyBudgetAmount,
+            Long budgetAmount,
             boolean fullDeviceDisplay,
             boolean onlyWifiDisplay,
             boolean allMedia,
@@ -225,6 +230,7 @@ public class AdGroup extends BaseUpdatedEntity {
         this.bidAmount = bidAmount;
         this.bidStrategy = bidStrategy;
         this.dailyBudgetAmount = dailyBudgetAmount;
+        this.budgetAmount = budgetAmount;
         this.fullDeviceDisplay = fullDeviceDisplay;
         this.onlyWifiDisplay = onlyWifiDisplay;
         this.allMedia = allMedia;
@@ -265,6 +271,7 @@ public class AdGroup extends BaseUpdatedEntity {
         this.bidAmount = request.getBidAmount();
         this.bidStrategy = request.getBidStrategy();
         this.dailyBudgetAmount = request.getDailyBudgetAmount();
+        this.budgetAmount = request.getBudgetAmount();
         this.fullDeviceDisplay = request.isFullDeviceDisplay();
         this.onlyWifiDisplay = request.isOnlyWifiDisplay();
         this.allMedia = request.isAllMedia();
@@ -290,6 +297,7 @@ public class AdGroup extends BaseUpdatedEntity {
         copy.bidAmount = this.bidAmount;
         copy.bidStrategy = this.bidStrategy;
         copy.dailyBudgetAmount = this.dailyBudgetAmount;
+        copy.budgetAmount = this.budgetAmount;
         copy.fullDeviceDisplay = this.fullDeviceDisplay;
         copy.onlyWifiDisplay = this.onlyWifiDisplay;
         copy.allMedia = this.allMedia;

@@ -95,6 +95,9 @@ public class Campaign extends BaseUpdatedEntity {
     @Column(name = "daily_budget_amount", columnDefinition = "INT")
     private Long dailyBudgetAmount;
 
+    @Column(name = "budget_amount", columnDefinition = "INT")
+    private Long budgetAmount;
+
     @Column(name = "start_date")
     private Integer startDate;
 
@@ -132,6 +135,7 @@ public class Campaign extends BaseUpdatedEntity {
             Integer startDate,
             Integer endDate,
             Long dailyBudgetAmount,
+            Long budgetAmount,
             GoalType goalType,
             String trackingId,
             TrackingType trackingType,
@@ -144,6 +148,7 @@ public class Campaign extends BaseUpdatedEntity {
         this.startDate = startDate;
         this.endDate = endDate;
         this.dailyBudgetAmount = dailyBudgetAmount;
+        this.budgetAmount = budgetAmount;
         this.goalType = goalType;
         this.trackingId = trackingId;
         this.trackingType = trackingType;
@@ -155,6 +160,7 @@ public class Campaign extends BaseUpdatedEntity {
     public Campaign update(CampaignDto.Request.Update request) {
         this.name = request.getName();
         this.dailyBudgetAmount = request.getDailyBudgetAmount();
+        this.budgetAmount = request.getBudgetAmount();
         this.goalType = request.getGoalType();
         this.trackingId = request.getTrackingId();
         this.trackingType = request.getTrackingType();

@@ -39,6 +39,8 @@ public abstract class CampaignDto {
             @NotNull
             private Long dailyBudgetAmount;
             @NotNull
+            private Long budgetAmount;
+            @NotNull
             private Integer startDate;
             private Integer endDate;
             private Campaign.GoalType goalType;
@@ -88,6 +90,7 @@ public abstract class CampaignDto {
             private AdTypeAndGoalDto adTypeAndGoal;
             private String name;
             private Long dailyBudgetAmount;
+            private Long budgetAmount;
             private Integer startDate;
             private Integer endDate;
             private String config;
@@ -129,15 +132,18 @@ public abstract class CampaignDto {
             private String name;
             @NotNull
             private Long dailyBudgetAmount;
+            @NotNull
+            private Long budgetAmount;
             private Campaign.GoalType goalType;
             private String trackingId;
             private Campaign.TrackingType trackingType;
 
             @QueryProjection
-            public ForUpdate(Integer campaignId, String name, Long dailyBudgetAmount, Campaign.GoalType goalType, String trackingId, Campaign.TrackingType trackingType) {
+            public ForUpdate(Integer campaignId, String name, Long dailyBudgetAmount, Long budgetAmount, Campaign.GoalType goalType, String trackingId, Campaign.TrackingType trackingType) {
                 this.campaignId = campaignId;
                 this.name = name;
                 this.dailyBudgetAmount = dailyBudgetAmount;
+                this.budgetAmount = budgetAmount;
                 this.goalType = goalType;
                 this.trackingId = trackingId;
                 this.trackingType = trackingType;

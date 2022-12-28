@@ -11,6 +11,7 @@ since 1.0
         <id column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="dailyBudgetAmount" property="dailyBudgetAmount"/>
+        <result column="budgetAmount" property="budgetAmount"/>
         <result column="config" property="config"/>
         <result column="systemConfig" property="systemConfig"/>
         <result column="status" property="status"/>
@@ -94,6 +95,7 @@ since 1.0
                tg.adGoalName,
                c.name,
                c.daily_budget_amount          AS dailyBudgetAmount,
+               c.budget_amount                AS budgetAmount,
                c.config,
                c.system_config                AS systemConfig,
                c.status                       AS status,
