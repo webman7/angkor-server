@@ -161,5 +161,23 @@ public class AdAccountDto {
                 this.outOfBalance = outOfBalance;
             }
         }
+
+        @Getter
+        @Setter
+        public static class AdAccountCashInfo {
+            private Long amount;
+            private Long availableAmount;
+            private Long reserveAmount;
+
+            @QueryProjection
+            public AdAccountCashInfo(
+                    Long amount,
+                    Long availableAmount,
+                    Long reserveAmount) {
+                this.amount = amount;
+                this.availableAmount = availableAmount;
+                this.reserveAmount = reserveAmount;
+            }
+        }
     }
 }

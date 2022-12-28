@@ -33,14 +33,14 @@ public class WalletCashTotal {
     @JoinColumn(name = "cash_info_id")
     private Cash cash;
 
-    @Column(name = "amount", columnDefinition = "Integer")
-    private int amount;
+    @Column(name = "amount", columnDefinition = "INT")
+    private Long amount;
 
-    @Column(name = "availableAmount", columnDefinition = "Integer")
-    private int availableAmount;
+    @Column(name = "availableAmount", columnDefinition = "INT")
+    private Long availableAmount;
 
-    @Column(name = "reserveAmount", columnDefinition = "Integer")
-    private int reserveAmount;
+    @Column(name = "reserveAmount", columnDefinition = "INT")
+    private Long reserveAmount;
 
     @LastModifiedDate
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")

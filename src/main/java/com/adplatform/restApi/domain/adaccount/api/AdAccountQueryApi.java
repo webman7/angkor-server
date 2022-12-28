@@ -64,4 +64,10 @@ public class AdAccountQueryApi {
     public AdAccountDto.Response.AdAccountInfo adAccountInfo(@PathVariable(name = "id") Integer adAccountId) {
         return this.adAccountRepository.adAccountInfo(adAccountId);
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}/cash")
+    public AdAccountDto.Response.AdAccountCashInfo adAccountCashInfo(@PathVariable(name = "id") Integer adAccountId) {
+        return this.adAccountRepository.adAccountCashInfo(adAccountId);
+    }
 }

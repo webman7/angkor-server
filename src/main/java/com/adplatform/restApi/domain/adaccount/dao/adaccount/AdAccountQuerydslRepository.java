@@ -26,4 +26,7 @@ public interface AdAccountQuerydslRepository {
     Optional<AdAccountDto.Response.AdAccountCount> countRequestStatusYN(Integer loginUserId);
 
     AdAccountDto.Response.AdAccountInfo adAccountInfo(Integer adAccountId);
+
+    AdAccountDto.Response.AdAccountCashInfo adAccountCashInfo(Integer adAccountId);
+
 }

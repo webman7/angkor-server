@@ -13,13 +13,13 @@ public class WalletDto {
         @Getter
         @Setter
         public static class WalletSpend {
-            private int cash;
+            private Long cash;
             private int todaySpend;
             private int yesterdaySpend;
             private int monthSpend;
 
             @QueryProjection
-            public WalletSpend(int cash, int todaySpend, int yesterdaySpend, int monthSpend) {
+            public WalletSpend(Long cash, int todaySpend, int yesterdaySpend, int monthSpend) {
                 this.cash = cash;
                 this.todaySpend = todaySpend;
                 this.yesterdaySpend = yesterdaySpend;

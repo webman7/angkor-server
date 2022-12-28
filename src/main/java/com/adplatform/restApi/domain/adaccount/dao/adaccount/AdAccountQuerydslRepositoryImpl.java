@@ -3,6 +3,7 @@ package com.adplatform.restApi.domain.adaccount.dao.adaccount;
 import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
 import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.*;
+import com.adplatform.restApi.domain.wallet.domain.WalletCashTotal;
 import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_WalletSpend;
 import com.adplatform.restApi.global.util.QuerydslOrderSpecifierUtil;
 import com.querydsl.core.types.OrderSpecifier;
@@ -242,6 +243,19 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                 .from(adAccount)
                 .where(adAccount.id.eq(adAccountId))
                 .fetchOne();
+    }
+
+    @Override
+    public AdAccountDto.Response.AdAccountCashInfo adAccountCashInfo(Integer adAccountId) {
+        return this.query.select(new QAdAccountDto_Response_AdAccountCashInfo(
+                        walletCashTotal.amount.sum(),
+                        walletCashTotal.availableAmount.sum(),
+                        walletCashTotal.reserveAmount.sum()
+                ))
+                .from(adAccount, walletCashTotal)
+                .where(adAccount.id.eq(adAccountId),
+                       adAccount.id.eq(walletCashTotal.id.walletMasterId)
+                ).fetchOne();
     }
 
     private BooleanExpression eqId(Integer id) {
