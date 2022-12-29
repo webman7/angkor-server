@@ -34,6 +34,14 @@ public class AdAccountQueryApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/search-for-admin")
+    public PageDto<AdAccountDto.Response.ForAdminSearch> searchForAdmin(
+            @PageableDefault Pageable pageable,
+            AdAccountDto.Request.ForAdminSearch request) {
+        return PageDto.create(this.adAccountRepository.searchForAdmin(pageable, request));
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/search-for-agency")
     public PageDto<AdAccountDto.Response.ForAgencySearch> searchForAgency(
             @PageableDefault Pageable pageable,

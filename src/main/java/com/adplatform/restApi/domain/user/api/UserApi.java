@@ -34,11 +34,10 @@ public class UserApi {
 //        return PageDto.create(this.userRepository.search(pageable));
 //    }
 
-    @AuthorizedAdAccount
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/search")
+    @GetMapping("/search")
     public PageDto<UserDto.Response.Search> search(
-            @RequestBody @Valid UserSearchRequest request,
+            UserSearchRequest request,
             @PageableDefault Pageable pageable) {
         return PageDto.create(new PageImpl<>(
                 this.userQueryMapper.search(request, pageable),

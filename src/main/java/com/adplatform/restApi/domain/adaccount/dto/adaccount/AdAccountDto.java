@@ -50,10 +50,55 @@ public class AdAccountDto {
 //            private String adminStopYn;
 //            private String outOfBalanceYn;
         }
+
+        @Getter
+        @Setter
+        public static class ForAdminSearch {
+            private Integer id;
+            private String name;
+        }
     }
 
 
     public static abstract class Response {
+        @Getter
+        @Setter
+        public static class ForAdminSearch {
+            private Integer id;
+            private String name;
+            private String marketerName;
+            private Company.Type companyType;
+            private WalletDto.Response.WalletSpend walletSpend;
+            private Integer creditLimit;
+            private boolean preDeferredPayment;
+            private AdAccount.Config config;
+            private boolean adminStop;
+            private boolean outOfBalance;
+
+            @QueryProjection
+            public ForAdminSearch(
+                    Integer id,
+                    String name,
+                    String marketerName,
+                    Company.Type companyType,
+                    WalletDto.Response.WalletSpend walletSpend,
+                    Integer creditLimit,
+                    boolean preDeferredPayment,
+                    AdAccount.Config config,
+                    boolean adminStop,
+                    boolean outOfBalance) {
+                this.id = id;
+                this.name = name;
+                this.marketerName = marketerName;
+                this.companyType = companyType;
+                this.walletSpend = walletSpend;
+                this.creditLimit = creditLimit;
+                this.preDeferredPayment = preDeferredPayment;
+                this.config = config;
+                this.adminStop = adminStop;
+                this.outOfBalance = outOfBalance;
+            }
+        }
         @Getter
         @Setter
         public static class ForAgencySearch {
