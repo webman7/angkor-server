@@ -40,7 +40,6 @@ public abstract class CampaignDto {
             private Long dailyBudgetAmount;
             @NotNull
             private Long budgetAmount;
-            @NotNull
             private Integer startDate;
             private Integer endDate;
             private Campaign.GoalType goalType;
