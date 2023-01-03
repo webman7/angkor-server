@@ -54,9 +54,15 @@ public class AdAccountFileApi {
             "마케터명",
             "후불한도",
             "유상캐시 잔액");
+    private static final List<String> HEADER_CASH_ITEMS = List.of(
+            "광고계정 ID",
+            "광고계정",
+            "상태",
+            "유상캐시 잔액",
+            "무상캐시 잔액");
 
     @SneakyThrows
-    @GetMapping("/info/csv")
+    @GetMapping("/adaccount/csv")
     public ResponseEntity<byte[]> downloadInfoCsv(AdAccountDto.Request.ForAdminSearch request) {
         List<AdAccountDto.Response.ForAdminSearch> content = this.adAccountRepository.searchForAdmin(
                 request);
@@ -89,7 +95,7 @@ public class AdAccountFileApi {
     }
 
     @SneakyThrows
-    @GetMapping("/info/excel")
+    @GetMapping("/adaccount/excel")
     public ResponseEntity<byte[]> downloadInfoExcel(AdAccountDto.Request.ForAdminSearch request) {
         ByteArrayOutputStream baos;
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
@@ -301,19 +307,18 @@ public class AdAccountFileApi {
 
     @SneakyThrows
     @GetMapping("/cash/csv")
-    public ResponseEntity<byte[]> downloadCashCsv(AdAccountDto.Request.ForAdminSearch request) {
-        List<AdAccountDto.Response.ForAdminSearch> content = this.adAccountRepository.searchForAdmin(
+    public ResponseEntity<byte[]> downloadCashCsv(AdAccountDto.Request.ForCashSearch request) {
+        List<AdAccountDto.Response.ForCashSearch> content = this.adAccountRepository.searchForCash(
                 request);
         StringBuilder sb = new StringBuilder();
-        sb.append(String.join(",", HEADER_PAYBALANCE_ITEMS)).append("\n");
+        sb.append(String.join(",", HEADER_CASH_ITEMS)).append("\n");
         content.forEach(c -> sb.append(
-                String.format("%s,%s,%s,%s,%s,%s\n",
+                String.format("%s,%s,%s,%s,%s\n",
                         c.getId(),
                         c.getName(),
                         this.getStatus(c.getConfig(), c.isAdminStop(), c.isOutOfBalance()),
-                        c.getMarketerName(),
-                        c.getCreditLimit(),
-                        c.getWalletSpend().getCash())
+                        c.getWalletBalance().getCash(),
+                        c.getWalletBalance().getFreeCash())
         ));
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -330,7 +335,7 @@ public class AdAccountFileApi {
 
     @SneakyThrows
     @GetMapping("/cash/excel")
-    public ResponseEntity<byte[]> downloadCashExcel(AdAccountDto.Request.ForAdminSearch request) {
+    public ResponseEntity<byte[]> downloadCashExcel(AdAccountDto.Request.ForCashSearch request) {
         ByteArrayOutputStream baos;
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
             XSSFSheet sheet = workbook.createSheet("adaccount");
@@ -343,17 +348,17 @@ public class AdAccountFileApi {
             CellStyle dataStyle = ExcelUtils.CellStyleSetting(workbook, "data");
 
             XSSFRow headerRow = sheet.createRow(0);
-            for (int i = 0; i < HEADER_PAYBALANCE_ITEMS.size(); i++) {
+            for (int i = 0; i < HEADER_CASH_ITEMS.size(); i++) {
                 cell = headerRow.createCell(i);
-                cell.setCellValue(HEADER_PAYBALANCE_ITEMS.get(i));
+                cell.setCellValue(HEADER_CASH_ITEMS.get(i));
                 cell.setCellStyle(headerStyle);
             }
 
-            List<AdAccountDto.Response.ForAdminSearch> content = this.adAccountRepository.searchForAdmin(
+            List<AdAccountDto.Response.ForCashSearch> content = this.adAccountRepository.searchForCash(
                     request);
 
             int rowNum = 1;
-            for (AdAccountDto.Response.ForAdminSearch data : content) {
+            for (AdAccountDto.Response.ForCashSearch data : content) {
                 row = sheet.createRow(rowNum++);
 
                 int columnNum = 0;
@@ -369,21 +374,17 @@ public class AdAccountFileApi {
                 cell.setCellValue(this.getStatus(data.getConfig(), data.isAdminStop(), data.isOutOfBalance()));
                 cell.setCellStyle(dataStyle);
 
-                cell = row.createCell(columnNum++);
-                cell.setCellValue(data.getMarketerName());
-                cell.setCellStyle(dataStyle);
-
-                cell = row.createCell(columnNum++);
-                cell.setCellValue(data.getCreditLimit());
+                cell = row.createCell(columnNum);
+                cell.setCellValue(data.getWalletBalance().getCash());
                 cell.setCellStyle(dataStyle);
 
                 cell = row.createCell(columnNum);
-                cell.setCellValue(data.getWalletSpend().getCash());
+                cell.setCellValue(data.getWalletBalance().getFreeCash());
                 cell.setCellStyle(dataStyle);
             }
 
             //셀 넓이 자동 조정
-            for (int i = 0; i < HEADER_PAYBALANCE_ITEMS.size(); i++) {
+            for (int i = 0; i < HEADER_CASH_ITEMS.size(); i++) {
                 sheet.autoSizeColumn(i);
                 sheet.setColumnWidth(i, sheet.getColumnWidth(i));
             }

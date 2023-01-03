@@ -37,7 +37,7 @@ public class UserApi {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/search")
     public PageDto<UserDto.Response.Search> search(
-            UserSearchRequest request,
+            UserDto.Request.Search request,
             @PageableDefault Pageable pageable) {
         return PageDto.create(new PageImpl<>(
                 this.userQueryMapper.search(request, pageable),

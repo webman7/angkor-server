@@ -61,6 +61,14 @@ public class AdAccountQueryApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/search-for-cash")
+    public PageDto<AdAccountDto.Response.ForCashSearch> searchForCash(
+            @PageableDefault Pageable pageable,
+            AdAccountDto.Request.ForCashSearch request) {
+        return PageDto.create(this.adAccountRepository.searchForCash(pageable, request));
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/counts")
     public AdAccountDto.Response.AdAccountCount getCounts() {
         return this.adAccountRepository.countRequestStatusYN(SecurityUtils.getLoginUserId())

@@ -26,5 +26,18 @@ public class WalletDto {
                 this.monthSpend = monthSpend;
             }
         }
+
+        @Getter
+        @Setter
+        public static class WalletBalance {
+            private Long cash;
+            private Long freeCash;
+
+            @QueryProjection
+            public WalletBalance(Long cash, Long freeCash) {
+                this.cash = cash;
+                this.freeCash = freeCash;
+            }
+        }
     }
 }

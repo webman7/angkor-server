@@ -11,9 +11,9 @@ import java.util.List;
 @Mapper
 public interface UserQueryMapper {
     List<UserDto.Response.Search> search(
-            @Param("request") UserSearchRequest request,
+            @Param("request") UserDto.Request.Search request,
             @Param("pageable") Pageable pageable
     );
 
-    long countSearch(@Param("request") UserSearchRequest request);
+    long countSearch(@Param("request") UserDto.Request.Search request);
 }

@@ -57,6 +57,13 @@ public class AdAccountDto {
             private Integer id;
             private String name;
         }
+
+        @Getter
+        @Setter
+        public static class ForCashSearch {
+            private Integer id;
+            private String name;
+        }
     }
 
 
@@ -168,6 +175,44 @@ public class AdAccountDto {
                 this.adminStop = adminStop;
                 this.outOfBalance = outOfBalance;
                 this.requestStatus = requestStatus;
+            }
+        }
+        @Getter
+        @Setter
+        public static class ForCashSearch {
+            private Integer id;
+            private String name;
+            private String marketerName;
+            private Company.Type companyType;
+            private WalletDto.Response.WalletBalance walletBalance;
+            private Integer creditLimit;
+            private boolean preDeferredPayment;
+            private AdAccount.Config config;
+            private boolean adminStop;
+            private boolean outOfBalance;
+
+            @QueryProjection
+            public ForCashSearch(
+                    Integer id,
+                    String name,
+                    String marketerName,
+                    Company.Type companyType,
+                    WalletDto.Response.WalletBalance walletBalance,
+                    Integer creditLimit,
+                    boolean preDeferredPayment,
+                    AdAccount.Config config,
+                    boolean adminStop,
+                    boolean outOfBalance) {
+                this.id = id;
+                this.name = name;
+                this.marketerName = marketerName;
+                this.companyType = companyType;
+                this.walletBalance = walletBalance;
+                this.creditLimit = creditLimit;
+                this.preDeferredPayment = preDeferredPayment;
+                this.config = config;
+                this.adminStop = adminStop;
+                this.outOfBalance = outOfBalance;
             }
         }
         @Getter

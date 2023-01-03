@@ -13,8 +13,10 @@ import java.util.List;
  */
 public abstract class UserDto {
     public static abstract class Request {
+        @Getter
+        @Setter
         public static class Search {
-
+            private String name;
         }
     }
 

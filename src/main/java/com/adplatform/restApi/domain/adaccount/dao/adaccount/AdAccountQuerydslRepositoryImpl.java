@@ -3,6 +3,7 @@ package com.adplatform.restApi.domain.adaccount.dao.adaccount;
 import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
 import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.*;
+import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_WalletBalance;
 import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_WalletSpend;
 import com.adplatform.restApi.global.util.QuerydslOrderSpecifierUtil;
 import com.querydsl.core.types.OrderSpecifier;
@@ -87,7 +88,7 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                                         "marketerName"),
                                 company.type,
                                 new QWalletDto_Response_WalletSpend(
-                                        as(select(walletCashTotal.amount.sum())
+                                        as(select(walletCashTotal.availableAmount.sum())
                                                         .from(walletCashTotal)
                                                         .join(walletCashTotal.cash, cash).on(cash.saleAffect.eq(true))
                                                         .where(walletCashTotal.id.walletMasterId.eq(adAccount.id)),
@@ -303,6 +304,88 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                         adAccountUser.requestStatus.eq(requestStatus),
                         this.eqId(id),
                         this.containsName(name));
+
+        return Objects.nonNull(pageable)
+                ? query.orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(AdAccount.class, "adAccount", pageable.getSort()).toArray(OrderSpecifier[]::new))
+                : query;
+    }
+
+    @Override
+    public Page<Response.ForCashSearch> searchForCash(Pageable pageable, Request.ForCashSearch request) {
+        List<Response.ForCashSearch> content = this.getSearchForCashQuery(pageable, request)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = this.query.select(adAccount.count())
+                .from(adAccount)
+                .join(adAccount.company, company)
+                .join(adAccount.adAccountUsers, adAccountUser)
+                .where(
+                        this.eqId(request.getId()),
+                        this.containsName(request.getName())
+                ).groupBy(adAccount.id);
+
+        return PageableExecutionUtils.getPage(content, pageable, () -> countQuery.fetch().size());
+    }
+
+    @Override
+    public List<Response.ForCashSearch> searchForCash(Request.ForCashSearch request) {
+        return this.getSearchForCashQuery(null, request).fetch();
+    }
+
+    private JPAQuery<Response.ForCashSearch> getSearchForCashQuery(
+            Pageable pageable,
+            Request.ForCashSearch request) {
+        LocalDate now = LocalDate.now();
+        DateTimeFormatter yyyyMMdd = DateTimeFormatter.ofPattern("yyyyMMdd");
+        JPAQuery<Response.ForCashSearch> query = this.query.select(
+                        new QAdAccountDto_Response_ForCashSearch(
+                                adAccount.id,
+                                adAccount.name,
+                                as(select(user.name)
+                                                .from(user)
+                                                .join(adAccountUser).on(user.id.eq(adAccountUser.id.userId),
+                                                        adAccountUser.memberType.eq(AdAccountUser.MemberType.MASTER))
+                                                .where(adAccountUser.id.adAccountId.eq(adAccount.id)),
+                                        "marketerName"),
+                                company.type,
+                                new QWalletDto_Response_WalletBalance(
+                                        as(select(walletCashTotal.availableAmount.sum().coalesce(Long.valueOf("0")))
+                                                        .from(walletCashTotal)
+                                                        .join(walletCashTotal.cash, cash).on(cash.saleAffect.eq(true))
+                                                        .where(walletCashTotal.id.walletMasterId.eq(adAccount.id)),
+                                                "cash"),
+                                        as(select(walletCashTotal.availableAmount.sum().coalesce(Long.valueOf("0")))
+                                                        .from(walletCashTotal)
+                                                        .join(walletCashTotal.cash, cash).on(cash.saleAffect.eq(false))
+                                                        .where(walletCashTotal.id.walletMasterId.eq(adAccount.id)),
+                                                "freeCash")
+                                ),
+                                adAccount.creditLimit,
+                                adAccount.preDeferredPayment,
+                                adAccount.config,
+                                adAccount.adminStop,
+                                adAccount.outOfBalance
+                        )
+                )
+                .from(adAccount)
+                .join(adAccount.company, company)
+                .join(adAccount.adAccountUsers, adAccountUser)
+                .where(
+                        this.eqId(request.getId()),
+                        this.containsName(request.getName())
+                )
+                .groupBy(
+                        adAccount.id,
+                        adAccount.name,
+                        company.type,
+                        adAccount.creditLimit,
+                        adAccount.preDeferredPayment,
+                        adAccount.company,
+                        adAccount.adminStop,
+                        adAccount.outOfBalance
+                );
 
         return Objects.nonNull(pageable)
                 ? query.orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(AdAccount.class, "adAccount", pageable.getSort()).toArray(OrderSpecifier[]::new))

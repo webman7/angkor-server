@@ -27,6 +27,10 @@ public interface AdAccountQuerydslRepository {
     List<AdAccountDto.Response.ForAdvertiserSearch> searchForAdvertiser(
             Integer id, String name, Integer loginUserId, AdAccountUser.RequestStatus requestStatus);
 
+    Page<AdAccountDto.Response.ForCashSearch> searchForCash(Pageable pageable, AdAccountDto.Request.ForCashSearch request);
+
+    List<AdAccountDto.Response.ForCashSearch> searchForCash(AdAccountDto.Request.ForCashSearch request);
+
     Optional<AdAccountDto.Response.AdAccountCount> countRequestStatusYN(Integer loginUserId);
 
     AdAccountDto.Response.AdAccountInfo adAccountInfo(Integer adAccountId);

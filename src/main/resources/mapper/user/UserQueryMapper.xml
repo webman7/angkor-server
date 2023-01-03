@@ -32,6 +32,13 @@ since 1.0
         INNER JOIN user_roles b ON a.user_no=b.user_no
         INNER JOIN roles_info c ON b.roles_info_id=c.id
         INNER JOIN company_info d ON a.company_info_id=d.id
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="request.name and request.name.size() > 0">
+                AND (a.user_name LIKE CONCAT('%', #{request.name}, '%')
+                OR a.user_id LIKE CONCAT('%', #{request.name}, '%')
+                OR d.name LIKE CONCAT('%', #{request.name}, '%'))
+            </if>
+        </trim>
         GROUP BY a.user_no
     </sql>
 
