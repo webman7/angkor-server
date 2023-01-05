@@ -4,11 +4,30 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * @author Seohyun Lee
  * @since 1.0
  */
 public class WalletDto {
+    public static abstract class Request {
+        @Getter
+        @Setter
+        public static class Save {
+            @NotNull
+            private int id;
+            @NotNull
+            private int cashId;
+            private int tradeNo;
+            private Long inAmount;
+            private Long outAmount;
+            private Long balance;
+            private String summary;
+            private String memo;
+        }
+    }
+
     public static abstract class Response {
         @Getter
         @Setter
@@ -37,6 +56,32 @@ public class WalletDto {
             public WalletBalance(Long cash, Long freeCash) {
                 this.cash = cash;
                 this.freeCash = freeCash;
+            }
+        }
+
+        @Getter
+        @Setter
+        public static class NewTradeNo {
+            private int tradeNo;
+
+            @QueryProjection
+            public NewTradeNo(int tradeNo) {
+                this.tradeNo = tradeNo;
+            }
+        }
+
+        @Getter
+        @Setter
+        public static class WalletCashTotal {
+            private Long amount;
+            private Long availableAmount;
+            private Long reserveAmount;
+
+            @QueryProjection
+            public WalletCashTotal(Long amount, Long availableAmount, Long reserveAmount) {
+                this.amount = amount;
+                this.availableAmount = availableAmount;
+                this.reserveAmount = reserveAmount;
             }
         }
     }

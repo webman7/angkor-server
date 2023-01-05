@@ -7,7 +7,7 @@ import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountMapper;
 import com.adplatform.restApi.domain.user.domain.User;
 import com.adplatform.restApi.domain.user.service.UserQueryService;
-import com.adplatform.restApi.domain.wallet.dao.CashRepository;
+import com.adplatform.restApi.domain.wallet.dao.cash.CashRepository;
 import com.adplatform.restApi.domain.wallet.domain.WalletMaster;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

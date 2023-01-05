@@ -36,10 +36,10 @@ public class WalletCashTotal {
     @Column(name = "amount", columnDefinition = "INT")
     private Long amount;
 
-    @Column(name = "availableAmount", columnDefinition = "INT")
+    @Column(name = "available_amount", columnDefinition = "INT")
     private Long availableAmount;
 
-    @Column(name = "reserveAmount", columnDefinition = "INT")
+    @Column(name = "reserve_amount", columnDefinition = "INT")
     private Long reserveAmount;
 
     @LastModifiedDate

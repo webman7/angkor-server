@@ -37,4 +37,8 @@ public interface AdAccountQuerydslRepository {
 
     AdAccountDto.Response.AdAccountCashInfo adAccountCashInfo(Integer adAccountId);
 
+    List<AdAccountDto.Response.AdAccountCashDetailInfo> adAccountCashDetailInfo(Integer adAccountId);
+
+    void creditLimitUpdate(Integer adAccountId, Boolean oufOfBalance);
+
 }

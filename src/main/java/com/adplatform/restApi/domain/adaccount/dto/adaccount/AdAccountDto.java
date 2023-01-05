@@ -40,6 +40,13 @@ public class AdAccountDto {
 
         @Getter
         @Setter
+        public static class OutOfBalanceUpdate {
+            private Integer id;
+            private Boolean outOfBalance;
+        }
+
+        @Getter
+        @Setter
         public static class ForAgencySearch {
             private Integer id;
             private String name;
@@ -264,6 +271,43 @@ public class AdAccountDto {
                     Long amount,
                     Long availableAmount,
                     Long reserveAmount) {
+                this.amount = amount;
+                this.availableAmount = availableAmount;
+                this.reserveAmount = reserveAmount;
+            }
+        }
+
+        @Getter
+        @Setter
+        public static class AdAccountCashDetailInfo {
+
+            private Integer id;
+            private String name;
+            private Boolean saleAffect;
+            private Boolean refund;
+            private Integer priority;
+            private Integer cashId;
+            private Long amount;
+            private Long availableAmount;
+            private Long reserveAmount;
+
+            @QueryProjection
+            public AdAccountCashDetailInfo(
+                    Integer id,
+                    String name,
+                    Boolean saleAffect,
+                    Boolean refund,
+                    Integer priority,
+                    Integer cashId,
+                    Long amount,
+                    Long availableAmount,
+                    Long reserveAmount) {
+                this.id = id;
+                this.name = name;
+                this.saleAffect = saleAffect;
+                this.refund = refund;
+                this.priority = priority;
+                this.cashId = cashId;
                 this.amount = amount;
                 this.availableAmount = availableAmount;
                 this.reserveAmount = reserveAmount;

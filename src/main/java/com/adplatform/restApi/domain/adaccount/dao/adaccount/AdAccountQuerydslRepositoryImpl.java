@@ -8,6 +8,7 @@ import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_WalletSpend;
 import com.adplatform.restApi.global.util.QuerydslOrderSpecifierUtil;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -21,6 +22,7 @@ import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -435,6 +437,49 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                 .where(adAccount.id.eq(adAccountId),
                        adAccount.id.eq(walletCashTotal.id.walletMasterId)
                 ).fetchOne();
+    }
+
+    @Override
+    public List<AdAccountDto.Response.AdAccountCashDetailInfo> adAccountCashDetailInfo(Integer adAccountId) {
+        return this.getAdAccountCashDetailInfoQuery(null, adAccountId).fetch();
+    }
+
+    private JPAQuery<Response.AdAccountCashDetailInfo> getAdAccountCashDetailInfoQuery(
+            Pageable pageable,
+            Integer adAccountId) {
+        LocalDate now = LocalDate.now();
+        DateTimeFormatter yyyyMMdd = DateTimeFormatter.ofPattern("yyyyMMdd");
+        JPAQuery<Response.AdAccountCashDetailInfo> query = this.query.select(
+                        new QAdAccountDto_Response_AdAccountCashDetailInfo(
+                                Expressions.as(Expressions.constant(adAccountId), "id"),
+                                cash.name,
+                                cash.saleAffect,
+                                cash.refund,
+                                cash.priority,
+                                walletCashTotal.cash.id,
+                                as(walletCashTotal.amount.coalesce(0L), "amount"),
+                                as(walletCashTotal.availableAmount.coalesce(0L), "availableAmount"),
+                                as(walletCashTotal.reserveAmount.coalesce(0L), "reserveAmount")
+                        )
+                )
+                .from(cash)
+                .join(walletCashTotal).on(
+                        walletCashTotal.id.cashId.eq(cash.id),
+                        walletCashTotal.id.walletMasterId.eq(adAccountId)
+                )
+                .where(walletCashTotal.id.cashId.in(Arrays.asList(1, 3))) ;
+
+        return Objects.nonNull(pageable)
+                ? query.orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(AdAccount.class, "adAccount", pageable.getSort()).toArray(OrderSpecifier[]::new))
+                : query;
+    }
+
+    @Override
+    public void creditLimitUpdate(Integer adAccountId, Boolean oufOfBalance) {
+        this.query.update(adAccount)
+                .set(adAccount.outOfBalance, oufOfBalance)
+                .where(adAccount.id.eq(adAccountId))
+                .execute();
     }
 
     private BooleanExpression eqId(Integer id) {
