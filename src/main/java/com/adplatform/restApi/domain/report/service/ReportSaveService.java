@@ -3,6 +3,8 @@ package com.adplatform.restApi.domain.report.service;
 import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
 import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto;
+import com.adplatform.restApi.domain.campaign.dto.CampaignDto;
+import com.adplatform.restApi.domain.campaign.service.CampaignFindUtils;
 import com.adplatform.restApi.domain.report.dao.custom.ReportCustomRepository;
 import com.adplatform.restApi.domain.report.domain.ReportCustom;
 import com.adplatform.restApi.domain.report.dto.custom.ReportCustomDto;
@@ -24,5 +26,13 @@ public class ReportSaveService {
     public void save(ReportCustomDto.Request.Save request, Integer loginUserId) {
         ReportCustom reportCustom = this.reportCustomMapper.toEntity(request);
         this.reportCustomRepository.save(reportCustom);
+    }
+
+    public void update(ReportCustomDto.Request.Update request) {
+        ReportCustomFindUtils.findByIdOrElseThrow(request.getId(), this.reportCustomRepository).update(request);
+    }
+
+    public void delete(Integer id) {
+        ReportCustomFindUtils.findByIdOrElseThrow(id, this.reportCustomRepository).delete();
     }
 }

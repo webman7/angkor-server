@@ -25,6 +25,21 @@ public abstract class ReportCustomDto {
 
         @Getter
         @Setter
+        public static class Update {
+            @NotNull
+            private Integer id;
+            @NotNull
+            private Integer adAccountId;
+            private String name;
+            private String reportLevel;
+            private List<String> configs;
+            private List<String> indicators;
+            private Integer startDate;
+            private Integer endDate;
+        }
+
+        @Getter
+        @Setter
         public static class Search {
             private Integer id;
             private Integer adAccountId;

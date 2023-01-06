@@ -1,9 +1,14 @@
 package com.adplatform.restApi.domain.report.domain;
 
 import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
+import com.adplatform.restApi.domain.company.domain.Company;
+import com.adplatform.restApi.domain.company.dto.CompanyDto;
+import com.adplatform.restApi.domain.report.dto.custom.ReportCustomDto;
 import com.adplatform.restApi.domain.user.domain.User;
+import com.adplatform.restApi.global.converter.BooleanToStringYOrNConverter;
 import com.adplatform.restApi.global.converter.StringListToStringConverter;
 import com.adplatform.restApi.global.entity.BaseUpdatedEntity;
+import com.adplatform.restApi.global.value.Email;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -69,6 +74,10 @@ public class ReportCustom extends BaseUpdatedEntity {
     @Column(name = "end_date")
     private Integer endDate;
 
+    @Convert(converter = BooleanToStringYOrNConverter.class)
+    @Column(name = "del_yn", nullable = false, columnDefinition = "CHAR(1)")
+    private boolean deleted;
+
 //    @Enumerated(EnumType.STRING)
 //    @Column(name = "report_level")
 //    private ReportLevel reportLevel;
@@ -97,6 +106,20 @@ public class ReportCustom extends BaseUpdatedEntity {
         this.indicators = indicators;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public ReportCustom update(ReportCustomDto.Request.Update request) {
+        this.name = request.getName();
+        this.reportLevel = request.getReportLevel();
+        this.configs = request.getConfigs();
+        this.indicators = request.getIndicators();
+        this.startDate = request.getStartDate();
+        this.endDate = request.getEndDate();
+        return this;
+    }
+
+    public void delete() {
+        this.deleted = true;
     }
 
 }

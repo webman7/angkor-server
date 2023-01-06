@@ -1,6 +1,8 @@
 package com.adplatform.restApi.domain.report.dao.custom;
 
 import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
+import com.adplatform.restApi.domain.campaign.dto.CampaignDto;
+import com.adplatform.restApi.domain.campaign.dto.QCampaignDto_Response_CampaignByAdAccountId;
 import com.adplatform.restApi.domain.report.dto.custom.QReportCustomDto_Response_Default;
 import com.adplatform.restApi.domain.report.dto.custom.ReportCustomDto;
 import com.adplatform.restApi.global.util.QuerydslOrderSpecifierUtil;
@@ -20,6 +22,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 import java.util.Objects;
 
+import static com.adplatform.restApi.domain.campaign.domain.QCampaign.campaign;
 import static com.adplatform.restApi.domain.report.domain.QReportCustom.reportCustom;
 
 @Slf4j
@@ -67,6 +70,23 @@ public class ReportCustomQuerydslRepositoryImpl implements ReportCustomQuerydslR
         return Objects.nonNull(pageable)
                 ? query.orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(AdAccount.class, "reportCustom", pageable.getSort()).toArray(OrderSpecifier[]::new))
                 : query;
+    }
+
+    @Override
+    public ReportCustomDto.Response.Default reportCustomDetailInfo(Integer id) {
+        return this.query.select(new QReportCustomDto_Response_Default(
+                        reportCustom.id,
+                        reportCustom.adAccountId,
+                        reportCustom.name,
+                        reportCustom.reportLevel,
+                        reportCustom.configs,
+                        reportCustom.indicators,
+                        reportCustom.startDate,
+                        reportCustom.endDate))
+                .from(reportCustom)
+                .where(
+                        reportCustom.id.eq(id))
+                .fetchOne();
     }
 
     private BooleanExpression containsReportLevel(String reportLevel) {
