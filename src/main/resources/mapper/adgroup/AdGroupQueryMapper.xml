@@ -76,13 +76,13 @@ since 1.0
                     #{id}
                 </foreach>
             </if>
+            <if test="request.adGroupCondition.name">
+                AND a.name LIKE CONCAT('%', #{request.adGroupCondition.name}, '%')
+            </if>
             <if test="request.adGroupCondition.campaignIds and request.adGroupCondition.campaignIds.size() > 0">
                 <foreach collection="request.adGroupCondition.campaignIds" item="campaignId" open="AND a.campaign_info_id IN (" separator=", " close=")">
                     #{campaignId}
                 </foreach>
-            </if>
-            <if test="request.adGroupCondition.name">
-                AND a.name LIKE CONCAT('%', #{request.campaignCondition.name}, '%')
             </if>
             <if test="request.adGroupCondition.statuses and request.adGroupCondition.statuses.size() > 0">
                 <foreach collection="request.adGroupCondition.statuses" item="status" open="AND a.status IN (" separator=", " close=")">
