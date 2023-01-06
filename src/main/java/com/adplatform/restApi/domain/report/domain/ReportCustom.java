@@ -52,9 +52,8 @@ public class ReportCustom extends BaseUpdatedEntity {
     @Column(name = "name")
     private String name;
 
-    @Convert(converter = StringListToStringConverter.class)
     @Column(name = "report_level")
-    private List<String> reportLevel;
+    private String reportLevel;
 
     @Convert(converter = StringListToStringConverter.class)
     @Column(name = "user_config")
@@ -86,7 +85,7 @@ public class ReportCustom extends BaseUpdatedEntity {
     public ReportCustom(
             Integer adAccountId,
             String name,
-            List<String> reportLevel,
+            String reportLevel,
             List<String> configs,
             List<String> indicators,
             Integer startDate,
