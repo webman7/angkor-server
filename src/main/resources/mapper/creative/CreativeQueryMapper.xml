@@ -77,6 +77,16 @@ since 1.0
                      #{format}
                  </foreach>
              </if>
+            <if test="request.creativeCondition.campaignIds and request.creativeCondition.campaignIds.size() > 0">
+                <foreach collection="request.creativeCondition.campaignIds" item="campaignId" open="AND a.campaign_info_id IN (" separator=", " close=")">
+                    #{campaignId}
+                </foreach>
+            </if>
+            <if test="request.creativeCondition.adGroupIds and request.creativeCondition.adGroupIds.size() > 0">
+                <foreach collection="request.creativeCondition.adGroupIds" item="adGroupId" open="AND a.adgroup_info_id IN (" separator=", " close=")">
+                    #{adGroupId}
+                </foreach>
+            </if>
              <if test="request.creativeCondition.configs and request.creativeCondition.configs.size() > 0">
                  <foreach collection="request.creativeCondition.configs" item="config" open="AND cr.config IN (" separator=", " close=")">
                      #{config}

@@ -17,6 +17,7 @@ import java.util.List;
 public class AdvertiserSearchAdGroupCondition {
     private List<Integer> ids;
     private String name;
+    private List<Integer> campaignIds;
     private List<AdGroup.Config> configs;
     private List<AdGroup.Status> statuses;
     @Valid
