@@ -15,7 +15,7 @@ public abstract class ReportCustomDto {
             @NotNull
             private Integer adAccountId;
             private String name;
-            private List<String> reportLevel;
+            private String reportLevel;
             private List<String> configs;
             private List<String> indicators;
             private Integer startDate;
