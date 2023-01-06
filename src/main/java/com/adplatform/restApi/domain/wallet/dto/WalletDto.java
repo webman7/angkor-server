@@ -73,12 +73,14 @@ public class WalletDto {
         @Getter
         @Setter
         public static class WalletCashTotal {
+            private int cashId;
             private Long amount;
             private Long availableAmount;
             private Long reserveAmount;
 
             @QueryProjection
-            public WalletCashTotal(Long amount, Long availableAmount, Long reserveAmount) {
+            public WalletCashTotal(Integer cashId, Long amount, Long availableAmount, Long reserveAmount) {
+                this.cashId = cashId;
                 this.amount = amount;
                 this.availableAmount = availableAmount;
                 this.reserveAmount = reserveAmount;

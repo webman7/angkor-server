@@ -13,6 +13,9 @@ import com.adplatform.restApi.domain.campaign.domain.Campaign;
 import com.adplatform.restApi.domain.campaign.dto.CampaignDto;
 import com.adplatform.restApi.domain.campaign.dto.CampaignMapper;
 import com.adplatform.restApi.domain.campaign.exception.AdTypeAndGoalNotFoundException;
+import com.adplatform.restApi.domain.campaign.exception.CampaignCashException;
+import com.adplatform.restApi.domain.wallet.dao.walletcashtotal.WalletCashTotalRepository;
+import com.adplatform.restApi.domain.wallet.dto.WalletDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.lang.Math.abs;
 
 /**
  * @author Seohyun Lee
@@ -36,11 +41,52 @@ public class CampaignCommandService {
     private final CampaignMapper campaignMapper;
     private final AdGroupEventMapper adGroupEventMapper;
 
+    private final WalletCashTotalRepository walletCashTotalRepository;
+
     public void save(CampaignDto.Request.Save request) {
         AdTypeAndGoal adTypeAndGoal = this.findAdTypeAndGoal(
                 request.getAdTypeAndGoal().getAdTypeName(),
                 request.getAdTypeAndGoal().getAdGoalName());
         AdAccount adAccount = AdAccountFindUtils.findByIdOrElseThrow(request.getAdAccountId(), this.adAccountRepository);
+
+        List<WalletDto.Response.WalletCashTotal> list = this.walletCashTotalRepository.getWalletCashTotal(request.getAdAccountId());
+
+        // 이용가능금액 조회
+        Long availableAmountSum = 0L;
+        for (WalletDto.Response.WalletCashTotal m: list) {
+            availableAmountSum += m.getAvailableAmount();
+        }
+
+        // 이용가능 금액 보다 크다면
+        Long availableAmount = 0L;
+        Long reserveAmount = 0L;
+        Long budgetAmount = request.getBudgetAmount();
+        Long budgetAmountRemain = budgetAmount;
+        Boolean isLoop = true;
+        if(availableAmountSum > budgetAmount) {
+            for (WalletDto.Response.WalletCashTotal m: list) {
+                // 하나의 캐시가 큰 경우
+                if(m.getAvailableAmount() - budgetAmount > 0) {
+                    availableAmount = m.getAvailableAmount() - budgetAmount;
+                    reserveAmount = m.getReserveAmount() + budgetAmount;
+                    isLoop = false;
+                } else {
+                    budgetAmountRemain = budgetAmount - m.getAvailableAmount();
+                    if(budgetAmountRemain >= 0) {
+                        availableAmount = 0L;
+                        reserveAmount = m.getReserveAmount() + m.getAvailableAmount();
+                    }
+                    budgetAmount = budgetAmountRemain;
+                    isLoop = true;
+                }
+                this.walletCashTotalRepository.saveWalletCashReserve(request.getAdAccountId(), m.getCashId(), availableAmount, reserveAmount);
+                if(!isLoop) {
+                    break;
+                }
+            }
+        } else {
+            throw new CampaignCashException();
+        }
         Campaign campaign = this.campaignRepository.save(this.campaignMapper.toEntity(request, adTypeAndGoal, adAccount));
         this.mapToAdGroupSavedEvent(request.getAdGroups(), campaign).forEach(this.eventPublisher::publishEvent);
     }
@@ -60,6 +106,68 @@ public class CampaignCommandService {
     }
 
     public void update(CampaignDto.Request.Update request) {
+
+        CampaignDto.Response.CampaignByAdAccountId campaignAdAccountId = this.campaignRepository.getCampaignByAdAccountId(request.getCampaignId());
+
+        List<WalletDto.Response.WalletCashTotal> list = this.walletCashTotalRepository.getWalletCashTotal(campaignAdAccountId.getAdAccountId());
+
+        // 이용가능금액 조회
+        Long availableAmountSum = 0L;
+        for (WalletDto.Response.WalletCashTotal m: list) {
+            availableAmountSum += m.getAvailableAmount();
+        }
+
+        // 이용가능 금액 보다 크다면
+        Long availableAmount = 0L;
+        Long reserveAmount = 0L;
+        Long budgetAmount = request.getBudgetAmount() - campaignAdAccountId.getBudgetAmount();
+        Long budgetAmountRemain = budgetAmount;
+        Boolean isLoop = true;
+        if(availableAmountSum > budgetAmount) {
+            for (WalletDto.Response.WalletCashTotal m: list) {
+                if(budgetAmount == 0) {
+                    break;
+                } else if(budgetAmount > 0) {
+                    // 하나의 캐시가 큰 경우
+                    if(m.getAvailableAmount() > abs(budgetAmount)) {
+                        availableAmount = m.getAvailableAmount() - budgetAmount;
+                        reserveAmount = m.getReserveAmount() + budgetAmount;
+                        isLoop = false;
+                    } else {
+                        budgetAmountRemain = budgetAmount - m.getAvailableAmount();
+                        if(budgetAmountRemain >= 0) {
+                            availableAmount = 0L;
+                            reserveAmount = m.getReserveAmount() + m.getAvailableAmount();
+                        }
+                        budgetAmount = budgetAmountRemain;
+                        isLoop = true;
+                    }
+                } else {
+                    if(m.getReserveAmount() > abs(budgetAmount)) {
+                        availableAmount = m.getAvailableAmount() - budgetAmount;
+                        reserveAmount = m.getReserveAmount() + budgetAmount;
+                        isLoop = false;
+                    } else {
+                        budgetAmountRemain = budgetAmount + m.getReserveAmount();
+                        if(budgetAmountRemain < 0) {
+                            reserveAmount = 0L;
+                            availableAmount = m.getReserveAmount();
+                        }
+                        budgetAmount = budgetAmountRemain;
+                        isLoop = true;
+                    }
+                }
+                this.walletCashTotalRepository.saveWalletCashReserve(campaignAdAccountId.getAdAccountId(), m.getCashId(), availableAmount, reserveAmount);
+
+
+                if(!isLoop) {
+                    break;
+                }
+            }
+        } else {
+            throw new CampaignCashException();
+        }
+
         CampaignFindUtils.findByIdOrElseThrow(request.getCampaignId(), this.campaignRepository)
                 .update(request);
     }

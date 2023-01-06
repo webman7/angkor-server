@@ -31,6 +31,7 @@ public class WalletLogQuerydslRepositoryImpl implements WalletLogQuerydslReposit
 
     public WalletDto.Response.WalletCashTotal getCashTotalByCashId(Integer adAccountId, Integer cashId) {
         return this.query.select(new QWalletDto_Response_WalletCashTotal(
+                        walletCashTotal.cash.id,
                         walletCashTotal.amount,
                         walletCashTotal.availableAmount,
                         walletCashTotal.reserveAmount

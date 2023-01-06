@@ -22,4 +22,6 @@ public interface CampaignQuerydslRepository {
 
     List<CampaignDto.Response.Budget> getBudget(Integer campaignId);
 
+    CampaignDto.Response.CampaignByAdAccountId getCampaignByAdAccountId(Integer campaignId);
+
 }

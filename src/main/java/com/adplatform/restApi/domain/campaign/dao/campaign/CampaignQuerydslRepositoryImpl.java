@@ -130,6 +130,14 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
                 .fetch();
     }
 
+    @Override
+    public CampaignDto.Response.CampaignByAdAccountId getCampaignByAdAccountId(Integer id) {
+        return this.query.select(new QCampaignDto_Response_CampaignByAdAccountId(campaign.id, campaign.adAccount.id, campaign.budgetAmount))
+                .from(campaign)
+                .where(campaign.id.eq(id))
+                .fetchOne();
+    }
+
     private BooleanExpression eqAdAccountId(Integer adAccountId) {
         return nonNull(adAccountId) ? campaign.adAccount.id.eq(adAccountId) : null;
     }

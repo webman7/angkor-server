@@ -1,5 +1,6 @@
 package com.adplatform.restApi.domain.campaign.dto;
 
+import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountIdGetter;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupDto;
 import com.adplatform.restApi.domain.campaign.domain.Campaign;
@@ -191,6 +192,23 @@ public abstract class CampaignDto {
             @QueryProjection
             public Budget(Integer campaignId, Long budgetAmount) {
                 this.campaignId = campaignId;
+                this.budgetAmount = budgetAmount;
+            }
+        }
+
+        @Getter
+        @Setter
+        @NoArgsConstructor(access = AccessLevel.PROTECTED)
+        public static class CampaignByAdAccountId {
+            private Integer campaignId;
+            private Integer adAccountId;
+
+            private Long budgetAmount;
+
+            @QueryProjection
+            public CampaignByAdAccountId(Integer campaignId, Integer adAccountId, Long budgetAmount) {
+                this.campaignId = campaignId;
+                this.adAccountId = adAccountId;
                 this.budgetAmount = budgetAmount;
             }
         }
