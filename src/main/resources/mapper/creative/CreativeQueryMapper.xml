@@ -83,7 +83,7 @@ since 1.0
                 </foreach>
             </if>
             <if test="request.creativeCondition.adGroupIds and request.creativeCondition.adGroupIds.size() > 0">
-                <foreach collection="request.creativeCondition.adGroupIds" item="adGroupId" open="AND a.adgroup_info_id IN (" separator=", " close=")">
+                <foreach collection="request.creativeCondition.adGroupIds" item="adGroupId" open="AND cr.adgroup_info_id IN (" separator=", " close=")">
                     #{adGroupId}
                 </foreach>
             </if>
