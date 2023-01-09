@@ -47,9 +47,9 @@ public class ReportCustom extends BaseUpdatedEntity {
 //        defaultIndicator
 //    }
 //
-//    public enum Config {
-//        ON, OFF, DEL
-//    }
+    public enum Config {
+        ON, OFF, DEL
+    }
 
     @Column(name = "adaccount_info_id")
     private Integer adAccountId;

@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+author junny
+since 1.0
+-->
+<!--suppress MybatisXMapperXmlInspection -->
+<mapper namespace="com.adplatform.restApi.domain.report.dao.custom.mapper.ReportCustomQueryMapper">
+    <resultMap id="mapSearchTotal" type="com.adplatform.restApi.domain.report.dto.custom.ReportCustomDto$Response$Page">
+        <id column="id" property="id"/>
+        <result column="adAccountId" property="adAccountId"/>
+        <result column="adAccountName" property="adAccountName"/>
+        <result column="adAccountUserConfig" property="adAccountUserConfig"/>
+        <result column="campaignId" property="campaignId"/>
+        <result column="campaignName" property="campaignName"/>
+        <result column="campaignUserConfig" property="campaignUserConfig"/>
+        <result column="campaignType" property="campaignType"/>
+        <result column="adGroupId" property="adGroupId"/>
+        <result column="adGroupName" property="adGroupName"/>
+        <result column="adGroupUserConfig" property="adGroupUserConfig"/>
+        <result column="creativeId" property="creativeId"/>
+        <result column="creativeName" property="creativeName"/>
+        <result column="creativeUserConfig" property="creativeUserConfig"/>
+        <result column="representativeId" property="representativeId"/>
+        <result column="startDate" property="startDate"/>
+        <result column="endDate" property="endDate"/>
+        <association property="adTypeAndGoal" javaType="com.adplatform.restApi.domain.campaign.dto.AdTypeAndGoalDto">
+            <result column="adTypeName" property="adTypeName"/>
+            <result column="adGoalName" property="adGoalName"/>
+        </association>
+        <association property="report" javaType="com.adplatform.restApi.domain.statistics.dto.ReportDto$Response">
+            <result column="cost" property="cost"/>
+            <result column="impression" property="impression"/>
+            <result column="click" property="click"/>
+            <result column="reach" property="reach"/>
+            <result column="videoAutoPlay" property="videoAutoPlay"/>
+            <result column="videoTouches" property="videoTouches"/>
+            <result column="videoUnmute" property="videoUnmute"/>
+            <result column="videoPlay3Seconds" property="videoPlay3Seconds"/>
+            <result column="videoPlay5Seconds" property="videoPlay5Seconds"/>
+            <result column="videoPlay10Seconds" property="videoPlay10Seconds"/>
+            <result column="videoPlay15Seconds" property="videoPlay15Seconds"/>
+            <result column="videoPlay30Seconds" property="videoPlay30Seconds"/>
+            <result column="videoPlay60Seconds" property="videoPlay60Seconds"/>
+            <result column="videoPlay25Percent" property="videoPlay25Percent"/>
+            <result column="videoPlay50Percent" property="videoPlay50Percent"/>
+            <result column="videoPlay75Percent" property="videoPlay75Percent"/>
+            <result column="videoPlay100Percent" property="videoPlay100Percent"/>
+            <result column="signUpDay1" property="signUpDay1"/>
+            <result column="purchaseDay1" property="purchaseDay1"/>
+            <result column="viewCartDay1" property="viewCartDay1"/>
+            <result column="signUpDay7" property="signUpDay7"/>
+            <result column="purchaseDay7" property="purchaseDay7"/>
+            <result column="viewCartDay7" property="viewCartDay7"/>
+            <result column="ctr" property="ctr"/>
+            <result column="cpm" property="cpm"/>
+            <result column="cpc" property="cpc"/>
+            <result column="reachRate" property="reachRate"/>
+            <result column="videoPlayRate" property="videoPlayRate"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="mapSearch" type="com.adplatform.restApi.domain.report.dto.custom.ReportCustomDto$Response$Page">
+        <id column="id" property="id"/>
+        <id column="startDate" property="startDate"/>
+        <id column="endDate" property="endDate"/>
+        <result column="adAccountId" property="adAccountId"/>
+        <result column="adAccountName" property="adAccountName"/>
+        <result column="adAccountUserConfig" property="adAccountUserConfig"/>
+        <result column="campaignId" property="campaignId"/>
+        <result column="campaignName" property="campaignName"/>
+        <result column="campaignUserConfig" property="campaignUserConfig"/>
+        <result column="campaignType" property="campaignType"/>
+        <result column="adGroupId" property="adGroupId"/>
+        <result column="adGroupName" property="adGroupName"/>
+        <result column="adGroupUserConfig" property="adGroupUserConfig"/>
+        <result column="creativeId" property="creativeId"/>
+        <result column="creativeName" property="creativeName"/>
+        <result column="creativeUserConfig" property="creativeUserConfig"/>
+        <result column="representativeId" property="representativeId"/>
+        <result column="startDate" property="startDate"/>
+        <result column="endDate" property="endDate"/>
+        <association property="adTypeAndGoal" javaType="com.adplatform.restApi.domain.campaign.dto.AdTypeAndGoalDto">
+            <result column="adTypeName" property="adTypeName"/>
+            <result column="adGoalName" property="adGoalName"/>
+        </association>
+        <association property="report" javaType="com.adplatform.restApi.domain.statistics.dto.ReportDto$Response">
+            <result column="cost" property="cost"/>
+            <result column="impression" property="impression"/>
+            <result column="click" property="click"/>
+            <result column="reach" property="reach"/>
+            <result column="videoAutoPlay" property="videoAutoPlay"/>
+            <result column="videoTouches" property="videoTouches"/>
+            <result column="videoUnmute" property="videoUnmute"/>
+            <result column="videoPlay3Seconds" property="videoPlay3Seconds"/>
+            <result column="videoPlay5Seconds" property="videoPlay5Seconds"/>
+            <result column="videoPlay10Seconds" property="videoPlay10Seconds"/>
+            <result column="videoPlay15Seconds" property="videoPlay15Seconds"/>
+            <result column="videoPlay30Seconds" property="videoPlay30Seconds"/>
+            <result column="videoPlay60Seconds" property="videoPlay60Seconds"/>
+            <result column="videoPlay25Percent" property="videoPlay25Percent"/>
+            <result column="videoPlay50Percent" property="videoPlay50Percent"/>
+            <result column="videoPlay75Percent" property="videoPlay75Percent"/>
+            <result column="videoPlay100Percent" property="videoPlay100Percent"/>
+            <result column="signUpDay1" property="signUpDay1"/>
+            <result column="purchaseDay1" property="purchaseDay1"/>
+            <result column="viewCartDay1" property="viewCartDay1"/>
+            <result column="signUpDay7" property="signUpDay7"/>
+            <result column="purchaseDay7" property="purchaseDay7"/>
+            <result column="viewCartDay7" property="viewCartDay7"/>
+            <result column="ctr" property="ctr"/>
+            <result column="cpm" property="cpm"/>
+            <result column="cpc" property="cpc"/>
+            <result column="reachRate" property="reachRate"/>
+            <result column="videoPlayRate" property="videoPlayRate"/>
+        </association>
+    </resultMap>
+
+    <sql id="adAccountsConfigs">
+        <choose>
+            <when test="request.configs and request.configs.size() > 0">
+                <foreach collection="request.configs" item="config" open="AND ac.config IN (" separator=", " close=")">
+                    #{config}
+                </foreach>
+            </when>
+            <otherwise>
+                AND ac.config IN ('ON', 'OFF')
+            </otherwise>
+        </choose>
+    </sql>
+
+    <sql id="adAccountsDailyTotalQuery">
+        SELECT ac.id                                AS id,
+               ac.name                              AS adAccountName,
+               ac.id                                AS adAccountId,
+               #{request.startDate}                 AS startDate,
+               #{request.endDate}                   AS endDate,
+               <include refid="ReportCommonMapper.searchReportColumns"/>
+          FROM adaccount_info ac , (
+               SELECT inner_report.adaccount_info_id,
+                      <include refid="ReportCommonMapper.reportUnionColumns"/>
+                 FROM (
+                      SELECT rad.adaccount_info_id,
+                             <include refid="ReportCommonMapper.reportColumns"/>
+                        FROM report_adgroup_daily rad
+                       WHERE rad.adaccount_info_id = #{request.adAccountId}
+                         AND rad.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+                       GROUP BY rad.adaccount_info_id
+                       UNION
+                      SELECT rac.adaccount_info_id,
+                             <include refid="ReportCommonMapper.reportConversionColumns"/>
+                        FROM report_adgroup_conversion_daily rac
+                       WHERE rac.adaccount_info_id = #{request.adAccountId}
+                         AND rac.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+                       GROUP BY rac.adaccount_info_id
+                      ) inner_report
+                GROUP BY inner_report.adaccount_info_id
+               ) reportData
+         WHERE ac.id = reportData.adaccount_info_id
+           AND reportData.adaccount_info_id = #{request.adAccountId}
+         <include refid="adAccountsConfigs"/>
+         GROUP BY ac.id
+    </sql>
+
+    <select id="adAccountsDailyTotal" resultMap="mapSearchTotal">
+        <include refid="adAccountsDailyTotalQuery"/>
+        <include refid="common.sortAndOrder"/>
+    </select>
+
+    <select id="countAdAccountsDailyTotal" resultType="long">
+        SELECT COUNT(*)
+        FROM (<include refid="adAccountsDailyTotalQuery"/>) a
+    </select>
+
+
+
+
+
+
+    <sql id="adAccountsDailyQuery">
+        SELECT ac.id                                AS id,
+               ac.name                              AS adAccountName,
+               ac.id                                AS adAccountId,
+               reportData.report_date               AS startDate,
+               reportData.report_date               AS endDate,
+               <include refid="ReportCommonMapper.searchReportColumns"/>
+          FROM adaccount_info ac , (
+               SELECT inner_report.adaccount_info_id,
+                      inner_report.report_date,
+                      <include refid="ReportCommonMapper.reportUnionColumns"/>
+                 FROM (
+                      SELECT rad.adaccount_info_id,
+                             rad.report_date,
+                             <include refid="ReportCommonMapper.reportColumns"/>
+                        FROM report_adgroup_daily rad
+                       WHERE rad.adaccount_info_id = #{request.adAccountId}
+                         AND rad.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+                       GROUP BY rad.adaccount_info_id, rad.report_date
+                       UNION
+                      SELECT rac.adaccount_info_id,
+                             rac.report_date,
+                             <include refid="ReportCommonMapper.reportConversionColumns"/>
+                        FROM report_adgroup_conversion_daily rac
+                       WHERE rac.adaccount_info_id = #{request.adAccountId}
+                         AND rac.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+                       GROUP BY rac.adaccount_info_id, rac.report_date
+                      ) inner_report
+                GROUP BY inner_report.adaccount_info_id, inner_report.report_date
+               ) reportData
+         WHERE ac.id = reportData.adaccount_info_id
+           AND reportData.adaccount_info_id = #{request.adAccountId}
+         <include refid="adAccountsConfigs"/>
+         GROUP BY ac.id, reportData.report_date
+    </sql>
+
+    <select id="adAccountsDaily" resultMap="mapSearch">
+        <include refid="adAccountsDailyQuery"/>
+        <include refid="common.sortAndOrder"/>
+    </select>
+
+    <select id="countAdAccountsDaily" resultType="long">
+        SELECT COUNT(*)
+        FROM (<include refid="adAccountsDailyQuery"/>) a
+    </select>
+</mapper>

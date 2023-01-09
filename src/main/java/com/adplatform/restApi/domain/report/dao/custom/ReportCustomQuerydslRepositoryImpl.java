@@ -43,6 +43,7 @@ public class ReportCustomQuerydslRepositoryImpl implements ReportCustomQuerydslR
                 .from(reportCustom)
                 .where(
                         reportCustom.adAccountId.eq(request.getAdAccountId()),
+                        reportCustom.deleted.eq(false),
                         this.containsReportLevel(request.getReportLevel())
                 );
 

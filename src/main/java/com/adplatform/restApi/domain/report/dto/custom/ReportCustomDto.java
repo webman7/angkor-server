@@ -1,5 +1,7 @@
 package com.adplatform.restApi.domain.report.dto.custom;
 
+import com.adplatform.restApi.domain.campaign.dto.AdTypeAndGoalDto;
+import com.adplatform.restApi.domain.statistics.dto.ReportDto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -50,6 +52,19 @@ public abstract class ReportCustomDto {
             private Integer startDate;
             private Integer endDate;
         }
+
+        @Getter
+        @Setter
+        public static class Report {
+            private Integer id;
+            private Integer adAccountId;
+            private String name;
+            private String reportLevel;
+            private List<String> configs;
+            private List<String> indicators;
+            private Integer startDate;
+            private Integer endDate;
+        }
     }
 
     public static abstract class Response {
@@ -76,6 +91,31 @@ public abstract class ReportCustomDto {
                 this.startDate = startDate;
                 this.endDate = endDate;
             }
+        }
+
+        @Getter
+        @Setter
+        public static class Page {
+            private Integer id;
+            private Integer adAccountId;
+            private String adAccountName;
+            private AdTypeAndGoalDto adTypeAndGoal;
+            private Integer campaignId;
+            private String campaignName;
+            private String campaignUserConfig;
+            private String campaignType;
+            private Integer adGroupId;
+            private String adGroupName;
+            private String adGroupUserConfig;
+            private Integer creativeId;
+            private String creativeName;
+            private String creativeUserConfig;
+            private Integer representativeId;
+//            private List<String> configs;
+//            private List<String> indicators;
+            private Integer startDate;
+            private Integer endDate;
+            private ReportDto.Response report;
         }
 
 
