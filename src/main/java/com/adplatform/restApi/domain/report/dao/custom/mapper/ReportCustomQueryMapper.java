@@ -24,7 +24,6 @@ public interface ReportCustomQueryMapper {
 
     long countAdAccountsDaily(@Param("request") ReportCustomDto.Request.Report request);
 
-    /*
     List<ReportCustomDto.Response.Page> campaignsDailyTotal(
             @Param("request") ReportCustomDto.Request.Report request,
             @Param("pageable") Pageable pageable
@@ -32,7 +31,13 @@ public interface ReportCustomQueryMapper {
 
     long countCampaignsDailyTotal(@Param("request") ReportCustomDto.Request.Report request);
 
-    List<ReportCustomDto.Response.Page> campaignsDaily(@Param("request") ReportCustomDto.Request.Report request);
+    List<ReportCustomDto.Response.Page> campaignsDaily(
+            @Param("request") ReportCustomDto.Request.Report request,
+            @Param("pageable") Pageable pageable
+    );
+
+    long countCampaignsDaily(@Param("request") ReportCustomDto.Request.Report request);
+
 
     List<ReportCustomDto.Response.Page> adGroupsDailyTotal(
             @Param("request") ReportCustomDto.Request.Report request,
@@ -41,7 +46,12 @@ public interface ReportCustomQueryMapper {
 
     long countAdGroupsDailyTotal(@Param("request") ReportCustomDto.Request.Report request);
 
-    List<ReportCustomDto.Response.Page> adGroupsDaily(@Param("request") ReportCustomDto.Request.Report request);
+    List<ReportCustomDto.Response.Page> adGroupsDaily(
+            @Param("request") ReportCustomDto.Request.Report request,
+            @Param("pageable") Pageable pageable
+    );
+
+    long countAdGroupsDaily(@Param("request") ReportCustomDto.Request.Report request);
 
     List<ReportCustomDto.Response.Page> creativesDailyTotal(
             @Param("request") ReportCustomDto.Request.Report request,
@@ -50,6 +60,10 @@ public interface ReportCustomQueryMapper {
 
     long countCreativesDailyTotal(@Param("request") ReportCustomDto.Request.Report request);
 
-    List<ReportCustomDto.Response.Page> creativesDaily(@Param("request") ReportCustomDto.Request.Report request);
-    */
+    List<ReportCustomDto.Response.Page> creativesDaily(
+            @Param("request") ReportCustomDto.Request.Report request,
+            @Param("pageable") Pageable pageable
+    );
+
+    long countCreativesDaily(@Param("request") ReportCustomDto.Request.Report request);
 }

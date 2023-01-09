@@ -60,7 +60,7 @@ public class ReportQueryApi {
                 pageable,
                 this.reportCustomQueryMapper.countAdAccountsDaily(request)));
     }
-/*
+
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/custom/campaigns")
     public PageDto<ReportCustomDto.Response.Page> campaignsDailyTotal(
@@ -74,10 +74,15 @@ public class ReportQueryApi {
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/custom/campaigns/daily")
-    public List<ReportCustomDto.Response.Page> campaignsDaily(
-            @RequestBody @Valid ReportCustomDto.Request.Report request) {
-        return this.reportCustomQueryMapper.campaignsDaily(request);
+    public PageDto<ReportCustomDto.Response.Page> campaignsDaily(
+            @RequestBody @Valid ReportCustomDto.Request.Report request,
+            @PageableDefault Pageable pageable) {
+        return PageDto.create(new PageImpl<>(
+                this.reportCustomQueryMapper.campaignsDaily(request, pageable),
+                pageable,
+                this.reportCustomQueryMapper.countCampaignsDaily(request)));
     }
+
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/custom/adGroups")
     public PageDto<ReportCustomDto.Response.Page> adGroupsDailyTotal(
@@ -91,9 +96,13 @@ public class ReportQueryApi {
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/custom/adGroups/daily")
-    public List<ReportCustomDto.Response.Page> adGroupsDaily(
-            @RequestBody @Valid ReportCustomDto.Request.Report request) {
-        return this.reportCustomQueryMapper.adGroupsDaily(request);
+    public PageDto<ReportCustomDto.Response.Page> adGroupsDaily(
+            @RequestBody @Valid ReportCustomDto.Request.Report request,
+            @PageableDefault Pageable pageable) {
+        return PageDto.create(new PageImpl<>(
+                this.reportCustomQueryMapper.adGroupsDaily(request, pageable),
+                pageable,
+                this.reportCustomQueryMapper.countAdGroupsDaily(request)));
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -108,10 +117,14 @@ public class ReportQueryApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/custom/adGroups/daily")
-    public List<ReportCustomDto.Response.Page> creativesDaily(
-            @RequestBody @Valid ReportCustomDto.Request.Report request) {
-        return this.reportCustomQueryMapper.creativesDaily(request);
+    @PostMapping("/custom/creatives/daily")
+    public PageDto<ReportCustomDto.Response.Page> creativesDaily(
+            @RequestBody @Valid ReportCustomDto.Request.Report request,
+            @PageableDefault Pageable pageable) {
+        return PageDto.create(new PageImpl<>(
+                this.reportCustomQueryMapper.creativesDaily(request, pageable),
+                pageable,
+                this.reportCustomQueryMapper.countCreativesDaily(request)));
     }
-    */
+
 }

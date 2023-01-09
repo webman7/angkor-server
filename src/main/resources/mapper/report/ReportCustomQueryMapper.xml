@@ -118,6 +118,7 @@ since 1.0
         </association>
     </resultMap>
 
+    <!-- adAccount -->
     <sql id="adAccountsConfigs">
         <choose>
             <when test="request.configs and request.configs.size() > 0">
@@ -174,11 +175,6 @@ since 1.0
         FROM (<include refid="adAccountsDailyTotalQuery"/>) a
     </select>
 
-
-
-
-
-
     <sql id="adAccountsDailyQuery">
         SELECT ac.id                                AS id,
                ac.name                              AS adAccountName,
@@ -223,5 +219,406 @@ since 1.0
     <select id="countAdAccountsDaily" resultType="long">
         SELECT COUNT(*)
         FROM (<include refid="adAccountsDailyQuery"/>) a
+    </select>
+
+    <!-- campaigns -->
+    <sql id="campaignsConfigs">
+        <choose>
+            <when test="request.configs and request.configs.size() > 0">
+                <foreach collection="request.configs" item="config" open="AND ca.config IN (" separator=", " close=")">
+                    #{config}
+                </foreach>
+            </when>
+            <otherwise>
+                AND ca.config IN ('ON', 'OFF')
+            </otherwise>
+        </choose>
+    </sql>
+
+    <sql id="campaignsDailyTotalQuery">
+        SELECT ca.id                                AS id,
+        ac.name                              AS adAccountName,
+        ac.id                                AS adAccountId,
+        ca.name                              AS campaignName,
+        ca.id                                AS campaignId,
+        ca.config                            AS campaignUserConfig,
+        tg.adTypeName, tg.adGoalName,
+        #{request.startDate}                 AS startDate,
+        #{request.endDate}                   AS endDate,
+        <include refid="ReportCommonMapper.searchReportColumns"/>
+        FROM adaccount_info ac , (
+        SELECT inner_report.adaccount_info_id, inner_report.campaign_info_id,
+        <include refid="ReportCommonMapper.reportUnionColumns"/>
+        FROM (
+        SELECT rad.adaccount_info_id, rad.campaign_info_id,
+        <include refid="ReportCommonMapper.reportColumns"/>
+        FROM report_adgroup_daily rad
+        WHERE rad.adaccount_info_id = #{request.adAccountId}
+        AND rad.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+        GROUP BY rad.adaccount_info_id, rad.campaign_info_id
+        UNION
+        SELECT rac.adaccount_info_id, rac.campaign_info_id,
+        <include refid="ReportCommonMapper.reportConversionColumns"/>
+        FROM report_adgroup_conversion_daily rac
+        WHERE rac.adaccount_info_id = #{request.adAccountId}
+        AND rac.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+        GROUP BY rac.adaccount_info_id, rac.campaign_info_id
+        ) inner_report
+        GROUP BY inner_report.adaccount_info_id, inner_report.campaign_info_id
+        ) reportData, campaign_info ca INNER JOIN (SELECT atg.id, at.name AS adTypeName, ag.name AS adGoalName
+        FROM ad_type_goal_info atg, ad_type_info at, ad_goal_info ag
+        WHERE atg.ad_type_info_id = at.id
+        AND atg.ad_goal_info_id = ag.id) tg
+        ON tg.id = ca.ad_type_goal_info_id
+        WHERE ac.id = reportData.adaccount_info_id
+        AND ac.id = ca.adaccount_info_id
+        AND reportData.adaccount_info_id = #{request.adAccountId}
+        AND reportData.campaign_info_id = ca.id
+        <include refid="campaignsConfigs"/>
+        GROUP BY ac.id, ca.id
+    </sql>
+
+    <select id="campaignsDailyTotal" resultMap="mapSearchTotal">
+        <include refid="campaignsDailyTotalQuery"/>
+        <include refid="common.sortAndOrder"/>
+    </select>
+
+    <select id="countCampaignsDailyTotal" resultType="long">
+        SELECT COUNT(*)
+        FROM (<include refid="campaignsDailyTotalQuery"/>) a
+    </select>
+
+    <sql id="campaignsDailyQuery">
+        SELECT ca.id                                AS id,
+        ac.name                              AS adAccountName,
+        ac.id                                AS adAccountId,
+        ca.name                              AS campaignName,
+        ca.id                                AS campaignId,
+        ca.config                            AS campaignUserConfig,
+        tg.adTypeName, tg.adGoalName,
+        reportData.report_date               AS startDate,
+        reportData.report_date               AS endDate,
+        <include refid="ReportCommonMapper.searchReportColumns"/>
+        FROM adaccount_info ac , (
+        SELECT inner_report.adaccount_info_id, inner_report.campaign_info_id,
+        inner_report.report_date,
+        <include refid="ReportCommonMapper.reportUnionColumns"/>
+        FROM (
+        SELECT rad.adaccount_info_id, rad.campaign_info_id,
+        rad.report_date,
+        <include refid="ReportCommonMapper.reportColumns"/>
+        FROM report_adgroup_daily rad
+        WHERE rad.campaign_info_id = #{request.campaignId}
+        AND rad.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+        GROUP BY rad.adaccount_info_id, rad.campaign_info_id, rad.report_date
+        UNION
+        SELECT rac.adaccount_info_id, rac.campaign_info_id,
+        rac.report_date,
+        <include refid="ReportCommonMapper.reportConversionColumns"/>
+        FROM report_adgroup_conversion_daily rac
+        WHERE rac.campaign_info_id = #{request.campaignId}
+        AND rac.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+        GROUP BY rac.adaccount_info_id, rac.campaign_info_id, rac.report_date
+        ) inner_report
+        GROUP BY inner_report.adaccount_info_id, inner_report.campaign_info_id, inner_report.report_date
+        ) reportData, campaign_info ca INNER JOIN (SELECT atg.id, at.name AS adTypeName, ag.name AS adGoalName
+        FROM ad_type_goal_info atg, ad_type_info at, ad_goal_info ag
+        WHERE atg.ad_type_info_id = at.id
+        AND atg.ad_goal_info_id = ag.id) tg
+        ON tg.id = ca.ad_type_goal_info_id
+        WHERE ac.id = reportData.adaccount_info_id
+        AND ac.id = ca.adaccount_info_id
+        AND reportData.campaign_info_id = ca.id
+        AND reportData.campaign_info_id = #{request.campaignId}
+        <include refid="campaignsConfigs"/>
+        GROUP BY ac.id, ca.id, reportData.report_date
+    </sql>
+
+    <select id="campaignsDaily" resultMap="mapSearch">
+        <include refid="campaignsDailyQuery"/>
+        <include refid="common.sortAndOrder"/>
+    </select>
+
+    <select id="countCampaignsDaily" resultType="long">
+        SELECT COUNT(*)
+        FROM (<include refid="campaignsDailyQuery"/>) a
+    </select>
+
+    <!-- adGroups -->
+    <sql id="adGroupsConfigs">
+        <choose>
+            <when test="request.configs and request.configs.size() > 0">
+                <foreach collection="request.configs" item="config" open="AND ad.config IN (" separator=", " close=")">
+                    #{config}
+                </foreach>
+            </when>
+            <otherwise>
+                AND ad.config IN ('ON', 'OFF')
+            </otherwise>
+        </choose>
+    </sql>
+
+    <sql id="adGroupsDailyTotalQuery">
+        SELECT ad.id                                AS id,
+        ac.name                              AS adAccountName,
+        ac.id                                AS adAccountId,
+        ca.name                              AS campaignName,
+        ca.id                                AS campaignId,
+        ca.config                            AS campaignUserConfig,
+        ad.name                              AS adGroupName,
+        ad.id                                AS adGroupId,
+        ad.config                            AS adGroupUserConfig,
+        tg.adTypeName, tg.adGoalName,
+        #{request.startDate}                 AS startDate,
+        #{request.endDate}                   AS endDate,
+        <include refid="ReportCommonMapper.searchReportColumns"/>
+        FROM adaccount_info ac , (
+        SELECT inner_report.adaccount_info_id, inner_report.campaign_info_id, inner_report.adgroup_info_id,
+        <include refid="ReportCommonMapper.reportUnionColumns"/>
+        FROM (
+        SELECT rad.adaccount_info_id, rad.campaign_info_id, rad.adgroup_info_id,
+        <include refid="ReportCommonMapper.reportColumns"/>
+        FROM report_adgroup_daily rad
+        WHERE rad.adaccount_info_id = #{request.adAccountId}
+        AND rad.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+        GROUP BY rad.adaccount_info_id, rad.campaign_info_id, rad.adgroup_info_id
+        UNION
+        SELECT rac.adaccount_info_id, rac.campaign_info_id, rac.adgroup_info_id,
+        <include refid="ReportCommonMapper.reportConversionColumns"/>
+        FROM report_adgroup_conversion_daily rac
+        WHERE rac.adaccount_info_id = #{request.adAccountId}
+        AND rac.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+        GROUP BY rac.adaccount_info_id, rac.campaign_info_id, rac.adgroup_info_id
+        ) inner_report
+        GROUP BY inner_report.adaccount_info_id, inner_report.campaign_info_id, inner_report.adgroup_info_id
+        ) reportData, adgroup_info ad, campaign_info ca INNER JOIN (SELECT atg.id, at.name AS adTypeName, ag.name AS adGoalName
+        FROM ad_type_goal_info atg, ad_type_info at, ad_goal_info ag
+        WHERE atg.ad_type_info_id = at.id
+        AND atg.ad_goal_info_id = ag.id) tg
+        ON tg.id = ca.ad_type_goal_info_id
+        WHERE ac.id = reportData.adaccount_info_id
+        AND ac.id = ca.adaccount_info_id
+        AND reportData.adaccount_info_id = #{request.adAccountId}
+        AND reportData.campaign_info_id = ca.id
+        AND ad.campaign_info_id = ca.id
+        AND reportData.adgroup_info_id = ad.id
+        <include refid="adGroupsConfigs"/>
+        GROUP BY ac.id, ca.id, ad.id
+    </sql>
+
+    <select id="adGroupsDailyTotal" resultMap="mapSearchTotal">
+        <include refid="adGroupsDailyTotalQuery"/>
+        <include refid="common.sortAndOrder"/>
+    </select>
+
+    <select id="countAdGroupsDailyTotal" resultType="long">
+        SELECT COUNT(*)
+        FROM (<include refid="adGroupsDailyTotalQuery"/>) a
+    </select>
+
+    <sql id="adGroupsDailyQuery">
+        SELECT ca.id                                AS id,
+        ac.name                              AS adAccountName,
+        ac.id                                AS adAccountId,
+        ca.name                              AS campaignName,
+        ca.id                                AS campaignId,
+        ca.config                            AS campaignUserConfig,
+        ad.name                              AS adGroupName,
+        ad.id                                AS adGroupId,
+        ad.config                            AS adGroupUserConfig,
+        tg.adTypeName, tg.adGoalName,
+        reportData.report_date               AS startDate,
+        reportData.report_date               AS endDate,
+        <include refid="ReportCommonMapper.searchReportColumns"/>
+        FROM adaccount_info ac , (
+        SELECT inner_report.adaccount_info_id, inner_report.campaign_info_id, inner_report.adgroup_info_id,
+        inner_report.report_date,
+        <include refid="ReportCommonMapper.reportUnionColumns"/>
+        FROM (
+        SELECT rad.adaccount_info_id, rad.campaign_info_id, rad.adgroup_info_id,
+        rad.report_date,
+        <include refid="ReportCommonMapper.reportColumns"/>
+        FROM report_adgroup_daily rad
+        WHERE rad.adgroup_info_id = #{request.adGroupId}
+        AND rad.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+        GROUP BY rad.adaccount_info_id, rad.campaign_info_id, rad.adgroup_info_id, rad.report_date
+        UNION
+        SELECT rac.adaccount_info_id, rac.campaign_info_id, rac.adgroup_info_id,
+        rac.report_date,
+        <include refid="ReportCommonMapper.reportConversionColumns"/>
+        FROM report_adgroup_conversion_daily rac
+        WHERE rac.adgroup_info_id = #{request.adGroupId}
+        AND rac.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+        GROUP BY rac.adaccount_info_id, rac.campaign_info_id, rac.adgroup_info_id, rac.report_date
+        ) inner_report
+        GROUP BY inner_report.adaccount_info_id, inner_report.campaign_info_id, inner_report.adgroup_info_id, inner_report.report_date
+        ) reportData, adgroup_info ad, campaign_info ca INNER JOIN (SELECT atg.id, at.name AS adTypeName, ag.name AS adGoalName
+        FROM ad_type_goal_info atg, ad_type_info at, ad_goal_info ag
+        WHERE atg.ad_type_info_id = at.id
+        AND atg.ad_goal_info_id = ag.id) tg
+        ON tg.id = ca.ad_type_goal_info_id
+        WHERE ac.id = reportData.adaccount_info_id
+        AND ac.id = ca.adaccount_info_id
+        AND reportData.adgroup_info_id = #{request.adGroupId}
+        AND reportData.campaign_info_id = ca.id
+        AND ad.campaign_info_id = ca.id
+        AND reportData.adgroup_info_id = ad.id
+        <include refid="adGroupsConfigs"/>
+        GROUP BY ac.id, ca.id, ad.id, reportData.report_date
+    </sql>
+
+    <select id="adGroupsDaily" resultMap="mapSearch">
+        <include refid="adGroupsDailyQuery"/>
+        <include refid="common.sortAndOrder"/>
+    </select>
+
+    <select id="countAdGroupsDaily" resultType="long">
+        SELECT COUNT(*)
+        FROM (<include refid="adGroupsDailyQuery"/>) a
+    </select>
+
+    <!-- creative -->
+    <sql id="creativesConfigs">
+        <choose>
+            <when test="request.configs and request.configs.size() > 0">
+                <foreach collection="request.configs" item="config" open="AND cr.config IN (" separator=", " close=")">
+                    #{config}
+                </foreach>
+            </when>
+            <otherwise>
+                AND cr.config IN ('ON', 'OFF')
+            </otherwise>
+        </choose>
+    </sql>
+
+    <sql id="creativesDailyTotalQuery">
+        SELECT cr.id                                AS id,
+        ac.name                              AS adAccountName,
+        ac.id                                AS adAccountId,
+        ca.name                              AS campaignName,
+        ca.id                                AS campaignId,
+        ca.config                            AS campaignUserConfig,
+        ad.name                              AS adGroupName,
+        ad.id                                AS adGroupId,
+        ad.config                            AS adGroupUserConfig,
+        cr.name                              AS creativeName,
+        cr.id                                AS creativeId,
+        cr.config                            AS creativeUserConfig,
+        cr.representative_id                 AS representativeId,
+        tg.adTypeName, tg.adGoalName,
+        #{request.startDate}                 AS startDate,
+        #{request.endDate}                   AS endDate,
+        <include refid="ReportCommonMapper.searchReportColumns"/>
+        FROM adaccount_info ac , (
+        SELECT inner_report.adaccount_info_id, inner_report.campaign_info_id, inner_report.adgroup_info_id, inner_report.creative_info_id,
+        <include refid="ReportCommonMapper.reportUnionColumns"/>
+        FROM (
+        SELECT rad.adaccount_info_id, rad.campaign_info_id, rad.adgroup_info_id, rad.creative_info_id,
+        <include refid="ReportCommonMapper.reportColumns"/>
+        FROM report_daily rad
+        WHERE rad.adaccount_info_id = #{request.adAccountId}
+        AND rad.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+        GROUP BY rad.adaccount_info_id, rad.campaign_info_id, rad.adgroup_info_id, rad.creative_info_id
+        UNION
+        SELECT rac.adaccount_info_id, rac.campaign_info_id, rac.adgroup_info_id, rac.creative_info_id,
+        <include refid="ReportCommonMapper.reportConversionColumns"/>
+        FROM report_conversion_daily rac
+        WHERE rac.adaccount_info_id = #{request.adAccountId}
+        AND rac.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+        GROUP BY rac.adaccount_info_id, rac.campaign_info_id, rac.adgroup_info_id, rac.creative_info_id
+        ) inner_report
+        GROUP BY inner_report.adaccount_info_id, inner_report.campaign_info_id, inner_report.adgroup_info_id, inner_report.creative_info_id
+        ) reportData, adgroup_info ad, creative_info cr, campaign_info ca INNER JOIN (SELECT atg.id, at.name AS adTypeName, ag.name AS adGoalName
+        FROM ad_type_goal_info atg, ad_type_info at, ad_goal_info ag
+        WHERE atg.ad_type_info_id = at.id
+        AND atg.ad_goal_info_id = ag.id) tg
+        ON tg.id = ca.ad_type_goal_info_id
+        WHERE ac.id = reportData.adaccount_info_id
+        AND ac.id = ca.adaccount_info_id
+        AND reportData.adaccount_info_id = #{request.adAccountId}
+        AND reportData.campaign_info_id = ca.id
+        AND ad.campaign_info_id = ca.id
+        AND reportData.adgroup_info_id = ad.id
+        AND ad.id = cr.adgroup_info_id
+        AND reportData.creative_info_id = cr.id
+        <include refid="creativesConfigs"/>
+        GROUP BY ac.id, ca.id, ad.id, cr.id
+    </sql>
+
+    <select id="creativesDailyTotal" resultMap="mapSearchTotal">
+        <include refid="creativesDailyTotalQuery"/>
+        <include refid="common.sortAndOrder"/>
+    </select>
+
+    <select id="countCreativesDailyTotal" resultType="long">
+        SELECT COUNT(*)
+        FROM (<include refid="creativesDailyTotalQuery"/>) a
+    </select>
+
+    <sql id="creativesDailyQuery">
+        SELECT cr.id                                AS id,
+        ac.name                              AS adAccountName,
+        ac.id                                AS adAccountId,
+        ca.name                              AS campaignName,
+        ca.id                                AS campaignId,
+        ca.config                            AS campaignUserConfig,
+        ad.name                              AS adGroupName,
+        ad.id                                AS adGroupId,
+        ad.config                            AS adGroupUserConfig,
+        cr.name                              AS creativeName,
+        cr.id                                AS creativeId,
+        cr.config                            AS creativeUserConfig,
+        cr.representative_id                 AS representativeId,
+        tg.adTypeName, tg.adGoalName,
+        reportData.report_date               AS startDate,
+        reportData.report_date               AS endDate,
+        <include refid="ReportCommonMapper.searchReportColumns"/>
+        FROM adaccount_info ac , (
+        SELECT inner_report.adaccount_info_id, inner_report.campaign_info_id, inner_report.adgroup_info_id, inner_report.creative_info_id,
+        inner_report.report_date,
+        <include refid="ReportCommonMapper.reportUnionColumns"/>
+        FROM (
+        SELECT rad.adaccount_info_id, rad.campaign_info_id, rad.adgroup_info_id, rad.creative_info_id,
+        rad.report_date,
+        <include refid="ReportCommonMapper.reportColumns"/>
+        FROM report_daily rad
+        WHERE rad.creative_info_id = #{request.creativeId}
+        AND rad.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+        GROUP BY rad.adaccount_info_id, rad.campaign_info_id, rad.adgroup_info_id, rad.creative_info_id, rad.report_date
+        UNION
+        SELECT rac.adaccount_info_id, rac.campaign_info_id, rac.adgroup_info_id, rac.creative_info_id,
+        rac.report_date,
+        <include refid="ReportCommonMapper.reportConversionColumns"/>
+        FROM report_conversion_daily rac
+        WHERE rac.creative_info_id = #{request.creativeId}
+        AND rac.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+        GROUP BY rac.adaccount_info_id, rac.campaign_info_id, rac.adgroup_info_id, rac.creative_info_id, rac.report_date
+        ) inner_report
+        GROUP BY inner_report.adaccount_info_id, inner_report.campaign_info_id, inner_report.adgroup_info_id, inner_report.creative_info_id, inner_report.report_date
+        ) reportData, adgroup_info ad, creative_info cr, campaign_info ca INNER JOIN (SELECT atg.id, at.name AS adTypeName, ag.name AS adGoalName
+        FROM ad_type_goal_info atg, ad_type_info at, ad_goal_info ag
+        WHERE atg.ad_type_info_id = at.id
+        AND atg.ad_goal_info_id = ag.id) tg
+        ON tg.id = ca.ad_type_goal_info_id
+        WHERE ac.id = reportData.adaccount_info_id
+        AND ac.id = ca.adaccount_info_id
+        AND reportData.creative_info_id = #{request.creativeId}
+        AND reportData.campaign_info_id = ca.id
+        AND ad.campaign_info_id = ca.id
+        AND reportData.adgroup_info_id = ad.id
+        AND ad.id = cr.adgroup_info_id
+        AND reportData.creative_info_id = cr.id
+        <include refid="creativesConfigs"/>
+        GROUP BY ac.id, ca.id, ad.id, cr.id, reportData.report_date
+    </sql>
+
+    <select id="creativesDaily" resultMap="mapSearch">
+        <include refid="creativesDailyQuery"/>
+        <include refid="common.sortAndOrder"/>
+    </select>
+
+    <select id="countCreativesDaily" resultType="long">
+        SELECT COUNT(*)
+        FROM (<include refid="creativesDailyQuery"/>) a
     </select>
 </mapper>

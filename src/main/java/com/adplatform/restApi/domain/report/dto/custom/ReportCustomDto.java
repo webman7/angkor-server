@@ -58,6 +58,9 @@ public abstract class ReportCustomDto {
         public static class Report {
             private Integer id;
             private Integer adAccountId;
+            private Integer campaignId;
+            private Integer adGroupId;
+            private Integer creativeId;
             private String name;
             private String reportLevel;
             private List<String> configs;
@@ -103,7 +106,6 @@ public abstract class ReportCustomDto {
             private Integer campaignId;
             private String campaignName;
             private String campaignUserConfig;
-            private String campaignType;
             private Integer adGroupId;
             private String adGroupName;
             private String adGroupUserConfig;
