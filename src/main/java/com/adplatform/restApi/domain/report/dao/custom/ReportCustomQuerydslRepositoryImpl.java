@@ -47,7 +47,7 @@ public class ReportCustomQuerydslRepositoryImpl implements ReportCustomQuerydslR
                         this.containsReportLevel(request.getReportLevel())
                 );
 
-        return PageableExecutionUtils.getPage(content, pageable, () -> countQuery.fetch().size());
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
     private JPAQuery<ReportCustomDto.Response.Default> getSearchReportCustomQuery(
@@ -66,6 +66,7 @@ public class ReportCustomQuerydslRepositoryImpl implements ReportCustomQuerydslR
                 .from(reportCustom)
                 .where(
                         reportCustom.adAccountId.eq(request.getAdAccountId()),
+                        reportCustom.deleted.eq(false),
                         this.containsReportLevel(request.getReportLevel()));
 
         return Objects.nonNull(pageable)
