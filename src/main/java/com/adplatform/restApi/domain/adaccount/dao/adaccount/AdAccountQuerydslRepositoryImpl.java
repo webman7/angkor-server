@@ -64,7 +64,7 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                         this.eqId(request.getId()),
                         this.containsName(request.getName())
                 ).groupBy(adAccount.id);
-
+        // group by 일 경우 () -> countQuery.fetch().size()
         return PageableExecutionUtils.getPage(content, pageable, () -> countQuery.fetch().size());
     }
 
@@ -163,7 +163,7 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                         this.containsName(request.getName()),
                         this.eqPreDeferredPayment(request.getPreDeferredPayment())
                 ).groupBy(adAccount.id);
-
+        // group by 일 경우 () -> countQuery.fetch().size()
         return PageableExecutionUtils.getPage(content, pageable, () -> countQuery.fetch().size());
     }
 
@@ -327,7 +327,7 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                         this.eqId(request.getId()),
                         this.containsName(request.getName())
                 ).groupBy(adAccount.id);
-
+        // group by 일 경우 () -> countQuery.fetch().size()
         return PageableExecutionUtils.getPage(content, pageable, () -> countQuery.fetch().size());
     }
 

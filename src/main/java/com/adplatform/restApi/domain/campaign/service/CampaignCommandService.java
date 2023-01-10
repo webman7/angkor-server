@@ -14,8 +14,13 @@ import com.adplatform.restApi.domain.campaign.dto.CampaignDto;
 import com.adplatform.restApi.domain.campaign.dto.CampaignMapper;
 import com.adplatform.restApi.domain.campaign.exception.AdTypeAndGoalNotFoundException;
 import com.adplatform.restApi.domain.campaign.exception.CampaignCashException;
+import com.adplatform.restApi.domain.history.dao.campaign.CampaignBudgetChangeHistoryRepository;
+import com.adplatform.restApi.domain.history.domain.CampaignBudgetChangeHistory;
+import com.adplatform.restApi.domain.history.dto.campaign.CampaignBudgetChangeHistoryDto;
+import com.adplatform.restApi.domain.history.dto.campaign.CampaignBudgetChangeHistoryMapper;
 import com.adplatform.restApi.domain.wallet.dao.walletcashtotal.WalletCashTotalRepository;
 import com.adplatform.restApi.domain.wallet.dto.WalletDto;
+import com.adplatform.restApi.global.config.security.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -40,14 +45,19 @@ public class CampaignCommandService {
     private final AdAccountRepository adAccountRepository;
     private final CampaignMapper campaignMapper;
     private final AdGroupEventMapper adGroupEventMapper;
-
     private final WalletCashTotalRepository walletCashTotalRepository;
+    private final CampaignBudgetChangeHistoryRepository campaignBudgetChangeHistoryRepository;
+
+    private final CampaignBudgetChangeHistoryMapper campaignBudgetChangeHistoryMapper;
 
     public void save(CampaignDto.Request.Save request) {
         AdTypeAndGoal adTypeAndGoal = this.findAdTypeAndGoal(
                 request.getAdTypeAndGoal().getAdTypeName(),
                 request.getAdTypeAndGoal().getAdGoalName());
         AdAccount adAccount = AdAccountFindUtils.findByIdOrElseThrow(request.getAdAccountId(), this.adAccountRepository);
+
+        Campaign campaign = this.campaignRepository.save(this.campaignMapper.toEntity(request, adTypeAndGoal, adAccount));
+        this.mapToAdGroupSavedEvent(request.getAdGroups(), campaign).forEach(this.eventPublisher::publishEvent);
 
         List<WalletDto.Response.WalletCashTotal> list = this.walletCashTotalRepository.getWalletCashTotal(request.getAdAccountId());
 
@@ -80,6 +90,19 @@ public class CampaignCommandService {
                     isLoop = true;
                 }
                 this.walletCashTotalRepository.saveWalletCashReserve(request.getAdAccountId(), m.getCashId(), availableAmount, reserveAmount);
+
+                CampaignBudgetChangeHistoryDto.Request.Save history = new CampaignBudgetChangeHistoryDto.Request.Save();
+                history.setAdAccountId(request.getAdAccountId());
+                history.setCampaignId(campaign.getId());
+                history.setCashId(m.getCashId());
+                history.setChgAmount(budgetAmount);
+                history.setAvailableAmount(m.getAvailableAmount());
+                history.setAvailableChgAmount(availableAmount);
+                history.setReserveAmount(m.getReserveAmount());
+                history.setReserveChgAmount(reserveAmount);
+                CampaignBudgetChangeHistory campaignBudgetChangeHistory = this.campaignBudgetChangeHistoryMapper.toEntity(history, SecurityUtils.getLoginUserId());
+                this.campaignBudgetChangeHistoryRepository.save(campaignBudgetChangeHistory);
+
                 if(!isLoop) {
                     break;
                 }
@@ -87,8 +110,6 @@ public class CampaignCommandService {
         } else {
             throw new CampaignCashException();
         }
-        Campaign campaign = this.campaignRepository.save(this.campaignMapper.toEntity(request, adTypeAndGoal, adAccount));
-        this.mapToAdGroupSavedEvent(request.getAdGroups(), campaign).forEach(this.eventPublisher::publishEvent);
     }
 
     private AdTypeAndGoal findAdTypeAndGoal(String adTypeName, String adGoalName) {
@@ -157,8 +178,20 @@ public class CampaignCommandService {
                         isLoop = true;
                     }
                 }
+
                 this.walletCashTotalRepository.saveWalletCashReserve(campaignAdAccountId.getAdAccountId(), m.getCashId(), availableAmount, reserveAmount);
 
+                CampaignBudgetChangeHistoryDto.Request.Save history = new CampaignBudgetChangeHistoryDto.Request.Save();
+                history.setAdAccountId(campaignAdAccountId.getAdAccountId());
+                history.setCampaignId(request.getCampaignId());
+                history.setCashId(m.getCashId());
+                history.setChgAmount(budgetAmount);
+                history.setAvailableAmount(m.getAvailableAmount());
+                history.setAvailableChgAmount(availableAmount);
+                history.setReserveAmount(m.getReserveAmount());
+                history.setReserveChgAmount(reserveAmount);
+                CampaignBudgetChangeHistory campaignBudgetChangeHistory = this.campaignBudgetChangeHistoryMapper.toEntity(history, SecurityUtils.getLoginUserId());
+                this.campaignBudgetChangeHistoryRepository.save(campaignBudgetChangeHistory);
 
                 if(!isLoop) {
                     break;

@@ -53,18 +53,6 @@ public class WalletCashTotalQuerydslRepositoryImpl implements WalletCashTotalQue
     public void saveWalletCashReserve(Integer adAccountId, Integer cashId, Long availableAmount, Long reserveAmount) {
         LocalDateTime now = LocalDateTime.now();
 
-//        // 년, 월(문자열, 숫자), 일(월 기준, 년 기준), 요일(문자열, 숫자), 시, 분, 초 구하기
-//        int year = now.getYear();  // 연도
-//        String month = now.getMonth().toString();  // 월(문자열)
-//        int monthValue = now.getMonthValue();  // 월(숫자)
-//        int dayOfMonth = now.getDayOfMonth();  // 일(월 기준)
-//        int dayOfYear = now.getDayOfYear();  // 일(년 기준)
-//        String dayOfWeek = now.getDayOfWeek().toString();  // 요일(문자열)
-//        int dayOfWeekValue = now.getDayOfWeek().getValue();  // 요일(숫자)
-//        int hour = now.getHour();
-//        int minute = now.getMinute();
-//        int second = now.getSecond();
-
         this.query.update(walletCashTotal)
                 .set(walletCashTotal.availableAmount, availableAmount)
                 .set(walletCashTotal.reserveAmount, reserveAmount)
