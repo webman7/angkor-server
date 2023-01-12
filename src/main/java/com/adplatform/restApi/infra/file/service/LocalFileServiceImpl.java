@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,8 @@ import java.util.UUID;
  * @author Seohyun Lee
  * @since 1.0
  */
-@Profile({"local", "dev"})
+@Profile({"stage", "local", "dev"})
+@Primary
 @Service
 public class LocalFileServiceImpl implements FileService {
     private static final String FILE_PATH = "./files/";

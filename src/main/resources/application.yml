@@ -1,8 +1,10 @@
 spring:
   profiles:
     group:
-      "dev": "dev,jwt,aes,email"
-      "local": "local,jwt,aes,email"
+      "prod": "prod,email"
+      "stage": "stage,email"
+      "dev": "dev,email"
+      "local": "local,email"
 
   messages:
     basename: exception/messages,validation/messages
@@ -12,7 +14,32 @@ spring:
       pageable:
         one-indexed-parameters: true
 
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username:
+    password:
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
   mapper-locations: classpath:mapper/**/*.xml
+
+aes:
+  secretKey: "adPlatform123456"
+  iv: "@@$%^&*()-+=1234"
+
+jwt:
+  prefix: "Bearer "
+  secret: 2022unionmobile!!
