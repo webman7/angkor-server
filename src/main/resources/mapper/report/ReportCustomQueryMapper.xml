@@ -168,6 +168,7 @@ since 1.0
     <select id="adAccountsDailyTotal" resultMap="mapSearchTotal">
         <include refid="adAccountsDailyTotalQuery"/>
         <include refid="common.sortAndOrder"/>
+        <include refid="common.limitAndOffset"/>
     </select>
 
     <select id="countAdAccountsDailyTotal" resultType="long">
@@ -281,6 +282,7 @@ since 1.0
     <select id="campaignsDailyTotal" resultMap="mapSearchTotal">
         <include refid="campaignsDailyTotalQuery"/>
         <include refid="common.sortAndOrder"/>
+        <include refid="common.limitAndOffset"/>
     </select>
 
     <select id="countCampaignsDailyTotal" resultType="long">
@@ -409,6 +411,7 @@ since 1.0
     <select id="adGroupsDailyTotal" resultMap="mapSearchTotal">
         <include refid="adGroupsDailyTotalQuery"/>
         <include refid="common.sortAndOrder"/>
+        <include refid="common.limitAndOffset"/>
     </select>
 
     <select id="countAdGroupsDailyTotal" resultType="long">
@@ -548,6 +551,7 @@ since 1.0
     <select id="creativesDailyTotal" resultMap="mapSearchTotal">
         <include refid="creativesDailyTotalQuery"/>
         <include refid="common.sortAndOrder"/>
+        <include refid="common.limitAndOffset"/>
     </select>
 
     <select id="countCreativesDailyTotal" resultType="long">
