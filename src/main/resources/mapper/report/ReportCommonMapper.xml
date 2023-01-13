@@ -58,8 +58,8 @@ since 1.0
             IFNULL(SUM(viewCartDay1), 0)                                                               AS viewCartDay1,
             IFNULL(SUM(viewCartDay7), 0)                                                               AS viewCartDay7,
             ROUND(CASE WHEN IFNULL(SUM(impression), 0) = 0 THEN 0 ELSE (IFNULL(SUM(click), 0) / IFNULL(SUM(impression), 0)) * 100 END, 2)              AS ctr,
-            ROUND(CASE WHEN IFNULL(SUM(impression), 0) = 0 THEN 0 ELSE (IFNULL(SUM(cost), 0) / IFNULL(SUM(impression), 0)) * 100 END, 2)               AS cpm,
-            ROUND(CASE WHEN IFNULL(SUM(click), 0) = 0 THEN 0 ELSE (IFNULL(SUM(cost), 0) / IFNULL(SUM(click), 0)) * 100 END, 2)                         AS cpc,
+            ROUND(CASE WHEN IFNULL(SUM(impression), 0) = 0 THEN 0 ELSE (IFNULL(SUM(cost), 0) / IFNULL(SUM(impression), 0)) * 1000 END, 0)              AS cpm,
+            ROUND(CASE WHEN IFNULL(SUM(click), 0) = 0 THEN 0 ELSE (IFNULL(SUM(cost), 0) / IFNULL(SUM(click), 0)) END, 0)                               AS cpc,
             ROUND(CASE WHEN IFNULL(SUM(reach), 0) = 0 THEN 0 ELSE (IFNULL(SUM(cost), 0) / IFNULL(SUM(reach), 0)) * 100 END, 2)                         AS reachRate,
             ROUND(CASE WHEN IFNULL(SUM(videoPlay3Seconds), 0) = 0 THEN 0 ELSE (IFNULL(SUM(cost), 0) / IFNULL(SUM(videoPlay3Seconds), 0)) * 100 END, 2) AS videoPlayRate
         </sql>

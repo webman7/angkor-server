@@ -44,10 +44,10 @@ public abstract class ReportDto {
         private int purchaseDay7;
         private int viewCartDay1;
         private int viewCartDay7;
-        private int ctr;
+        private float ctr;
         private int cpm;
         private int cpc;
-        private int reachRate;
-        private int videoPlayRate;
+        private float reachRate;
+        private float videoPlayRate;
     }
 }
