@@ -108,6 +108,7 @@ public abstract class CreativeDto {
             private String adGroupName;
             private Integer fileId;
             private String fileName;
+            private String url;
             private FileInformation.FileType fileType;
             private ReportDto.Response report;
         }

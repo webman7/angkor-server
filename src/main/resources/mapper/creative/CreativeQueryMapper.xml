@@ -20,6 +20,7 @@ since 1.0
         <result column="fileId" property="fileId"/>
         <result column="fileName" property="fileName"/>
         <result column="fileType" property="fileType"/>
+        <result column="url" property="url"/>
         <association property="report" javaType="com.adplatform.restApi.domain.statistics.dto.ReportDto$Response">
             <result column="cost" property="cost"/>
             <result column="impression" property="impression"/>
@@ -123,6 +124,7 @@ since 1.0
                cf.id                          AS fileId,
                cf.file_name                   AS fileName,
                cf.file_type                   AS fileType,
+               cf.url                         AS url,
                <include refid="ReportCommonMapper.searchReportColumns"/>
         FROM creative_info cr
                  LEFT JOIN creative_files cf ON cr.id = cf.creative_info_id

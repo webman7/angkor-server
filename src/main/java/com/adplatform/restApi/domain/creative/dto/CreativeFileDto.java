@@ -17,6 +17,7 @@ public class CreativeFileDto {
     private long fileSize;
     private String filename;
     private String originalFileName;
+    private String url;
     private int width;
     private int height;
     private String mimeType;
