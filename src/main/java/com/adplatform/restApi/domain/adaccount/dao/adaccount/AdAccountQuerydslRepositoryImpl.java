@@ -3,6 +3,9 @@ package com.adplatform.restApi.domain.adaccount.dao.adaccount;
 import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
 import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.*;
+import com.adplatform.restApi.domain.adgroup.domain.AdGroup;
+import com.adplatform.restApi.domain.campaign.domain.Campaign;
+import com.adplatform.restApi.domain.creative.domain.Creative;
 import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_WalletBalance;
 import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_WalletSpend;
 import com.adplatform.restApi.global.util.QuerydslOrderSpecifierUtil;
@@ -31,7 +34,10 @@ import static com.adplatform.restApi.domain.adaccount.domain.QAdAccount.adAccoun
 import static com.adplatform.restApi.domain.adaccount.domain.QAdAccountUser.adAccountUser;
 import static com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto.Request;
 import static com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto.Response;
+import static com.adplatform.restApi.domain.adgroup.domain.QAdGroup.adGroup;
+import static com.adplatform.restApi.domain.campaign.domain.QCampaign.campaign;
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
+import static com.adplatform.restApi.domain.creative.domain.QCreative.creative;
 import static com.adplatform.restApi.domain.statistics.domain.sale.QSaleAmountDaily.saleAmountDaily;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
 import static com.adplatform.restApi.domain.wallet.domain.QCash.cash;
@@ -480,6 +486,51 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                 .set(adAccount.outOfBalance, oufOfBalance)
                 .where(adAccount.id.eq(adAccountId))
                 .execute();
+    }
+
+    @Override
+    public AdAccountDto.Response.AdAccountCountByAd adAccountCountByAd(Integer adAccountId) {
+        return this.query.select(new QAdAccountDto_Response_AdAccountCountByAd(
+                as(select(Wildcard.count)
+                        .from(adAccount, campaign)
+                        .where(adAccount.id.eq(campaign.adAccount.id),
+                                adAccount.id.eq(adAccountId),
+                                campaign.config.eq(Campaign.Config.ON),
+                                campaign.systemConfig.eq(Campaign.SystemConfig.ON),
+                                campaign.status.eq(Campaign.Status.LIVE)),
+                        "campaignCount"),
+                as(select(Wildcard.count)
+                                .from(adAccount, campaign, adGroup)
+                                .where(adAccount.id.eq(campaign.adAccount.id),
+                                        adAccount.id.eq(adAccountId),
+                                        campaign.id.eq(adGroup.campaign.id),
+                                        campaign.config.eq(Campaign.Config.ON),
+                                        campaign.systemConfig.eq(Campaign.SystemConfig.ON),
+                                        campaign.status.eq(Campaign.Status.LIVE),
+                                        adGroup.config.eq(AdGroup.Config.ON),
+                                        adGroup.systemConfig.eq(AdGroup.SystemConfig.ON),
+                                        adGroup.status.eq(AdGroup.Status.LIVE)),
+                        "adgroupCount"),
+                as(select(Wildcard.count)
+                                .from(adAccount, campaign, adGroup, creative)
+                                .where(adAccount.id.eq(campaign.adAccount.id),
+                                        adAccount.id.eq(adAccountId),
+                                        campaign.id.eq(adGroup.campaign.id),
+                                        adGroup.id.eq(creative.adGroup.id),
+                                        campaign.config.eq(Campaign.Config.ON),
+                                        campaign.systemConfig.eq(Campaign.SystemConfig.ON),
+                                        campaign.status.eq(Campaign.Status.LIVE),
+                                        adGroup.config.eq(AdGroup.Config.ON),
+                                        adGroup.systemConfig.eq(AdGroup.SystemConfig.ON),
+                                        adGroup.status.eq(AdGroup.Status.LIVE),
+                                        creative.config.eq(Creative.Config.ON),
+                                        creative.systemConfig.eq(Creative.SystemConfig.ON),
+                                        creative.status.eq(Creative.Status.OPERATING)),
+                        "creativeCount")
+                ))
+                .from(adAccount)
+                .where(adAccount.id.eq(adAccountId))
+                .fetchOne();
     }
 
     private BooleanExpression eqId(Integer id) {

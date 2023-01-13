@@ -31,4 +31,5 @@ public class AdvertiserSearchRequest implements AdAccountIdGetter {
     private AdvertiserSearchAdGroupCondition adGroupCondition;
     @Valid
     private AdvertiserSearchCreativeCondition creativeCondition;
+    private List<String> indicators;
 }

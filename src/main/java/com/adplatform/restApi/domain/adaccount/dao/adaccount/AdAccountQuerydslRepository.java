@@ -41,4 +41,6 @@ public interface AdAccountQuerydslRepository {
 
     void creditLimitUpdate(Integer adAccountId, Boolean oufOfBalance);
 
+    AdAccountDto.Response.AdAccountCountByAd adAccountCountByAd(Integer adAccountId);
+
 }

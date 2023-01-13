@@ -3,6 +3,7 @@ package com.adplatform.restApi.domain.adaccount.dto.adaccount;
 import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
 import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
 import com.adplatform.restApi.domain.company.domain.Company;
+import com.adplatform.restApi.domain.statistics.dto.ReportDto;
 import com.adplatform.restApi.domain.wallet.dto.WalletDto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 /**
  * @author Seohyun Lee
@@ -70,6 +72,15 @@ public class AdAccountDto {
         public static class ForCashSearch {
             private Integer id;
             private String name;
+        }
+
+        @Getter
+        @Setter
+        public static class AdAccountDashboardChart {
+            private Integer adAccountId;
+            private Integer startDate;
+            private Integer endDate;
+            private List<String> indicators;
         }
     }
 
@@ -312,6 +323,32 @@ public class AdAccountDto {
                 this.availableAmount = availableAmount;
                 this.reserveAmount = reserveAmount;
             }
+        }
+
+        @Getter
+        @Setter
+        public static class AdAccountCountByAd {
+            private Long campaignCount;
+            private Long adGroupCount;
+            private Long creativeCount;
+
+            @QueryProjection
+            public AdAccountCountByAd(
+                    Long campaignCount,
+                    Long adGroupCount,
+                    Long creativeCount
+            ) {
+                this.campaignCount = campaignCount;
+                this.adGroupCount = adGroupCount;
+                this.creativeCount = creativeCount;
+            }
+        }
+
+        @Getter
+        @Setter
+        public static class AdAccountDashboardChart {
+            private Integer reportDate;
+            private ReportDto.Response report;
         }
     }
 }
