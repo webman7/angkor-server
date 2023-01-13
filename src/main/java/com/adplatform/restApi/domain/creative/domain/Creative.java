@@ -185,12 +185,12 @@ public class Creative extends BaseUpdatedEntity {
         this.opinionProofFiles.add(file);
     }
 
-    public Creative deleteOpinionProofFiles(List<String> deleteFilenames, FileService fileService) {
+    public Creative deleteOpinionProofFiles(Integer adGroupId, List<String> deleteFilenames, FileService fileService) {
         List<CreativeOpinionProofFile> filesToBeDeleted = this.opinionProofFiles.stream()
                 .filter(file -> deleteFilenames.contains(file.getInformation().getOriginalFileName()))
                 .collect(Collectors.toList());
         this.opinionProofFiles.removeAll(filesToBeDeleted);
-        filesToBeDeleted.forEach(file -> fileService.delete(file.getInformation().getFilename()));
+        filesToBeDeleted.forEach(file -> fileService.deleteOpinionProofFiles(adGroupId, file.getInformation().getFilename()));
         return this;
     }
 

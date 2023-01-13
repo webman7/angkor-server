@@ -63,7 +63,7 @@ public class CreativeCommandService {
             List<Placement> placement = this.findByPlacementId(request.getPlacements());
             Creative creative = CreativeFindUtils.findByIdOrElseThrow(request.getCreativeId(), this.creativeRepository)
                     .update(request, placement)
-                    .deleteOpinionProofFiles(request.getDeleteOpinionProofFilenames(), this.fileService);
+                    .deleteOpinionProofFiles(request.getAdGroupId(), request.getDeleteOpinionProofFilenames(), this.fileService);
             request.getOpinionProofFiles().forEach(file -> creative.addOpinionProofFile(this.saveOpinionProofFile(creative, file)));
         }catch (Exception e){
             throw new CreativeUpdateException();
@@ -74,20 +74,24 @@ public class CreativeCommandService {
     private CreativeFile saveFile(CreativeDto.Request.Save request, Creative creative, MultipartFile file) {
         String originalFilename = file.getOriginalFilename();
         String mimetype = Files.probeContentType(Paths.get(originalFilename));
-        String savedFilename = this.fileService.save(file);
-        return new CreativeFile(creative, request.getType(), this.createFileInformation(file, savedFilename, originalFilename, mimetype));
+        String savedFileUrl = this.fileService.save(request, file);
+        int index = savedFileUrl.lastIndexOf("/");
+        String savedFilename = savedFileUrl.substring(index+1);
+        return new CreativeFile(creative, request.getType(), this.createFileInformation(file, savedFileUrl, savedFilename, originalFilename, mimetype));
     }
 
     @SneakyThrows
     private CreativeOpinionProofFile saveOpinionProofFile(Creative creative, MultipartFile file) {
         String originalFilename = file.getOriginalFilename();
         String mimetype = Files.probeContentType(Paths.get(originalFilename));
-        String savedFilename = this.fileService.save(file);
-        return new CreativeOpinionProofFile(creative, this.createFileInformation(file, savedFilename, originalFilename, mimetype));
+        String savedFileUrl = this.fileService.saveProofFile(creative, file);
+        int index = savedFileUrl.lastIndexOf("/");
+        String savedFilename = savedFileUrl.substring(index+1);
+        return new CreativeOpinionProofFile(creative, this.createFileInformation(file, savedFileUrl, savedFilename, originalFilename, mimetype));
     }
 
     @SneakyThrows
-    private FileInformation createFileInformation(MultipartFile file, String savedFilename, String originalFilename, String mimetype) {
+    private FileInformation createFileInformation(MultipartFile file, String savedFileUrl, String savedFilename, String originalFilename, String mimetype) {
         FileInformation.FileType fileType;
         int width = 0;
         int height = 0;
@@ -102,8 +106,9 @@ public class CreativeCommandService {
         } else {
             throw new UnsupportedOperationException();
         }
+
         return FileInformation.builder()
-                .url("")
+                .url(savedFileUrl)
                 .fileType(fileType)
                 .fileSize(file.getSize())
                 .filename(savedFilename)

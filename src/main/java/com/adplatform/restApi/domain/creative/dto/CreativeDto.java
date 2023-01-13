@@ -72,6 +72,7 @@ public abstract class CreativeDto {
         public static class Update implements CreativeIdGetter {
             @NotNull
             private Integer creativeId;
+            private Integer adGroupId;
             private List<MultipartFile> opinionProofFiles = new ArrayList<>();
             private List<String> deleteOpinionProofFilenames = new ArrayList<>();
             @NotBlank

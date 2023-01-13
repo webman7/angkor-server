@@ -20,4 +20,8 @@ public interface CampaignQueryMapper {
     );
 
     long countSearch(@Param("request") AdvertiserSearchRequest request);
+
+    List<CampaignDto.Response.Page> searchCampaignSelectQuery(
+            @Param("request") AdvertiserSearchRequest request);
+
 }
