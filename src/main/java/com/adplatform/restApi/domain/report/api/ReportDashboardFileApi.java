@@ -50,7 +50,7 @@ public class ReportDashboardFileApi {
 
         StringBuilder sb = new StringBuilder();
 
-        String fileName = request.getReportLevel()+"_"+request.getReportStartDate()+"_"+ request.getReportStartDate();
+        String fileName = request.getReportLevel()+"_"+request.getReportStartDate()+"_"+ request.getReportEndDate();
 
         // Campaign
         if(request.getReportLevel().equals("CAMPAIGN"))
