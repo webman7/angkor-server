@@ -9,11 +9,14 @@ import com.adplatform.restApi.domain.adgroup.domain.Media;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupDto;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupMapper;
 import com.adplatform.restApi.domain.adgroup.event.AdGroupSavedEvent;
+import com.adplatform.restApi.domain.adgroup.exception.AdGroupCopyCashException;
+import com.adplatform.restApi.domain.adgroup.exception.AdGroupNotFoundException;
 import com.adplatform.restApi.domain.adgroup.exception.DeviceNotFoundException;
 import com.adplatform.restApi.domain.adgroup.exception.MediaNotFoundException;
 import com.adplatform.restApi.domain.campaign.dao.campaign.CampaignRepository;
 import com.adplatform.restApi.domain.campaign.domain.Campaign;
 import com.adplatform.restApi.domain.campaign.dto.CampaignDto;
+import com.adplatform.restApi.domain.campaign.exception.CampaignCashException;
 import com.adplatform.restApi.domain.campaign.service.CampaignFindUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -82,6 +85,27 @@ public class AdGroupService {
 
     public void copy(AdGroupDto.Request.@Valid Copy request) {
         Campaign campaign = CampaignFindUtils.findByIdOrElseThrow(request.getCampaignId(), this.campaignRepository);
+        // Budget Calculate
+        List<CampaignDto.Response.Budget> campaigns = this.campaignRepository.getBudget(campaign.getId());
+        Long campaignBudgetSum = 0L;
+        for(CampaignDto.Response.Budget item :campaigns) {
+            campaignBudgetSum += item.getBudgetAmount();
+        }
+
+        List<AdGroupDto.Response.Budget> adGroups = this.adGroupRepository.getBudget(campaign.getId());
+        Long adGroupBudgetSum = 0L;
+        for(AdGroupDto.Response.Budget item :adGroups) {
+            adGroupBudgetSum += item.getBudgetAmount();
+        }
+
+        AdGroup adGroup = AdGroupFindUtils.findByIdOrElseThrow(request.getAdGroupId(), this.adGroupRepository);
+        Long adGroupBudgetAmount = adGroup.getBudgetAmount();
+
+        if(campaignBudgetSum < (adGroupBudgetSum + adGroupBudgetAmount)) {
+            throw new AdGroupCopyCashException();
+        }
+
+
         AdGroup copiedAdGroup = AdGroupFindUtils.findByIdOrElseThrow(request.getAdGroupId(), this.adGroupRepository).copy(request, campaign);
         this.adGroupRepository.save(copiedAdGroup);
     }
