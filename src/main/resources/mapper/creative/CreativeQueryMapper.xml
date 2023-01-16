@@ -15,6 +15,7 @@ since 1.0
         <result column="reviewStatus" property="reviewStatus"/>
         <result column="status" property="status"/>
         <result column="campaignId" property="campaignId"/>
+        <result column="campaignName" property="campaignName"/>
         <result column="adGroupId" property="adGroupId"/>
         <result column="adGroupName" property="adGroupName"/>
         <result column="fileId" property="fileId"/>
@@ -119,6 +120,7 @@ since 1.0
                cr.review_status               AS reviewStatus,
                cr.creative_status             AS status,
                c.id                           AS campaignId,
+               c.name                         AS campaignName,
                cr.adgroup_info_id             AS adGroupId,
                a.name                         AS adGroupName,
                cf.id                          AS fileId,
@@ -175,7 +177,7 @@ since 1.0
                                 c.adaccount_info_id = #{request.adAccountId}
                                 <include refid="com.adplatform.restApi.domain.adgroup.dao.adgroup.mapper.AdGroupQueryMapper.adGroupCondition"/>
                             </trim>) a ON a.id = cr.adgroup_info_id
-                 INNER JOIN (SELECT c.id
+                 INNER JOIN (SELECT c.id, c.name
                              FROM campaign_info c
                                       LEFT JOIN (SELECT campaign_info_id,
                                                         <include refid="ReportCommonMapper.reportUnionColumns"/>
@@ -213,5 +215,10 @@ since 1.0
     <select id="countSearch" resultType="long">
         SELECT COUNT(*)
         FROM (<include refid="searchCreativeSelectQuery"/>) a
+    </select>
+
+    <select id="searchCreativeList" resultMap="mapSearch">
+        <include refid="searchCreativeSelectQuery"/>
+        <include refid="common.sortAndOrder"/>
     </select>
 </mapper>

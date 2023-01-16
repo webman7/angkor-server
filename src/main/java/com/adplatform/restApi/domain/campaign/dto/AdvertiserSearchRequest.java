@@ -32,4 +32,5 @@ public class AdvertiserSearchRequest implements AdAccountIdGetter {
     @Valid
     private AdvertiserSearchCreativeCondition creativeCondition;
     private List<String> indicators;
+    private String reportLevel;
 }

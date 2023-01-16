@@ -16,4 +16,9 @@ public interface CreativeQueryMapper {
     );
 
     long countSearch(@Param("request") AdvertiserSearchRequest request);
+
+    List<CreativeDto.Response.Default> searchCreativeList(
+            @Param("request") AdvertiserSearchRequest request,
+            @Param("pageable") Pageable pageable
+    );
 }

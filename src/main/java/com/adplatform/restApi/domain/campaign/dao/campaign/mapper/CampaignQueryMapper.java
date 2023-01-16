@@ -21,7 +21,8 @@ public interface CampaignQueryMapper {
 
     long countSearch(@Param("request") AdvertiserSearchRequest request);
 
-    List<CampaignDto.Response.Page> searchCampaignSelectQuery(
-            @Param("request") AdvertiserSearchRequest request);
+    List<CampaignDto.Response.Page> searchCampaignList(
+            @Param("request") AdvertiserSearchRequest request,
+            @Param("pageable") Pageable pageable);
 
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+author junny
+since 1.0
+-->
+<!--suppress MybatisXMapperXmlInspection -->
+<mapper namespace="com.adplatform.restApi.domain.report.dao.dashboard.mapper.ReportDashboardQueryMapper">
+    <resultMap id="mapSearch" type="com.adplatform.restApi.domain.report.dto.dashboard.ReportDashboardDto$Response$IndicatorColumn">
+    <id column="columnIndex" property="columnIndex"/>
+    <result column="columnName" property="columnName"/>
+    </resultMap>
+
+    <sql id="indicatorColumnSelectQuery">
+        SELECT column_index    AS columnIndex,
+               column_name     AS columnName
+          FROM indicator_column_info
+    </sql>
+
+    <select id="indicatorColumn" resultMap="mapSearch">
+        <include refid="indicatorColumnSelectQuery"/>
+    </select>
+</mapper>

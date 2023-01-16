@@ -104,6 +104,7 @@ public abstract class CreativeDto {
             private String reviewStatus;
             private String status;
             private Integer campaignId;
+            private String campaignName;
             private Integer adGroupId;
             private String adGroupName;
             private Integer fileId;

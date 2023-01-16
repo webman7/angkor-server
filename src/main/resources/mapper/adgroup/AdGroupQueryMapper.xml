@@ -206,4 +206,9 @@ since 1.0
         SELECT COUNT(*)
         FROM (<include refid="searchAdGroupSelectQuery"/>) a;
     </select>
+
+    <select id="searchAdGroupList" resultMap="mapSearch">
+        <include refid="searchAdGroupSelectQuery"/>
+        <include refid="common.sortAndOrder"/>
+    </select>
 </mapper>

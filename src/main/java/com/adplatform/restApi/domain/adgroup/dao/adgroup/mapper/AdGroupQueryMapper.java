@@ -20,4 +20,9 @@ public interface AdGroupQueryMapper {
     );
 
     long countSearch(@Param("request") AdvertiserSearchRequest request);
+
+    List<AdGroupDto.Response.AdvertiserSearch> searchAdGroupList(
+            @Param("request") AdvertiserSearchRequest request,
+            @Param("pageable") Pageable pageable
+    );
 }

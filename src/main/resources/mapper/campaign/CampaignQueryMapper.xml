@@ -17,6 +17,8 @@ since 1.0
         <result column="status" property="status"/>
         <result column="createdAt" property="createdAt"/>
         <result column="updatedAt" property="updatedAt"/>
+        <result column="startDate" property="startDate"/>
+        <result column="endDate" property="endDate"/>
         <result column="adGroupSchedulesFirstStartDate" property="adGroupSchedulesFirstStartDate"/>
         <result column="adGroupSchedulesLastEndDate" property="adGroupSchedulesLastEndDate"/>
         <association property="adTypeAndGoal" javaType="com.adplatform.restApi.domain.campaign.dto.AdTypeAndGoalDto">
@@ -101,6 +103,8 @@ since 1.0
                c.status                       AS status,
                c.reg_date                     AS createdAt,
                c.upd_date                     AS updatedAt,
+               c.start_date                   AS startDate,
+               c.end_date                     AS endDate,
                c.start_date                   AS adGroupSchedulesFirstStartDate,
                c.end_date                     AS adGroupSchedulesLastEndDate,
                <include refid="ReportCommonMapper.searchReportColumns"/>
@@ -203,4 +207,10 @@ since 1.0
         SELECT COUNT(*)
         FROM (<include refid="searchCampaignSelectQuery"/>) a
     </select>
+
+    <select id="searchCampaignList" resultMap="mapSearch">
+        <include refid="searchCampaignSelectQuery"/>
+        <include refid="common.sortAndOrder"/>
+    </select>
+
 </mapper>
