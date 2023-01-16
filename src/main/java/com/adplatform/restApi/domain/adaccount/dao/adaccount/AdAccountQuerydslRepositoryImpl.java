@@ -5,10 +5,14 @@ import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.*;
 import com.adplatform.restApi.domain.adgroup.domain.AdGroup;
 import com.adplatform.restApi.domain.campaign.domain.Campaign;
+import com.adplatform.restApi.domain.company.dto.CompanyDto;
+import com.adplatform.restApi.domain.company.dto.QCompanyDto_Response_AdAccountDetail;
 import com.adplatform.restApi.domain.creative.domain.Creative;
 import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_WalletBalance;
 import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_WalletSpend;
 import com.adplatform.restApi.global.util.QuerydslOrderSpecifierUtil;
+import com.adplatform.restApi.global.value.QAddress;
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -23,6 +27,7 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+import javax.validation.constraints.Email;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -530,6 +535,26 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                 ))
                 .from(adAccount)
                 .where(adAccount.id.eq(adAccountId))
+                .fetchOne();
+    }
+
+    @Override
+    public CompanyDto.Response.AdAccountDetail adAccountByAdvertiser(Integer adAccountId) {
+        return this.query.select(new QCompanyDto_Response_AdAccountDetail(
+                company.id,
+                company.name,
+                company.type,
+                company.registrationNumber,
+                company.representationName,
+                company.address,
+                company.businessCategory,
+                company.businessItem,
+                company.taxBillEmail1,
+                company.taxBillEmail2
+                ))
+                .from(adAccount, company)
+                .where(adAccount.id.eq(adAccountId),
+                       adAccount.ownerCompany.id.eq(company.id))
                 .fetchOne();
     }
 

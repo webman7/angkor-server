@@ -4,6 +4,8 @@ import com.adplatform.restApi.domain.adaccount.dao.adaccount.AdAccountRepository
 import com.adplatform.restApi.domain.adaccount.dao.adaccount.mapper.AdAccountQueryMapper;
 import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto;
+import com.adplatform.restApi.domain.company.dto.CompanyDto;
+import com.adplatform.restApi.domain.company.service.CompanyFindUtils;
 import com.adplatform.restApi.global.config.security.util.SecurityUtils;
 import com.adplatform.restApi.global.dto.PageDto;
 import lombok.RequiredArgsConstructor;
@@ -108,5 +110,11 @@ public class AdAccountQueryApi {
     public List<AdAccountDto.Response.AdAccountDashboardChart> adAccountDashboardChart(
             @RequestBody @Valid AdAccountDto.Request.AdAccountDashboardChart request) {
         return this.adAccountQueryMapper.adAccountDashboardChart(request);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}/advertiser")
+    public CompanyDto.Response.AdAccountDetail adAccountByAdvertiser(@PathVariable(name = "id") Integer adAccountId) {
+        return this.adAccountRepository.adAccountByAdvertiser(adAccountId);
     }
 }

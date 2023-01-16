@@ -22,11 +22,11 @@ public class Email {
     private String address;
 
     public String getId() {
-        return this.address.substring(0, this.atSignIndexOf());
+        return this.address.equals("") ? "" : this.address.substring(0, this.atSignIndexOf());
     }
 
     public String getHost() {
-        return this.address.substring(this.atSignIndexOf() + 1);
+        return address.equals("") ? "" : this.address.substring(this.atSignIndexOf() + 1);
     }
 
     private int atSignIndexOf() {

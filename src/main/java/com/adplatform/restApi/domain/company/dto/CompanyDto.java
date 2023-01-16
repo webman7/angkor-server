@@ -1,6 +1,7 @@
 package com.adplatform.restApi.domain.company.dto;
 
 import com.adplatform.restApi.domain.company.domain.Company;
+import com.adplatform.restApi.global.value.Address;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
@@ -94,6 +95,44 @@ public abstract class CompanyDto {
             private String taxBillEmail2;
             private boolean active;
             private boolean deleted;
+        }
+
+        @Getter
+        @Setter
+        public static class AdAccountDetail {
+            private Integer id;
+            private String name;
+            private Company.Type type;
+            private String registrationNumber;
+            private String representationName;
+            private Address address;
+            private String businessCategory;
+            private String businessItem;
+            private com.adplatform.restApi.global.value.Email taxBillEmail1;
+            private com.adplatform.restApi.global.value.Email taxBillEmail2;
+
+            @QueryProjection
+            public AdAccountDetail(Integer id,
+                                   String name,
+                                   Company.Type type,
+                                   String registrationNumber,
+                                   String representationName,
+                                   Address address,
+                                   String businessCategory,
+                                   String businessItem,
+                                   com.adplatform.restApi.global.value.Email taxBillEmail1,
+                                   com.adplatform.restApi.global.value.Email taxBillEmail2) {
+                this.id = id;
+                this.name = name;
+                this.type = type;
+                this.registrationNumber = registrationNumber;
+                this.representationName = representationName;
+                this.address = address;
+                this.businessCategory = businessCategory;
+                this.businessItem = businessItem;
+                this.taxBillEmail1 = taxBillEmail1;
+                this.taxBillEmail2 = taxBillEmail2;
+            }
         }
     }
 }
