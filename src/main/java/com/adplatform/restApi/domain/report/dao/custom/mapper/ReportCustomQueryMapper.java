@@ -66,4 +66,19 @@ public interface ReportCustomQueryMapper {
     );
 
     long countCreativesDaily(@Param("request") ReportCustomDto.Request.Report request);
+
+    List<ReportCustomDto.Response.Page> adAccountCampaignsDaily(
+            @Param("request") ReportCustomDto.Request.Report request,
+            @Param("pageable") Pageable pageable
+    );
+
+    List<ReportCustomDto.Response.Page> adAccountAdGroupsDaily(
+            @Param("request") ReportCustomDto.Request.Report request,
+            @Param("pageable") Pageable pageable
+    );
+
+    List<ReportCustomDto.Response.Page> adAccountCreativesDaily(
+            @Param("request") ReportCustomDto.Request.Report request,
+            @Param("pageable") Pageable pageable
+    );
 }
