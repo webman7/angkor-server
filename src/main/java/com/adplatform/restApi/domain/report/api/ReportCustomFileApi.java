@@ -15,10 +15,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.ByteArrayOutputStream;
@@ -35,7 +32,7 @@ public class ReportCustomFileApi {
     private final ReportCustomQueryMapper reportCustomQueryMapper;
 
     @SneakyThrows
-    @GetMapping("/custom/csv")
+    @PostMapping("/custom/csv")
     public ResponseEntity<byte[]> downloadInfoCsv(@RequestBody @Valid ReportCustomDto.Request.Report request, @PageableDefault Pageable pageable) {
 
         List<ReportDashboardDto.Response.IndicatorColumn> indicatorContent = this.reportDashboardQueryMapper.indicatorColumn();
