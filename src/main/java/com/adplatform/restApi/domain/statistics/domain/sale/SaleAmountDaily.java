@@ -23,7 +23,4 @@ public class SaleAmountDaily {
 
     @Column(name = "sale_amount")
     private int saleAmount;
-
-    @Column(name = "sale_cnt")
-    private int saleCount;
 }

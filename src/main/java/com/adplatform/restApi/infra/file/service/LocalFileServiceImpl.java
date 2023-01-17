@@ -31,7 +31,6 @@ public class LocalFileServiceImpl implements FileService {
     public String save(CreativeDto.Request.Save request, MultipartFile file) {
         String filePath = FILE_PATH + request.getAdGroupId();
         String ymdPath = UpLoadFileUtils.calcPath(filePath);
-        System.out.println("ymdPath : " + ymdPath);
         String uploadPath = filePath + ymdPath + "/";
         File savedFile = new File(String.format(
                 "%s%s.%s",
