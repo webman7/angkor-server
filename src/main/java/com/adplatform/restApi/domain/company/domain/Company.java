@@ -120,6 +120,7 @@ public class Company extends BaseUpdatedEntity {
         this.name = request.getName();
         this.registrationNumber = request.getRegistrationNumber();
         this.representationName = request.getRepresentationName();
+        this.address = request.getAddress();
         this.businessCategory = request.getBusinessCategory();
         this.businessItem = request.getBusinessItem();
         this.taxBillEmail1 = new Email(request.getTaxBillEmail1());
