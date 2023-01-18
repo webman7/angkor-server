@@ -4,7 +4,9 @@ import com.adplatform.restApi.domain.adgroup.dao.adgroup.AdGroupRepository;
 import com.adplatform.restApi.domain.adgroup.domain.Device;
 import com.adplatform.restApi.domain.adgroup.service.AdGroupFindUtils;
 import com.adplatform.restApi.domain.creative.domain.Creative;
+import com.adplatform.restApi.domain.creative.domain.CreativeFile;
 import com.adplatform.restApi.domain.creative.domain.CreativeLanding;
+import com.adplatform.restApi.domain.creative.domain.CreativeOpinionProofFile;
 import com.adplatform.restApi.domain.placement.domain.Placement;
 import com.adplatform.restApi.global.dto.BaseMapperConfig;
 import org.mapstruct.Mapper;
@@ -52,8 +54,10 @@ public abstract class CreativeMapper {
                 dto.getResponsiveLandingUrl());
     }
 
+    @Mapping(target = "files", source = "creativeFile")
+    @Mapping(target = "opinionProofFiles", source = "creativeOpinionProofFile")
     @Mapping(target = "placements", source = "creative.placements", qualifiedByName = "mapPlacements")
-    public abstract CreativeDto.Response.Detail toDetailResponse(Creative creative);
+    public abstract CreativeDto.Response.Detail toDetailResponse(Creative creative, List<CreativeFile> creativeFile, List<CreativeOpinionProofFile> creativeOpinionProofFile);
 
     @Named("mapPlacements")
     List<Integer> mapPlacement(Collection<Placement> placements) {

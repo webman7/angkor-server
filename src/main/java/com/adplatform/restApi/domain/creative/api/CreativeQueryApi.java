@@ -49,6 +49,8 @@ public class CreativeQueryApi {
     public CreativeDto.Response.Detail findById(@PathVariable(name = "id") Integer creativeId) {
         return this.creativeMapper.toDetailResponse(
                 this.creativeRepository.findDetailById(creativeId)
-                        .orElseThrow(CreativeNotFoundException::new));
+                        .orElseThrow(CreativeNotFoundException::new),
+                this.creativeRepository.findDetailFilesById(creativeId),
+                this.creativeRepository.findDetailOpinionProofById(creativeId));
     }
 }
