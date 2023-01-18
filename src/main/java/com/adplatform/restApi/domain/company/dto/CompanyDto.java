@@ -50,6 +50,8 @@ public abstract class CompanyDto {
             @Size(min = 1, max = 50)
             private String businessItem;
 
+            private Address address;
+
             @NotNull
             @Email
             private String taxBillEmail1;
@@ -88,7 +90,7 @@ public abstract class CompanyDto {
             private Company.Type type;
             private String registrationNumber;
             private String representationName;
-            private String address;
+            private Address address;
             private String businessCategory;
             private String businessItem;
             private String taxBillEmail1;
