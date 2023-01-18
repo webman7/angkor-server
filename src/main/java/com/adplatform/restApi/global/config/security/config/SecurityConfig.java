@@ -109,7 +109,7 @@ public class SecurityConfig {
 
     private void permitAll(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/exception/**", "/", "/files/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/exception/**", "/", "/files/**","/batch/**").permitAll()
                 .anyRequest().authenticated();
     }
 

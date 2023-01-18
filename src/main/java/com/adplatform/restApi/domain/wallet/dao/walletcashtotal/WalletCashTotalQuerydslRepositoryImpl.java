@@ -61,4 +61,16 @@ public class WalletCashTotalQuerydslRepositoryImpl implements WalletCashTotalQue
                         walletCashTotal.id.cashId.eq(cashId))
                 .execute();
     }
+
+    public void saveWalletCashSettle(Integer adAccountId, Integer cashId, Long amount, Long reserveAmount) {
+        LocalDateTime now = LocalDateTime.now();
+
+        this.query.update(walletCashTotal)
+                .set(walletCashTotal.amount, amount)
+                .set(walletCashTotal.reserveAmount, reserveAmount)
+                .set(walletCashTotal.updatedAt, now)
+                .where(walletCashTotal.id.walletMasterId.eq(adAccountId),
+                        walletCashTotal.id.cashId.eq(cashId))
+                .execute();
+    }
 }

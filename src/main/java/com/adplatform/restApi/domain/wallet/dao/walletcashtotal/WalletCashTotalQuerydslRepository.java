@@ -10,5 +10,7 @@ public interface WalletCashTotalQuerydslRepository {
 
     void saveWalletCashReserve(Integer adAccountId, Integer cashId, Long availableAmount, Long reserveAmount);
 
+    void saveWalletCashSettle(Integer adAccountId, Integer cashId, Long amount, Long reserveAmount);
+
     List<WalletDto.Response.WalletCashTotal> getWalletCashTotal(Integer adAccountId);
 }
