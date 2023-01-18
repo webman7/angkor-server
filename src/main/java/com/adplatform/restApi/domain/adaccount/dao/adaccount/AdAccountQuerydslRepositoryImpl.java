@@ -142,14 +142,7 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                         this.containsName(request.getName())
                 )
                 .groupBy(
-                        adAccount.id,
-                        adAccount.name,
-                        company.type,
-                        adAccount.creditLimit,
-                        adAccount.preDeferredPayment,
-                        adAccount.company,
-                        adAccount.adminStop,
-                        adAccount.outOfBalance
+                        adAccount.id
                 );
 
         return Objects.nonNull(pageable)
@@ -244,14 +237,7 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                         this.eqPreDeferredPayment(request.getPreDeferredPayment())
                 )
                 .groupBy(
-                        adAccount.id,
-                        adAccount.name,
-                        company.type,
-                        adAccount.creditLimit,
-                        adAccount.preDeferredPayment,
-                        adAccount.company,
-                        adAccount.adminStop,
-                        adAccount.outOfBalance
+                        adAccount.id
                 );
 
         return Objects.nonNull(pageable)
@@ -390,14 +376,7 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                         this.containsName(request.getName())
                 )
                 .groupBy(
-                        adAccount.id,
-                        adAccount.name,
-                        company.type,
-                        adAccount.creditLimit,
-                        adAccount.preDeferredPayment,
-                        adAccount.company,
-                        adAccount.adminStop,
-                        adAccount.outOfBalance
+                        adAccount.id
                 );
 
         return Objects.nonNull(pageable)

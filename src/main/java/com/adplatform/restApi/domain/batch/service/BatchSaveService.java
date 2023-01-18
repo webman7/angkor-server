@@ -119,13 +119,15 @@ public class BatchSaveService {
                 System.out.println("useCost : " + useCost);
 
                 // detail
-                SaleAmountDto.Request.Save saleDetailList = new SaleAmountDto.Request.Save();
-                saleDetailList.setStatDate(co.getReportDate());
-                saleDetailList.setAdAccountId(co.getAdAccountId());
-                saleDetailList.setCashId(wa.getCashId());
-                saleDetailList.setSaleAmount(useCost.intValue());
-                SaleDetailAmountDaily saleDetailAmountDaily = this.saleAmountMapper.toEntityDetail(saleDetailList);
-//                this.saleDetailAmountDailyRepository.save(saleDetailAmountDaily);
+                if(useCost > 0) {
+                    SaleAmountDto.Request.Save saleDetailList = new SaleAmountDto.Request.Save();
+                    saleDetailList.setStatDate(co.getReportDate());
+                    saleDetailList.setAdAccountId(co.getAdAccountId());
+                    saleDetailList.setCashId(wa.getCashId());
+                    saleDetailList.setSaleAmount(useCost.intValue());
+                    SaleDetailAmountDaily saleDetailAmountDaily = this.saleAmountMapper.toEntityDetail(saleDetailList);
+//                    this.saleDetailAmountDailyRepository.save(saleDetailAmountDaily);
+                }
 
                 if(!isLoop) {
                     break;
