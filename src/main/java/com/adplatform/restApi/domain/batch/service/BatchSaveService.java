@@ -9,8 +9,10 @@ import com.adplatform.restApi.domain.batch.exception.BatchStatusYNException;
 import com.adplatform.restApi.domain.campaign.exception.CampaignCashException;
 import com.adplatform.restApi.domain.statistics.dao.sale.SaleAmountDailyRepository;
 import com.adplatform.restApi.domain.statistics.dao.sale.SaleDetailAmountDailyRepository;
+import com.adplatform.restApi.domain.statistics.dao.sale.SaleRemainAmountDailyRepository;
 import com.adplatform.restApi.domain.statistics.domain.sale.SaleAmountDaily;
 import com.adplatform.restApi.domain.statistics.domain.sale.SaleDetailAmountDaily;
+import com.adplatform.restApi.domain.statistics.domain.sale.SaleRemainAmountDaily;
 import com.adplatform.restApi.domain.statistics.dto.SaleAmountDto;
 import com.adplatform.restApi.domain.statistics.dto.SaleAmountMapper;
 import com.adplatform.restApi.domain.wallet.dao.walletcashtotal.WalletCashTotalRepository;
@@ -39,6 +41,7 @@ public class BatchSaveService {
     private final WalletCashTotalRepository walletCashTotalRepository;
     private final SaleAmountDailyRepository saleAmountDailyRepository;
     private final SaleDetailAmountDailyRepository saleDetailAmountDailyRepository;
+    private final SaleRemainAmountDailyRepository saleRemainAmountDailyRepository;
 
     public void settlementDaily(Integer reportDate) {
 
@@ -67,6 +70,7 @@ public class BatchSaveService {
         System.out.println(exeDate);
         System.out.println(batchName);
 
+        // Batch Y Count
         int cnt = this.batchQueryMapper.getBatchStatusYNCount(batchType, exeDate, batchName);
 
         if (cnt > 0) {
@@ -107,16 +111,16 @@ public class BatchSaveService {
                     remainCost = remainCost - wa.getReserveAmount();
                     isLoop = true;
                 }
-//                this.walletCashTotalRepository.saveWalletCashSettle(co.getAdAccountId(), wa.getCashId(), amount, reserveAmount);
-                System.out.println("===================================================");
-                System.out.println("detail");
-                System.out.println("===================================================");
-                System.out.println("co.getAdAccountId() : " + co.getAdAccountId());
-                System.out.println("wa.getCashId() : " + wa.getCashId());
-                System.out.println("amount : " + amount);
-                System.out.println("reserveAmount : " + reserveAmount);
-                System.out.println("remainCost : " + remainCost);
-                System.out.println("useCost : " + useCost);
+                this.walletCashTotalRepository.saveWalletCashSettle(co.getAdAccountId(), wa.getCashId(), amount, reserveAmount);
+//                System.out.println("===================================================");
+//                System.out.println("detail");
+//                System.out.println("===================================================");
+//                System.out.println("co.getAdAccountId() : " + co.getAdAccountId());
+//                System.out.println("wa.getCashId() : " + wa.getCashId());
+//                System.out.println("amount : " + amount);
+//                System.out.println("reserveAmount : " + reserveAmount);
+//                System.out.println("remainCost : " + remainCost);
+//                System.out.println("useCost : " + useCost);
 
                 // detail
                 if(useCost > 0) {
@@ -126,19 +130,19 @@ public class BatchSaveService {
                     saleDetailList.setCashId(wa.getCashId());
                     saleDetailList.setSaleAmount(useCost.intValue());
                     SaleDetailAmountDaily saleDetailAmountDaily = this.saleAmountMapper.toEntityDetail(saleDetailList);
-//                    this.saleDetailAmountDailyRepository.save(saleDetailAmountDaily);
+                    this.saleDetailAmountDailyRepository.save(saleDetailAmountDaily);
                 }
 
                 if(!isLoop) {
                     break;
                 }
             }
-            System.out.println("===================================================");
-            System.out.println("Total");
-            System.out.println("===================================================");
-            System.out.println("co.getReportDate() : " + co.getReportDate());
-            System.out.println("co.getAdAccountId() : " + co.getAdAccountId());
-            System.out.println("totalUseCost : " + totalUseCost);
+//            System.out.println("===================================================");
+//            System.out.println("Total");
+//            System.out.println("===================================================");
+//            System.out.println("co.getReportDate() : " + co.getReportDate());
+//            System.out.println("co.getAdAccountId() : " + co.getAdAccountId());
+//            System.out.println("totalUseCost : " + totalUseCost);
 
             // total
             SaleAmountDto.Request.Save saleList = new SaleAmountDto.Request.Save();
@@ -146,16 +150,25 @@ public class BatchSaveService {
             saleList.setAdAccountId(co.getAdAccountId());
             saleList.setSaleAmount(totalUseCost.intValue());
             SaleAmountDaily saleAmountDaily = this.saleAmountMapper.toEntity(saleList);
-//            this.saleAmountDailyRepository.save(saleAmountDaily);
+            this.saleAmountDailyRepository.save(saleAmountDaily);
+
+            // remain Cash
+            SaleAmountDto.Request.Save saleRemainList = new SaleAmountDto.Request.Save();
+            saleRemainList.setStatDate(co.getReportDate());
+            saleRemainList.setAdAccountId(co.getAdAccountId());
+            saleRemainList.setRemainAmount(co.getCost().intValue() - totalUseCost.intValue());
+            SaleRemainAmountDaily saleRemainAmountDaily = this.saleAmountMapper.toEntityRemain(saleRemainList);
+            this.saleRemainAmountDailyRepository.save(saleRemainAmountDaily);
         }
 
+        // Batch Execution
         BatchStatusDto.Request.Save saveList = new BatchStatusDto.Request.Save();
         saveList.setType(batchType);
         saveList.setExeDate(exeDate);
         saveList.setName(batchName);
         saveList.setExeYn(true);
         BatchStatus batchStatus = this.batchStatusMapper.toEntity(saveList);
-//        this.batchStatusRepository.save(batchStatus);
+        this.batchStatusRepository.save(batchStatus);
 
     }
 }

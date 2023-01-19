@@ -15,6 +15,7 @@ public class SaleAmountDto {
             private Integer adAccountId;
             private Integer cashId;
             private Integer saleAmount;
+            private Integer remainAmount;
         }
     }
 

@@ -23,7 +23,7 @@ public class SaleDetailAmountDaily {
             Integer adAccountId,
             Integer statDate,
             Integer cashId,
-            int saleAmount) {
+            Integer saleAmount) {
         this.id.setAdAccountId(adAccountId);
         this.id.setStatDate(statDate);
         this.id.setCashId(cashId);
