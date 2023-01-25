@@ -14,6 +14,8 @@ public class SaleAmountDto {
             private Integer statDate;
             private Integer adAccountId;
             private Integer cashId;
+            private Integer companyId;
+            private Integer ownerCompanyId;
             private Integer saleAmount;
             private Integer remainAmount;
         }
@@ -25,6 +27,8 @@ public class SaleAmountDto {
         private Integer statDate;
         private Integer adAccountId;
         private Integer cashId;
+        private Integer companyId;
+        private Integer ownerCompanyId;
         private Integer saleAmount;
     }
 }
