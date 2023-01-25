@@ -49,7 +49,7 @@ public class BatchSaveService {
         // Batch Code
         ////////////////////////////////////////////////////////////
         String batchType = "D";
-        String batchName = "cash_settlement_daily";
+        String batchName = "sale_amount_daily";
         ////////////////////////////////////////////////////////////
 
         Calendar calendar = new GregorianCalendar();
@@ -128,6 +128,8 @@ public class BatchSaveService {
                     saleDetailList.setStatDate(co.getReportDate());
                     saleDetailList.setAdAccountId(co.getAdAccountId());
                     saleDetailList.setCashId(wa.getCashId());
+                    saleDetailList.setCompanyId(co.getCompanyId());
+                    saleDetailList.setOwnerCompanyId(co.getOwnerCompanyId());
                     saleDetailList.setSaleAmount(useCost.intValue());
                     SaleDetailAmountDaily saleDetailAmountDaily = this.saleAmountMapper.toEntityDetail(saleDetailList);
                     this.saleDetailAmountDailyRepository.save(saleDetailAmountDaily);
@@ -148,6 +150,8 @@ public class BatchSaveService {
             SaleAmountDto.Request.Save saleList = new SaleAmountDto.Request.Save();
             saleList.setStatDate(co.getReportDate());
             saleList.setAdAccountId(co.getAdAccountId());
+            saleList.setCompanyId(co.getCompanyId());
+            saleList.setOwnerCompanyId(co.getOwnerCompanyId());
             saleList.setSaleAmount(totalUseCost.intValue());
             SaleAmountDaily saleAmountDaily = this.saleAmountMapper.toEntity(saleList);
             this.saleAmountDailyRepository.save(saleAmountDaily);
@@ -156,6 +160,8 @@ public class BatchSaveService {
             SaleAmountDto.Request.Save saleRemainList = new SaleAmountDto.Request.Save();
             saleRemainList.setStatDate(co.getReportDate());
             saleRemainList.setAdAccountId(co.getAdAccountId());
+            saleRemainList.setCompanyId(co.getCompanyId());
+            saleRemainList.setOwnerCompanyId(co.getOwnerCompanyId());
             saleRemainList.setRemainAmount(co.getCost().intValue() - totalUseCost.intValue());
             SaleRemainAmountDaily saleRemainAmountDaily = this.saleAmountMapper.toEntityRemain(saleRemainList);
             this.saleRemainAmountDailyRepository.save(saleRemainAmountDaily);

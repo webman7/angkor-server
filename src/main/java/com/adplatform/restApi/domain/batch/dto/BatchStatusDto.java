@@ -30,6 +30,8 @@ public class BatchStatusDto {
         @Setter
         public static class ReportAdGroupCost {
             private Integer adAccountId;
+            private Integer companyId;
+            private Integer ownerCompanyId;
             private Integer reportDate;
             private Long cost;
         }

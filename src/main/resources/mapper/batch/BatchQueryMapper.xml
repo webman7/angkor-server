@@ -9,17 +9,22 @@ since 1.0
 <mapper namespace="com.adplatform.restApi.domain.batch.dao.mapper.BatchQueryMapper">
     <resultMap id="reportAdGroupCostMap" type="com.adplatform.restApi.domain.batch.dto.BatchStatusDto$Response$ReportAdGroupCost">
         <id column="adAccountId" property="adAccountId"/>
+        <result column="companyId" property="companyId"/>
+        <result column="ownerCompanyId" property="ownerCompanyId"/>
         <result column="reportDate" property="reportDate"/>
         <result column="cost" property="cost"/>
     </resultMap>
 
     <sql id="reportAdGroupCostQuery">
-        SELECT adaccount_info_id AS adAccountId,
-               report_date AS reportDate,
-               SUM(cost) AS cost
-          FROM report_adgroup_daily
-         WHERE report_date = date_format(date_add(NOW(), INTERVAL - 1 DAY), '%Y%m%d')
-         GROUP BY adaccount_info_id
+        SELECT b.adaccount_info_id AS adAccountId,
+               a.company_info_id AS companyId,
+               a.owner_company_info_id AS ownerCompanyId,
+               b.report_date AS reportDate,
+               SUM(b.cost) AS cost
+          FROM adaccount_info a, report_adgroup_daily b
+         WHERE b.report_date = date_format(date_add(NOW(), INTERVAL - 1 DAY), '%Y%m%d')
+           AND a.id = b.adaccount_info_id
+         GROUP BY b.adaccount_info_id
     </sql>
 
     <select id="reportAdGroupCost" resultMap="reportAdGroupCostMap">
