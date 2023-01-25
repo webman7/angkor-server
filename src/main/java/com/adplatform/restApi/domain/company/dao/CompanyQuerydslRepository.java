@@ -14,5 +14,9 @@ import java.util.List;
 public interface CompanyQuerydslRepository {
     Page<CompanyDto.Response.Default> search(Pageable pageable, CompanyDto.Request.Search searchRequest);
 
+    Page<CompanyDto.Response.Default> advertiserRegistrationNumber(Pageable pageable, CompanyDto.Request.SearchKeyword searchRequest);
+
+    Page<CompanyDto.Response.Default> allRegistrationNumber(Pageable pageable, CompanyDto.Request.SearchKeyword searchRequest);
+
     List<CompanyDto.Response.Default> searchForSignUp(Company.Type type, String name);
 }

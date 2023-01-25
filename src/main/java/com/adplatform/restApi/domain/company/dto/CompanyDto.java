@@ -29,6 +29,14 @@ public abstract class CompanyDto {
 
         @Getter
         @Setter
+        public static class SearchKeyword {
+            private String searchType;
+            private String searchKeyword;
+        }
+
+
+        @Getter
+        @Setter
         public static class Save {
             @Size(min = 1, max = 50)
             @NotBlank

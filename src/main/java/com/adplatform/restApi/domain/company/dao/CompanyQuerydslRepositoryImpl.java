@@ -51,6 +51,46 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
     }
 
     @Override
+    public Page<CompanyDto.Response.Default> advertiserRegistrationNumber(Pageable pageable, CompanyDto.Request.SearchKeyword searchRequest) {
+        List<CompanyDto.Response.Default> content = this.query
+                .select(new QCompanyDto_Response_Default(company.id, company.name))
+                .from(company)
+                .where(
+                        this.registrationNumberContains(searchRequest.getSearchKeyword()),
+                        this.typeEq(Company.Type.valueOf("ADVERTISER")))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = this.query.select(company.count())
+                .where(
+                        this.registrationNumberContains(searchRequest.getSearchKeyword()),
+                        this.typeEq(Company.Type.valueOf("ADVERTISER")))
+                .from(company);
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public Page<CompanyDto.Response.Default> allRegistrationNumber(Pageable pageable, CompanyDto.Request.SearchKeyword searchRequest) {
+        List<CompanyDto.Response.Default> content = this.query
+                .select(new QCompanyDto_Response_Default(company.id, company.name))
+                .from(company)
+                .where(
+                        this.registrationNumberContains(searchRequest.getSearchKeyword()))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = this.query.select(company.count())
+                .where(
+                        this.registrationNumberContains(searchRequest.getSearchKeyword()))
+                .from(company);
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    @Override
     public List<CompanyDto.Response.Default> searchForSignUp(Company.Type type, String name) {
         return this.query.select(new QCompanyDto_Response_Default(company.id, company.name))
                 .from(company)
@@ -69,5 +109,9 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
     private BooleanExpression isDeletedEq(Boolean deleted) {
         if (deleted == null) return null;
         return deleted ? company.deleted.eq(true) : company.deleted.eq(false);
+    }
+
+    private BooleanExpression registrationNumberContains(String registrationNumber) {
+        return StringUtils.hasText(registrationNumber) ? company.registrationNumber.contains(registrationNumber) : null;
     }
 }
