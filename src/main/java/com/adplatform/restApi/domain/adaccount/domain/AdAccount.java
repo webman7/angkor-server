@@ -12,6 +12,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "adaccount_info")
+@DynamicInsert
 public class AdAccount extends BaseUpdatedEntity {
     /**
      * 광고 타입
@@ -79,14 +81,17 @@ public class AdAccount extends BaseUpdatedEntity {
     @Column(name = "business_registration_number", length = 20)
     private String businessRegistrationNumber;
 
-    @Column(name = "member_count")
+    @Column(name = "tax_bill_registration_number", length = 20)
+    private String taxBillRegistrationNumber;
+
+    @Column(name = "member_count", columnDefinition = "INT")
     private Integer memberCount;
 
     @Convert(converter = BooleanToStringYOrNConverter.class)
     @Column(name = "business_right_yn", nullable = false, columnDefinition = "CHAR(1)")
     private boolean businessRight;
 
-    @Column(name = "credit_limit")
+    @Column(name = "credit_limit", columnDefinition = "INT")
     private Integer creditLimit;
 
     @Convert(converter = BooleanToStringYOrNConverter.class)
@@ -111,10 +116,12 @@ public class AdAccount extends BaseUpdatedEntity {
     @Builder
     public AdAccount(
             User user,
+            Company ownerCompany,
             AdAccountType type,
             PlatformType platformType,
             String name,
             String businessRegistrationNumber,
+            String taxBillRegistrationNumber,
             boolean businessRight,
             Integer creditLimit,
             boolean preDeferredPayment,
@@ -122,11 +129,12 @@ public class AdAccount extends BaseUpdatedEntity {
             boolean adminStop,
             boolean outOfBalance) {
         this.company = user.getCompany();
-        this.ownerCompany = user.getCompany();
+        this.ownerCompany = ownerCompany;
         this.type = type;
         this.platformType = platformType;
         this.name = name;
         this.businessRegistrationNumber = businessRegistrationNumber;
+        this.taxBillRegistrationNumber = taxBillRegistrationNumber;
         this.businessRight = businessRight;
         this.creditLimit = creditLimit;
         this.preDeferredPayment = preDeferredPayment;

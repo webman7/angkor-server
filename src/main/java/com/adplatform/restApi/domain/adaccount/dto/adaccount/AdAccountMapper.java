@@ -1,6 +1,7 @@
 package com.adplatform.restApi.domain.adaccount.dto.adaccount;
 
 import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
+import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.user.domain.User;
 import com.adplatform.restApi.global.dto.BaseMapperConfig;
 import org.mapstruct.Mapper;

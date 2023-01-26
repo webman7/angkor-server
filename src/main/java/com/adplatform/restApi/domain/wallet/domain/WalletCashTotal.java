@@ -3,6 +3,7 @@ package com.adplatform.restApi.domain.wallet.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "wallet_cash_total")
+@DynamicInsert
 public class WalletCashTotal {
     @EmbeddedId
     private WalletCashTotalId id = new WalletCashTotalId();

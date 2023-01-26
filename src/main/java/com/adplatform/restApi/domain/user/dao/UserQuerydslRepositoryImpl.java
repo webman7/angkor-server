@@ -1,29 +1,16 @@
 package com.adplatform.restApi.domain.user.dao;
 
 import com.adplatform.restApi.domain.user.domain.User;
-import com.adplatform.restApi.domain.user.dto.user.QUserDto_Response_Detail;
-import com.adplatform.restApi.domain.user.dto.user.UserDto;
-import com.adplatform.restApi.global.util.QuerydslOrderSpecifierUtil;
-import com.querydsl.core.group.GroupBy;
-import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
-import static com.adplatform.restApi.domain.company.domain.QCompany.company;
 import static com.adplatform.restApi.domain.user.domain.QRole.role;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
 import static com.adplatform.restApi.domain.user.domain.QUserRole.userRole;
-import static com.querydsl.core.group.GroupBy.groupBy;
-import static com.querydsl.core.group.GroupBy.list;
 
 /**
  * @author Seohyun Lee
@@ -41,6 +28,15 @@ public class UserQuerydslRepositoryImpl implements UserQuerydslRepository {
                 .join(userRole.role, role).fetchJoin()
                 .where(user.loginId.eq(loginId))
                 .fetchOne());
+    }
+
+    @Override
+    public List<Integer> findByUserRoles(Integer id) {
+        return this.query.select(userRole.role.id)
+                .from(user, userRole)
+                .where(user.id.eq(id),
+                        user.id.eq(userRole.user.id))
+                .fetch();
     }
 
 //    @Override

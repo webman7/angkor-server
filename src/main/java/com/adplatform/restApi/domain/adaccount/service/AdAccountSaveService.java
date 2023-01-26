@@ -5,13 +5,20 @@ import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
 import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountMapper;
+import com.adplatform.restApi.domain.company.domain.Company;
+import com.adplatform.restApi.domain.company.service.CompanyService;
 import com.adplatform.restApi.domain.user.domain.User;
 import com.adplatform.restApi.domain.user.service.UserQueryService;
 import com.adplatform.restApi.domain.wallet.dao.cash.CashRepository;
+import com.adplatform.restApi.domain.wallet.dao.walletmaster.WalletMasterRepository;
 import com.adplatform.restApi.domain.wallet.domain.WalletMaster;
+import com.adplatform.restApi.domain.wallet.service.WalletFindUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author Seohyun Lee
@@ -25,13 +32,29 @@ public class AdAccountSaveService {
     private final CashRepository cashRepository;
     private final AdAccountMapper adAccountMapper;
     private final UserQueryService userQueryService;
+    private final CompanyService companyService;
+    private final WalletMasterRepository walletMasterRepository;
 
     public void save(AdAccountDto.Request.Save request, Integer loginUserId) {
         User user = this.userQueryService.findByIdOrElseThrow(loginUserId);
+        Company ownerCompany = this.companyService.findByIdOrElseThrow(request.getOwnerCompany().getId());
+//        if(user.getCompany().getType().toString().equals("ADVERTISER")) {
+//            AdAccount adAccount = this.adAccountMapper.toEntity(request, user)
+//                    .addAdAccountUser(user, AdAccountUser.MemberType.MASTER, AdAccountUser.RequestStatus.Y)
+//                    .changeWalletMaster(WalletMaster.create(), this.cashRepository.findAll());
+//            this.adAccountRepository.save(adAccount);
+//        } else if(user.getCompany().getType().toString().equals("AGENCY")) {
+//
+//        }
+
         AdAccount adAccount = this.adAccountMapper.toEntity(request, user)
                 .addAdAccountUser(user, AdAccountUser.MemberType.MASTER, AdAccountUser.RequestStatus.Y)
                 .changeWalletMaster(WalletMaster.create(), this.cashRepository.findAll());
         this.adAccountRepository.save(adAccount);
+
+//        System.out.println("==========================================================");
+//        this.walletMasterRepository.openDateUpdate(1, Integer.getInteger(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"))));
+//        System.out.println(WalletFindUtils.findByIdOrElseThrow(1, this.walletMasterRepository));
     }
 
     public void creditLimitUpdate(AdAccountDto.Request.CreditLimitUpdate request) {

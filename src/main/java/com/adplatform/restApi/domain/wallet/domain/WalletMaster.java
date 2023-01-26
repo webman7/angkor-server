@@ -2,12 +2,13 @@ package com.adplatform.restApi.domain.wallet.domain;
 
 import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
 import com.adplatform.restApi.global.entity.BaseEntity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
  * @since 1.0
  */
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @AttributeOverride(name = "id", column = @Column(name = "adaccount_info_id"))
@@ -42,7 +44,7 @@ public class WalletMaster extends BaseEntity {
     }
 
     public static WalletMaster create() {
-        return new WalletMaster(null, Integer.getInteger(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"))));
+        return new WalletMaster(null, Integer.parseInt(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"))));
     }
 
     public WalletMaster updateAdAccount(AdAccount adAccount) {

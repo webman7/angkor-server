@@ -28,6 +28,9 @@ public class AdAccountDto {
             private AdAccount.AdAccountType type;
             @NotBlank
             private String businessRegistrationNumber;
+//            @NotBlank
+            private String taxBillRegistrationNumber;
+            private Company ownerCompany;
             @Size(min = 1, max = 20)
             @NotBlank
             private String name;
