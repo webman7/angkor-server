@@ -98,14 +98,15 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                 .select(new QCompanyDto_Response_Default(company.id, company.name))
                 .from(company)
                 .where(
-                        this.registrationNumberContains(searchRequest.getSearchKeyword()))
+                        this.registrationNumberEq(searchRequest.getSearchKeyword()),
+                        this.typeEq(searchRequest.getType()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
         JPAQuery<Long> countQuery = this.query.select(company.count())
                 .where(
-                        this.registrationNumberContains(searchRequest.getSearchKeyword()),
+                        this.registrationNumberEq(searchRequest.getSearchKeyword()),
                         this.typeEq(searchRequest.getType()))
                 .from(company);
 
@@ -133,7 +134,7 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
         return deleted ? company.deleted.eq(true) : company.deleted.eq(false);
     }
 
-    private BooleanExpression registrationNumberContains(String registrationNumber) {
-        return StringUtils.hasText(registrationNumber) ? company.registrationNumber.contains(registrationNumber) : null;
+    private BooleanExpression registrationNumberEq(String registrationNumber) {
+        return nonNull(registrationNumber) ? company.registrationNumber.eq(registrationNumber) : null;
     }
 }
