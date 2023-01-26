@@ -30,7 +30,7 @@ public abstract class CompanyDto {
         @Getter
         @Setter
         public static class SearchKeyword {
-            private String searchType;
+            private Company.Type type;
             private String searchKeyword;
         }
 

@@ -1,8 +1,11 @@
 package com.adplatform.restApi.domain.company.service;
 
 import com.adplatform.restApi.domain.company.dao.CompanyRepository;
+import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.company.dto.CompanyMapper;
+import com.adplatform.restApi.domain.user.domain.User;
+import com.adplatform.restApi.domain.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +20,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class CompanyService {
     private final CompanyRepository companyRepository;
     private final CompanyMapper companyMapper;
+
+    public Company findByIdOrElseThrow(Integer id) {
+        return this.companyRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
+    }
 
     public void saveAdvertiser(CompanyDto.Request.Save request) {
         this.companyRepository.save(this.companyMapper.toAdvertiserEntity(request));

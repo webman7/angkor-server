@@ -52,11 +52,14 @@ public class CompanyQueryApi {
     public PageDto<CompanyDto.Response.Default> registrationNumber(
             @PageableDefault Pageable pageable,
             CompanyDto.Request.SearchKeyword searchRequest) {
-        if(searchRequest.getSearchType().equals("ADVERTISER")) {
-            return PageDto.create(this.companyRepository.advertiserRegistrationNumber(pageable, searchRequest));
-        } else {
-            return PageDto.create(this.companyRepository.allRegistrationNumber(pageable, searchRequest));
-        }
+        return PageDto.create(this.companyRepository.registrationNumber(pageable, searchRequest));
+//        if(searchRequest.getSearchType().equals("ADVERTISER")) {
+//            return PageDto.create(this.companyRepository.advertiserRegistrationNumber(pageable, searchRequest));
+//        } else if(searchRequest.getSearchType().equals("AGENCY")) {
+//            return PageDto.create(this.companyRepository.agencyRegistrationNumber(pageable, searchRequest));
+//        } else {
+//            return PageDto.create(this.companyRepository.allRegistrationNumber(pageable, searchRequest));
+//        }
 
     }
 }
