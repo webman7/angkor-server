@@ -1,11 +1,9 @@
 package com.adplatform.restApi.domain.adaccount.api;
 
 import com.adplatform.restApi.domain.adaccount.dao.adaccount.AdAccountRepository;
-import com.adplatform.restApi.domain.adaccount.dao.adaccount.mapper.AdAccountQueryMapper;
 import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
-import com.adplatform.restApi.domain.company.service.CompanyFindUtils;
 import com.adplatform.restApi.global.config.security.util.SecurityUtils;
 import com.adplatform.restApi.global.dto.PageDto;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +24,6 @@ import java.util.List;
 @RequestMapping("/adaccounts")
 public class AdAccountQueryApi {
     private final AdAccountRepository adAccountRepository;
-
-    private final AdAccountQueryMapper adAccountQueryMapper;
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/all")
@@ -97,26 +93,6 @@ public class AdAccountQueryApi {
     @GetMapping("/{id}/cash/detail")
     public List<AdAccountDto.Response.AdAccountCashDetailInfo> adAccountCashDetailInfo(@PathVariable(name = "id") Integer adAccountId) {
         return this.adAccountRepository.adAccountCashDetailInfo(adAccountId);
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{id}/countByAd")
-    public AdAccountDto.Response.AdAccountCountByAd adAccountCountByAd(@PathVariable(name = "id") Integer adAccountId) {
-        return this.adAccountRepository.adAccountCountByAd(adAccountId);
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/dashboard/chart")
-    public List<AdAccountDto.Response.AdAccountDashboardChart> adAccountDashboardChart(
-            @RequestBody @Valid AdAccountDto.Request.AdAccountDashboardChart request) {
-        return this.adAccountQueryMapper.adAccountDashboardChart(request);
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/dashboard/cost")
-    public AdAccountDto.Response.AdAccountDashboardCost adAccountDashboardCost(
-            @RequestBody @Valid AdAccountDto.Request.AdAccountDashboardCost request) {
-        return this.adAccountQueryMapper.adAccountDashboardCost(request);
     }
 
     @ResponseStatus(HttpStatus.OK)

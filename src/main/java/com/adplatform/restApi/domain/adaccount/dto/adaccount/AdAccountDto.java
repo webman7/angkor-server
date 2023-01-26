@@ -76,21 +76,6 @@ public class AdAccountDto {
             private Integer id;
             private String name;
         }
-
-        @Getter
-        @Setter
-        public static class AdAccountDashboardChart {
-            private Integer adAccountId;
-            private Integer startDate;
-            private Integer endDate;
-            private List<String> indicators;
-        }
-
-        @Getter
-        @Setter
-        public static class AdAccountDashboardCost {
-            private Integer adAccountId;
-        }
     }
 
 
@@ -332,38 +317,6 @@ public class AdAccountDto {
                 this.availableAmount = availableAmount;
                 this.reserveAmount = reserveAmount;
             }
-        }
-
-        @Getter
-        @Setter
-        public static class AdAccountCountByAd {
-            private Long campaignCount;
-            private Long adGroupCount;
-            private Long creativeCount;
-
-            @QueryProjection
-            public AdAccountCountByAd(
-                    Long campaignCount,
-                    Long adGroupCount,
-                    Long creativeCount
-            ) {
-                this.campaignCount = campaignCount;
-                this.adGroupCount = adGroupCount;
-                this.creativeCount = creativeCount;
-            }
-        }
-
-        @Getter
-        @Setter
-        public static class AdAccountDashboardChart {
-            private Integer reportDate;
-            private ReportDto.Response report;
-        }
-
-        @Getter
-        @Setter
-        public static class AdAccountDashboardCost {
-            private Integer costOfToday;
         }
     }
 }

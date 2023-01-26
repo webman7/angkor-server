@@ -2,6 +2,7 @@ package com.adplatform.restApi.domain.creative.dao.mapper;
 
 import com.adplatform.restApi.domain.campaign.dto.AdvertiserSearchRequest;
 import com.adplatform.restApi.domain.creative.dto.CreativeDto;
+import com.adplatform.restApi.domain.dashboard.dto.DashboardDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;

@@ -8,6 +8,8 @@ import com.adplatform.restApi.domain.campaign.domain.Campaign;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.company.dto.QCompanyDto_Response_AdAccountDetail;
 import com.adplatform.restApi.domain.creative.domain.Creative;
+import com.adplatform.restApi.domain.dashboard.dto.DashboardDto;
+import com.adplatform.restApi.domain.dashboard.dto.QDashboardDto_Response_AdAccountCountByAd;
 import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_WalletBalance;
 import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_WalletSpend;
 import com.adplatform.restApi.global.util.QuerydslOrderSpecifierUtil;
@@ -472,8 +474,8 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
     }
 
     @Override
-    public AdAccountDto.Response.AdAccountCountByAd adAccountCountByAd(Integer adAccountId) {
-        return this.query.select(new QAdAccountDto_Response_AdAccountCountByAd(
+    public DashboardDto.Response.AdAccountCountByAd adAccountsCountByAd(Integer adAccountId) {
+        return this.query.select(new QDashboardDto_Response_AdAccountCountByAd(
                 as(select(Wildcard.count)
                         .from(adAccount, campaign)
                         .where(adAccount.id.eq(campaign.adAccount.id),

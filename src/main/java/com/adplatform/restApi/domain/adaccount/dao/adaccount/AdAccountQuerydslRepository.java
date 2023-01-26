@@ -3,6 +3,7 @@ package com.adplatform.restApi.domain.adaccount.dao.adaccount;
 import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
+import com.adplatform.restApi.domain.dashboard.dto.DashboardDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -42,7 +43,7 @@ public interface AdAccountQuerydslRepository {
 
     void creditLimitUpdate(Integer adAccountId, Boolean oufOfBalance);
 
-    AdAccountDto.Response.AdAccountCountByAd adAccountCountByAd(Integer adAccountId);
+    DashboardDto.Response.AdAccountCountByAd adAccountsCountByAd(Integer adAccountId);
 
     CompanyDto.Response.AdAccountDetail adAccountByAdvertiser(Integer adAccountId);
 
