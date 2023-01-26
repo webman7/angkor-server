@@ -7,7 +7,9 @@ import com.adplatform.restApi.domain.adgroup.domain.Media;
 import com.adplatform.restApi.domain.adgroup.dto.schedule.AdGroupScheduleMapper;
 import com.adplatform.restApi.domain.adgroup.dto.target.AdGroupDemographicTargetMapper;
 import com.adplatform.restApi.domain.adgroup.event.AdGroupSavedEvent;
+import com.adplatform.restApi.domain.campaign.domain.AdTypeAndGoal;
 import com.adplatform.restApi.domain.campaign.domain.Campaign;
+import com.adplatform.restApi.domain.campaign.dto.AdTypeAndGoalDto;
 import com.adplatform.restApi.global.dto.BaseMapperConfig;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -36,6 +38,8 @@ public interface AdGroupMapper {
     AdGroup toEntity(AdGroupSavedEvent event, List<Media> media, List<Device> devices);
 
     @Mapping(target = "adGroupId", source = "adGroup.id")
+    @Mapping(target = "campaign.adTypeAndGoal.adTypeName", source = "adGroup.campaign.adTypeAndGoal.adType.name")
+    @Mapping(target = "campaign.adTypeAndGoal.adGoalName", source = "adGroup.campaign.adTypeAndGoal.adGoal.name")
     @Mapping(target = "media", source = "adGroup.media", qualifiedByName = "mapMedia")
     @Mapping(target = "devices", source = "adGroup.devices", qualifiedByName = "mapDevices")
     AdGroupDto.Response.Detail toDetailResponse(AdGroup adGroup);

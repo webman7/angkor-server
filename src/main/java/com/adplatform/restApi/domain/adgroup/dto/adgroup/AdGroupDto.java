@@ -5,6 +5,8 @@ import com.adplatform.restApi.domain.adgroup.domain.AdGroup;
 import com.adplatform.restApi.domain.adgroup.domain.AdGroupMedia;
 import com.adplatform.restApi.domain.adgroup.dto.schedule.AdGroupScheduleDto;
 import com.adplatform.restApi.domain.adgroup.dto.target.AdGroupDemographicTargetDto;
+import com.adplatform.restApi.domain.campaign.domain.Campaign;
+import com.adplatform.restApi.domain.campaign.dto.CampaignDto;
 import com.adplatform.restApi.domain.campaign.dto.CampaignIdGetter;
 import com.adplatform.restApi.domain.statistics.dto.ReportDto;
 import com.querydsl.core.annotations.QueryProjection;
@@ -142,6 +144,7 @@ public abstract class AdGroupDto {
         @Setter
         public static class Detail {
             private Integer adGroupId;
+            private CampaignDto.Response.Detail campaign;
             private AdGroupDemographicTargetDto.Response.Default demographicTarget;
             private AdGroupScheduleDto.Response.Default adGroupSchedule;
             private List<String> media;

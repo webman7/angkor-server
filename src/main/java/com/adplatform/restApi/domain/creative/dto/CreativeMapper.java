@@ -1,8 +1,10 @@
 package com.adplatform.restApi.domain.creative.dto;
 
 import com.adplatform.restApi.domain.adgroup.dao.adgroup.AdGroupRepository;
+import com.adplatform.restApi.domain.adgroup.domain.AdGroup;
 import com.adplatform.restApi.domain.adgroup.domain.Device;
 import com.adplatform.restApi.domain.adgroup.service.AdGroupFindUtils;
+import com.adplatform.restApi.domain.campaign.domain.Campaign;
 import com.adplatform.restApi.domain.creative.domain.Creative;
 import com.adplatform.restApi.domain.creative.domain.CreativeFile;
 import com.adplatform.restApi.domain.creative.domain.CreativeLanding;
@@ -57,7 +59,12 @@ public abstract class CreativeMapper {
     @Mapping(target = "files", source = "creativeFile")
     @Mapping(target = "opinionProofFiles", source = "creativeOpinionProofFile")
     @Mapping(target = "placements", source = "creative.placements", qualifiedByName = "mapPlacements")
-    public abstract CreativeDto.Response.Detail toDetailResponse(Creative creative, List<CreativeFile> creativeFile, List<CreativeOpinionProofFile> creativeOpinionProofFile);
+    @Mapping(target = "name", source = "creative.name")
+    @Mapping(target = "adGroupName", source = "adGroup.name")
+    @Mapping(target = "campaign.name", source = "adGroup.campaign.name")
+    @Mapping(target = "campaign.adTypeAndGoal.adTypeName", source = "adGroup.campaign.adTypeAndGoal.adType.name")
+    @Mapping(target = "campaign.adTypeAndGoal.adGoalName", source = "adGroup.campaign.adTypeAndGoal.adGoal.name")
+    public abstract CreativeDto.Response.Detail toDetailResponse(Creative creative, List<CreativeFile> creativeFile, List<CreativeOpinionProofFile> creativeOpinionProofFile, AdGroup adGroup);
 
     @Named("mapPlacements")
     List<Integer> mapPlacement(Collection<Placement> placements) {

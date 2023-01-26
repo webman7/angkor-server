@@ -105,6 +105,31 @@ public abstract class CampaignDto {
 
         @Getter
         @Setter
+        public static class Detail {
+            private Integer id;
+            private AdTypeAndGoalDto adTypeAndGoal;
+            private String name;
+            private Long dailyBudgetAmount;
+            private Long budgetAmount;
+            private Integer startDate;
+            private Integer endDate;
+            private String config;
+            private String systemConfig;
+            private String status;
+            private LocalDateTime createdAt;
+            private LocalDateTime updatedAt;
+        }
+
+        @Getter
+        @Setter
+        public static class BaseDetail {
+            private Integer id;
+            private AdTypeAndGoalDto adTypeAndGoal;
+            private String name;
+        }
+
+        @Getter
+        @Setter
         public static class ForSaveAdGroup {
             private Integer id;
             private String name;

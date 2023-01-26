@@ -66,4 +66,11 @@ public class CampaignQueryApi {
     public BudgetDto getBudget(@PathVariable(name = "id") Integer campaignId) {
         return BudgetDto.create(this.campaignRepository.getBudget(campaignId), this.adGroupRepository.getBudget(campaignId));
     }
+
+    @AuthorizedAdAccountByCampaignId
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}")
+    public CampaignDto.Response.Detail searchByCampaignId(@PathVariable(name = "id") Integer campaignId) {
+        return this.campaignQueryMapper.searchByCampaignId(campaignId);
+    }
 }

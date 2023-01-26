@@ -2,6 +2,7 @@ package com.adplatform.restApi.domain.creative.dto;
 
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountIdGetter;
 import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupIdGetter;
+import com.adplatform.restApi.domain.campaign.dto.CampaignDto;
 import com.adplatform.restApi.domain.creative.domain.Creative;
 import com.adplatform.restApi.domain.creative.domain.CreativeFile;
 import com.adplatform.restApi.domain.creative.domain.CreativeLanding;
@@ -120,6 +121,8 @@ public abstract class CreativeDto {
             private List<CreativeFileDto> files;
             List<CreativeOpinionProofFileDto> opinionProofFiles;
             private String name;
+            private CampaignDto.Response.BaseDetail campaign;
+            private String adGroupName;
             private Creative.Format format;
             private String altText;
             private String title;
@@ -136,6 +139,8 @@ public abstract class CreativeDto {
                     List<CreativeFileDto> files,
                     List<CreativeOpinionProofFileDto> opinionProofFiles,
                     String name,
+                    String adGroupName,
+                    CampaignDto.Response.BaseDetail campaign,
                     Creative.Format format,
                     String altText,
                     String title,
@@ -149,6 +154,8 @@ public abstract class CreativeDto {
                 this.files = files;
                 this.opinionProofFiles = opinionProofFiles;
                 this.name = name;
+                this.adGroupName = adGroupName;
+                this.campaign = campaign;
                 this.format = format;
                 this.altText = altText;
                 this.title = title;

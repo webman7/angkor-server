@@ -13,7 +13,10 @@ import com.adplatform.restApi.domain.adgroup.dto.adgroup.AdGroupMediaDto;
 import com.adplatform.restApi.domain.adgroup.dto.media.MediaDto;
 import com.adplatform.restApi.domain.adgroup.dto.media.MediaMapper;
 import com.adplatform.restApi.domain.adgroup.exception.AdGroupNotFoundException;
+import com.adplatform.restApi.domain.campaign.dao.campaign.CampaignRepository;
+import com.adplatform.restApi.domain.campaign.domain.Campaign;
 import com.adplatform.restApi.domain.campaign.dto.AdvertiserSearchRequest;
+import com.adplatform.restApi.domain.campaign.service.CampaignFindUtils;
 import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount;
 import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccountByAdGroupId;
 import com.adplatform.restApi.global.dto.PageDto;
@@ -36,6 +39,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/adgroups")
 public class AdGroupQueryApi {
+
+    private final CampaignRepository campaignRepository;
     private final AdGroupRepository adGroupRepository;
     private final AdGroupMediaRepository adGroupMediaRepository;
     private final AdGroupQueryMapper adGroupQueryMapper;

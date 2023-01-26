@@ -1,8 +1,15 @@
 package com.adplatform.restApi.domain.creative.api;
 
+import com.adplatform.restApi.domain.adgroup.dao.adgroup.AdGroupRepository;
+import com.adplatform.restApi.domain.adgroup.domain.AdGroup;
+import com.adplatform.restApi.domain.adgroup.service.AdGroupFindUtils;
+import com.adplatform.restApi.domain.campaign.dao.campaign.CampaignRepository;
+import com.adplatform.restApi.domain.campaign.domain.Campaign;
 import com.adplatform.restApi.domain.campaign.dto.AdvertiserSearchRequest;
+import com.adplatform.restApi.domain.campaign.service.CampaignFindUtils;
 import com.adplatform.restApi.domain.creative.dao.CreativeRepository;
 import com.adplatform.restApi.domain.creative.dao.mapper.CreativeQueryMapper;
+import com.adplatform.restApi.domain.creative.domain.Creative;
 import com.adplatform.restApi.domain.creative.dto.CreativeDto;
 import com.adplatform.restApi.domain.creative.dto.CreativeMapper;
 import com.adplatform.restApi.domain.creative.exception.CreativeNotFoundException;
@@ -26,6 +33,8 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/creatives")
 public class CreativeQueryApi {
+    private final CampaignRepository campaignRepository;
+    private final AdGroupRepository adGroupRepository;
     private final CreativeRepository creativeRepository;
     private final CreativeQueryMapper creativeQueryMapper;
     private final CreativeMapper creativeMapper;
@@ -47,10 +56,13 @@ public class CreativeQueryApi {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
     public CreativeDto.Response.Detail findById(@PathVariable(name = "id") Integer creativeId) {
+        Creative creative = this.creativeRepository.findDetailById(creativeId).orElseThrow(CreativeNotFoundException::new);
+        AdGroup adGroup = AdGroupFindUtils.findByIdOrElseThrow(creative.getAdGroup().getId(), this.adGroupRepository);
+//        Campaign campaign = CampaignFindUtils.findByIdOrElseThrow(adGroup.getCampaign().getId(), this.campaignRepository);
         return this.creativeMapper.toDetailResponse(
                 this.creativeRepository.findDetailById(creativeId)
                         .orElseThrow(CreativeNotFoundException::new),
                 this.creativeRepository.findDetailFilesById(creativeId),
-                this.creativeRepository.findDetailOpinionProofById(creativeId));
+                this.creativeRepository.findDetailOpinionProofById(creativeId), adGroup);
     }
 }

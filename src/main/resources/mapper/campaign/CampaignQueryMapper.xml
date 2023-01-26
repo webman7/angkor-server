@@ -113,12 +113,6 @@ since 1.0
                              FROM ad_type_goal_info atg
                                       INNER JOIN ad_type_info at ON atg.ad_type_info_id = at.id
                                       INNER JOIN ad_goal_info ag ON atg.ad_goal_info_id = ag.id) tg ON tg.id = c.ad_type_goal_info_id
-                 /*LEFT JOIN (SELECT a.campaign_info_id AS campaignId,
-                                   MIN(s.start_date)  AS adGroupSchedulesFirstStartDate,
-                                   MAX(s.end_date)    AS adGroupSchedulesLastEndDate
-                            FROM adgroup_schedule s
-                                     INNER JOIN adgroup_info a ON a.id = s.adgroup_info_id
-                            GROUP BY a.campaign_info_id) startEndDate ON startEndDate.campaignId = c.id*/
                  LEFT JOIN (SELECT campaign_info_id,
                                    <include refid="ReportCommonMapper.reportUnionColumns"/>
                             FROM (SELECT campaign_info_id,
@@ -211,6 +205,57 @@ since 1.0
     <select id="searchCampaignList" resultMap="mapSearch">
         <include refid="searchCampaignSelectQuery"/>
         <include refid="common.sortAndOrder"/>
+    </select>
+
+    <resultMap id="mapDetail" type="com.adplatform.restApi.domain.campaign.dto.CampaignDto$Response$Detail">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="dailyBudgetAmount" property="dailyBudgetAmount"/>
+        <result column="budgetAmount" property="budgetAmount"/>
+        <result column="config" property="config"/>
+        <result column="systemConfig" property="systemConfig"/>
+        <result column="status" property="status"/>
+        <result column="createdAt" property="createdAt"/>
+        <result column="updatedAt" property="updatedAt"/>
+        <result column="startDate" property="startDate"/>
+        <result column="endDate" property="endDate"/>
+        <result column="adGroupSchedulesFirstStartDate" property="adGroupSchedulesFirstStartDate"/>
+        <result column="adGroupSchedulesLastEndDate" property="adGroupSchedulesLastEndDate"/>
+        <association property="adTypeAndGoal" javaType="com.adplatform.restApi.domain.campaign.dto.AdTypeAndGoalDto">
+            <result column="adTypeName" property="adTypeName"/>
+            <result column="adGoalName" property="adGoalName"/>
+        </association>
+    </resultMap>
+
+    <sql id="searchByCampaignIdSelectQuery">
+        SELECT c.id,
+                tg.id                          AS adTypeGoalId,
+                tg.adTypeName,
+                tg.adGoalName,
+                c.name,
+                c.daily_budget_amount          AS dailyBudgetAmount,
+                c.budget_amount                AS budgetAmount,
+                c.config,
+                c.system_config                AS systemConfig,
+                c.status                       AS status,
+                c.reg_date                     AS createdAt,
+                c.upd_date                     AS updatedAt,
+                c.start_date                   AS startDate,
+                c.end_date                     AS endDate,
+                c.start_date                   AS adGroupSchedulesFirstStartDate,
+                c.end_date                     AS adGroupSchedulesLastEndDate
+        FROM campaign_info c
+        INNER JOIN (SELECT atg.id, at.name AS adTypeName, ag.name AS adGoalName
+        FROM ad_type_goal_info atg
+        INNER JOIN ad_type_info at ON atg.ad_type_info_id = at.id
+        INNER JOIN ad_goal_info ag ON atg.ad_goal_info_id = ag.id) tg ON tg.id = c.ad_type_goal_info_id
+        <trim prefix="WHERE" prefixOverrides="AND | OR ">
+            c.id = #{campaignId}
+        </trim>
+    </sql>
+
+    <select id="searchByCampaignId" resultMap="mapDetail">
+        <include refid="searchByCampaignIdSelectQuery"/>
     </select>
 
 </mapper>
