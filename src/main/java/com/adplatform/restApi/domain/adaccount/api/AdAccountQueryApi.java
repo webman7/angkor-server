@@ -113,6 +113,13 @@ public class AdAccountQueryApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/dashboard/cost")
+    public AdAccountDto.Response.AdAccountDashboardCost adAccountDashboardCost(
+            @RequestBody @Valid AdAccountDto.Request.AdAccountDashboardCost request) {
+        return this.adAccountQueryMapper.adAccountDashboardCost(request);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}/advertiser")
     public CompanyDto.Response.AdAccountDetail adAccountByAdvertiser(@PathVariable(name = "id") Integer adAccountId) {
         return this.adAccountRepository.adAccountByAdvertiser(adAccountId);

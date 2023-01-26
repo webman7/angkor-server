@@ -63,4 +63,19 @@
     <select id="adAccountDashboardChart" resultMap="mapSearch">
         <include refid="adAccountDashboardChartSelectQuery"/>
     </select>
+
+    <resultMap id="mapCost" type="com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto$Response$AdAccountDashboardCost">
+        <id column="costOfToday" property="costOfToday"/>
+    </resultMap>
+
+    <sql id="adAccountDashboardCostSelectQuery">
+        SELECT SUM(cost) AS costOfToday
+          FROM report_adgroup_daily rad
+         WHERE rad.adaccount_info_id = #{request.adAccountId}
+           AND rad.report_date = date_format(NOW(), '%Y%m%d')
+    </sql>
+
+    <select id="adAccountDashboardCost" resultMap="mapCost">
+        <include refid="adAccountDashboardCostSelectQuery"/>
+    </select>
 </mapper>

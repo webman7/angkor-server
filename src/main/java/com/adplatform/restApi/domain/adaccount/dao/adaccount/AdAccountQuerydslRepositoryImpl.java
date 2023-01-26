@@ -11,8 +11,6 @@ import com.adplatform.restApi.domain.creative.domain.Creative;
 import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_WalletBalance;
 import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_WalletSpend;
 import com.adplatform.restApi.global.util.QuerydslOrderSpecifierUtil;
-import com.adplatform.restApi.global.value.QAddress;
-import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -43,6 +41,7 @@ import static com.adplatform.restApi.domain.adgroup.domain.QAdGroup.adGroup;
 import static com.adplatform.restApi.domain.campaign.domain.QCampaign.campaign;
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
 import static com.adplatform.restApi.domain.creative.domain.QCreative.creative;
+import static com.adplatform.restApi.domain.statistics.domain.report.QReportAdGroupDaily.reportAdGroupDaily;
 import static com.adplatform.restApi.domain.statistics.domain.sale.QSaleAmountDaily.saleAmountDaily;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
 import static com.adplatform.restApi.domain.wallet.domain.QCash.cash;
@@ -106,10 +105,10 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                                                         .join(walletCashTotal.cash, cash).on(cash.saleAffect.eq(true))
                                                         .where(walletCashTotal.id.walletMasterId.eq(adAccount.id)),
                                                 "cash"),
-                                        as(select(saleAmountDaily.saleAmount)
-                                                        .from(saleAmountDaily)
-                                                        .where(saleAmountDaily.id.adAccountId.eq(adAccount.id),
-                                                                saleAmountDaily.id.statDate.eq(Integer.valueOf(now.format(yyyyMMdd)))),
+                                        as(select(reportAdGroupDaily.information.cost.sum())
+                                                        .from(reportAdGroupDaily)
+                                                        .where(reportAdGroupDaily.adAccountId.eq(adAccount.id),
+                                                                reportAdGroupDaily.reportDate.eq(Integer.valueOf(now.format(yyyyMMdd)))),
                                                 "todaySpend"),
                                         as(select(saleAmountDaily.saleAmount)
                                                         .from(saleAmountDaily)
@@ -199,10 +198,10 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                                                         .join(walletCashTotal.cash, cash).on(cash.saleAffect.eq(true))
                                                         .where(walletCashTotal.id.walletMasterId.eq(adAccount.id)),
                                                 "cash"),
-                                        as(select(saleAmountDaily.saleAmount)
-                                                        .from(saleAmountDaily)
-                                                        .where(saleAmountDaily.id.adAccountId.eq(adAccount.id),
-                                                                saleAmountDaily.id.statDate.eq(Integer.valueOf(now.format(yyyyMMdd)))),
+                                        as(select(reportAdGroupDaily.information.cost.sum())
+                                                        .from(reportAdGroupDaily)
+                                                        .where(reportAdGroupDaily.adAccountId.eq(adAccount.id),
+                                                                reportAdGroupDaily.reportDate.eq(Integer.valueOf(now.format(yyyyMMdd)))),
                                                 "todaySpend"),
                                         as(select(saleAmountDaily.saleAmount)
                                                         .from(saleAmountDaily)

@@ -10,4 +10,8 @@ import java.util.List;
 public interface AdAccountQueryMapper {
     List<AdAccountDto.Response.AdAccountDashboardChart> adAccountDashboardChart(
             @Param("request") AdAccountDto.Request.AdAccountDashboardChart request);
+
+    AdAccountDto.Response.AdAccountDashboardCost adAccountDashboardCost(
+            @Param("request") AdAccountDto.Request.AdAccountDashboardCost request);
+
 }

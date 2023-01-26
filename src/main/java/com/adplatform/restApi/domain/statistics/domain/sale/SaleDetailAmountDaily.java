@@ -15,6 +15,12 @@ public class SaleDetailAmountDaily {
     @EmbeddedId
     private final AdAccountIdStartDateCashIdPk id = new AdAccountIdStartDateCashIdPk();
 
+    @Column(name = "company_info_id")
+    private int companyId;
+
+    @Column(name = "owner_company_info_id")
+    private int ownerCompanyId;
+
     @Column(name = "sale_amount")
     private int saleAmount;
 
@@ -23,10 +29,14 @@ public class SaleDetailAmountDaily {
             Integer adAccountId,
             Integer statDate,
             Integer cashId,
+            Integer companyId,
+            Integer ownerCompanyId,
             Integer saleAmount) {
         this.id.setAdAccountId(adAccountId);
         this.id.setStatDate(statDate);
         this.id.setCashId(cashId);
+        this.companyId = companyId;
+        this.ownerCompanyId = ownerCompanyId;
         this.saleAmount = saleAmount;
     }
 }

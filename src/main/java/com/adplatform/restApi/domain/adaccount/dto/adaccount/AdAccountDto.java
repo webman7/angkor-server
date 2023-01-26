@@ -85,6 +85,12 @@ public class AdAccountDto {
             private Integer endDate;
             private List<String> indicators;
         }
+
+        @Getter
+        @Setter
+        public static class AdAccountDashboardCost {
+            private Integer adAccountId;
+        }
     }
 
 
@@ -352,6 +358,12 @@ public class AdAccountDto {
         public static class AdAccountDashboardChart {
             private Integer reportDate;
             private ReportDto.Response report;
+        }
+
+        @Getter
+        @Setter
+        public static class AdAccountDashboardCost {
+            private Integer costOfToday;
         }
     }
 }
