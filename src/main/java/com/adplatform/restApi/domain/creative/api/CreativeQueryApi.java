@@ -58,7 +58,7 @@ public class CreativeQueryApi {
     public CreativeDto.Response.Detail findById(@PathVariable(name = "id") Integer creativeId) {
         Creative creative = this.creativeRepository.findDetailById(creativeId).orElseThrow(CreativeNotFoundException::new);
         AdGroup adGroup = AdGroupFindUtils.findByIdOrElseThrow(creative.getAdGroup().getId(), this.adGroupRepository);
-//        Campaign campaign = CampaignFindUtils.findByIdOrElseThrow(adGroup.getCampaign().getId(), this.campaignRepository);
+
         return this.creativeMapper.toDetailResponse(
                 this.creativeRepository.findDetailById(creativeId)
                         .orElseThrow(CreativeNotFoundException::new),
