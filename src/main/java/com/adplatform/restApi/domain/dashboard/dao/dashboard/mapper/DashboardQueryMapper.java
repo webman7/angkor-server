@@ -14,11 +14,11 @@ public interface DashboardQueryMapper {
     DashboardDto.Response.AdAccountDashboardCost adAccountsDashboardCost(
             @Param("request") DashboardDto.Request.AdAccountDashboard request);
 
-    List<DashboardDto.Response.DashboardChart> campaignsDashboardChart(
+    List<DashboardDto.Response.DashboardChart> totalDashboardChart(
             @Param("request") DashboardDto.Request.TotalDashboardChart request);
 
-    List<DashboardDto.Response.DashboardChart> campaignByIdDashboardChart(
-            @Param("request") DashboardDto.Request.DashboardChart request, Integer campaignId);
+    List<DashboardDto.Response.DashboardChart> byIdDashboardChart(
+            @Param("request") DashboardDto.Request.DashboardChart request, Integer campaignId, Integer adGroupId, Integer creativeId);
 
     List<DashboardDto.Response.DashboardChart> adGroupsDashboardChart(
             @Param("request") DashboardDto.Request.TotalDashboardChart request);
@@ -30,5 +30,5 @@ public interface DashboardQueryMapper {
             @Param("request") DashboardDto.Request.TotalDashboardChart request);
 
     List<DashboardDto.Response.DashboardChart> creativeByIdDashboardChart(
-            @Param("request") DashboardDto.Request.DashboardChart request);
+            @Param("request") DashboardDto.Request.DashboardChart request, Integer creativeId);
 }

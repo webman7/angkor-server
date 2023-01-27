@@ -42,7 +42,7 @@ public class DashboardQueryApi {
     @PostMapping("/campaigns/chart")
     public List<DashboardDto.Response.DashboardChart> campaignsDashboardChart(
             @RequestBody @Valid DashboardDto.Request.TotalDashboardChart request) {
-        return this.dashboardQueryMapper.campaignsDashboardChart(request);
+        return this.dashboardQueryMapper.totalDashboardChart(request);
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -50,14 +50,14 @@ public class DashboardQueryApi {
     public List<DashboardDto.Response.DashboardChart> campaignByIdDashboardChart(
             @PathVariable(name = "id") Integer campaignId,
             @RequestBody @Valid DashboardDto.Request.DashboardChart request) {
-        return this.dashboardQueryMapper.campaignByIdDashboardChart(request, campaignId);
+        return this.dashboardQueryMapper.byIdDashboardChart(request, campaignId, null, null);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/adgroups/chart")
     public List<DashboardDto.Response.DashboardChart> adGroupsDashboardChart(
             @RequestBody @Valid DashboardDto.Request.TotalDashboardChart request) {
-        return this.dashboardQueryMapper.adGroupsDashboardChart(request);
+        return this.dashboardQueryMapper.totalDashboardChart(request);
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -65,14 +65,14 @@ public class DashboardQueryApi {
     public List<DashboardDto.Response.DashboardChart> adGroupByIdDashboardChart(
             @PathVariable(name = "id") Integer adGroupId,
             @RequestBody @Valid DashboardDto.Request.DashboardChart request) {
-        return this.dashboardQueryMapper.adGroupByIdDashboardChart(request, adGroupId);
+        return this.dashboardQueryMapper.byIdDashboardChart(request, null, adGroupId, null);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/creatives/chart")
     public List<DashboardDto.Response.DashboardChart> creativesDashboardChart(
             @RequestBody @Valid DashboardDto.Request.TotalDashboardChart request) {
-        return this.dashboardQueryMapper.creativesDashboardChart(request);
+        return this.dashboardQueryMapper.totalDashboardChart(request);
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -80,7 +80,7 @@ public class DashboardQueryApi {
     public List<DashboardDto.Response.DashboardChart> creativeByIdDashboardChart(
             @PathVariable(name = "id") Integer creativeId,
             @RequestBody @Valid DashboardDto.Request.DashboardChart request) {
-        return this.dashboardQueryMapper.creativeByIdDashboardChart(request);
+        return this.dashboardQueryMapper.byIdDashboardChart(request, null, null, creativeId);
     }
 
 }
