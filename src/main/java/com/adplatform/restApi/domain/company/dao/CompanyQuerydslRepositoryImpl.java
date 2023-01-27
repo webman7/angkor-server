@@ -2,6 +2,7 @@ package com.adplatform.restApi.domain.company.dao;
 
 import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
+import com.adplatform.restApi.domain.company.dto.QCompanyDto_Response_AdAccountDetail;
 import com.adplatform.restApi.domain.company.dto.QCompanyDto_Response_Default;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -50,52 +51,21 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
-//    @Override
-//    public Page<CompanyDto.Response.Default> advertiserRegistrationNumber(Pageable pageable, CompanyDto.Request.SearchKeyword searchRequest) {
-//        List<CompanyDto.Response.Default> content = this.query
-//                .select(new QCompanyDto_Response_Default(company.id, company.name))
-//                .from(company)
-//                .where(
-//                        this.registrationNumberContains(searchRequest.getSearchKeyword()),
-//                        this.typeEq(Company.Type.valueOf("ADVERTISER")))
-//                .offset(pageable.getOffset())
-//                .limit(pageable.getPageSize())
-//                .fetch();
-//
-//        JPAQuery<Long> countQuery = this.query.select(company.count())
-//                .where(
-//                        this.registrationNumberContains(searchRequest.getSearchKeyword()),
-//                        this.typeEq(Company.Type.valueOf("ADVERTISER")))
-//                .from(company);
-//
-//        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
-//    }
-//
-//    @Override
-//    public Page<CompanyDto.Response.Default> agencyRegistrationNumber(Pageable pageable, CompanyDto.Request.SearchKeyword searchRequest) {
-//        List<CompanyDto.Response.Default> content = this.query
-//                .select(new QCompanyDto_Response_Default(company.id, company.name))
-//                .from(company)
-//                .where(
-//                        this.registrationNumberContains(searchRequest.getSearchKeyword()),
-//                        this.typeEq(Company.Type.valueOf("AGENCY")))
-//                .offset(pageable.getOffset())
-//                .limit(pageable.getPageSize())
-//                .fetch();
-//
-//        JPAQuery<Long> countQuery = this.query.select(company.count())
-//                .where(
-//                        this.registrationNumberContains(searchRequest.getSearchKeyword()),
-//                        this.typeEq(Company.Type.valueOf("AGENCY")))
-//                .from(company);
-//
-//        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
-//    }
-
     @Override
-    public Page<CompanyDto.Response.Default> registrationNumber(Pageable pageable, CompanyDto.Request.SearchKeyword searchRequest) {
-        List<CompanyDto.Response.Default> content = this.query
-                .select(new QCompanyDto_Response_Default(company.id, company.name))
+    public Page<CompanyDto.Response.AdAccountDetail> registrationNumber(Pageable pageable, CompanyDto.Request.SearchKeyword searchRequest) {
+        List<CompanyDto.Response.AdAccountDetail> content = this.query
+                .select(new QCompanyDto_Response_AdAccountDetail(
+                        company.id,
+                        company.name,
+                        company.type,
+                        company.registrationNumber,
+                        company.representationName,
+                        company.address,
+                        company.businessCategory,
+                        company.businessItem,
+                        company.taxBillEmail1,
+                        company.taxBillEmail2
+                ))
                 .from(company)
                 .where(
                         this.registrationNumberEq(searchRequest.getSearchKeyword()),

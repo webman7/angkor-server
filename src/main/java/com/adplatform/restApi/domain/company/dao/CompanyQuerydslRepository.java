@@ -18,7 +18,7 @@ public interface CompanyQuerydslRepository {
 //
 //    Page<CompanyDto.Response.Default> agencyRegistrationNumber(Pageable pageable, CompanyDto.Request.SearchKeyword searchRequest);
 
-    Page<CompanyDto.Response.Default> registrationNumber(Pageable pageable, CompanyDto.Request.SearchKeyword searchRequest);
+    Page<CompanyDto.Response.AdAccountDetail> registrationNumber(Pageable pageable, CompanyDto.Request.SearchKeyword searchRequest);
 
     List<CompanyDto.Response.Default> searchForSignUp(Company.Type type, String name);
 }

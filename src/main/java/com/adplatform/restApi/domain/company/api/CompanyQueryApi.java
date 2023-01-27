@@ -49,7 +49,7 @@ public class CompanyQueryApi {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/registration/number")
-    public PageDto<CompanyDto.Response.Default> registrationNumber(
+    public PageDto<CompanyDto.Response.AdAccountDetail> registrationNumber(
             @PageableDefault Pageable pageable,
             CompanyDto.Request.SearchKeyword searchRequest) {
         return PageDto.create(this.companyRepository.registrationNumber(pageable, searchRequest));
