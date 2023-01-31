@@ -13,7 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SecurityUtils {
-    public static Integer getLoginUserId() {
+    public static Integer getLoginUserNo() {
         Authentication authentication = validateAnonymousAuthentication();
         if (authentication == null) return null;
         return ((CustomUserDetails) authentication.getPrincipal()).getUser().getId();

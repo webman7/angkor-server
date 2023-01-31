@@ -1,16 +1,11 @@
 package com.adplatform.restApi.domain.history.domain;
 
-import com.adplatform.restApi.domain.adgroup.domain.*;
-import com.adplatform.restApi.domain.campaign.domain.Campaign;
-import com.adplatform.restApi.domain.wallet.domain.Cash;
-import com.adplatform.restApi.domain.wallet.domain.WalletLogId;
 import com.adplatform.restApi.global.entity.BaseEntity;
 import lombok.*;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -45,7 +40,7 @@ public class CampaignBudgetChangeHistory  extends BaseEntity {
 
     @CreatedBy
     @Column(name = "reg_user_no")
-    private Integer createdUserId;
+    private Integer createdUserNo;
 
     @Builder
     public CampaignBudgetChangeHistory(
@@ -57,7 +52,7 @@ public class CampaignBudgetChangeHistory  extends BaseEntity {
             Long availableChgAmount,
             Long reserveAmount,
             Long reserveChgAmount,
-            Integer createdUserId) {
+            Integer createdUserNo) {
         this.adAccountId = adAccountId;
         this.campaignId = campaignId;
         this.cashId = cashId;
@@ -66,6 +61,6 @@ public class CampaignBudgetChangeHistory  extends BaseEntity {
         this.availableChgAmount = availableChgAmount;
         this.reserveAmount = reserveAmount;
         this.reserveChgAmount = reserveChgAmount;
-        this.createdUserId = createdUserId;
+        this.createdUserNo = createdUserNo;
     }
 }

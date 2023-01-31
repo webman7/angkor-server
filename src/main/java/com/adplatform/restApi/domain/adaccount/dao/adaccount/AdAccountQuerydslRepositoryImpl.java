@@ -248,8 +248,8 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
 
     @Override
     public Page<Response.ForAdvertiserSearch> searchForAdvertiser(
-            Pageable pageable, Integer id, String name, Integer loginUserId, AdAccountUser.RequestStatus requestStatus) {
-        List<Response.ForAdvertiserSearch> content = this.getSearchForAdvertiserQuery(pageable, id, name, loginUserId, requestStatus)
+            Pageable pageable, Integer id, String name, Integer loginUserNo, AdAccountUser.RequestStatus requestStatus) {
+        List<Response.ForAdvertiserSearch> content = this.getSearchForAdvertiserQuery(pageable, id, name, loginUserNo, requestStatus)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -259,7 +259,7 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                 .join(adAccount.adAccountUsers, adAccountUser)
                 .join(adAccountUser.user, user)
                 .where(
-                        adAccountUser.id.userId.eq(loginUserId),
+                        adAccountUser.id.userId.eq(loginUserNo),
                         adAccountUser.requestStatus.eq(requestStatus),
                         this.eqId(id),
                         this.containsName(name));
@@ -269,13 +269,13 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
 
     @Override
     public List<Response.ForAdvertiserSearch> searchForAdvertiser(
-            Integer id, String name, Integer loginUserId, AdAccountUser.RequestStatus requestStatus) {
-        return this.getSearchForAdvertiserQuery(null, id, name, loginUserId, requestStatus).fetch();
+            Integer id, String name, Integer loginUserNo, AdAccountUser.RequestStatus requestStatus) {
+        return this.getSearchForAdvertiserQuery(null, id, name, loginUserNo, requestStatus).fetch();
     }
 
     private JPAQuery<Response.ForAdvertiserSearch> getSearchForAdvertiserQuery(
             Pageable pageable,
-            Integer id, String name, Integer loginUserId, AdAccountUser.RequestStatus requestStatus) {
+            Integer id, String name, Integer loginUserNo, AdAccountUser.RequestStatus requestStatus) {
 
         JPAQuery<Response.ForAdvertiserSearch> query = this.query.select(new QAdAccountDto_Response_ForAdvertiserSearch(
                         adAccount.id,
@@ -300,7 +300,7 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                 .join(adAccount.adAccountUsers, adAccountUser)
                 .join(adAccountUser.user, user)
                 .where(
-                        adAccountUser.id.userId.eq(loginUserId),
+                        adAccountUser.id.userId.eq(loginUserNo),
                         adAccountUser.requestStatus.eq(requestStatus),
                         this.eqId(id),
                         this.containsName(name));
@@ -386,7 +386,7 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
     }
 
     @Override
-    public Optional<Response.AdAccountCount> countRequestStatusYN(Integer loginUserId) {
+    public Optional<Response.AdAccountCount> countRequestStatusYN(Integer loginUserNo) {
         return Optional.ofNullable(this.query.select(new QAdAccountDto_Response_AdAccountCount(
                         as(select(adAccountUser.id.userId.count())
                                         .from(adAccountUser)
@@ -398,7 +398,7 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                                 "requestStatusNCount")
                 ))
                 .from(adAccountUser)
-                .where(adAccountUser.id.userId.eq(loginUserId))
+                .where(adAccountUser.id.userId.eq(loginUserNo))
                 .groupBy(adAccountUser.id.userId)
                 .fetchOne());
     }
@@ -458,7 +458,7 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                         walletCashTotal.id.cashId.eq(cash.id),
                         walletCashTotal.id.walletMasterId.eq(adAccountId)
                 )
-                .where(walletCashTotal.id.cashId.in(Arrays.asList(1, 3))) ;
+                .where(walletCashTotal.id.cashId.in(Arrays.asList(1, 2))) ;
 
         return Objects.nonNull(pageable)
                 ? query.orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(AdAccount.class, "adAccount", pageable.getSort()).toArray(OrderSpecifier[]::new))
@@ -466,7 +466,7 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
     }
 
     @Override
-    public void creditLimitUpdate(Integer adAccountId, Boolean oufOfBalance) {
+    public void outOfBalanceUpdate(Integer adAccountId, Boolean oufOfBalance) {
         this.query.update(adAccount)
                 .set(adAccount.outOfBalance, oufOfBalance)
                 .where(adAccount.id.eq(adAccountId))

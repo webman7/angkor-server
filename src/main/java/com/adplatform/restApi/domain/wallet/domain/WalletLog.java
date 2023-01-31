@@ -18,24 +18,16 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
-@EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@IdClass(WalletLogId.class)
 @Entity
 @Table(name = "wallet_log")
-public class WalletLog {
+public class WalletLog extends BaseCreatedEntity {
 
-//    @EmbeddedId
-//    private final WalletLogId id = new WalletLogId();
-
-    @Id
     @Column(name = "adaccount_info_id")
-    private int id;
+    private int adAccountId;
 
-    @Id
-    @Column(name = "trade_no")
-    private int tradeNo;
-
+    @Column(name = "cash_info_id")
+    private Integer cashId;
     @Column(name = "summary", length = 40)
     private String summary;
 
@@ -45,25 +37,16 @@ public class WalletLog {
     @Column(name = "in_amount", columnDefinition = "INT")
     private Long inAmount;
 
-    @Column(name = "balance", columnDefinition = "INT")
-    private Long balance;
-
     @Column(name = "memo", length = 100)
     private String memo;
 
-    @CreatedBy
-    @Column(name = "reg_user_no")
-    private Integer createdUserId;
-
     @Builder
-    public WalletLog(Integer id, Integer tradeNo, String summary, Long outAmount, Long inAmount, Long balance, String memo, Integer createdUserId) {
-        this.id = id;
-        this.tradeNo = tradeNo;
+    public WalletLog(Integer adAccountId, Integer cashId, String summary, Long outAmount, Long inAmount, String memo) {
+        this.adAccountId = adAccountId;
+        this.cashId = cashId;
         this.summary = summary;
         this.outAmount = outAmount;
         this.inAmount = inAmount;
-        this.balance = balance;
         this.memo = memo;
-        this.createdUserId = createdUserId;
     }
 }

@@ -25,7 +25,7 @@ public class ReportCommandApi {
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/custom")
     public void save(@RequestBody @Valid ReportCustomDto.Request.Save request) {
-        this.reportSaveService.save(request, SecurityUtils.getLoginUserId());
+        this.reportSaveService.save(request, SecurityUtils.getLoginUserNo());
     }
 
     @ResponseStatus(HttpStatus.OK)

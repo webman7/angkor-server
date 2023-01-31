@@ -23,7 +23,7 @@ public class ReportSaveService {
     private final ReportCustomRepository reportCustomRepository;
     private final ReportCustomMapper reportCustomMapper;
 
-    public void save(ReportCustomDto.Request.Save request, Integer loginUserId) {
+    public void save(ReportCustomDto.Request.Save request, Integer loginUserNo) {
         ReportCustom reportCustom = this.reportCustomMapper.toEntity(request);
         this.reportCustomRepository.save(reportCustom);
     }

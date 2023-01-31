@@ -32,7 +32,7 @@ public class AdAccountQueryApi {
             @RequestParam(required = false) String name,
             @RequestParam AdAccountUser.RequestStatus requestStatus) {
         return this.adAccountRepository.searchForAdvertiser(
-                id, name, SecurityUtils.getLoginUserId(), requestStatus);
+                id, name, SecurityUtils.getLoginUserNo(), requestStatus);
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -48,7 +48,7 @@ public class AdAccountQueryApi {
     public PageDto<AdAccountDto.Response.ForAgencySearch> searchForAgency(
             @PageableDefault Pageable pageable,
             AdAccountDto.Request.ForAgencySearch request) {
-        return PageDto.create(this.adAccountRepository.searchForAgency(pageable, request, SecurityUtils.getLoginUserId()));
+        return PageDto.create(this.adAccountRepository.searchForAgency(pageable, request, SecurityUtils.getLoginUserNo()));
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -59,7 +59,7 @@ public class AdAccountQueryApi {
             @RequestParam(required = false) String name,
             @RequestParam AdAccountUser.RequestStatus requestStatus) {
         return PageDto.create(this.adAccountRepository.searchForAdvertiser(
-                pageable, id, name, SecurityUtils.getLoginUserId(), requestStatus));
+                pageable, id, name, SecurityUtils.getLoginUserNo(), requestStatus));
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -73,7 +73,7 @@ public class AdAccountQueryApi {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/counts")
     public AdAccountDto.Response.AdAccountCount getCounts() {
-        return this.adAccountRepository.countRequestStatusYN(SecurityUtils.getLoginUserId())
+        return this.adAccountRepository.countRequestStatusYN(SecurityUtils.getLoginUserNo())
                 .orElse(new AdAccountDto.Response.AdAccountCount(0L, 0L));
     }
 

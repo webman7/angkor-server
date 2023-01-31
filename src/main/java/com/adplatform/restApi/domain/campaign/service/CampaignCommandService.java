@@ -100,7 +100,7 @@ public class CampaignCommandService {
                 history.setAvailableChgAmount(availableAmount);
                 history.setReserveAmount(m.getReserveAmount());
                 history.setReserveChgAmount(reserveAmount);
-                CampaignBudgetChangeHistory campaignBudgetChangeHistory = this.campaignBudgetChangeHistoryMapper.toEntity(history, SecurityUtils.getLoginUserId());
+                CampaignBudgetChangeHistory campaignBudgetChangeHistory = this.campaignBudgetChangeHistoryMapper.toEntity(history, SecurityUtils.getLoginUserNo());
                 this.campaignBudgetChangeHistoryRepository.save(campaignBudgetChangeHistory);
 
                 if(!isLoop) {
@@ -190,7 +190,7 @@ public class CampaignCommandService {
                 history.setAvailableChgAmount(availableAmount);
                 history.setReserveAmount(m.getReserveAmount());
                 history.setReserveChgAmount(reserveAmount);
-                CampaignBudgetChangeHistory campaignBudgetChangeHistory = this.campaignBudgetChangeHistoryMapper.toEntity(history, SecurityUtils.getLoginUserId());
+                CampaignBudgetChangeHistory campaignBudgetChangeHistory = this.campaignBudgetChangeHistoryMapper.toEntity(history, SecurityUtils.getLoginUserNo());
                 this.campaignBudgetChangeHistoryRepository.save(campaignBudgetChangeHistory);
 
                 if(!isLoop) {

@@ -17,7 +17,19 @@ public class WalletCommandApi {
     private final WalletSaveService walletSaveService;
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/cash/add")
-    public void save(@RequestBody @Valid WalletDto.Request.Save request) {
-        this.walletSaveService.save(request, SecurityUtils.getLoginUserId());
+    public void save(@RequestBody @Valid WalletDto.Request.SaveCash request) {
+        this.walletSaveService.save(request, SecurityUtils.getLoginUserNo());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/freecash/add")
+    public void saveFreeCash(@RequestBody @Valid WalletDto.Request.SaveFreeCash request) {
+        this.walletSaveService.saveFreeCash(request, SecurityUtils.getLoginUserNo());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/freecash/{id}/use")
+    public void updateFreeCashUse(@PathVariable(name = "id") Integer id) {
+        this.walletSaveService.updateFreeCashStatus(id, "USED", SecurityUtils.getLoginUserNo());
     }
 }

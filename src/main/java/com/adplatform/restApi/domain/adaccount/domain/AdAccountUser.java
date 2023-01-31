@@ -64,7 +64,7 @@ public class AdAccountUser {
 
     @CreatedBy
     @Column(name = "reg_user_no")
-    private Integer createdUserId;
+    private Integer createdUserNo;
 
     @CreatedDate
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
@@ -73,7 +73,7 @@ public class AdAccountUser {
 
     @CreatedBy
     @Column(name = "upd_user_no")
-    private Integer updatedUserId;
+    private Integer updatedUserNo;
 
     @LastModifiedDate
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")

@@ -24,7 +24,7 @@ public class AdAccountCommandApi {
     @ResponseStatus(HttpStatus.OK)
     @PostMapping
     public void save(@RequestBody @Valid AdAccountDto.Request.Save request) {
-        this.adAccountSaveService.save(request, SecurityUtils.getLoginUserId());
+        this.adAccountSaveService.save(request, SecurityUtils.getLoginUserNo());
     }
 
     @AuthorizedAdAccount

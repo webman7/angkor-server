@@ -11,20 +11,16 @@ import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
-/**
- * @author Seohyun Lee
- * @since 1.0
- */
 @Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class BaseCreatedEntity extends BaseEntity {
+public abstract class PubCreatedEntity extends BaseEntity {
     @CreatedBy
-    @Column(name = "reg_user_no")
+    @Column(name = "pub_user_no")
     private Integer createdUserNo;
 
     @CreatedDate
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    @Column(name = "reg_date", updatable = false)
+    @Column(name = "pub_date", updatable = false)
     private LocalDateTime createdAt;
 }

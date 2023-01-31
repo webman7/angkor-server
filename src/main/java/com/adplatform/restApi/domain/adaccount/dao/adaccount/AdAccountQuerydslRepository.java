@@ -24,16 +24,16 @@ public interface AdAccountQuerydslRepository {
     List<AdAccountDto.Response.ForAgencySearch> searchForAgency(AdAccountDto.Request.ForAgencySearch request, Integer userId);
 
     Page<AdAccountDto.Response.ForAdvertiserSearch> searchForAdvertiser(
-            Pageable pageable, Integer id, String name, Integer loginUserId, AdAccountUser.RequestStatus requestStatus);
+            Pageable pageable, Integer id, String name, Integer loginUserNo, AdAccountUser.RequestStatus requestStatus);
 
     List<AdAccountDto.Response.ForAdvertiserSearch> searchForAdvertiser(
-            Integer id, String name, Integer loginUserId, AdAccountUser.RequestStatus requestStatus);
+            Integer id, String name, Integer loginUserNo, AdAccountUser.RequestStatus requestStatus);
 
     Page<AdAccountDto.Response.ForCashSearch> searchForCash(Pageable pageable, AdAccountDto.Request.ForCashSearch request);
 
     List<AdAccountDto.Response.ForCashSearch> searchForCash(AdAccountDto.Request.ForCashSearch request);
 
-    Optional<AdAccountDto.Response.AdAccountCount> countRequestStatusYN(Integer loginUserId);
+    Optional<AdAccountDto.Response.AdAccountCount> countRequestStatusYN(Integer loginUserNo);
 
     AdAccountDto.Response.AdAccountInfo adAccountInfo(Integer adAccountId);
 
@@ -41,7 +41,7 @@ public interface AdAccountQuerydslRepository {
 
     List<AdAccountDto.Response.AdAccountCashDetailInfo> adAccountCashDetailInfo(Integer adAccountId);
 
-    void creditLimitUpdate(Integer adAccountId, Boolean oufOfBalance);
+    void outOfBalanceUpdate(Integer adAccountId, Boolean oufOfBalance);
 
     DashboardDto.Response.AdAccountCountByAd adAccountsCountByAd(Integer adAccountId);
 

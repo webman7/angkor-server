@@ -13,6 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Mapper(config = BaseMapperConfig.class)
 public abstract class CampaignBudgetChangeHistoryMapper {
 
-    @Mapping(target = "createdUserId", source = "loginUserId")
-    public abstract CampaignBudgetChangeHistory toEntity(CampaignBudgetChangeHistoryDto.Request.Save SaveDto, Integer loginUserId);
+    @Mapping(target = "createdUserNo", source = "loginUserNo")
+    public abstract CampaignBudgetChangeHistory toEntity(CampaignBudgetChangeHistoryDto.Request.Save SaveDto, Integer loginUserNo);
 }

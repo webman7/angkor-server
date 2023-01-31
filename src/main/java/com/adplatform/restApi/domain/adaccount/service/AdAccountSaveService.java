@@ -35,8 +35,8 @@ public class AdAccountSaveService {
     private final CompanyService companyService;
     private final WalletMasterRepository walletMasterRepository;
 
-    public void save(AdAccountDto.Request.Save request, Integer loginUserId) {
-        User user = this.userQueryService.findByIdOrElseThrow(loginUserId);
+    public void save(AdAccountDto.Request.Save request, Integer loginUserNo) {
+        User user = this.userQueryService.findByIdOrElseThrow(loginUserNo);
         Company ownerCompany = this.companyService.findByIdOrElseThrow(request.getOwnerCompany().getId());
 //        if(user.getCompany().getType().toString().equals("ADVERTISER")) {
 //            AdAccount adAccount = this.adAccountMapper.toEntity(request, user)

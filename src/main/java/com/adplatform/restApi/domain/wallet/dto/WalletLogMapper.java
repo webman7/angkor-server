@@ -16,6 +16,6 @@ public interface WalletLogMapper {
 //    @Mapping(target = "balance", source = "balance")
 //    @Mapping(target = "summary", source = "request.summary")
 //    @Mapping(target = "memo", source = "request.memo")
-    @Mapping(target = "createdUserId", source = "loginUserId")
-    WalletLog toEntity(WalletDto.Request.Save request, Integer loginUserId);
+//    @Mapping(target = "createdUserNo", source = "loginUserNo")
+    WalletLog toEntity(WalletDto.Request.SaveCash request, Integer loginUserNo);
 }

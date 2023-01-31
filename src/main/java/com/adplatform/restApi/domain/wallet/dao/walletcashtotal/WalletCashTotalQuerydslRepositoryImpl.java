@@ -73,4 +73,19 @@ public class WalletCashTotalQuerydslRepositoryImpl implements WalletCashTotalQue
                         walletCashTotal.id.cashId.eq(cashId))
                 .execute();
     }
+
+    public WalletDto.Response.WalletCashTotal getCashTotalByCashId(Integer adAccountId, Integer cashId) {
+        return this.query.select(new QWalletDto_Response_WalletCashTotal(
+                        walletCashTotal.cash.id,
+                        walletCashTotal.amount,
+                        walletCashTotal.availableAmount,
+                        walletCashTotal.reserveAmount
+                ))
+                .from(adAccount, walletCashTotal)
+                .where(adAccount.id.eq(adAccountId),
+                        walletCashTotal.id.cashId.eq(cashId),
+                        adAccount.id.eq(walletCashTotal.id.walletMasterId)
+                ).fetchOne();
+    }
+
 }

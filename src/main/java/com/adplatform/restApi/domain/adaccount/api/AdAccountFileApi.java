@@ -187,7 +187,7 @@ public class AdAccountFileApi {
     @GetMapping("/my/csv")
     public ResponseEntity<byte[]> downloadMyCsv(AdAccountDto.Request.ForAgencySearch request) {
         List<AdAccountDto.Response.ForAgencySearch> content = this.adAccountRepository.searchForAgency(
-                request, SecurityUtils.getLoginUserId());
+                request, SecurityUtils.getLoginUserNo());
         StringBuilder sb = new StringBuilder();
         sb.append(String.join(",", HEADER_MY_ITEMS)).append("\n");
         content.forEach(c -> sb.append(
@@ -238,7 +238,7 @@ public class AdAccountFileApi {
             }
 
             List<AdAccountDto.Response.ForAgencySearch> content = this.adAccountRepository.searchForAgency(
-                    request, SecurityUtils.getLoginUserId());
+                    request, SecurityUtils.getLoginUserNo());
 
             int rowNum = 1;
             for (AdAccountDto.Response.ForAgencySearch data : content) {
@@ -406,7 +406,7 @@ public class AdAccountFileApi {
     @GetMapping("/paybalance/csv")
     public ResponseEntity<byte[]> downloadPayBalanceCsv(AdAccountDto.Request.ForAgencySearch request) {
         List<AdAccountDto.Response.ForAgencySearch> content = this.adAccountRepository.searchForAgency(
-                request, SecurityUtils.getLoginUserId());
+                request, SecurityUtils.getLoginUserNo());
         StringBuilder sb = new StringBuilder();
         sb.append(String.join(",", HEADER_PAYBALANCE_ITEMS)).append("\n");
         content.forEach(c -> sb.append(
@@ -453,7 +453,7 @@ public class AdAccountFileApi {
             }
 
             List<AdAccountDto.Response.ForAgencySearch> content = this.adAccountRepository.searchForAgency(
-                    request, SecurityUtils.getLoginUserId());
+                    request, SecurityUtils.getLoginUserNo());
 
             int rowNum = 1;
             for (AdAccountDto.Response.ForAgencySearch data : content) {

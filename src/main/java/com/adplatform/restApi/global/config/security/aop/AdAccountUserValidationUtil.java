@@ -33,7 +33,7 @@ public class AdAccountUserValidationUtil {
     public static void validateAdAccountUser(Integer adAccountId, AdAccountUserRepository adAccountUserRepository) {
         AdAccountUserQueryUtils.findByAdAccountIdAndUserIdOrElseThrow(
                         adAccountId,
-                        SecurityUtils.getLoginUserId(),
+                        SecurityUtils.getLoginUserNo(),
                         adAccountUserRepository)
                 .validateRequestStatus();
     }

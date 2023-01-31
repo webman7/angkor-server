@@ -40,14 +40,14 @@ public class UserApi {
 //        return PageDto.create(this.userRepository.search(pageable));
 //    }
 
-//    @ResponseStatus(HttpStatus.OK)
-//    @GetMapping("/{id}")
-//    public UserDto.Response.Detail findById(@PathVariable Integer id) {
-//        User user = UserFindUtils.findByIdOrElseThrow(id, this.userRepository);
-//        List<Integer> userRoles = this.userRepository.findByUserRoles(id);
-//        CompanyDto.Response.Detail company = this.companyMapper.toDetailResponse(CompanyFindUtils.findByIdOrElseThrow(user.getCompany().getId(), this.companyRepository));
-//        return this.userMapper.toDetailResponse(user, userRoles, company);
-//    }
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}")
+    public UserDto.Response.Detail findById(@PathVariable Integer id) {
+        User user = UserFindUtils.findByIdOrElseThrow(id, this.userRepository);
+        List<Integer> userRoles = this.userRepository.findByUserRoles(id);
+        CompanyDto.Response.Detail company = this.companyMapper.toDetailResponse(CompanyFindUtils.findByIdOrElseThrow(user.getCompany().getId(), this.companyRepository));
+        return this.userMapper.toDetailResponse(user, userRoles, company);
+    }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/search")
