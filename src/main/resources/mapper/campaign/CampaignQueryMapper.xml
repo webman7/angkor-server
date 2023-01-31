@@ -19,8 +19,6 @@ since 1.0
         <result column="updatedAt" property="updatedAt"/>
         <result column="startDate" property="startDate"/>
         <result column="endDate" property="endDate"/>
-        <result column="adGroupSchedulesFirstStartDate" property="adGroupSchedulesFirstStartDate"/>
-        <result column="adGroupSchedulesLastEndDate" property="adGroupSchedulesLastEndDate"/>
         <association property="adTypeAndGoal" javaType="com.adplatform.restApi.domain.campaign.dto.AdTypeAndGoalDto">
             <result column="adTypeName" property="adTypeName"/>
             <result column="adGoalName" property="adGoalName"/>
@@ -105,8 +103,6 @@ since 1.0
                c.upd_date                     AS updatedAt,
                c.start_date                   AS startDate,
                c.end_date                     AS endDate,
-               c.start_date                   AS adGroupSchedulesFirstStartDate,
-               c.end_date                     AS adGroupSchedulesLastEndDate,
                <include refid="ReportCommonMapper.searchReportColumns"/>
         FROM campaign_info c
                  INNER JOIN (SELECT atg.id, at.name AS adTypeName, ag.name AS adGoalName
@@ -187,8 +183,6 @@ since 1.0
         <result column="updatedAt" property="updatedAt"/>
         <result column="startDate" property="startDate"/>
         <result column="endDate" property="endDate"/>
-        <result column="adGroupSchedulesFirstStartDate" property="adGroupSchedulesFirstStartDate"/>
-        <result column="adGroupSchedulesLastEndDate" property="adGroupSchedulesLastEndDate"/>
         <association property="adTypeAndGoal" javaType="com.adplatform.restApi.domain.campaign.dto.AdTypeAndGoalDto">
             <result column="adTypeName" property="adTypeName"/>
             <result column="adGoalName" property="adGoalName"/>
@@ -209,9 +203,7 @@ since 1.0
                 c.reg_date                     AS createdAt,
                 c.upd_date                     AS updatedAt,
                 c.start_date                   AS startDate,
-                c.end_date                     AS endDate,
-                c.start_date                   AS adGroupSchedulesFirstStartDate,
-                c.end_date                     AS adGroupSchedulesLastEndDate
+                c.end_date                     AS endDate
         FROM campaign_info c
         INNER JOIN (SELECT atg.id, at.name AS adTypeName, ag.name AS adGoalName
         FROM ad_type_goal_info atg

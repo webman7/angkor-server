@@ -98,8 +98,6 @@ public abstract class CampaignDto {
             private String status;
             private LocalDateTime createdAt;
             private LocalDateTime updatedAt;
-            private Integer adGroupSchedulesFirstStartDate;
-            private Integer adGroupSchedulesLastEndDate;
             private ReportDto.Response report;
         }
 
