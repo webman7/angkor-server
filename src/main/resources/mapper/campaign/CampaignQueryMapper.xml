@@ -130,6 +130,22 @@ since 1.0
                              FROM adgroup_info a
                                       INNER JOIN campaign_info c ON c.id = a.campaign_info_id
                                       INNER JOIN adgroup_schedule s ON a.id = s.adgroup_info_id
+                                        LEFT JOIN (SELECT adgroup_info_id,
+                                        <include refid="ReportCommonMapper.reportUnionColumns"/>
+                                        FROM (SELECT adgroup_info_id,
+                                        <include refid="ReportCommonMapper.reportColumns"/>
+                                        FROM report_adgroup_daily rad
+                                        WHERE rad.adaccount_info_id = #{request.adAccountId}
+                                        AND rad.report_date BETWEEN #{request.reportStartDate} AND #{request.reportEndDate}
+                                        GROUP BY rad.adgroup_info_id
+                                        UNION
+                                        SELECT adgroup_info_id,
+                                        <include refid="ReportCommonMapper.reportConversionColumns"/>
+                                        FROM report_adgroup_conversion_daily rac
+                                        WHERE rac.adaccount_info_id = #{request.adAccountId}
+                                        AND rac.report_date BETWEEN #{request.reportStartDate} AND #{request.reportEndDate}
+                                        GROUP BY rac.adgroup_info_id) inner_report
+                                        GROUP BY adgroup_info_id) adGroupReport ON adGroupReport.adgroup_info_id = a.id
                             <trim prefix="WHERE" prefixOverrides="AND | OR ">
                                 c.adaccount_info_id = #{request.adAccountId}
                                 <include refid="com.adplatform.restApi.domain.adgroup.dao.adgroup.mapper.AdGroupQueryMapper.adGroupCondition"/>
@@ -140,6 +156,22 @@ since 1.0
                  INNER JOIN (SELECT c.id as campaignId
                              FROM creative_info cr
                                       LEFT JOIN creative_files cf ON cr.id = cf.creative_info_id
+                                        LEFT JOIN (SELECT creative_info_id,
+                                        <include refid="ReportCommonMapper.reportUnionColumns"/>
+                                        FROM (SELECT creative_info_id,
+                                        <include refid="ReportCommonMapper.reportColumns"/>
+                                        FROM report_daily rd
+                                        WHERE rd.adaccount_info_id = #{request.adAccountId}
+                                        AND rd.report_date BETWEEN #{request.reportStartDate} AND #{request.reportEndDate}
+                                        GROUP BY rd.creative_info_id
+                                        UNION
+                                        SELECT creative_info_id,
+                                        <include refid="ReportCommonMapper.reportConversionColumns"/>
+                                        FROM report_conversion_daily rcd
+                                        WHERE rcd.adaccount_info_id = #{request.adAccountId}
+                                        AND rcd.report_date BETWEEN #{request.reportStartDate} AND #{request.reportEndDate}
+                                        GROUP BY rcd.creative_info_id) inner_report
+                                        GROUP BY creative_info_id) creativeReport ON creativeReport.creative_info_id = cr.id
                                       INNER JOIN adgroup_info a ON cr.adgroup_info_id = a.id
                                       INNER JOIN campaign_info c ON a.campaign_info_id = c.id
                             <trim prefix="WHERE" prefixOverrides="AND | OR ">
