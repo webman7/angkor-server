@@ -38,7 +38,7 @@ public class WalletFreeCashQuerydslRepositoryImpl implements WalletFreeCashQuery
     @Override
     public void updateFreeCashStats(Integer id, String status, Integer updatedUserNo) {
         this.query.update(walletFreeCash)
-                .set(Collections.singletonList(walletFreeCash.status), Collections.singletonList(status))
+                .set(walletFreeCash.status, WalletFreeCash.Status.valueOf(status))
                 .set(walletFreeCash.updatedUserNo, updatedUserNo)
                 .set(walletFreeCash.updatedAt, LocalDateTime.now())
                 .where(walletFreeCash.id.eq(id))

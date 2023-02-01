@@ -28,7 +28,7 @@ public class WalletCommandApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/freecash/{id}/use")
+    @GetMapping("/freecash/{id}/use")
     public void updateFreeCashUse(@PathVariable(name = "id") Integer id) {
         this.walletSaveService.updateFreeCashStatus(id, "USED", SecurityUtils.getLoginUserNo());
     }

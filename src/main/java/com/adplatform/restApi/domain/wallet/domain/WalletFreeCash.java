@@ -36,7 +36,7 @@ public class WalletFreeCash  extends PubUpdatedEntity {
         /** 사용완료 */
         USED,
         /** 만료 */
-        EXPIERD,
+        EXPIRED,
         /** 회수 */
         CANCEL
     }

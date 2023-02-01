@@ -75,7 +75,7 @@ public class WalletLogQuerydslRepositoryImpl implements WalletLogQuerydslReposit
                 .where(
                         walletLog.adAccountId.eq(adAccount.id),
                         this.eqId(request.getAdAccountId()),
-                        walletLog.cashId.in(1, 3),
+                        this.eqSummary(request.getSummary()),
                         walletLog.createdAt.between(
                                 LocalDateTime.of(searchStartDate, LocalTime.MIN),
                                 LocalDateTime.of(searchEndDate, LocalTime.MAX).withNano(0)
@@ -134,7 +134,7 @@ public class WalletLogQuerydslRepositoryImpl implements WalletLogQuerydslReposit
                 .where(
                         walletLog.adAccountId.eq(adAccount.id),
                         this.eqId(request.getAdAccountId()),
-                        walletLog.cashId.in(1, 3),
+                        this.eqSummary(request.getSummary()),
                         walletLog.createdAt.between(
                                 LocalDateTime.of(searchStartDate, LocalTime.MIN),
                                 LocalDateTime.of(searchEndDate, LocalTime.MAX).withNano(0)
@@ -148,5 +148,9 @@ public class WalletLogQuerydslRepositoryImpl implements WalletLogQuerydslReposit
 
     private BooleanExpression eqId(Integer id) {
         return id != null ? adAccount.id.eq(id) : null;
+    }
+
+    private BooleanExpression eqSummary(String summary) {
+        return summary != null ? walletLog.summary.eq(summary) : null;
     }
 }
