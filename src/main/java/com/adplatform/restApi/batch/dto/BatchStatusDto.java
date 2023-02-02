@@ -1,4 +1,4 @@
-package com.adplatform.restApi.advertiser.batch.dto;
+package com.adplatform.restApi.batch.dto;
 
 import lombok.Getter;
 import lombok.Setter;

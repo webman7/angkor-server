@@ -1,6 +1,6 @@
-package com.adplatform.restApi.advertiser.batch.dao.mapper;
+package com.adplatform.restApi.batch.dao.mapper;
 
-import com.adplatform.restApi.advertiser.batch.dto.BatchStatusDto;
+import com.adplatform.restApi.batch.dto.BatchStatusDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

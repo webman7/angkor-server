@@ -1,4 +1,4 @@
-package com.adplatform.restApi.advertiser.batch.domain;
+package com.adplatform.restApi.batch.domain;
 
 import com.adplatform.restApi.global.converter.BooleanToStringYOrNConverter;
 import lombok.AccessLevel;

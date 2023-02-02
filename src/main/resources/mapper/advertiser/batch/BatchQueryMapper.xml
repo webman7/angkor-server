@@ -6,8 +6,8 @@
 author junny
 since 1.0
 -->
-<mapper namespace="com.adplatform.restApi.advertiser.batch.dao.mapper.BatchQueryMapper">
-    <resultMap id="reportAdGroupCostMap" type="com.adplatform.restApi.advertiser.batch.dto.BatchStatusDto$Response$ReportAdGroupCost">
+<mapper namespace="com.adplatform.restApi.batch.dao.mapper.BatchQueryMapper">
+    <resultMap id="reportAdGroupCostMap" type="com.adplatform.restApi.batch.dto.BatchStatusDto$Response$ReportAdGroupCost">
         <id column="adAccountId" property="adAccountId"/>
         <result column="companyId" property="companyId"/>
         <result column="ownerCompanyId" property="ownerCompanyId"/>
@@ -31,7 +31,7 @@ since 1.0
         <include refid="reportAdGroupCostQuery"/>
     </select>
 
-    <resultMap id="getBatchStatusYNMap" type="com.adplatform.restApi.advertiser.batch.dto.BatchStatusDto$Response$Batch">
+    <resultMap id="getBatchStatusYNMap" type="com.adplatform.restApi.batch.dto.BatchStatusDto$Response$Batch">
         <id column="count" property="count"/>
         <id column="exeDate" property="exeDate"/>
         <id column="name" property="name"/>
@@ -60,7 +60,7 @@ since 1.0
     </select>
 
 
-    <resultMap id="walletCashTotalMap" type="com.adplatform.restApi.advertiser.batch.dto.BatchStatusDto$Response$ReportAdGroupCost">
+    <resultMap id="walletCashTotalMap" type="com.adplatform.restApi.batch.dto.BatchStatusDto$Response$ReportAdGroupCost">
         <id column="adAccountId" property="adAccountId"/>
         <id column="cashId" property="cashId"/>
         <result column="amount" property="amount"/>

@@ -1,4 +1,4 @@
-package com.adplatform.restApi.advertiser.batch.domain;
+package com.adplatform.restApi.batch.domain;
 
 import lombok.*;
 

@@ -1,6 +1,6 @@
-package com.adplatform.restApi.advertiser.batch.api;
+package com.adplatform.restApi.batch.api;
 
-import com.adplatform.restApi.advertiser.batch.service.BatchSaveService;
+import com.adplatform.restApi.batch.service.BatchSaveService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

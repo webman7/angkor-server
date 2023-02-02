@@ -1,4 +1,4 @@
-package com.adplatform.restApi.advertiser.batch.exception;
+package com.adplatform.restApi.batch.exception;
 
 import com.adplatform.restApi.global.error.exception.BaseException;
 

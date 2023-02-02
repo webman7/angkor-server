@@ -1,10 +1,10 @@
-package com.adplatform.restApi.advertiser.batch.service;
+package com.adplatform.restApi.batch.service;
 
-import com.adplatform.restApi.advertiser.batch.dao.BatchStatusRepository;
-import com.adplatform.restApi.advertiser.batch.dao.mapper.BatchQueryMapper;
-import com.adplatform.restApi.advertiser.batch.domain.BatchStatus;
-import com.adplatform.restApi.advertiser.batch.dto.BatchStatusDto;
-import com.adplatform.restApi.advertiser.batch.dto.BatchStatusMapper;
+import com.adplatform.restApi.batch.dao.BatchStatusRepository;
+import com.adplatform.restApi.batch.dao.mapper.BatchQueryMapper;
+import com.adplatform.restApi.batch.domain.BatchStatus;
+import com.adplatform.restApi.batch.dto.BatchStatusDto;
+import com.adplatform.restApi.batch.dto.BatchStatusMapper;
 import com.adplatform.restApi.advertiser.statistics.dao.sale.SaleAmountDailyRepository;
 import com.adplatform.restApi.advertiser.statistics.dao.sale.SaleDetailAmountDailyRepository;
 import com.adplatform.restApi.advertiser.statistics.dao.sale.SaleRemainAmountDailyRepository;
