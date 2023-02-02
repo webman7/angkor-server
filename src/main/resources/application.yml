@@ -34,7 +34,7 @@ spring:
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
-  mapper-locations: classpath:mapper/**/*.xml
+  mapper-locations: classpath:mapper/**/**/*.xml
 
 aes:
   secretKey: "adPlatform123456"

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+author junny
+since 1.0
+-->
+<mapper namespace="com.adplatform.restApi.advertiser.batch.dao.mapper.BatchQueryMapper">
+    <resultMap id="reportAdGroupCostMap" type="com.adplatform.restApi.advertiser.batch.dto.BatchStatusDto$Response$ReportAdGroupCost">
+        <id column="adAccountId" property="adAccountId"/>
+        <result column="companyId" property="companyId"/>
+        <result column="ownerCompanyId" property="ownerCompanyId"/>
+        <result column="reportDate" property="reportDate"/>
+        <result column="cost" property="cost"/>
+    </resultMap>
+
+    <sql id="reportAdGroupCostQuery">
+        SELECT b.adaccount_info_id AS adAccountId,
+               a.company_info_id AS companyId,
+               a.owner_company_info_id AS ownerCompanyId,
+               b.report_date AS reportDate,
+               SUM(b.cost) AS cost
+          FROM adaccount_info a, report_adgroup_daily b
+         WHERE b.report_date = date_format(date_add(NOW(), INTERVAL - 1 DAY), '%Y%m%d')
+           AND a.id = b.adaccount_info_id
+         GROUP BY b.adaccount_info_id
+    </sql>
+
+    <select id="reportAdGroupCost" resultMap="reportAdGroupCostMap">
+        <include refid="reportAdGroupCostQuery"/>
+    </select>
+
+    <resultMap id="getBatchStatusYNMap" type="com.adplatform.restApi.advertiser.batch.dto.BatchStatusDto$Response$Batch">
+        <id column="count" property="count"/>
+        <id column="exeDate" property="exeDate"/>
+        <id column="name" property="name"/>
+        <result column="exeYn" property="exeYn"/>
+    </resultMap>
+
+    <sql id="getBatchStatusYNQuery">
+        SELECT type AS type,
+               exe_date AS exeDate,
+               name AS name,
+               exe_yn AS exeYn
+        FROM batch_status
+        WHERE type = #{type}
+          AND exe_date = #{exeDate}
+          AND name = #{name}
+          AND exe_yn = 'Y'
+    </sql>
+
+    <select id="getBatchStatusYN" resultMap="getBatchStatusYNMap">
+        <include refid="getBatchStatusYNQuery"/>
+    </select>
+
+    <select id="getBatchStatusYNCount" resultType="int">
+        SELECT COUNT(*)
+        FROM (<include refid="getBatchStatusYNQuery"/>) a;
+    </select>
+
+
+    <resultMap id="walletCashTotalMap" type="com.adplatform.restApi.advertiser.batch.dto.BatchStatusDto$Response$ReportAdGroupCost">
+        <id column="adAccountId" property="adAccountId"/>
+        <id column="cashId" property="cashId"/>
+        <result column="amount" property="amount"/>
+        <result column="availableAmount" property="availableAmount"/>
+        <result column="reserveAmount" property="reserveAmount"/>
+        <result column="saleAffectYn" property="saleAffectYn"/>
+        <result column="refundYn" property="refundYn"/>
+    </resultMap>
+
+    <sql id="walletCashTotalQuery">
+        SELECT adaccount_info_id AS adAccountId,
+               cash_info_id AS cashId,
+               amount AS amount,
+               available_amount AS availableAmount,
+               reserve_amount AS reserveAmount,
+               sale_affect_yn AS saleAffectYn,
+               refund_yn AS refundYn
+        FROM wallet_cash_total a, cash_info b
+        WHERE a.adaccount_info_id = #{adAccountId}
+        AND a.cash_info_id = b.id
+        ORDER BY b.priority ASC
+    </sql>
+
+    <select id="walletCashTotal" resultMap="walletCashTotalMap">
+        <include refid="walletCashTotalQuery"/>
+    </select>
+
+</mapper>

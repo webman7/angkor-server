@@ -1,6 +1,5 @@
 package com.adplatform.restApi.infra.file.api;
 
-import com.adplatform.restApi.domain.creative.dto.CreativeDto;
 import com.adplatform.restApi.infra.file.service.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;

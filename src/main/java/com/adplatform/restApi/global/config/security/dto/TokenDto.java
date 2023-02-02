@@ -1,6 +1,6 @@
 package com.adplatform.restApi.global.config.security.dto;
 
-import com.adplatform.restApi.domain.user.domain.User;
+import com.adplatform.restApi.advertiser.user.domain.User;
 import com.adplatform.restApi.global.config.security.service.Aes256Service;
 import lombok.AccessLevel;
 import lombok.Builder;

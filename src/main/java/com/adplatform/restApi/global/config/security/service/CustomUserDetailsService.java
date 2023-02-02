@@ -1,7 +1,7 @@
 package com.adplatform.restApi.global.config.security.service;
 
-import com.adplatform.restApi.domain.user.dao.UserRepository;
-import com.adplatform.restApi.domain.user.exception.UserNotFoundException;
+import com.adplatform.restApi.advertiser.user.dao.UserRepository;
+import com.adplatform.restApi.advertiser.user.exception.UserNotFoundException;
 import com.adplatform.restApi.global.config.security.dto.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

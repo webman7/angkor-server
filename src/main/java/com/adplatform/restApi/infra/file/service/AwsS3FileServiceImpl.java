@@ -1,8 +1,7 @@
 package com.adplatform.restApi.infra.file.service;
 
-import com.adplatform.restApi.domain.creative.domain.Creative;
-import com.adplatform.restApi.domain.creative.dto.CreativeDto;
-import org.springframework.context.annotation.Profile;
+import com.adplatform.restApi.advertiser.creative.domain.Creative;
+import com.adplatform.restApi.advertiser.creative.dto.CreativeDto;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

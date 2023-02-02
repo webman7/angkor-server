@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.adplatform.restApi.advertiser.dashboard.dao.dashboard.mapper.DashboardQueryMapper">
+    <resultMap id="mapCost" type="com.adplatform.restApi.advertiser.dashboard.dto.DashboardDto$Response$AdAccountDashboardCost">
+        <id column="costOfToday" property="costOfToday"/>
+    </resultMap>
+
+    <sql id="adAccountsDashboardCostSelectQuery">
+        SELECT SUM(cost) AS costOfToday
+        FROM report_adgroup_daily rad
+        WHERE rad.adaccount_info_id = #{request.adAccountId}
+        AND rad.report_date = date_format(NOW(), '%Y%m%d')
+    </sql>
+
+    <select id="adAccountsDashboardCost" resultMap="mapCost">
+        <include refid="adAccountsDashboardCostSelectQuery"/>
+    </select>
+
+    <resultMap id="mapSearch" type="com.adplatform.restApi.advertiser.dashboard.dto.DashboardDto$Response$DashboardChart">
+        <id column="reportDate" property="reportDate"/>
+        <association property="report" javaType="com.adplatform.restApi.advertiser.statistics.dto.ReportDto$Response">
+            <result column="cost" property="cost"/>
+            <result column="impression" property="impression"/>
+            <result column="click" property="click"/>
+            <result column="reach" property="reach"/>
+            <result column="videoAutoPlay" property="videoAutoPlay"/>
+            <result column="videoTouches" property="videoTouches"/>
+            <result column="videoUnmute" property="videoUnmute"/>
+            <result column="videoPlay3Seconds" property="videoPlay3Seconds"/>
+            <result column="videoPlay5Seconds" property="videoPlay5Seconds"/>
+            <result column="videoPlay10Seconds" property="videoPlay10Seconds"/>
+            <result column="videoPlay15Seconds" property="videoPlay15Seconds"/>
+            <result column="videoPlay30Seconds" property="videoPlay30Seconds"/>
+            <result column="videoPlay60Seconds" property="videoPlay60Seconds"/>
+            <result column="videoPlay25Percent" property="videoPlay25Percent"/>
+            <result column="videoPlay50Percent" property="videoPlay50Percent"/>
+            <result column="videoPlay75Percent" property="videoPlay75Percent"/>
+            <result column="videoPlay100Percent" property="videoPlay100Percent"/>
+            <result column="signUpDay1" property="signUpDay1"/>
+            <result column="purchaseDay1" property="purchaseDay1"/>
+            <result column="viewCartDay1" property="viewCartDay1"/>
+            <result column="signUpDay7" property="signUpDay7"/>
+            <result column="purchaseDay7" property="purchaseDay7"/>
+            <result column="viewCartDay7" property="viewCartDay7"/>
+            <result column="ctr" property="ctr"/>
+            <result column="cpm" property="cpm"/>
+            <result column="cpc" property="cpc"/>
+            <result column="reachRate" property="reachRate"/>
+            <result column="videoPlayRate" property="videoPlayRate"/>
+        </association>
+    </resultMap>
+
+    <sql id="adAccountsDashboardChartSelectQuery">
+        SELECT a.report_date      AS reportDate,
+        <include refid="ReportCommonMapper.searchReportColumns"/>
+        FROM (SELECT report_date,
+        <include refid="ReportCommonMapper.reportUnionColumns"/>
+        FROM (SELECT report_date,
+        <include refid="ReportCommonMapper.reportColumns"/>
+        FROM report_adgroup_daily rad
+        WHERE rad.adaccount_info_id = #{request.adAccountId}
+        AND rad.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+        GROUP BY rad.report_date
+        UNION
+        SELECT report_date,
+        <include refid="ReportCommonMapper.reportConversionColumns"/>
+        FROM report_adgroup_conversion_daily rac
+        WHERE rac.adaccount_info_id = #{request.adAccountId}
+        AND rac.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+        GROUP BY rac.report_date) inner_report
+        GROUP BY report_date ) a
+        GROUP BY report_date
+        ORDER BY report_date ASC
+    </sql>
+
+    <select id="adAccountsDashboardChart" resultMap="mapSearch">
+        <include refid="adAccountsDashboardChartSelectQuery"/>
+    </select>
+
+    <sql id="totalDashboardChartSelectQuery">
+        SELECT a.report_date      AS reportDate,
+        <include refid="ReportCommonMapper.searchReportColumns"/>
+        FROM (SELECT report_date,
+        <include refid="ReportCommonMapper.reportUnionColumns"/>
+        FROM (SELECT report_date,
+        <include refid="ReportCommonMapper.reportColumns"/>
+        FROM report_daily rad
+        LEFT JOIN
+        (SELECT c.adaccount_info_id, c.id AS campaign_info_id, a.id AS adgroup_info_id, cr.id AS creative_info_id
+                FROM campaign_info c, adgroup_info a, creative_info cr
+        WHERE c.id = a.campaign_info_id
+          AND a.id = cr.adgroup_info_id
+          AND c.adaccount_info_id = #{request.adAccountId}
+        <include refid="com.adplatform.restApi.advertiser.campaign.dao.campaign.mapper.CampaignQueryMapper.campaignCondition"/>
+        <include refid="com.adplatform.restApi.advertiser.adgroup.dao.adgroup.mapper.AdGroupQueryMapper.adGroupCondition"/>
+        <include refid="com.adplatform.restApi.advertiser.creative.dao.mapper.CreativeQueryMapper.creativeCondition"/>
+        ) t1
+         ON rad.adaccount_info_id = #{request.adAccountId}
+        AND t1.adaccount_info_id = rad.adaccount_info_id
+        AND t1.campaign_info_id = rad.campaign_info_id
+        AND t1.adgroup_info_id = rad.adgroup_info_id
+        AND t1.creative_info_id = rad.creative_info_id
+        WHERE rad.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+        GROUP BY rad.report_date
+        UNION
+        SELECT report_date,
+        <include refid="ReportCommonMapper.reportConversionColumns"/>
+        FROM report_conversion_daily rac
+        LEFT JOIN
+        (SELECT c.adaccount_info_id, c.id AS campaign_info_id, a.id AS adgroup_info_id, cr.id AS creative_info_id
+        FROM campaign_info c, adgroup_info a, creative_info cr
+        WHERE c.id = a.campaign_info_id
+        AND a.id = cr.adgroup_info_id
+        AND c.adaccount_info_id = #{request.adAccountId}
+        <include refid="com.adplatform.restApi.advertiser.campaign.dao.campaign.mapper.CampaignQueryMapper.campaignCondition"/>
+        <include refid="com.adplatform.restApi.advertiser.adgroup.dao.adgroup.mapper.AdGroupQueryMapper.adGroupCondition"/>
+        <include refid="com.adplatform.restApi.advertiser.creative.dao.mapper.CreativeQueryMapper.creativeCondition"/>
+        ) t1
+         ON rac.adaccount_info_id = #{request.adAccountId}
+        AND t1.adaccount_info_id = rac.adaccount_info_id
+        AND t1.campaign_info_id = rac.campaign_info_id
+        AND t1.adgroup_info_id = rac.adgroup_info_id
+        AND t1.creative_info_id = rac.creative_info_id
+        WHERE rac.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+        GROUP BY rac.report_date) inner_report
+        GROUP BY report_date ) a
+        GROUP BY report_date
+        ORDER BY report_date ASC
+    </sql>
+
+    <select id="totalDashboardChart" resultMap="mapSearch">
+        <include refid="totalDashboardChartSelectQuery"/>
+    </select>
+
+    <sql id="byIdDashboardChartSelectQuery">
+        SELECT a.report_date      AS reportDate,
+        <include refid="ReportCommonMapper.searchReportColumns"/>
+        FROM (SELECT report_date,
+        <include refid="ReportCommonMapper.reportUnionColumns"/>
+        FROM (SELECT report_date,
+        <include refid="ReportCommonMapper.reportColumns"/>
+        FROM report_daily rad
+        LEFT JOIN
+        (SELECT c.adaccount_info_id, c.id AS campaign_info_id, a.id AS adgroup_info_id, cr.id AS creative_info_id
+        FROM campaign_info c, adgroup_info a, creative_info cr
+        WHERE c.id = a.campaign_info_id
+        AND a.id = cr.adgroup_info_id
+        AND c.adaccount_info_id = #{request.adAccountId}
+        <if test="campaignId">
+            AND c.id = #{campaignId}
+        </if>
+        <if test="adGroupId">
+            AND a.id = #{campaignId}
+        </if>
+        <if test="creativeId">
+            AND cr.id = #{creativeId}
+        </if>
+        ) t1
+        ON rad.adaccount_info_id = #{request.adAccountId}
+        AND t1.adaccount_info_id = rad.adaccount_info_id
+        AND t1.campaign_info_id = rad.campaign_info_id
+        AND t1.adgroup_info_id = rad.adgroup_info_id
+        AND t1.creative_info_id = rad.creative_info_id
+        WHERE rad.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+        GROUP BY rad.report_date
+        UNION
+        SELECT report_date,
+        <include refid="ReportCommonMapper.reportConversionColumns"/>
+        FROM report_conversion_daily rac
+        LEFT JOIN
+        (SELECT c.adaccount_info_id, c.id AS campaign_info_id, a.id AS adgroup_info_id, cr.id AS creative_info_id
+        FROM campaign_info c, adgroup_info a, creative_info cr
+        WHERE c.id = a.campaign_info_id
+        AND a.id = cr.adgroup_info_id
+        AND c.adaccount_info_id = #{request.adAccountId}
+        <if test="campaignId">
+            AND c.id = #{campaignId}
+        </if>
+        <if test="adGroupId">
+            AND a.id = #{campaignId}
+        </if>
+        <if test="creativeId">
+            AND cr.id = #{creativeId}
+        </if>
+        ) t1
+        ON rac.adaccount_info_id = #{request.adAccountId}
+        AND t1.adaccount_info_id = rac.adaccount_info_id
+        AND t1.campaign_info_id = rac.campaign_info_id
+        AND t1.adgroup_info_id = rac.adgroup_info_id
+        AND t1.creative_info_id = rac.creative_info_id
+        WHERE rac.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+        GROUP BY rac.report_date) inner_report
+        GROUP BY report_date ) a
+        GROUP BY report_date
+        ORDER BY report_date ASC
+    </sql>
+
+    <select id="byIdDashboardChart" resultMap="mapSearch">
+        <include refid="byIdDashboardChartSelectQuery"/>
+    </select>
+
+</mapper>

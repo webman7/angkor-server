@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+author Seohyun Lee
+since 1.0
+-->
+<mapper namespace="com.adplatform.restApi.advertiser.adgroup.dao.adgroup.mapper.AdGroupQueryMapper">
+    <resultMap id="mapSearch" type="com.adplatform.restApi.advertiser.adgroup.dto.adgroup.AdGroupDto$Response$AdvertiserSearch">
+        <id column="id" property="id"/>
+        <result column="adTypeName" property="adTypeName"/>
+        <result column="adGoalName" property="adGoalName"/>
+        <result column="name" property="name"/>
+        <result column="pacing" property="pacing"/>
+        <result column="pacingType" property="pacingType"/>
+        <result column="bidAmount" property="bidAmount"/>
+        <result column="bidStrategy" property="bidStrategy"/>
+        <result column="dailyBudgetAmount" property="dailyBudgetAmount"/>
+        <result column="budgetAmount" property="budgetAmount"/>
+        <result column="config" property="config"/>
+        <result column="systemConfig" property="systemConfig"/>
+        <result column="status" property="status"/>
+        <result column="campaignId" property="campaignId"/>
+        <result column="campaignName" property="campaignName"/>
+        <result column="scheduleStartDate" property="scheduleStartDate"/>
+        <result column="scheduleEndDate" property="scheduleEndDate"/>
+        <result column="createdAt" property="createdAt"/>
+        <result column="updatedAt" property="updatedAt"/>
+        <association property="report" javaType="com.adplatform.restApi.advertiser.statistics.dto.ReportDto$Response">
+            <result column="cost" property="cost"/>
+            <result column="impression" property="impression"/>
+            <result column="click" property="click"/>
+            <result column="reach" property="reach"/>
+            <result column="videoAutoPlay" property="videoAutoPlay"/>
+            <result column="videoTouches" property="videoTouches"/>
+            <result column="videoUnmute" property="videoUnmute"/>
+            <result column="videoPlay3Seconds" property="videoPlay3Seconds"/>
+            <result column="videoPlay5Seconds" property="videoPlay5Seconds"/>
+            <result column="videoPlay10Seconds" property="videoPlay10Seconds"/>
+            <result column="videoPlay15Seconds" property="videoPlay15Seconds"/>
+            <result column="videoPlay30Seconds" property="videoPlay30Seconds"/>
+            <result column="videoPlay60Seconds" property="videoPlay60Seconds"/>
+            <result column="videoPlay25Percent" property="videoPlay25Percent"/>
+            <result column="videoPlay50Percent" property="videoPlay50Percent"/>
+            <result column="videoPlay75Percent" property="videoPlay75Percent"/>
+            <result column="videoPlay100Percent" property="videoPlay100Percent"/>
+            <result column="signUpDay1" property="signUpDay1"/>
+            <result column="purchaseDay1" property="purchaseDay1"/>
+            <result column="viewCartDay1" property="viewCartDay1"/>
+            <result column="signUpDay7" property="signUpDay7"/>
+            <result column="purchaseDay7" property="purchaseDay7"/>
+            <result column="viewCartDay7" property="viewCartDay7"/>
+            <result column="ctr" property="ctr"/>
+            <result column="cpm" property="cpm"/>
+            <result column="cpc" property="cpc"/>
+            <result column="reachRate" property="reachRate"/>
+            <result column="videoPlayRate" property="videoPlayRate"/>
+        </association>
+    </resultMap>
+
+    <sql id="adGroupCondition">
+        <choose>
+            <when test="request.adGroupCondition and request.adGroupCondition.configs and request.adGroupCondition.configs.size() > 0">
+                <foreach collection="request.adGroupCondition.configs" item="config" open="AND a.config IN (" separator=", " close=")">
+                    #{config}
+                </foreach>
+            </when>
+            <otherwise>
+                AND a.config IN ('ON', 'OFF')
+            </otherwise>
+        </choose>
+        <if test="request.adGroupCondition">
+            <if test="request.adGroupCondition.ids and request.adGroupCondition.ids.size() > 0">
+                <foreach collection="request.adGroupCondition.ids" item="id" open="AND a.id IN (" separator=", " close=")">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="request.adGroupCondition.name">
+                AND a.name LIKE CONCAT('%', #{request.adGroupCondition.name}, '%')
+            </if>
+            <if test="request.adGroupCondition.campaignIds and request.adGroupCondition.campaignIds.size() > 0">
+                <foreach collection="request.adGroupCondition.campaignIds" item="campaignId" open="AND a.campaign_info_id IN (" separator=", " close=")">
+                    #{campaignId}
+                </foreach>
+            </if>
+            <if test="request.adGroupCondition.statuses and request.adGroupCondition.statuses.size() > 0">
+                <foreach collection="request.adGroupCondition.statuses" item="status" open="AND a.status IN (" separator=", " close=")">
+                    #{status}
+                </foreach>
+            </if>
+            <if test="request.adGroupCondition.reportConditions and request.adGroupCondition.reportConditions.size() > 0">
+                <foreach collection="request.adGroupCondition.reportConditions" item="condition">
+                    AND ${condition.indicator.getValue()} ${condition.conditionFunction.getValue()} ${condition.value}
+                </foreach>
+            </if>
+        </if>
+    </sql>
+
+    <sql id="searchAdGroupSelectQuery">
+        SELECT a.id,
+               tg.id                          AS adTypeGoalId,
+               tg.adTypeName,
+               tg.adGoalName,
+               a.name,
+               pacing,
+               a.pacing_type                  AS pacingType,
+               a.bid_amount                   AS bidAmount,
+               a.bid_strategy                 AS bidStrategy,
+               a.daily_budget_amount          AS dailyBudgetAmount,
+               a.budget_amount                AS budgetAmount,
+               a.config,
+               a.system_config                AS systemConfig,
+               a.status,
+               a.campaign_info_id             AS campaignId,
+               c.name                         AS campaignName,
+               s.start_date                   AS scheduleStartDate,
+               s.end_date                     AS scheduleEndDate,
+               a.reg_date                     AS createdAt,
+               a.upd_date                     AS updatedAt,
+               <include refid="ReportCommonMapper.searchReportColumns"/>
+        FROM adgroup_info a
+                 INNER JOIN adgroup_schedule s ON a.id = s.adgroup_info_id
+                 INNER JOIN (SELECT c.id AS campaignId, atg.id, at.name AS adTypeName, ag.name AS adGoalName
+                             FROM ad_type_goal_info atg
+                                      INNER JOIN ad_type_info at ON atg.ad_type_info_id = at.id
+                                      INNER JOIN ad_goal_info ag ON atg.ad_goal_info_id = ag.id
+                                      INNER JOIN campaign_info c ON atg.id = c.ad_type_goal_info_id) tg ON tg.campaignId = a.campaign_info_id
+                 INNER JOIN (SELECT c.id, c.name, c.adaccount_info_id
+                             FROM campaign_info c
+                                    LEFT JOIN (SELECT campaign_info_id,
+                                    <include refid="ReportCommonMapper.reportUnionColumns"/>
+                                    FROM (SELECT campaign_info_id,
+                                    <include refid="ReportCommonMapper.reportColumns"/>
+                                    FROM report_adgroup_daily rad
+                                    WHERE rad.adaccount_info_id = #{request.adAccountId}
+                                    AND rad.report_date BETWEEN #{request.reportStartDate} AND #{request.reportEndDate}
+                                    GROUP BY rad.campaign_info_id
+                                    UNION
+                                    SELECT campaign_info_id,
+                                    <include refid="ReportCommonMapper.reportConversionColumns"/>
+                                    FROM report_adgroup_conversion_daily rac
+                                    WHERE rac.adaccount_info_id = #{request.adAccountId}
+                                    AND rac.report_date BETWEEN #{request.reportStartDate} AND #{request.reportEndDate}
+                                    GROUP BY rac.campaign_info_id) inner_report
+                                    GROUP BY campaign_info_id) campaignReport ON campaignReport.campaign_info_id = c.id
+                             <trim prefix="WHERE" prefixOverrides="AND | OR ">
+                                c.adaccount_info_id = #{request.adAccountId}
+                                <include refid="com.adplatform.restApi.advertiser.campaign.dao.campaign.mapper.CampaignQueryMapper.campaignCondition"/>
+                             </trim>) c ON a.campaign_info_id = c.id
+                 LEFT JOIN (SELECT adgroup_info_id,
+                                   <include refid="ReportCommonMapper.reportUnionColumns"/>
+                            FROM (SELECT adgroup_info_id,
+                                         <include refid="ReportCommonMapper.reportColumns"/>
+                                  FROM report_adgroup_daily rad
+                                  WHERE rad.adaccount_info_id = #{request.adAccountId}
+                                    AND rad.report_date BETWEEN #{request.reportStartDate} AND #{request.reportEndDate}
+                                  GROUP BY rad.adgroup_info_id
+                                  UNION
+                                  SELECT adgroup_info_id,
+                                         <include refid="ReportCommonMapper.reportConversionColumns"/>
+                                  FROM report_adgroup_conversion_daily rac
+                                  WHERE rac.adaccount_info_id = #{request.adAccountId}
+                                    AND rac.report_date BETWEEN #{request.reportStartDate} AND #{request.reportEndDate}
+                                  GROUP BY rac.adgroup_info_id) inner_report
+                            GROUP BY adgroup_info_id) adGroupReport ON adGroupReport.adgroup_info_id = a.id
+                <if test="request.creativeCondition">
+                    INNER JOIN (SELECT a.id AS adGroupId
+                               FROM creative_info cr
+                                    LEFT JOIN creative_files cf ON cf.creative_info_id = cr.id
+                                    LEFT JOIN (SELECT creative_info_id,
+                                                            <include refid="ReportCommonMapper.reportUnionColumns"/>
+                                                     FROM (SELECT creative_info_id,
+                                                                  <include refid="ReportCommonMapper.reportColumns"/>
+                                                           FROM report_daily rd
+                                                           WHERE rd.adaccount_info_id = #{request.adAccountId}
+                                                             AND rd.report_date BETWEEN #{request.reportStartDate} AND #{request.reportEndDate}
+                                                           GROUP BY rd.creative_info_id
+                                                           UNION
+                                                           SELECT creative_info_id,
+                                                                  <include refid="ReportCommonMapper.reportConversionColumns"/>
+                                                           FROM report_conversion_daily rcd
+                                                           WHERE rcd.adaccount_info_id = #{request.adAccountId}
+                                                             AND rcd.report_date BETWEEN #{request.reportStartDate} AND #{request.reportEndDate}
+                                                           GROUP BY rcd.creative_info_id) inner_report
+                                                     GROUP BY creative_info_id) creativeReport ON creativeReport.creative_info_id = cr.id
+                                    INNER JOIN adgroup_info a ON cr.adgroup_info_id = a.id
+                              <trim prefix="WHERE" prefixOverrides="AND | OR ">
+                                     <include refid="com.adplatform.restApi.advertiser.creative.dao.mapper.CreativeQueryMapper.creativeCondition"/>
+                              </trim>
+                            GROUP BY adGroupId) cr ON cr.adGroupId = a.id
+                </if>
+        <trim prefix="WHERE" prefixOverrides="AND | OR ">
+            <include refid="AdTypeAndGoalCondition.adTypeGoalNames"/>
+            <include refid="adGroupCondition"/>
+        </trim>
+    </sql>
+
+    <select id="search" resultMap="mapSearch">
+        <include refid="searchAdGroupSelectQuery"/>
+        <include refid="common.sortAndOrder"/>
+        <include refid="common.limitAndOffset"/>
+    </select>
+
+    <select id="countSearch" resultType="long">
+        SELECT COUNT(*)
+        FROM (<include refid="searchAdGroupSelectQuery"/>) a;
+    </select>
+
+    <select id="searchAdGroupList" resultMap="mapSearch">
+        <include refid="searchAdGroupSelectQuery"/>
+        <include refid="common.sortAndOrder"/>
+    </select>
+</mapper>
