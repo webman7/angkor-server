@@ -1,5 +1,6 @@
-package com.adplatform.restApi.advertiser.adaccount.domain;
+package com.adplatform.restApi.agency.businessright.domain;
 
+import com.adplatform.restApi.agency.businessright.dto.BusinessRightDto;
 import com.adplatform.restApi.global.entity.BaseCreatedEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "adaccount_business_right_info")
-public class AdAccountBusinessRight extends BaseCreatedEntity {
+public class BusinessRight extends BaseCreatedEntity {
     @Column(name = "adaccount_info_id")
     private Integer adAccountId;
 
@@ -26,10 +27,15 @@ public class AdAccountBusinessRight extends BaseCreatedEntity {
     private Integer endDate;
 
     @Builder
-    public AdAccountBusinessRight(Integer adAccountId, Integer companyId, Integer startDate, Integer endDate) {
+    public BusinessRight(Integer adAccountId, Integer companyId, Integer startDate, Integer endDate) {
         this.adAccountId = adAccountId;
         this.companyId = companyId;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public BusinessRight update(BusinessRightDto.Request.Save request) {
+        this.endDate = request.getEndDate();
+        return this;
     }
 }

@@ -1,7 +1,6 @@
 package com.adplatform.restApi.advertiser.adaccount.api;
 
 import com.adplatform.restApi.advertiser.adaccount.domain.AdAccount;
-import com.adplatform.restApi.advertiser.adaccount.dto.adaccount.AdAccountBusinessRightDto;
 import com.adplatform.restApi.advertiser.adaccount.dto.adaccount.AdAccountDto;
 import com.adplatform.restApi.advertiser.adaccount.service.AdAccountSaveService;
 import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount;
@@ -44,17 +43,5 @@ public class AdAccountCommandApi {
     @PatchMapping("/{id}/config/off")
     public void changeConfigOff(@PathVariable Integer id) {
         this.adAccountSaveService.changeConfig(id, AdAccount.Config.OFF);
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/businessright/request")
-    public void saveBusinessRightRequest(@RequestBody @Valid AdAccountBusinessRightDto.Request.SaveRequest request) {
-        this.adAccountSaveService.saveBusinessRightRequest(request);
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/businessright/status")
-    public void updateBusinessRightStatus(@RequestBody @Valid AdAccountBusinessRightDto.Request.SaveStatus request) {
-        this.adAccountSaveService.saveBusinessRightStatus(request);
     }
 }

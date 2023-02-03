@@ -1,13 +1,9 @@
 package com.adplatform.restApi.advertiser.adaccount.service;
 
-import com.adplatform.restApi.advertiser.adaccount.dao.adaccount.AdAccountBusinessRightRepository;
-import com.adplatform.restApi.advertiser.adaccount.dao.adaccount.AdAccountBusinessRightRequestRepository;
 import com.adplatform.restApi.advertiser.adaccount.dao.adaccount.AdAccountRepository;
 import com.adplatform.restApi.advertiser.adaccount.domain.AdAccount;
-import com.adplatform.restApi.advertiser.adaccount.domain.AdAccountBusinessRightRequest;
 import com.adplatform.restApi.advertiser.adaccount.domain.AdAccountUser;
-import com.adplatform.restApi.advertiser.adaccount.dto.adaccount.AdAccountBusinessRightDto;
-import com.adplatform.restApi.advertiser.adaccount.dto.adaccount.AdAccountBusinessRightRequestMapper;
+import com.adplatform.restApi.agency.businessright.dto.BusinessRightRequestMapper;
 import com.adplatform.restApi.advertiser.adaccount.dto.adaccount.AdAccountDto;
 import com.adplatform.restApi.advertiser.adaccount.dto.adaccount.AdAccountMapper;
 import com.adplatform.restApi.advertiser.company.domain.Company;
@@ -30,13 +26,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AdAccountSaveService {
     private final AdAccountRepository adAccountRepository;
-    private final AdAccountBusinessRightRequestRepository adAccountBusinessRightRequestRepository;
-    private final AdAccountBusinessRightRepository adAccountBusinessRightRepository;
     private final CashRepository cashRepository;
     private final AdAccountMapper adAccountMapper;
     private final UserQueryService userQueryService;
     private final CompanyService companyService;
-    private final AdAccountBusinessRightRequestMapper adAccountBusinessRightRequestMapper;
+    private final BusinessRightRequestMapper businessRightRequestMapper;
     private final WalletMasterRepository walletMasterRepository;
 
     public void save(AdAccountDto.Request.Save request, Integer loginUserNo) {
@@ -70,15 +64,4 @@ public class AdAccountSaveService {
         if (config == AdAccount.Config.ON) adAccount.changeConfigOn();
         else if (config == AdAccount.Config.OFF) adAccount.changeConfigOff();
     }
-
-    public void saveBusinessRightRequest(AdAccountBusinessRightDto.Request.SaveRequest request) {
-//        AdAccountBusinessRightRequest adAccountBusinessRightRequest = this.adAccountBusinessRightRequestMapper.toEntity(request);
-//        this.adAccountBusinessRightRequestRepository.save(adAccountBusinessRightRequest);
-    }
-
-    public void saveBusinessRightStatus(AdAccountBusinessRightDto.Request.SaveStatus request) {
-//        AdAccountBusinessRightRequest adAccountBusinessRightRequest = this.adAccountBusinessRightRequestMapper.toEntity(request);
-//        this.adAccountBusinessRightRequestRepository.save(adAccountBusinessRightRequest);
-    }
-
 }

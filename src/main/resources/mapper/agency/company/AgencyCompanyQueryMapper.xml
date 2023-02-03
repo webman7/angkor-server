@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.adplatform.restApi.agency.company.dao.mapper.AgencyCompanyQueryMapper">
+    <resultMap id="mapSpendSummary" type="com.adplatform.restApi.agency.company.dto.AgencyCompanyDto$Response$SpendSummary">
+        <id column="platformType" property="platformType"/>
+        <result column="prePaymentCnt" property="prePaymentCnt"/>
+        <result column="todaySpend" property="todaySpend"/>
+        <result column="monthSpend" property="monthSpend"/>
+    </resultMap>
+
+    <sql id="walletSpendSummarySelectQuery">
+        SELECT ad.platform_type AS platformType,
+                SUM(CASE WHEN ad.pre_deferred_payment_yn = 'Y' THEN 1 ELSE 0 END) AS prePaymentCnt,
+                SUM(CASE WHEN ad.pre_deferred_payment_yn = 'N' THEN 1 ELSE 0 END) AS deferredPaymentCnt,
+                ( SELECT IFNULL(SUM(cost), 0)
+                FROM report_adgroup_daily
+                WHERE adaccount_info_id = ad.id
+                AND report_date = DATE_FORMAT(NOW(), '%Y%m%d') ) AS todaySpend,
+                ( SELECT IFNULL(SUM(sale_amount), 0)
+                FROM sale_amount_daily
+                WHERE adaccount_info_id = ad.id
+                AND stat_date = DATE_FORMAT(DATE_ADD(NOW(), INTERVAL -1 DAY), '%Y%m%d') ) AS yesterdaySpend,
+                ( SELECT IFNULL(SUM(sale_amount), 0)
+                FROM sale_amount_daily
+                WHERE adaccount_info_id = ad.id
+                AND stat_date BETWEEN DATE_FORMAT(DATE_ADD(LAST_DAY(NOW() - INTERVAL 1 MONTH), INTERVAL + 1 DAY), '%Y%m%d')
+                                  AND DATE_FORMAT(LAST_DAY(NOW()), '%Y%m%d') )  AS monthSpend
+        FROM adaccount_info ad
+        WHERE ad.company_info_id IN (
+                SELECT company_info_id
+                FROM user_info a, company_info b
+                WHERE a.user_no = #{loginUserNo}
+                AND a.company_info_id = b.id)
+        GROUP BY ad.platform_type
+    </sql>
+
+    <select id="walletSpendSummary" resultMap="mapSpendSummary">
+        <include refid="walletSpendSummarySelectQuery"/>
+    </select>
+</mapper>
