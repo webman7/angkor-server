@@ -64,6 +64,7 @@ public class BusinessRightService {
                 BusinessRightDto.Request.Save businessRightList = new BusinessRightDto.Request.Save();
                 businessRightList.setAdAccountId(businessRightRequest.getAdAccountId());
                 businessRightList.setCompanyId(businessRightRequest.getRequestCompanyId());
+                businessRightList.setRequestUserNo(businessRightRequest.getCreatedUserNo());
                 businessRightList.setStartDate(startDate);
                 businessRightList.setEndDate(29991231);
 

@@ -26,12 +26,16 @@ public class BusinessRight extends BaseCreatedEntity {
     @Column(name = "end_date")
     private Integer endDate;
 
+    @Column(name = "request_user_no")
+    private Integer requestUserNo;
+
     @Builder
-    public BusinessRight(Integer adAccountId, Integer companyId, Integer startDate, Integer endDate) {
+    public BusinessRight(Integer adAccountId, Integer companyId, Integer startDate, Integer endDate, Integer requestUserNo) {
         this.adAccountId = adAccountId;
         this.companyId = companyId;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.requestUserNo = requestUserNo;
     }
 
     public BusinessRight update(BusinessRightDto.Request.Save request) {

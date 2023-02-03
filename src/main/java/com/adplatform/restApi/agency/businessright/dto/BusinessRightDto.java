@@ -39,6 +39,7 @@ public class BusinessRightDto {
             private Integer companyId;
             private Integer startDate;
             private Integer endDate;
+            private Integer requestUserNo;
         }
 
         @Getter
