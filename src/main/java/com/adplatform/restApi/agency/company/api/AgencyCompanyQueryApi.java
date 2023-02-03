@@ -1,16 +1,13 @@
 package com.adplatform.restApi.agency.company.api;
 
-import com.adplatform.restApi.advertiser.company.dao.CompanyRepository;
-import com.adplatform.restApi.advertiser.company.dto.CompanyDto;
-import com.adplatform.restApi.advertiser.company.dto.CompanyMapper;
-import com.adplatform.restApi.advertiser.company.service.CompanyFindUtils;
 import com.adplatform.restApi.advertiser.user.dao.UserRepository;
 import com.adplatform.restApi.advertiser.user.domain.User;
 import com.adplatform.restApi.advertiser.user.service.UserFindUtils;
-import com.adplatform.restApi.agency.adaccount.dto.AgencyAdAccountDto;
 import com.adplatform.restApi.agency.company.dao.AgencyCompanyRepository;
 import com.adplatform.restApi.agency.company.dto.AgencyCompanyDto;
 import com.adplatform.restApi.agency.company.dao.mapper.AgencyCompanyQueryMapper;
+import com.adplatform.restApi.agency.company.dto.AgencyCompanyMapper;
+import com.adplatform.restApi.agency.company.service.AgencyCompanyFindUtils;
 import com.adplatform.restApi.global.config.security.util.SecurityUtils;
 import com.adplatform.restApi.global.dto.PageDto;
 import lombok.RequiredArgsConstructor;
@@ -31,14 +28,13 @@ public class AgencyCompanyQueryApi {
     private final AgencyCompanyQueryMapper agencyCompanyQueryMapper;
     private final AgencyCompanyRepository agencyCompanyRepository;
     private final UserRepository userRepository;
-    private final CompanyRepository companyRepository;
-    private final CompanyMapper companyMapper;
+    private final AgencyCompanyMapper agencyCompanyMapper;
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/my")
-    public CompanyDto.Response.Detail my() {
+    public AgencyCompanyDto.Response.Detail my() {
         User user = UserFindUtils.findByIdOrElseThrow(SecurityUtils.getLoginUserNo(), this.userRepository);
-        return this.companyMapper.toDetailResponse(CompanyFindUtils.findByIdOrElseThrow(user.getCompany().getId(), this.companyRepository));
+        return this.agencyCompanyMapper.toDetailResponse(AgencyCompanyFindUtils.findByIdOrElseThrow(user.getCompany().getId(), this.agencyCompanyRepository));
     }
 
     @ResponseStatus(HttpStatus.OK)
