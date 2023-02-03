@@ -6,5 +6,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface AgencyCompanyQueryMapper {
 
-    AgencyCompanyDto.Response.SpendSummary walletSpendSummary(Integer loginUserNo);
+    AgencyCompanyDto.Response.SpendSummary walletSpendSummary(Integer companyId);
 }

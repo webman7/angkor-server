@@ -33,9 +33,9 @@ public class AgencyCompanyQueryApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/walletSpendSummary")
-    public AgencyCompanyDto.Response.SpendSummary walletSpendSummary() {
-        return this.agencyCompanyQueryMapper.walletSpendSummary(SecurityUtils.getLoginUserNo());
+    @GetMapping("/{id}/walletSpendSummary")
+    public AgencyCompanyDto.Response.SpendSummary walletSpendSummary(@PathVariable Integer id) {
+        return this.agencyCompanyQueryMapper.walletSpendSummary(id);
     }
 
 }
