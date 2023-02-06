@@ -3,6 +3,7 @@ package com.adplatform.restApi.agency.marketers.api;
 import com.adplatform.restApi.advertiser.user.dao.UserRepository;
 import com.adplatform.restApi.advertiser.user.domain.User;
 import com.adplatform.restApi.advertiser.user.service.UserFindUtils;
+import com.adplatform.restApi.agency.adaccount.dto.AgencyAdAccountDto;
 import com.adplatform.restApi.agency.businessright.dto.BusinessRightDto;
 import com.adplatform.restApi.agency.company.dto.AgencyCompanyDto;
 import com.adplatform.restApi.agency.company.service.AgencyCompanyFindUtils;
@@ -50,6 +51,20 @@ public class AgencyMarketersQueryApi {
                 this.agencyMarketersQueryMapper.search(request, pageable),
                 pageable,
                 this.agencyMarketersQueryMapper.countSearch(request)));
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/search")
+    public PageDto<AgencyMarketersDto.Response.SearchMarketers> searchMarketers(
+            @PageableDefault Pageable pageable,
+            AgencyMarketersDto.Request.SearchMarketers request) {
+
+        request.setLoginUserNo(SecurityUtils.getLoginUserNo());
+
+        return PageDto.create(new PageImpl<>(
+                this.agencyMarketersQueryMapper.searchMarketers(request, pageable),
+                pageable,
+                this.agencyMarketersQueryMapper.countSearchMarketers(request)));
     }
 
 }

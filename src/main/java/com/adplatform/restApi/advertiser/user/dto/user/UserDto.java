@@ -18,6 +18,13 @@ public abstract class UserDto {
         public static class Search {
             private String name;
         }
+
+        @Getter
+        @Setter
+        public static class UpdateStatus {
+            private Integer id;
+            private String status;
+        }
     }
 
     public static abstract class Response {

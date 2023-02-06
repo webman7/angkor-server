@@ -52,4 +52,19 @@ since 1.0
         SELECT COUNT(*)
         FROM (<include refid="searchUserSelectQuery"/>) a;
     </select>
+
+    <insert id="insertUserApproveLog">
+        INSERT INTO user_approve_log (user_no, prev_active, reg_user_no, reg_date)
+        VALUES (#{user.id}, #{user.active}, #{loginUserNo}, NOW())
+    </insert>
+
+    <update id="updateUserStatus">
+        UPDATE user_info
+        SET active = #{request.status},
+        status_chg_user_no = #{loginUserNo},
+        status_chg_date = NOW(),
+        upd_user_no = #{loginUserNo},
+        upd_date = NOW()
+        WHERE user_no = #{user.id}
+    </update>
 </mapper>

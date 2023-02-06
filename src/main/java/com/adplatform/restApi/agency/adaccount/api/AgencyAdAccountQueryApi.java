@@ -23,7 +23,6 @@ import java.util.GregorianCalendar;
 @RequestMapping("/agency/adaccounts")
 public class AgencyAdAccountQueryApi {
 
-    private final AgencyAdAccountRepository agencyAdAccountRepository;
     private final AgencyAdAccountQueryMapper agencyAdAccountQueryMapper;
 
     @ResponseStatus(HttpStatus.OK)

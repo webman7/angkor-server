@@ -4,9 +4,12 @@ import com.adplatform.restApi.advertiser.company.domain.Company;
 import com.adplatform.restApi.global.entity.BaseUpdatedEntity;
 import com.adplatform.restApi.global.value.Email;
 import lombok.*;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -58,6 +61,13 @@ public class User extends BaseUpdatedEntity {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private final Set<UserRole> roles = new HashSet<>();
+
+    @Column(name = "status_chg_user_no")
+    private Integer statusChangedUserNo;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Column(name = "status_chg_date")
+    private LocalDateTime statusChangedAt;
 
     @Builder
     public User(Company company, String loginId, String password, String name, String email, String phone, Active active) {

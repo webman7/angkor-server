@@ -1,5 +1,6 @@
 package com.adplatform.restApi.advertiser.user.dao.mapper;
 
+import com.adplatform.restApi.advertiser.user.domain.User;
 import com.adplatform.restApi.advertiser.user.dto.user.UserDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -15,4 +16,7 @@ public interface UserQueryMapper {
     );
 
     long countSearch(@Param("request") UserDto.Request.Search request);
+
+    void updateUserStatus(UserDto.Request.UpdateStatus request, User user, Integer loginUserNo);
+    void insertUserApproveLog(UserDto.Request.UpdateStatus request, User user, Integer loginUserNo);
 }

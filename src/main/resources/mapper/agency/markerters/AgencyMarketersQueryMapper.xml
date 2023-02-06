@@ -49,4 +49,44 @@
         SELECT COUNT(*)
         FROM (<include refid="searchSelectQuery"/>) a
     </select>
+
+    <resultMap id="mapSearchMarketers" type="com.adplatform.restApi.agency.marketers.dto.AgencyMarketersDto$Response$SearchMarketers">
+        <id column="id" property="id"/>
+        <result column="loginId" property="loginId"/>
+        <result column="companyId" property="companyId"/>
+        <result column="name" property="name"/>
+        <result column="createdAt" property="createdAt"/>
+        <result column="statusChangeLoginId" property="statusChangeLoginId"/>
+        <result column="statusChangeLoginName" property="statusChangeLoginName"/>
+        <result column="statusChangedAt" property="statusChangedAt"/>
+    </resultMap>
+
+    <sql id="searchMarketersSelectQuery">
+        SELECT ui.user_no AS id, ui.user_id AS loginId, ui.company_info_id AS companyId, ui.user_name AS name, ui.reg_date AS createdAt,
+               (SELECT a.user_id FROM user_info a WHERE a.user_no = ui.status_chg_user_no) AS statusChangeLoginId,
+               (SELECT a.user_name FROM user_info a WHERE a.user_no = ui.status_chg_user_no) AS statusChangeLoginName,
+               ui.status_chg_date AS statusChangedAt, ui.active AS status
+          FROM user_info ui
+         WHERE ui.company_info_id IN (
+                  SELECT a.company_info_id FROM user_info a WHERE a.user_no = #{request.loginUserNo}
+               )
+           AND ui.active = #{request.status}
+        <if test="request.searchKeyword != null and !request.searchKeyword.equals('')">
+            <if test="request.searchType == 'ID'">
+                AND ui.user_id = #{request.searchKeyword}
+            </if>
+            <if test="request.searchType == 'NAME'">
+                AND ui.user_name LIKE CONCAT('%', #{request.searchKeyword}, '%')
+            </if>
+        </if>
+    </sql>
+
+    <select id="searchMarketers" resultMap="mapSearchMarketers">
+        <include refid="searchMarketersSelectQuery"/>
+    </select>
+
+    <select id="countSearchMarketers" resultType="long">
+        SELECT COUNT(*)
+        FROM (<include refid="searchMarketersSelectQuery"/>) a
+    </select>
 </mapper>
