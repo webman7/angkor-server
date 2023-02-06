@@ -37,23 +37,19 @@ public class AgencyMarketersService {
 
 
     public void updateUserRoles(AgencyMarketersDto.Request.UpdateAgencyRoles request, Integer userNo, Integer loginUserNo) {
-System.out.println("1111111111111111111");
+
         AgencyMarketersDto.Response.SearchMarketers userMarketers = this.agencyMarketersQueryMapper.getUserMarketers(userNo);
-        System.out.println("2222222222222222222");
+
         UserRolesChangeHistoryDto.Request.Save history = new UserRolesChangeHistoryDto.Request.Save();
         history.setPrevRoles(userMarketers.getRoles());
         history.setUserNo(userNo);
         String roleString = request.getAgencyRoles().toString().replace("[", "").replace("]", "");
         history.setRoles(roleString);
 
-        System.out.println("3333333333333333333");
         UserRolesChangeHistory userRolesChangeHistory = this.userRolesChangeHistoryMapper.toEntity(history);
         this.userRolesChangeHistoryRepository.save(userRolesChangeHistory);
-        System.out.println("44444444444444444444");
 
         this.userQueryMapper.deleteUserRoles(request, userNo, loginUserNo);
-        System.out.println("5555555555555555555");
         this.userQueryMapper.updateUserRoles(request, userNo, loginUserNo);
-        System.out.println("666666666666666666");
     }
 }
