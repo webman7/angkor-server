@@ -25,4 +25,6 @@ public interface AgencyMarketersQueryMapper {
     );
 
     long countSearchMarketers(@Param("request") AgencyMarketersDto.Request.SearchMarketers request);
+
+    AgencyMarketersDto.Response.SearchMarketers getUserMarketers(Integer userNo);
 }

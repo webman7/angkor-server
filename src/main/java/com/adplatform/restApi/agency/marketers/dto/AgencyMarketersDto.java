@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class AgencyMarketersDto {
 
@@ -22,7 +23,14 @@ public class AgencyMarketersDto {
             private String searchType;
             private String searchKeyword;
             private String status;
+            private List<String> agencyRoles;
             private Integer loginUserNo;
+        }
+
+        @Getter
+        @Setter
+        public static class UpdateAgencyRoles {
+            private List<String> agencyRoles;
         }
     }
 
@@ -54,6 +62,7 @@ public class AgencyMarketersDto {
             private String statusChangeLoginId;
             private String statusChangeLoginName;
             private String status;
+            private String roles;
             private LocalDateTime createdAt;
             private LocalDateTime statusChangedAt;
         }

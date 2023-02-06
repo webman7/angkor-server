@@ -62,15 +62,18 @@
     </resultMap>
 
     <sql id="searchMarketersSelectQuery">
-        SELECT ui.user_no AS id, ui.user_id AS loginId, ui.company_info_id AS companyId, ui.user_name AS name, ui.reg_date AS createdAt,
+        SELECT ui.user_no AS id, ui.user_id AS loginId, ui.company_info_id AS companyId, ui.user_name AS name, group_concat(c.name) as roles,
+               ui.reg_date AS createdAt,
                (SELECT a.user_id FROM user_info a WHERE a.user_no = ui.status_chg_user_no) AS statusChangeLoginId,
                (SELECT a.user_name FROM user_info a WHERE a.user_no = ui.status_chg_user_no) AS statusChangeLoginName,
                ui.status_chg_date AS statusChangedAt, ui.active AS status
           FROM user_info ui
+               INNER JOIN user_roles b ON ui.user_no=b.user_no
+               INNER JOIN roles_info c ON b.roles_info_id=c.id AND c.id NOT IN (1, 2)
          WHERE ui.company_info_id IN (
                   SELECT a.company_info_id FROM user_info a WHERE a.user_no = #{request.loginUserNo}
                )
-           AND ui.active = #{request.status}
+
         <if test="request.searchKeyword != null and !request.searchKeyword.equals('')">
             <if test="request.searchType == 'ID'">
                 AND ui.user_id = #{request.searchKeyword}
@@ -79,6 +82,19 @@
                 AND ui.user_name LIKE CONCAT('%', #{request.searchKeyword}, '%')
             </if>
         </if>
+        <choose>
+            <when test="request.agencyRoles != null and !request.agencyRoles.equals('')">
+                AND ui.active = 'Y'
+                <foreach collection="request.agencyRoles" item="name" open="AND c.name IN (" separator=", " close=")">
+                    #{name}
+                </foreach>
+            </when>
+            <otherwise>
+                AND ui.active = #{request.status}
+            </otherwise>
+        </choose>
+        GROUP BY ui.user_no
+        ORDER BY ui.reg_date DESC
     </sql>
 
     <select id="searchMarketers" resultMap="mapSearchMarketers">
@@ -88,5 +104,21 @@
     <select id="countSearchMarketers" resultType="long">
         SELECT COUNT(*)
         FROM (<include refid="searchMarketersSelectQuery"/>) a
+    </select>
+
+    <sql id="getUserMarketersSelectQuery">
+        SELECT ui.user_no AS id, ui.user_id AS loginId, ui.company_info_id AS companyId, ui.user_name AS name, group_concat(c.name) as roles,
+               ui.reg_date AS createdAt,
+               (SELECT a.user_id FROM user_info a WHERE a.user_no = ui.status_chg_user_no) AS statusChangeLoginId,
+               (SELECT a.user_name FROM user_info a WHERE a.user_no = ui.status_chg_user_no) AS statusChangeLoginName,
+               ui.status_chg_date AS statusChangedAt, ui.active AS status
+          FROM user_info ui
+         INNER JOIN user_roles b ON ui.user_no=b.user_no
+         INNER JOIN roles_info c ON b.roles_info_id=c.id AND c.id NOT IN (1, 2)
+         WHERE ui.user_no = #{userNo}
+    </sql>
+
+    <select id="getUserMarketers" resultMap="mapSearchMarketers">
+        <include refid="getUserMarketersSelectQuery"/>
     </select>
 </mapper>

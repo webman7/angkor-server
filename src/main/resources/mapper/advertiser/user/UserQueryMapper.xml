@@ -67,4 +67,29 @@ since 1.0
         upd_date = NOW()
         WHERE user_no = #{user.id}
     </update>
+
+    <delete id="deleteUserRoles">
+        DELETE FROM user_roles
+              WHERE user_no = #{userNo}
+                AND roles_info_id IN (
+                    SELECT id
+                      FROM roles_info
+                    <trim prefix="WHERE" prefixOverrides="AND | OR">
+                        <foreach collection="request.agencyRoles" item="name" open="AND name IN (" separator=", " close=")">
+                            #{name}
+                        </foreach>
+                    </trim>
+                    )
+    </delete>
+
+    <update id="updateUserRoles">
+        INSERT INTO user_roles (user_no, roles_info_id)
+        SELECT #{userNo}, id
+        FROM roles_info
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <foreach collection="request.agencyRoles" item="name" open="AND name IN (" separator=", " close=")">
+                #{name}
+            </foreach>
+        </trim>
+    </update>
 </mapper>

@@ -22,4 +22,10 @@ public class AgencyMarketersCommandApi {
     public void updateUserStatus(@RequestBody @Valid UserDto.Request.UpdateStatus request) {
         this.agencyMarketersService.updateUserStatus(request, SecurityUtils.getLoginUserNo());
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{id}/roles")
+    public void updateUserRoles(@PathVariable Integer id, AgencyMarketersDto.Request.UpdateAgencyRoles request) {
+        this.agencyMarketersService.updateUserRoles(request, id, SecurityUtils.getLoginUserNo());
+    }
 }
