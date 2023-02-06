@@ -43,6 +43,15 @@ public class AgencyMarketersDto {
             private String name;
             private String companyName;
             private String status;
+            private String registrationNumber;
+            private String representationName;
+            private String baseAddress;
+            private String detailAddress;
+            private String zipCode;
+            private String businessCategory;
+            private String businessItem;
+            private String taxBillEmail1;
+            private String taxBillEmail2;
         }
 
         @Getter
