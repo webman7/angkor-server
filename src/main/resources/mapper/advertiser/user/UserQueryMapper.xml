@@ -92,4 +92,11 @@ since 1.0
             </foreach>
         </trim>
     </update>
+
+    <update id="updateUserUpdDate">
+        UPDATE user_info
+           SET upd_user_no = #{loginUserNo},
+               upd_date = NOW()
+         WHERE user_no = #{userNo}
+    </update>
 </mapper>

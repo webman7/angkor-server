@@ -23,4 +23,5 @@ public interface UserQueryMapper {
 
     void updateUserRoles(AgencyMarketersDto.Request.UpdateAgencyRoles request, Integer userNo, Integer loginUserNo);
     void deleteUserRoles(AgencyMarketersDto.Request.UpdateAgencyRoles request, Integer userNo, Integer loginUserNo);
+    void updateUserUpdDate(Integer userNo, Integer loginUserNo);
 }

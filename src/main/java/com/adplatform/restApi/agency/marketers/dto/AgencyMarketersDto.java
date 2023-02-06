@@ -65,6 +65,7 @@ public class AgencyMarketersDto {
             private String roles;
             private LocalDateTime createdAt;
             private LocalDateTime statusChangedAt;
+            private LocalDateTime updatedAt;
         }
     }
 }

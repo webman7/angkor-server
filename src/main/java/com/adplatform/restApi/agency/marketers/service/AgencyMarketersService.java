@@ -51,5 +51,6 @@ public class AgencyMarketersService {
 
         this.userQueryMapper.deleteUserRoles(request, userNo, loginUserNo);
         this.userQueryMapper.updateUserRoles(request, userNo, loginUserNo);
+        this.userQueryMapper.updateUserUpdDate(userNo, loginUserNo);
     }
 }
