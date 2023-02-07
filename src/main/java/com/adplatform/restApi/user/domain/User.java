@@ -28,9 +28,10 @@ public class User extends BaseUpdatedEntity {
          * Y: 사용중
          * N: 삭제
          * W: 승인대기
+         * R: 거절
          * L: 잠금
          */
-        Y, N, W, L
+        Y, N, W, L, R
     }
 
     @ManyToOne(fetch = FetchType.LAZY)

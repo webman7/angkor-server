@@ -89,6 +89,13 @@ public class AuthService {
                 UserLoginHistory userLoginHistory = this.userLoginHistoryMapper.toEntity(history);
                 this.userLoginHistoryRepository.save(userLoginHistory);
                 throw new WaitingApprovalUserException();
+            case R:
+                history.setLoginType(5);
+                history.setUserId(userId);
+                history.setRegIp(HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
+                UserLoginHistory userLoginHistory1 = this.userLoginHistoryMapper.toEntity(history);
+                this.userLoginHistoryRepository.save(userLoginHistory1);
+                throw new RejectUserException();
             case N:
                 history.setLoginType(2);
                 history.setUserId(userId);
