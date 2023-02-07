@@ -34,7 +34,7 @@ public class BusinessRightQueryApi {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}/statistics")
-    public BusinessRightDto.Response.Statistics statistics(@PathVariable Integer id, BusinessRightDto.Request.Statistics request) {
+    public List<BusinessRightDto.Response.Statistics> statistics(@PathVariable Integer id, BusinessRightDto.Request.Statistics request) {
         return this.businessRightQueryMapper.statistics(request, id);
     }
 
