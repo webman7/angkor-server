@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.adplatform.restApi.agency.businessright.dao.mapper.BusinessRightQueryMapper">
-    <resultMap id="mapStatistics" type="com.adplatform.restApi.agency.businessright.dto.BusinessRightDto$Response$Statistics">
+<mapper namespace="com.adplatform.restApi.domain.agency.businessright.dao.mapper.BusinessRightQueryMapper">
+    <resultMap id="mapStatistics" type="com.adplatform.restApi.domain.agency.businessright.dto.BusinessRightDto$Response$Statistics">
         <id column="businessRightStatus" property="businessRightStatus"/>
         <result column="count" property="count"/>
     </resultMap>

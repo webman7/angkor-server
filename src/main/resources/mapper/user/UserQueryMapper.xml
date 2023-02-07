@@ -6,8 +6,8 @@
 author junny
 since 1.0
 -->
-<mapper namespace="com.adplatform.restApi.user.dao.mapper.UserQueryMapper">
-    <resultMap id="mapSearch" type="com.adplatform.restApi.user.dto.user.UserDto$Response$Search">
+<mapper namespace="com.adplatform.restApi.domain.user.dao.mapper.UserQueryMapper">
+    <resultMap id="mapSearch" type="com.adplatform.restApi.domain.user.dto.user.UserDto$Response$Search">
         <id column="id" property="id"/>
         <result column="loginId" property="loginId"/>
         <result column="name" property="name"/>

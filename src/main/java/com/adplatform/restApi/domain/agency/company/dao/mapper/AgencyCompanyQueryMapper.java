@@ -1,0 +1,10 @@
+package com.adplatform.restApi.domain.agency.company.dao.mapper;
+
+import com.adplatform.restApi.domain.agency.company.dto.AgencyCompanyDto;
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface AgencyCompanyQueryMapper {
+
+    AgencyCompanyDto.Response.SpendSummary walletSpendSummary(Integer companyId);
+}

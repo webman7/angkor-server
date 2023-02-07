@@ -1,8 +1,8 @@
 package com.adplatform.restApi.global.error.handler;
 
-import com.adplatform.restApi.user.exception.UserAlreadyExistException;
-import com.adplatform.restApi.user.exception.UserException;
-import com.adplatform.restApi.user.exception.UserLoginFailedException;
+import com.adplatform.restApi.domain.user.exception.UserAlreadyExistException;
+import com.adplatform.restApi.domain.user.exception.UserException;
+import com.adplatform.restApi.domain.user.exception.UserLoginFailedException;
 import com.adplatform.restApi.global.config.security.exception.SecurityException;
 import com.adplatform.restApi.global.error.dto.ErrorResponse;
 import com.adplatform.restApi.global.error.exception.BaseException;

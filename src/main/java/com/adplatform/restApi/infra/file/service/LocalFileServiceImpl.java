@@ -1,7 +1,7 @@
 package com.adplatform.restApi.infra.file.service;
 
-import com.adplatform.restApi.advertiser.creative.domain.Creative;
-import com.adplatform.restApi.advertiser.creative.dto.CreativeDto;
+import com.adplatform.restApi.domain.advertiser.creative.domain.Creative;
+import com.adplatform.restApi.domain.advertiser.creative.dto.CreativeDto;
 import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;

@@ -6,8 +6,8 @@
 author Seohyun Lee
 since 1.0
 -->
-<mapper namespace="com.adplatform.restApi.advertiser.adgroup.dao.adgroup.mapper.AdGroupQueryMapper">
-    <resultMap id="mapSearch" type="com.adplatform.restApi.advertiser.adgroup.dto.adgroup.AdGroupDto$Response$AdvertiserSearch">
+<mapper namespace="com.adplatform.restApi.domain.advertiser.adgroup.dao.adgroup.mapper.AdGroupQueryMapper">
+    <resultMap id="mapSearch" type="com.adplatform.restApi.domain.advertiser.adgroup.dto.adgroup.AdGroupDto$Response$AdvertiserSearch">
         <id column="id" property="id"/>
         <result column="adTypeName" property="adTypeName"/>
         <result column="adGoalName" property="adGoalName"/>
@@ -27,7 +27,7 @@ since 1.0
         <result column="scheduleEndDate" property="scheduleEndDate"/>
         <result column="createdAt" property="createdAt"/>
         <result column="updatedAt" property="updatedAt"/>
-        <association property="report" javaType="com.adplatform.restApi.statistics.dto.ReportDto$Response">
+        <association property="report" javaType="com.adplatform.restApi.domain.statistics.dto.ReportDto$Response">
             <result column="cost" property="cost"/>
             <result column="impression" property="impression"/>
             <result column="click" property="click"/>
@@ -146,7 +146,7 @@ since 1.0
                                     GROUP BY campaign_info_id) campaignReport ON campaignReport.campaign_info_id = c.id
                              <trim prefix="WHERE" prefixOverrides="AND | OR ">
                                 c.adaccount_info_id = #{request.adAccountId}
-                                <include refid="com.adplatform.restApi.advertiser.campaign.dao.campaign.mapper.CampaignQueryMapper.campaignCondition"/>
+                                <include refid="com.adplatform.restApi.domain.advertiser.campaign.dao.campaign.mapper.CampaignQueryMapper.campaignCondition"/>
                              </trim>) c ON a.campaign_info_id = c.id
                  LEFT JOIN (SELECT adgroup_info_id,
                                    <include refid="ReportCommonMapper.reportUnionColumns"/>
@@ -186,7 +186,7 @@ since 1.0
                                                      GROUP BY creative_info_id) creativeReport ON creativeReport.creative_info_id = cr.id
                                     INNER JOIN adgroup_info a ON cr.adgroup_info_id = a.id
                               <trim prefix="WHERE" prefixOverrides="AND | OR ">
-                                     <include refid="com.adplatform.restApi.advertiser.creative.dao.mapper.CreativeQueryMapper.creativeCondition"/>
+                                     <include refid="com.adplatform.restApi.domain.advertiser.creative.dao.mapper.CreativeQueryMapper.creativeCondition"/>
                               </trim>
                             GROUP BY adGroupId) cr ON cr.adGroupId = a.id
                 </if>

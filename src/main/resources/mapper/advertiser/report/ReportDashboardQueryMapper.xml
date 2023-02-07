@@ -7,8 +7,8 @@ author junny
 since 1.0
 -->
 <!--suppress MybatisXMapperXmlInspection -->
-<mapper namespace="com.adplatform.restApi.advertiser.report.dao.dashboard.mapper.ReportDashboardQueryMapper">
-    <resultMap id="mapSearch" type="com.adplatform.restApi.advertiser.report.dto.dashboard.ReportDashboardDto$Response$IndicatorColumn">
+<mapper namespace="com.adplatform.restApi.domain.advertiser.report.dao.dashboard.mapper.ReportDashboardQueryMapper">
+    <resultMap id="mapSearch" type="com.adplatform.restApi.domain.advertiser.report.dto.dashboard.ReportDashboardDto$Response$IndicatorColumn">
     <id column="columnIndex" property="columnIndex"/>
     <result column="columnName" property="columnName"/>
     </resultMap>

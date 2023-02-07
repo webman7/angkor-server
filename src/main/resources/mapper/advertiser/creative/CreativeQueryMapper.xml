@@ -6,8 +6,8 @@
 author Seohyun Lee
 since 1.0
 -->
-<mapper namespace="com.adplatform.restApi.advertiser.creative.dao.mapper.CreativeQueryMapper">
-    <resultMap id="mapSearch" type="com.adplatform.restApi.advertiser.creative.dto.CreativeDto$Response$Default">
+<mapper namespace="com.adplatform.restApi.domain.advertiser.creative.dao.mapper.CreativeQueryMapper">
+    <resultMap id="mapSearch" type="com.adplatform.restApi.domain.advertiser.creative.dto.CreativeDto$Response$Default">
         <id column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="config" property="config"/>
@@ -22,7 +22,7 @@ since 1.0
         <result column="fileName" property="fileName"/>
         <result column="fileType" property="fileType"/>
         <result column="url" property="url"/>
-        <association property="report" javaType="com.adplatform.restApi.statistics.dto.ReportDto$Response">
+        <association property="report" javaType="com.adplatform.restApi.domain.statistics.dto.ReportDto$Response">
             <result column="cost" property="cost"/>
             <result column="impression" property="impression"/>
             <result column="click" property="click"/>
@@ -175,7 +175,7 @@ since 1.0
                                       INNER JOIN campaign_info c ON c.id = a.campaign_info_id
                             <trim prefix="WHERE" prefixOverrides="AND | OR ">
                                 c.adaccount_info_id = #{request.adAccountId}
-                                <include refid="com.adplatform.restApi.advertiser.adgroup.dao.adgroup.mapper.AdGroupQueryMapper.adGroupCondition"/>
+                                <include refid="com.adplatform.restApi.domain.advertiser.adgroup.dao.adgroup.mapper.AdGroupQueryMapper.adGroupCondition"/>
                             </trim>) a ON a.id = cr.adgroup_info_id
                  INNER JOIN (SELECT c.id, c.name
                              FROM campaign_info c
@@ -198,7 +198,7 @@ since 1.0
                                     ON campaignReport.campaign_info_id = c.id
                             <trim prefix="WHERE" prefixOverrides="AND | OR ">
                                 c.adaccount_info_id = #{request.adAccountId}
-                                <include refid="com.adplatform.restApi.advertiser.campaign.dao.campaign.mapper.CampaignQueryMapper.campaignCondition"/>
+                                <include refid="com.adplatform.restApi.domain.advertiser.campaign.dao.campaign.mapper.CampaignQueryMapper.campaignCondition"/>
                             </trim>) c ON c.id = a.campaign_info_id
         <trim prefix="WHERE" prefixOverrides="AND | OR">
             <include refid="AdTypeAndGoalCondition.adTypeGoalNames"/>

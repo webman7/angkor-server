@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.adplatform.restApi.agency.company.dao.mapper.AgencyCompanyQueryMapper">
-    <resultMap id="mapSpendSummary" type="com.adplatform.restApi.agency.company.dto.AgencyCompanyDto$Response$SpendSummary">
+<mapper namespace="com.adplatform.restApi.domain.agency.company.dao.mapper.AgencyCompanyQueryMapper">
+    <resultMap id="mapSpendSummary" type="com.adplatform.restApi.domain.agency.company.dto.AgencyCompanyDto$Response$SpendSummary">
         <id column="platformType" property="platformType"/>
         <result column="prePaymentCnt" property="prePaymentCnt"/>
         <result column="todaySpend" property="todaySpend"/>

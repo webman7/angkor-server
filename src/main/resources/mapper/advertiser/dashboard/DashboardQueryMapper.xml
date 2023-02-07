@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.adplatform.restApi.advertiser.dashboard.dao.dashboard.mapper.DashboardQueryMapper">
-    <resultMap id="mapCost" type="com.adplatform.restApi.advertiser.dashboard.dto.DashboardDto$Response$AdAccountDashboardCost">
+<mapper namespace="com.adplatform.restApi.domain.advertiser.dashboard.dao.dashboard.mapper.DashboardQueryMapper">
+    <resultMap id="mapCost" type="com.adplatform.restApi.domain.advertiser.dashboard.dto.DashboardDto$Response$AdAccountDashboardCost">
         <id column="costOfToday" property="costOfToday"/>
     </resultMap>
 
@@ -18,9 +18,9 @@
         <include refid="adAccountsDashboardCostSelectQuery"/>
     </select>
 
-    <resultMap id="mapSearch" type="com.adplatform.restApi.advertiser.dashboard.dto.DashboardDto$Response$DashboardChart">
+    <resultMap id="mapSearch" type="com.adplatform.restApi.domain.advertiser.dashboard.dto.DashboardDto$Response$DashboardChart">
         <id column="reportDate" property="reportDate"/>
-        <association property="report" javaType="com.adplatform.restApi.statistics.dto.ReportDto$Response">
+        <association property="report" javaType="com.adplatform.restApi.domain.statistics.dto.ReportDto$Response">
             <result column="cost" property="cost"/>
             <result column="impression" property="impression"/>
             <result column="click" property="click"/>
@@ -93,9 +93,9 @@
         WHERE c.id = a.campaign_info_id
           AND a.id = cr.adgroup_info_id
           AND c.adaccount_info_id = #{request.adAccountId}
-        <include refid="com.adplatform.restApi.advertiser.campaign.dao.campaign.mapper.CampaignQueryMapper.campaignCondition"/>
-        <include refid="com.adplatform.restApi.advertiser.adgroup.dao.adgroup.mapper.AdGroupQueryMapper.adGroupCondition"/>
-        <include refid="com.adplatform.restApi.advertiser.creative.dao.mapper.CreativeQueryMapper.creativeCondition"/>
+        <include refid="com.adplatform.restApi.domain.advertiser.campaign.dao.campaign.mapper.CampaignQueryMapper.campaignCondition"/>
+        <include refid="com.adplatform.restApi.domain.advertiser.adgroup.dao.adgroup.mapper.AdGroupQueryMapper.adGroupCondition"/>
+        <include refid="com.adplatform.restApi.domain.advertiser.creative.dao.mapper.CreativeQueryMapper.creativeCondition"/>
         ) t1
          ON rad.adaccount_info_id = #{request.adAccountId}
         AND t1.adaccount_info_id = rad.adaccount_info_id
@@ -114,9 +114,9 @@
         WHERE c.id = a.campaign_info_id
         AND a.id = cr.adgroup_info_id
         AND c.adaccount_info_id = #{request.adAccountId}
-        <include refid="com.adplatform.restApi.advertiser.campaign.dao.campaign.mapper.CampaignQueryMapper.campaignCondition"/>
-        <include refid="com.adplatform.restApi.advertiser.adgroup.dao.adgroup.mapper.AdGroupQueryMapper.adGroupCondition"/>
-        <include refid="com.adplatform.restApi.advertiser.creative.dao.mapper.CreativeQueryMapper.creativeCondition"/>
+        <include refid="com.adplatform.restApi.domain.advertiser.campaign.dao.campaign.mapper.CampaignQueryMapper.campaignCondition"/>
+        <include refid="com.adplatform.restApi.domain.advertiser.adgroup.dao.adgroup.mapper.AdGroupQueryMapper.adGroupCondition"/>
+        <include refid="com.adplatform.restApi.domain.advertiser.creative.dao.mapper.CreativeQueryMapper.creativeCondition"/>
         ) t1
          ON rac.adaccount_info_id = #{request.adAccountId}
         AND t1.adaccount_info_id = rac.adaccount_info_id

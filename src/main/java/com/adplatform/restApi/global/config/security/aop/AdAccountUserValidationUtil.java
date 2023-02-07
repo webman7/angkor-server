@@ -1,10 +1,10 @@
 package com.adplatform.restApi.global.config.security.aop;
 
-import com.adplatform.restApi.adaccount.domain.AdAccountUser;
-import com.adplatform.restApi.adaccount.exception.AdAccountUserAuthorizationException;
-import com.adplatform.restApi.adaccount.dao.user.AdAccountUserRepository;
-import com.adplatform.restApi.adaccount.exception.AdAccountUserNotFoundException;
-import com.adplatform.restApi.adaccount.service.AdAccountUserQueryUtils;
+import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
+import com.adplatform.restApi.domain.adaccount.exception.AdAccountUserAuthorizationException;
+import com.adplatform.restApi.domain.adaccount.dao.user.AdAccountUserRepository;
+import com.adplatform.restApi.domain.adaccount.exception.AdAccountUserNotFoundException;
+import com.adplatform.restApi.domain.adaccount.service.AdAccountUserQueryUtils;
 import com.adplatform.restApi.global.config.security.util.SecurityUtils;
 
 /**

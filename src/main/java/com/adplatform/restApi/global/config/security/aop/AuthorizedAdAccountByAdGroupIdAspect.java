@@ -1,8 +1,8 @@
 package com.adplatform.restApi.global.config.security.aop;
 
-import com.adplatform.restApi.adaccount.dao.user.AdAccountUserRepository;
-import com.adplatform.restApi.advertiser.adgroup.dao.adgroup.AdGroupRepository;
-import com.adplatform.restApi.advertiser.adgroup.service.AdGroupFindUtils;
+import com.adplatform.restApi.domain.adaccount.dao.user.AdAccountUserRepository;
+import com.adplatform.restApi.domain.advertiser.adgroup.dao.adgroup.AdGroupRepository;
+import com.adplatform.restApi.domain.advertiser.adgroup.service.AdGroupFindUtils;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.adplatform.restApi.agency.marketers.dao.mapper.AgencyMarketersQueryMapper">
-    <resultMap id="mapMy" type="com.adplatform.restApi.agency.marketers.dto.AgencyMarketersDto$Response$MarketersDetail">
+<mapper namespace="com.adplatform.restApi.domain.agency.marketers.dao.mapper.AgencyMarketersQueryMapper">
+    <resultMap id="mapMy" type="com.adplatform.restApi.domain.agency.marketers.dto.AgencyMarketersDto$Response$MarketersDetail">
         <id column="id" property="id"/>
         <result column="loginId" property="loginId"/>
         <result column="name" property="name"/>
@@ -39,7 +39,7 @@
         <include refid="mySelectQuery"/>
     </select>
 
-    <resultMap id="mapSearch" type="com.adplatform.restApi.agency.marketers.dto.AgencyMarketersDto$Response$Search">
+    <resultMap id="mapSearch" type="com.adplatform.restApi.domain.agency.marketers.dto.AgencyMarketersDto$Response$Search">
         <id column="id" property="id"/>
         <result column="name" property="name"/>
     </resultMap>
@@ -63,7 +63,7 @@
         FROM (<include refid="searchSelectQuery"/>) a
     </select>
 
-    <resultMap id="mapSearchMarketers" type="com.adplatform.restApi.agency.marketers.dto.AgencyMarketersDto$Response$SearchMarketers">
+    <resultMap id="mapSearchMarketers" type="com.adplatform.restApi.domain.agency.marketers.dto.AgencyMarketersDto$Response$SearchMarketers">
         <id column="id" property="id"/>
         <result column="loginId" property="loginId"/>
         <result column="companyId" property="companyId"/>

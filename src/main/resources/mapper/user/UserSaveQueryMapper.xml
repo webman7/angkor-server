@@ -6,7 +6,7 @@
 author junny
 since 1.0
 -->
-<mapper namespace="com.adplatform.restApi.user.dao.mapper.UserSaveQueryMapper">
+<mapper namespace="com.adplatform.restApi.domain.user.dao.mapper.UserSaveQueryMapper">
     <insert id="insertUserApproveLog">
         INSERT INTO user_approve_log (user_no, prev_active, reg_user_no, reg_date)
         VALUES (#{user.id}, #{user.active}, #{loginUserNo}, NOW())

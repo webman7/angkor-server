@@ -6,8 +6,8 @@
 author junny
 since 1.0
 -->
-<mapper namespace="com.adplatform.restApi.agency.adaccount.dao.mapper.AgencyAdAccountQueryMapper">
-    <resultMap id="mapSearch" type="com.adplatform.restApi.agency.adaccount.dto.AgencyAdAccountDto$Response$Search">
+<mapper namespace="com.adplatform.restApi.domain.agency.adaccount.dao.mapper.AgencyAdAccountQueryMapper">
+    <resultMap id="mapSearch" type="com.adplatform.restApi.domain.agency.adaccount.dto.AgencyAdAccountDto$Response$Search">
         <id column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="adAccountType" property="adAccountType"/>

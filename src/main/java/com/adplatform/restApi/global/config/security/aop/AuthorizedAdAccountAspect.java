@@ -1,16 +1,16 @@
 package com.adplatform.restApi.global.config.security.aop;
 
-import com.adplatform.restApi.adaccount.dao.user.AdAccountUserRepository;
-import com.adplatform.restApi.adaccount.dto.adaccount.AdAccountIdGetter;
-import com.adplatform.restApi.advertiser.adgroup.dao.adgroup.AdGroupRepository;
-import com.adplatform.restApi.advertiser.adgroup.dto.adgroup.AdGroupIdGetter;
-import com.adplatform.restApi.advertiser.adgroup.service.AdGroupFindUtils;
-import com.adplatform.restApi.advertiser.campaign.dao.campaign.CampaignRepository;
-import com.adplatform.restApi.advertiser.campaign.dto.CampaignIdGetter;
-import com.adplatform.restApi.advertiser.campaign.service.CampaignFindUtils;
-import com.adplatform.restApi.advertiser.creative.dao.CreativeRepository;
-import com.adplatform.restApi.advertiser.creative.dto.CreativeIdGetter;
-import com.adplatform.restApi.advertiser.creative.service.CreativeFindUtils;
+import com.adplatform.restApi.domain.adaccount.dao.user.AdAccountUserRepository;
+import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountIdGetter;
+import com.adplatform.restApi.domain.advertiser.adgroup.dao.adgroup.AdGroupRepository;
+import com.adplatform.restApi.domain.advertiser.adgroup.dto.adgroup.AdGroupIdGetter;
+import com.adplatform.restApi.domain.advertiser.adgroup.service.AdGroupFindUtils;
+import com.adplatform.restApi.domain.advertiser.campaign.dao.campaign.CampaignRepository;
+import com.adplatform.restApi.domain.advertiser.campaign.dto.CampaignIdGetter;
+import com.adplatform.restApi.domain.advertiser.campaign.service.CampaignFindUtils;
+import com.adplatform.restApi.domain.advertiser.creative.dao.CreativeRepository;
+import com.adplatform.restApi.domain.advertiser.creative.dto.CreativeIdGetter;
+import com.adplatform.restApi.domain.advertiser.creative.service.CreativeFindUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -29,9 +29,9 @@ import static com.adplatform.restApi.global.config.security.aop.AdAccountUserVal
  * @since 1.0
  * @see com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount AuthorizedAdAccount
  * @see AdAccountIdGetter AdAccountIdGetter
- * @see com.adplatform.restApi.advertiser.campaign.dto.CampaignIdGetter CampaignIdGetter
- * @see com.adplatform.restApi.advertiser.adgroup.dto.adgroup.AdGroupIdGetter AdGroupIdGetter
- * @see com.adplatform.restApi.advertiser.creative.dto.CreativeIdGetter CreativeIdGetter
+ * @see CampaignIdGetter CampaignIdGetter
+ * @see AdGroupIdGetter AdGroupIdGetter
+ * @see CreativeIdGetter CreativeIdGetter
  */
 @Slf4j
 @RequiredArgsConstructor

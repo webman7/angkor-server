@@ -7,8 +7,8 @@ author junny
 since 1.0
 -->
 <!--suppress MybatisXMapperXmlInspection -->
-<mapper namespace="com.adplatform.restApi.advertiser.report.dao.custom.mapper.ReportCustomQueryMapper">
-    <resultMap id="mapSearchTotal" type="com.adplatform.restApi.advertiser.report.dto.custom.ReportCustomDto$Response$Page">
+<mapper namespace="com.adplatform.restApi.domain.advertiser.report.dao.custom.mapper.ReportCustomQueryMapper">
+    <resultMap id="mapSearchTotal" type="com.adplatform.restApi.domain.advertiser.report.dto.custom.ReportCustomDto$Response$Page">
         <id column="id" property="id"/>
         <result column="adAccountId" property="adAccountId"/>
         <result column="adAccountName" property="adAccountName"/>
@@ -26,11 +26,11 @@ since 1.0
         <result column="representativeId" property="representativeId"/>
         <result column="startDate" property="startDate"/>
         <result column="endDate" property="endDate"/>
-        <association property="adTypeAndGoal" javaType="com.adplatform.restApi.advertiser.campaign.dto.AdTypeAndGoalDto">
+        <association property="adTypeAndGoal" javaType="com.adplatform.restApi.domain.advertiser.campaign.dto.AdTypeAndGoalDto">
             <result column="adTypeName" property="adTypeName"/>
             <result column="adGoalName" property="adGoalName"/>
         </association>
-        <association property="report" javaType="com.adplatform.restApi.statistics.dto.ReportDto$Response">
+        <association property="report" javaType="com.adplatform.restApi.domain.statistics.dto.ReportDto$Response">
             <result column="cost" property="cost"/>
             <result column="impression" property="impression"/>
             <result column="click" property="click"/>
@@ -62,7 +62,7 @@ since 1.0
         </association>
     </resultMap>
 
-    <resultMap id="mapSearch" type="com.adplatform.restApi.advertiser.report.dto.custom.ReportCustomDto$Response$Page">
+    <resultMap id="mapSearch" type="com.adplatform.restApi.domain.advertiser.report.dto.custom.ReportCustomDto$Response$Page">
         <id column="id" property="id"/>
         <id column="startDate" property="startDate"/>
         <id column="endDate" property="endDate"/>
@@ -82,11 +82,11 @@ since 1.0
         <result column="representativeId" property="representativeId"/>
         <result column="startDate" property="startDate"/>
         <result column="endDate" property="endDate"/>
-        <association property="adTypeAndGoal" javaType="com.adplatform.restApi.advertiser.campaign.dto.AdTypeAndGoalDto">
+        <association property="adTypeAndGoal" javaType="com.adplatform.restApi.domain.advertiser.campaign.dto.AdTypeAndGoalDto">
             <result column="adTypeName" property="adTypeName"/>
             <result column="adGoalName" property="adGoalName"/>
         </association>
-        <association property="report" javaType="com.adplatform.restApi.statistics.dto.ReportDto$Response">
+        <association property="report" javaType="com.adplatform.restApi.domain.statistics.dto.ReportDto$Response">
             <result column="cost" property="cost"/>
             <result column="impression" property="impression"/>
             <result column="click" property="click"/>

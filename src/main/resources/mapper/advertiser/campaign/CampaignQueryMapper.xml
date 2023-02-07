@@ -6,8 +6,8 @@
 author Seohyun Lee
 since 1.0
 -->
-<mapper namespace="com.adplatform.restApi.advertiser.campaign.dao.campaign.mapper.CampaignQueryMapper">
-    <resultMap id="mapSearch" type="com.adplatform.restApi.advertiser.campaign.dto.CampaignDto$Response$Page">
+<mapper namespace="com.adplatform.restApi.domain.advertiser.campaign.dao.campaign.mapper.CampaignQueryMapper">
+    <resultMap id="mapSearch" type="com.adplatform.restApi.domain.advertiser.campaign.dto.CampaignDto$Response$Page">
         <id column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="dailyBudgetAmount" property="dailyBudgetAmount"/>
@@ -19,11 +19,11 @@ since 1.0
         <result column="updatedAt" property="updatedAt"/>
         <result column="startDate" property="startDate"/>
         <result column="endDate" property="endDate"/>
-        <association property="adTypeAndGoal" javaType="com.adplatform.restApi.advertiser.campaign.dto.AdTypeAndGoalDto">
+        <association property="adTypeAndGoal" javaType="com.adplatform.restApi.domain.advertiser.campaign.dto.AdTypeAndGoalDto">
             <result column="adTypeName" property="adTypeName"/>
             <result column="adGoalName" property="adGoalName"/>
         </association>
-        <association property="report" javaType="com.adplatform.restApi.statistics.dto.ReportDto$Response">
+        <association property="report" javaType="com.adplatform.restApi.domain.statistics.dto.ReportDto$Response">
             <result column="cost" property="cost"/>
             <result column="impression" property="impression"/>
             <result column="click" property="click"/>
@@ -148,7 +148,7 @@ since 1.0
                                         GROUP BY adgroup_info_id) adGroupReport ON adGroupReport.adgroup_info_id = a.id
                             <trim prefix="WHERE" prefixOverrides="AND | OR ">
                                 c.adaccount_info_id = #{request.adAccountId}
-                                <include refid="com.adplatform.restApi.advertiser.adgroup.dao.adgroup.mapper.AdGroupQueryMapper.adGroupCondition"/>
+                                <include refid="com.adplatform.restApi.domain.advertiser.adgroup.dao.adgroup.mapper.AdGroupQueryMapper.adGroupCondition"/>
                             </trim>
                              GROUP BY c.id) a ON a.campaignId = c.id
             </if>
@@ -176,7 +176,7 @@ since 1.0
                                       INNER JOIN campaign_info c ON a.campaign_info_id = c.id
                             <trim prefix="WHERE" prefixOverrides="AND | OR ">
                                 c.adaccount_info_id = #{request.adAccountId}
-                                <include refid="com.adplatform.restApi.advertiser.creative.dao.mapper.CreativeQueryMapper.creativeCondition"/>
+                                <include refid="com.adplatform.restApi.domain.advertiser.creative.dao.mapper.CreativeQueryMapper.creativeCondition"/>
                             </trim>
                              GROUP BY campaignId) cr ON cr.campaignId = c.id
             </if>
@@ -203,7 +203,7 @@ since 1.0
         <include refid="common.sortAndOrder"/>
     </select>
 
-    <resultMap id="mapDetail" type="com.adplatform.restApi.advertiser.campaign.dto.CampaignDto$Response$Detail">
+    <resultMap id="mapDetail" type="com.adplatform.restApi.domain.advertiser.campaign.dto.CampaignDto$Response$Detail">
         <id column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="dailyBudgetAmount" property="dailyBudgetAmount"/>
@@ -215,7 +215,7 @@ since 1.0
         <result column="updatedAt" property="updatedAt"/>
         <result column="startDate" property="startDate"/>
         <result column="endDate" property="endDate"/>
-        <association property="adTypeAndGoal" javaType="com.adplatform.restApi.advertiser.campaign.dto.AdTypeAndGoalDto">
+        <association property="adTypeAndGoal" javaType="com.adplatform.restApi.domain.advertiser.campaign.dto.AdTypeAndGoalDto">
             <result column="adTypeName" property="adTypeName"/>
             <result column="adGoalName" property="adGoalName"/>
         </association>
