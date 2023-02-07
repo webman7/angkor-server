@@ -88,8 +88,16 @@ public class AdAccount extends BaseUpdatedEntity {
     private Integer memberCount;
 
     @Convert(converter = BooleanToStringYOrNConverter.class)
+    @Column(name = "agency_register_yn", nullable = false, columnDefinition = "CHAR(1)")
+    private boolean agencyRegister;
+
+    @Convert(converter = BooleanToStringYOrNConverter.class)
     @Column(name = "business_right_yn", nullable = false, columnDefinition = "CHAR(1)")
     private boolean businessRight;
+
+    @Convert(converter = BooleanToStringYOrNConverter.class)
+    @Column(name = "request_business_right_yn", nullable = false, columnDefinition = "CHAR(1)")
+    private boolean requestBusinessRight;
 
     @Column(name = "credit_limit", columnDefinition = "INT")
     private Integer creditLimit;
@@ -122,7 +130,9 @@ public class AdAccount extends BaseUpdatedEntity {
             String name,
             String businessRegistrationNumber,
             String taxBillRegistrationNumber,
+            boolean agencyRegister,
             boolean businessRight,
+            boolean requestBusinessRight,
             Integer creditLimit,
             boolean preDeferredPayment,
             Config config,
@@ -135,7 +145,9 @@ public class AdAccount extends BaseUpdatedEntity {
         this.name = name;
         this.businessRegistrationNumber = businessRegistrationNumber;
         this.taxBillRegistrationNumber = taxBillRegistrationNumber;
+        this.agencyRegister = agencyRegister;
         this.businessRight = businessRight;
+        this.requestBusinessRight = requestBusinessRight;
         this.creditLimit = creditLimit;
         this.preDeferredPayment = preDeferredPayment;
         this.config = config;
@@ -153,9 +165,8 @@ public class AdAccount extends BaseUpdatedEntity {
         return this;
     }
 
-    public AdAccount creditLimitUpdate(AdAccountDto.Request.CreditLimitUpdate request) {
+    public void creditLimitUpdate(AdAccountDto.Request.CreditLimitUpdate request) {
         this.creditLimit = request.getCreditLimit();
-        return this;
     }
 
     public AdAccount outOfBalanceUpdate(AdAccountDto.Request.OutOfBalanceUpdate request) {
