@@ -5,7 +5,7 @@ import com.adplatform.restApi.history.domain.UserRolesChangeHistory;
 import com.adplatform.restApi.history.dto.campaign.UserRolesChangeHistoryDto;
 import com.adplatform.restApi.history.dto.campaign.UserRolesChangeHistoryMapper;
 import com.adplatform.restApi.user.dao.UserRepository;
-import com.adplatform.restApi.user.dao.mapper.UserQueryMapper;
+import com.adplatform.restApi.user.dao.mapper.UserSaveQueryMapper;
 import com.adplatform.restApi.user.domain.User;
 import com.adplatform.restApi.user.dto.user.UserDto;
 import com.adplatform.restApi.user.service.UserFindUtils;
@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AgencyMarketersService {
 
-    private final UserQueryMapper userQueryMapper;
+    private final UserSaveQueryMapper userSaveQueryMapper;
     private final UserRepository userRepository;
     private final AgencyMarketersQueryMapper agencyMarketersQueryMapper;
     private final UserRolesChangeHistoryMapper userRolesChangeHistoryMapper;
@@ -28,8 +28,8 @@ public class AgencyMarketersService {
     public void updateUserStatus(UserDto.Request.UpdateStatus request, Integer loginUserNo) {
         User user = UserFindUtils.findByIdOrElseThrow(request.getId(), this.userRepository);
 
-        this.userQueryMapper.updateUserStatus(request, user, loginUserNo);
-        this.userQueryMapper.insertUserApproveLog(request, user, loginUserNo);
+        this.userSaveQueryMapper.updateUserStatus(request, user, loginUserNo);
+        this.userSaveQueryMapper.insertUserApproveLog(request, user, loginUserNo);
     }
 
 
@@ -46,8 +46,8 @@ public class AgencyMarketersService {
         UserRolesChangeHistory userRolesChangeHistory = this.userRolesChangeHistoryMapper.toEntity(history);
         this.userRolesChangeHistoryRepository.save(userRolesChangeHistory);
 
-        this.userQueryMapper.deleteUserRoles(request, userNo, loginUserNo);
-        this.userQueryMapper.updateUserRoles(request, userNo, loginUserNo);
-        this.userQueryMapper.updateUserUpdDate(userNo, loginUserNo);
+        this.userSaveQueryMapper.deleteUserRoles(request, userNo, loginUserNo);
+        this.userSaveQueryMapper.updateUserRoles(request, userNo, loginUserNo);
+        this.userSaveQueryMapper.updateUserUpdDate(userNo, loginUserNo);
     }
 }

@@ -17,11 +17,4 @@ public interface UserQueryMapper {
     );
 
     long countSearch(@Param("request") UserDto.Request.Search request);
-
-    void updateUserStatus(UserDto.Request.UpdateStatus request, User user, Integer loginUserNo);
-    void insertUserApproveLog(UserDto.Request.UpdateStatus request, User user, Integer loginUserNo);
-
-    void updateUserRoles(AgencyMarketersDto.Request.UpdateAgencyRoles request, Integer userNo, Integer loginUserNo);
-    void deleteUserRoles(AgencyMarketersDto.Request.UpdateAgencyRoles request, Integer userNo, Integer loginUserNo);
-    void updateUserUpdDate(Integer userNo, Integer loginUserNo);
 }
