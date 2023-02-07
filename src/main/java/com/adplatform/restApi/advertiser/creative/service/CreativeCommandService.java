@@ -2,7 +2,7 @@
 package com.adplatform.restApi.advertiser.creative.service;
 
 import com.adplatform.restApi.advertiser.creative.dao.CreativeRepository;
-import com.adplatform.restApi.advertiser.creative.dao.PlacementCreativeRepository;
+import com.adplatform.restApi.advertiser.creative.dao.CreativePlacementRepository;
 import com.adplatform.restApi.advertiser.creative.domain.*;
 import com.adplatform.restApi.advertiser.creative.dto.CreativeDto;
 import com.adplatform.restApi.advertiser.creative.dto.CreativeMapper;
@@ -34,7 +34,7 @@ public class CreativeCommandService {
     private final CreativeRepository creativeRepository;
     private final PlacementRepository placementRepository;
 
-    private final PlacementCreativeRepository placementCreativeRepository;
+    private final CreativePlacementRepository creativePlacementRepository;
     private final FileService fileService;
     private final CreativeMapper creativeMapper;
 
@@ -57,8 +57,8 @@ public class CreativeCommandService {
 
     public void update(CreativeDto.Request.Update request) {
         try{
-            // placement_creative_info delete
-            this.placementCreativeRepository.deletePlacementCreative(request.getCreativeId());
+            // creative_placement_info delete
+            this.creativePlacementRepository.deleteCreativePlacement(request.getCreativeId());
             List<Placement> placement = this.findByPlacementId(request.getPlacements());
             Creative creative = CreativeFindUtils.findByIdOrElseThrow(request.getCreativeId(), this.creativeRepository)
                     .update(request, placement)

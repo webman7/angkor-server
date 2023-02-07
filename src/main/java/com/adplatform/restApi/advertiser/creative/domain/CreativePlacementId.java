@@ -11,7 +11,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
-public class PlacementCreativeId implements Serializable {
+public class CreativePlacementId implements Serializable {
     private static final long serialVersionUID = -2846137600408817356L;
     @Column(name = "placement_info_id")
     private Integer placementId;

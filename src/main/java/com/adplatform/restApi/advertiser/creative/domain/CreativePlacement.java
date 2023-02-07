@@ -11,18 +11,18 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "placement_creative_info")
-public class PlacementCreative {
+@Table(name = "creative_placement_info")
+public class CreativePlacement {
     @EmbeddedId
-    private final PlacementCreativeId id = new PlacementCreativeId();
-
-    @MapsId("placementId")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "placement_info_id")
-    private Placement placement;
+    private final CreativePlacementId id = new CreativePlacementId();
 
     @MapsId("creativeId")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "creative_info_id")
     private Creative creative;
+
+    @MapsId("placementId")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "placement_info_id")
+    private Placement placement;
 }

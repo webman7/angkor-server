@@ -103,7 +103,7 @@ public class Creative extends BaseUpdatedEntity {
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "placement_creative_info",
+            name = "creative_placement_info",
             joinColumns = @JoinColumn(name = "creative_info_id"),
             inverseJoinColumns = @JoinColumn(name = "placement_info_id"))
     private final Set<Placement> placements = new HashSet<>();
@@ -252,20 +252,20 @@ public class Creative extends BaseUpdatedEntity {
     @NoArgsConstructor
     @Entity
     @EntityListeners(AuditingEntityListener.class)
-    @Table(name = "placement_creative_info")
-    public static class PlacementCreative {
+    @Table(name = "creative_placement_info")
+    public static class CreativePlacement {
         @EmbeddedId
-        private final PlacementCreativeId id = new PlacementCreativeId();
-
-        @MapsId("placementId")
-        @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn(name = "placement_info_id")
-        private Placement placement;
+        private final CreativePlacementId id = new CreativePlacementId();
 
         @MapsId("creativeId")
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "creative_info_id")
         private Creative creative;
+
+        @MapsId("placementId")
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "placement_info_id")
+        private Placement placement;
     }
 
     @Getter
@@ -273,11 +273,11 @@ public class Creative extends BaseUpdatedEntity {
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Embeddable
-    public static class PlacementCreativeId implements Serializable {
-        @Column(name = "placement_info_id")
-        private Integer placementId;
-
+    public static class CreativePlacementId implements Serializable {
         @Column(name = "creative_info_id")
         private Integer creativeId;
+
+        @Column(name = "placement_info_id")
+        private Integer placementId;
     }
 }
