@@ -2,6 +2,7 @@ package com.adplatform.restApi.agency.company.dto;
 
 import com.adplatform.restApi.advertiser.adaccount.domain.AdAccount;
 import com.adplatform.restApi.advertiser.company.domain.Company;
+import com.adplatform.restApi.advertiser.user.domain.User;
 import com.adplatform.restApi.advertiser.wallet.dto.WalletDto;
 import com.adplatform.restApi.global.value.Address;
 import com.querydsl.core.annotations.QueryProjection;
@@ -38,6 +39,8 @@ public abstract class AgencyCompanyDto {
         public static class Detail {
             private Integer id;
             private String name;
+            private Integer userId;
+            private String loginId;
             private Company.Type type;
             private String registrationNumber;
             private String representationName;
