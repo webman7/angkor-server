@@ -34,7 +34,7 @@ public class AgencyCompanyQueryApi {
     @GetMapping("/my")
     public AgencyCompanyDto.Response.Detail my() {
         User user = UserFindUtils.findByIdOrElseThrow(SecurityUtils.getLoginUserNo(), this.userRepository);
-        return this.agencyCompanyMapper.toDetailResponse(AgencyCompanyFindUtils.findByIdOrElseThrow(user.getCompany().getId(), this.agencyCompanyRepository), user.getId(), user.getLoginId());
+        return this.agencyCompanyMapper.toDetailResponse(AgencyCompanyFindUtils.findByIdOrElseThrow(user.getCompany().getId(), this.agencyCompanyRepository), user.getId(), user.getName(), user.getLoginId());
     }
 
     @ResponseStatus(HttpStatus.OK)

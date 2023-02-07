@@ -12,11 +12,12 @@ import org.mapstruct.Named;
 @Mapper(config = BaseMapperConfig.class, imports = Email.class)
 public interface AgencyCompanyMapper {
     @Mapping(target = "userId", source = "userId")
+    @Mapping(target = "userName", source = "userName")
     @Mapping(target = "loginId", source = "loginId")
     @Mapping(target = "address", source = "company.address")
     @Mapping(target = "taxBillEmail1", qualifiedByName = "getEmail")
     @Mapping(target = "taxBillEmail2", qualifiedByName = "getEmail")
-    AgencyCompanyDto.Response.Detail toDetailResponse(Company company, Integer userId, String loginId);
+    AgencyCompanyDto.Response.Detail toDetailResponse(Company company, Integer userId, String userName, String loginId);
 
     @Named("getEmail")
     default String getEmail(Email email) {

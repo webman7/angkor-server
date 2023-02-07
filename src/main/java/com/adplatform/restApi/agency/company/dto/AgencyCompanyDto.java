@@ -40,6 +40,7 @@ public abstract class AgencyCompanyDto {
             private Integer id;
             private String name;
             private Integer userId;
+            private String userName;
             private String loginId;
             private Company.Type type;
             private String registrationNumber;
