@@ -52,6 +52,8 @@ public class BusinessRightDto {
         @Setter
         public static class Search {
             private String platformType;
+            private String searchType;
+            private String searchKeyword;
             private String businessRightStatus;
             private Integer companyId;
         }

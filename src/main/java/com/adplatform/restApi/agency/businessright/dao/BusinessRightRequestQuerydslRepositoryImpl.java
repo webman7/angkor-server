@@ -42,6 +42,7 @@ public class BusinessRightRequestQuerydslRepositoryImpl implements BusinessRight
                         adAccount.id.eq(businessRightRequest.adAccountId),
                         this.eqPlatformType(request.getPlatformType()),
                         this.eqStatus(request.getBusinessRightStatus()),
+                        this.eqSearchKeyword(request.getSearchType(), request.getSearchKeyword()),
                         businessRightRequest.createdUserNo.eq(user.id),
                         businessRightRequest.requestCompanyId.eq(request.getCompanyId())
                 );
@@ -68,6 +69,7 @@ public class BusinessRightRequestQuerydslRepositoryImpl implements BusinessRight
                         adAccount.id.eq(businessRightRequest.adAccountId),
                         this.eqPlatformType(request.getPlatformType()),
                         this.eqStatus(request.getBusinessRightStatus()),
+                        this.eqSearchKeyword(request.getSearchType(), request.getSearchKeyword()),
                         businessRightRequest.createdUserNo.eq(user.id),
                         businessRightRequest.requestCompanyId.eq(request.getCompanyId())
                 );
@@ -88,6 +90,24 @@ public class BusinessRightRequestQuerydslRepositoryImpl implements BusinessRight
     private BooleanExpression eqStatus(String status) {
         try {
             return status != null && !status.isEmpty() ? businessRightRequest.status.eq(BusinessRightRequest.Status.valueOf(status)) : null;
+        } catch (java.lang.IllegalArgumentException e) {
+            return null;
+        }
+    }
+
+    private BooleanExpression eqSearchKeyword(String searchType, String searchKeyword) {
+        try {
+            if(searchKeyword != null && !searchKeyword.isEmpty()) {
+                if(searchType.equals("AD_ACCOUNT_ID")) {
+                    return adAccount.id.eq(Integer.parseInt(searchKeyword));
+                } else if(searchType.equals("AD_ACCOUNT_NAME")) {
+                    return adAccount.name.contains(searchKeyword);
+                } else {
+                    return user.name.contains(searchKeyword);
+                }
+            } else {
+                return null;
+            }
         } catch (java.lang.IllegalArgumentException e) {
             return null;
         }
