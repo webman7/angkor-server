@@ -15,7 +15,6 @@ public interface AdAccountMapper {
     @Mapping(target = "user", source = "user")
     @Mapping(target = "platformType", expression = "java(AdAccount.PlatformType.AD)")
     @Mapping(target = "name", source = "request.name")
-    @Mapping(target = "agencyRegister", expression = "java(false)")
     @Mapping(target = "businessRight", expression = "java(false)")
     @Mapping(target = "requestBusinessRight", expression = "java(true)")
     @Mapping(target = "creditLimit", ignore = true)

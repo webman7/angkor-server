@@ -32,6 +32,8 @@ public class AdAccountDto {
             @Size(min = 1, max = 20)
             @NotBlank
             private String name;
+
+            private boolean agencyRegister;
         }
 
         @Getter

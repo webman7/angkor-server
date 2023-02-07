@@ -36,14 +36,15 @@ public class AdAccountSaveService {
     public void save(AdAccountDto.Request.Save request, Integer loginUserNo) {
         User user = this.userQueryService.findByIdOrElseThrow(loginUserNo);
         Company ownerCompany = this.companyService.findByIdOrElseThrow(request.getOwnerCompany().getId());
-//        if(user.getCompany().getType().toString().equals("ADVERTISER")) {
+        if(user.getCompany().getType().toString().equals("ADVERTISER")) {
+            request.setAgencyRegister(false);
 //            AdAccount adAccount = this.adAccountMapper.toEntity(request, user)
 //                    .addAdAccountUser(user, AdAccountUser.MemberType.MASTER, AdAccountUser.RequestStatus.Y)
 //                    .changeWalletMaster(WalletMaster.create(), this.cashRepository.findAll());
 //            this.adAccountRepository.save(adAccount);
-//        } else if(user.getCompany().getType().toString().equals("AGENCY")) {
-//
-//        }
+        } else if(user.getCompany().getType().toString().equals("AGENCY")) {
+            request.setAgencyRegister(true);
+        }
 
         AdAccount adAccount = this.adAccountMapper.toEntity(request, user)
                 .addAdAccountUser(user, AdAccountUser.MemberType.MASTER, AdAccountUser.RequestStatus.Y)
