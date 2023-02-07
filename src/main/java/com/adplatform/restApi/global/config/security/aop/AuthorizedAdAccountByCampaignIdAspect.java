@@ -1,6 +1,6 @@
 package com.adplatform.restApi.global.config.security.aop;
 
-import com.adplatform.restApi.advertiser.adaccount.dao.user.AdAccountUserRepository;
+import com.adplatform.restApi.adaccount.dao.user.AdAccountUserRepository;
 import com.adplatform.restApi.advertiser.campaign.dao.campaign.CampaignRepository;
 import com.adplatform.restApi.advertiser.campaign.service.CampaignFindUtils;
 import lombok.RequiredArgsConstructor;

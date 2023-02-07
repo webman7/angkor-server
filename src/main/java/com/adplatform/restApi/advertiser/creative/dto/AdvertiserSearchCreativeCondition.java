@@ -1,7 +1,7 @@
 package com.adplatform.restApi.advertiser.creative.dto;
 
 import com.adplatform.restApi.advertiser.creative.domain.Creative;
-import com.adplatform.restApi.advertiser.statistics.dto.ReportCondition;
+import com.adplatform.restApi.statistics.dto.ReportCondition;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,7 +1,7 @@
 package com.adplatform.restApi.global.config.security.aop;
 
-import com.adplatform.restApi.advertiser.adaccount.dao.user.AdAccountUserRepository;
-import com.adplatform.restApi.advertiser.adaccount.dto.adaccount.AdAccountIdGetter;
+import com.adplatform.restApi.adaccount.dao.user.AdAccountUserRepository;
+import com.adplatform.restApi.adaccount.dto.adaccount.AdAccountIdGetter;
 import com.adplatform.restApi.advertiser.adgroup.dao.adgroup.AdGroupRepository;
 import com.adplatform.restApi.advertiser.adgroup.dto.adgroup.AdGroupIdGetter;
 import com.adplatform.restApi.advertiser.adgroup.service.AdGroupFindUtils;
@@ -28,7 +28,7 @@ import static com.adplatform.restApi.global.config.security.aop.AdAccountUserVal
  * @author Seohyun Lee
  * @since 1.0
  * @see com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount AuthorizedAdAccount
- * @see com.adplatform.restApi.advertiser.adaccount.dto.adaccount.AdAccountIdGetter AdAccountIdGetter
+ * @see AdAccountIdGetter AdAccountIdGetter
  * @see com.adplatform.restApi.advertiser.campaign.dto.CampaignIdGetter CampaignIdGetter
  * @see com.adplatform.restApi.advertiser.adgroup.dto.adgroup.AdGroupIdGetter AdGroupIdGetter
  * @see com.adplatform.restApi.advertiser.creative.dto.CreativeIdGetter CreativeIdGetter

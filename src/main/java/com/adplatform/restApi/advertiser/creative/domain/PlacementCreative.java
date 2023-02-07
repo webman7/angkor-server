@@ -1,6 +1,6 @@
 package com.adplatform.restApi.advertiser.creative.domain;
 
-import com.adplatform.restApi.advertiser.placement.domain.Placement;
+import com.adplatform.restApi.placement.domain.Placement;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;

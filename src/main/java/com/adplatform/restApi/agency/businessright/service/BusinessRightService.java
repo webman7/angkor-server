@@ -1,8 +1,5 @@
 package com.adplatform.restApi.agency.businessright.service;
 
-import com.adplatform.restApi.advertiser.company.service.CompanyFindUtils;
-import com.adplatform.restApi.advertiser.statistics.dto.SaleAmountDto;
-import com.adplatform.restApi.advertiser.wallet.dto.WalletDto;
 import com.adplatform.restApi.agency.businessright.dao.BusinessRightRepository;
 import com.adplatform.restApi.agency.businessright.dao.BusinessRightRequestRepository;
 import com.adplatform.restApi.agency.businessright.domain.BusinessRight;
@@ -10,7 +7,6 @@ import com.adplatform.restApi.agency.businessright.domain.BusinessRightRequest;
 import com.adplatform.restApi.agency.businessright.dto.BusinessRightDto;
 import com.adplatform.restApi.agency.businessright.dto.BusinessRightMapper;
 import com.adplatform.restApi.agency.businessright.dto.BusinessRightRequestMapper;
-import com.adplatform.restApi.batch.dto.BatchStatusDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

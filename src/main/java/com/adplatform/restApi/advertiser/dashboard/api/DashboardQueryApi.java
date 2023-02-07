@@ -1,6 +1,6 @@
 package com.adplatform.restApi.advertiser.dashboard.api;
 
-import com.adplatform.restApi.advertiser.adaccount.dao.adaccount.AdAccountRepository;
+import com.adplatform.restApi.adaccount.dao.adaccount.AdAccountRepository;
 import com.adplatform.restApi.advertiser.dashboard.dao.dashboard.mapper.DashboardQueryMapper;
 import com.adplatform.restApi.advertiser.dashboard.dto.DashboardDto;
 import lombok.RequiredArgsConstructor;

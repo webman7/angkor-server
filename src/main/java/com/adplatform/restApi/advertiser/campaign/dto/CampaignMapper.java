@@ -1,6 +1,6 @@
 package com.adplatform.restApi.advertiser.campaign.dto;
 
-import com.adplatform.restApi.advertiser.adaccount.domain.AdAccount;
+import com.adplatform.restApi.adaccount.domain.AdAccount;
 import com.adplatform.restApi.advertiser.campaign.domain.AdTypeAndGoal;
 import com.adplatform.restApi.advertiser.campaign.domain.Campaign;
 import com.adplatform.restApi.global.dto.BaseMapperConfig;

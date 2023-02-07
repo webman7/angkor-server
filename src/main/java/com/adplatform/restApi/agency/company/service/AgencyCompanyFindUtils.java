@@ -1,7 +1,7 @@
 package com.adplatform.restApi.agency.company.service;
 
-import com.adplatform.restApi.advertiser.company.domain.Company;
-import com.adplatform.restApi.advertiser.company.exception.CompanyNotFoundException;
+import com.adplatform.restApi.company.domain.Company;
+import com.adplatform.restApi.company.exception.CompanyNotFoundException;
 import com.adplatform.restApi.agency.company.dao.AgencyCompanyRepository;
 
 public class AgencyCompanyFindUtils {

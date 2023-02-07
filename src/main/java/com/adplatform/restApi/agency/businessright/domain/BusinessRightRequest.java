@@ -1,11 +1,7 @@
 package com.adplatform.restApi.agency.businessright.domain;
 
-import com.adplatform.restApi.advertiser.company.domain.Company;
-import com.adplatform.restApi.advertiser.company.dto.CompanyDto;
 import com.adplatform.restApi.agency.businessright.dto.BusinessRightDto;
-import com.adplatform.restApi.global.entity.BaseCreatedEntity;
 import com.adplatform.restApi.global.entity.BaseUpdatedEntity;
-import com.adplatform.restApi.global.value.Email;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

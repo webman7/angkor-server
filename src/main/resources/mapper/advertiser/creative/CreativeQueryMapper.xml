@@ -22,7 +22,7 @@ since 1.0
         <result column="fileName" property="fileName"/>
         <result column="fileType" property="fileType"/>
         <result column="url" property="url"/>
-        <association property="report" javaType="com.adplatform.restApi.advertiser.statistics.dto.ReportDto$Response">
+        <association property="report" javaType="com.adplatform.restApi.statistics.dto.ReportDto$Response">
             <result column="cost" property="cost"/>
             <result column="impression" property="impression"/>
             <result column="click" property="click"/>

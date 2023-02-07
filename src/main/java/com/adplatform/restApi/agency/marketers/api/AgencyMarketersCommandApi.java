@@ -1,7 +1,6 @@
 package com.adplatform.restApi.agency.marketers.api;
 
-import com.adplatform.restApi.advertiser.user.dto.user.UserDto;
-import com.adplatform.restApi.agency.businessright.dto.BusinessRightDto;
+import com.adplatform.restApi.user.dto.user.UserDto;
 import com.adplatform.restApi.agency.marketers.dto.AgencyMarketersDto;
 import com.adplatform.restApi.agency.marketers.service.AgencyMarketersService;
 import com.adplatform.restApi.global.config.security.util.SecurityUtils;

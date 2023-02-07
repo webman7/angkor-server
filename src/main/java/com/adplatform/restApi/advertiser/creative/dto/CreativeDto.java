@@ -1,13 +1,13 @@
 package com.adplatform.restApi.advertiser.creative.dto;
 
-import com.adplatform.restApi.advertiser.adaccount.dto.adaccount.AdAccountIdGetter;
+import com.adplatform.restApi.adaccount.dto.adaccount.AdAccountIdGetter;
 import com.adplatform.restApi.advertiser.adgroup.dto.adgroup.AdGroupIdGetter;
 import com.adplatform.restApi.advertiser.campaign.dto.CampaignDto;
 import com.adplatform.restApi.advertiser.creative.domain.Creative;
 import com.adplatform.restApi.advertiser.creative.domain.CreativeFile;
 import com.adplatform.restApi.advertiser.creative.domain.CreativeLanding;
 import com.adplatform.restApi.advertiser.creative.domain.FileInformation;
-import com.adplatform.restApi.advertiser.statistics.dto.ReportDto;
+import com.adplatform.restApi.statistics.dto.ReportDto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;

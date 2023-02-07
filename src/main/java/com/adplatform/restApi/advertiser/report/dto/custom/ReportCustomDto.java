@@ -1,7 +1,7 @@
 package com.adplatform.restApi.advertiser.report.dto.custom;
 
 import com.adplatform.restApi.advertiser.campaign.dto.AdTypeAndGoalDto;
-import com.adplatform.restApi.advertiser.statistics.dto.ReportDto;
+import com.adplatform.restApi.statistics.dto.ReportDto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;

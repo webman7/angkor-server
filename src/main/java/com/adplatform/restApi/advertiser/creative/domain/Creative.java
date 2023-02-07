@@ -2,7 +2,7 @@ package com.adplatform.restApi.advertiser.creative.domain;
 
 import com.adplatform.restApi.advertiser.adgroup.domain.AdGroup;
 import com.adplatform.restApi.advertiser.creative.dto.CreativeDto;
-import com.adplatform.restApi.advertiser.placement.domain.Placement;
+import com.adplatform.restApi.placement.domain.Placement;
 import com.adplatform.restApi.global.entity.BaseUpdatedEntity;
 import com.adplatform.restApi.infra.file.service.FileService;
 import lombok.*;

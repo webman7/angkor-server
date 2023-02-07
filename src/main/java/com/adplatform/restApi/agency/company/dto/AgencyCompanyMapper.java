@@ -1,8 +1,6 @@
 package com.adplatform.restApi.agency.company.dto;
 
-import com.adplatform.restApi.advertiser.company.domain.Company;
-import com.adplatform.restApi.advertiser.company.dto.CompanyDto;
-import com.adplatform.restApi.advertiser.user.domain.User;
+import com.adplatform.restApi.company.domain.Company;
 import com.adplatform.restApi.global.dto.BaseMapperConfig;
 import com.adplatform.restApi.global.value.Email;
 import org.mapstruct.Mapper;

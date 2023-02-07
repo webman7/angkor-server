@@ -1,6 +1,6 @@
 package com.adplatform.restApi.advertiser.campaign.dto;
 
-import com.adplatform.restApi.advertiser.adaccount.dto.adaccount.AdAccountIdGetter;
+import com.adplatform.restApi.adaccount.dto.adaccount.AdAccountIdGetter;
 import com.adplatform.restApi.advertiser.adgroup.dto.adgroup.AdvertiserSearchAdGroupCondition;
 import com.adplatform.restApi.advertiser.creative.dto.AdvertiserSearchCreativeCondition;
 import lombok.Getter;

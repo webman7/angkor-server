@@ -1,6 +1,6 @@
 package com.adplatform.restApi.global.config.security.service;
 
-import com.adplatform.restApi.advertiser.user.domain.User;
+import com.adplatform.restApi.user.domain.User;
 import com.adplatform.restApi.global.config.security.dto.TokenDto;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;

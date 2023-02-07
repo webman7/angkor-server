@@ -1,9 +1,9 @@
 package com.adplatform.restApi.advertiser.campaign.dto;
 
-import com.adplatform.restApi.advertiser.adaccount.dto.adaccount.AdAccountIdGetter;
+import com.adplatform.restApi.adaccount.dto.adaccount.AdAccountIdGetter;
 import com.adplatform.restApi.advertiser.adgroup.dto.adgroup.AdGroupDto;
 import com.adplatform.restApi.advertiser.campaign.domain.Campaign;
-import com.adplatform.restApi.advertiser.statistics.dto.ReportDto;
+import com.adplatform.restApi.statistics.dto.ReportDto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.AccessLevel;
 import lombok.Getter;

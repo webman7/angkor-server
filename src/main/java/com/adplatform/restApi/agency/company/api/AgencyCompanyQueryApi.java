@@ -1,8 +1,8 @@
 package com.adplatform.restApi.agency.company.api;
 
-import com.adplatform.restApi.advertiser.user.dao.UserRepository;
-import com.adplatform.restApi.advertiser.user.domain.User;
-import com.adplatform.restApi.advertiser.user.service.UserFindUtils;
+import com.adplatform.restApi.user.dao.UserRepository;
+import com.adplatform.restApi.user.domain.User;
+import com.adplatform.restApi.user.service.UserFindUtils;
 import com.adplatform.restApi.agency.company.dao.AgencyCompanyRepository;
 import com.adplatform.restApi.agency.company.dto.AgencyCompanyDto;
 import com.adplatform.restApi.agency.company.dao.mapper.AgencyCompanyQueryMapper;

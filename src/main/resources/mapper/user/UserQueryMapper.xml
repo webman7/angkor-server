@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+author junny
+since 1.0
+-->
+<mapper namespace="com.adplatform.restApi.user.dao.mapper.UserQueryMapper">
+    <resultMap id="mapSearch" type="com.adplatform.restApi.user.dto.user.UserDto$Response$Search">
+        <id column="id" property="id"/>
+        <result column="loginId" property="loginId"/>
+        <result column="name" property="name"/>
+        <result column="email" property="email"/>
+        <result column="phone" property="phone"/>
+        <result column="active" property="active"/>
+        <result column="roles" property="roles"/>
+        <result column="company" property="company"/>
+    </resultMap>
+
+    <sql id="searchUserSelectQuery">
+        SELECT
+                a.user_no as id,
+                a.user_id as loginId,
+                a.user_name as name,
+                a.email as email,
+                a.phone as phone,
+                a.active as active,
+                group_concat(c.name) as roles,
+                d.name as company
+        FROM user_info a
+        INNER JOIN user_roles b ON a.user_no=b.user_no
+        INNER JOIN roles_info c ON b.roles_info_id=c.id
+        INNER JOIN company_info d ON a.company_info_id=d.id
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="request.name and request.name.size() > 0">
+                AND (a.user_name LIKE CONCAT('%', #{request.name}, '%')
+                OR a.user_id LIKE CONCAT('%', #{request.name}, '%')
+                OR d.name LIKE CONCAT('%', #{request.name}, '%'))
+            </if>
+        </trim>
+        GROUP BY a.user_no
+    </sql>
+
+    <select id="search" resultMap="mapSearch">
+        <include refid="searchUserSelectQuery"/>
+        <include refid="common.sortAndOrder"/>
+        <include refid="common.limitAndOffset"/>
+    </select>
+
+    <select id="countSearch" resultType="long">
+        SELECT COUNT(*)
+        FROM (<include refid="searchUserSelectQuery"/>) a;
+    </select>
+
+    <insert id="insertUserApproveLog">
+        INSERT INTO user_approve_log (user_no, prev_active, reg_user_no, reg_date)
+        VALUES (#{user.id}, #{user.active}, #{loginUserNo}, NOW())
+    </insert>
+
+    <update id="updateUserStatus">
+        UPDATE user_info
+        SET active = #{request.status},
+        status_chg_user_no = #{loginUserNo},
+        status_chg_date = NOW(),
+        upd_user_no = #{loginUserNo},
+        upd_date = NOW()
+        WHERE user_no = #{user.id}
+    </update>
+
+    <delete id="deleteUserRoles">
+        DELETE FROM user_roles
+              WHERE user_no = #{userNo}
+                AND roles_info_id IN (
+                    SELECT id
+                      FROM roles_info
+                    <trim prefix="WHERE" prefixOverrides="AND | OR">
+                        <foreach collection="request.agencyRoles" item="name" open="AND name IN (" separator=", " close=")">
+                            #{name}
+                        </foreach>
+                    </trim>
+                    )
+    </delete>
+
+    <update id="updateUserRoles">
+        INSERT INTO user_roles (user_no, roles_info_id)
+        SELECT #{userNo}, id
+        FROM roles_info
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <foreach collection="request.agencyRoles" item="name" open="AND name IN (" separator=", " close=")">
+                #{name}
+            </foreach>
+        </trim>
+    </update>
+
+    <update id="updateUserUpdDate">
+        UPDATE user_info
+           SET upd_user_no = #{loginUserNo},
+               upd_date = NOW()
+         WHERE user_no = #{userNo}
+    </update>
+</mapper>

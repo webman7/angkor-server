@@ -1,6 +1,6 @@
 package com.adplatform.restApi.global.config.security.dto;
 
-import com.adplatform.restApi.advertiser.user.domain.User;
+import com.adplatform.restApi.user.domain.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

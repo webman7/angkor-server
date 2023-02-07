@@ -3,7 +3,7 @@ package com.adplatform.restApi.advertiser.dashboard.dto;
 import com.adplatform.restApi.advertiser.adgroup.dto.adgroup.AdvertiserSearchAdGroupCondition;
 import com.adplatform.restApi.advertiser.campaign.dto.AdvertiserSearchCampaignCondition;
 import com.adplatform.restApi.advertiser.creative.dto.AdvertiserSearchCreativeCondition;
-import com.adplatform.restApi.advertiser.statistics.dto.ReportDto;
+import com.adplatform.restApi.statistics.dto.ReportDto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;

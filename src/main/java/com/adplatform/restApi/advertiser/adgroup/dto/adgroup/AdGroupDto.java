@@ -1,12 +1,12 @@
 package com.adplatform.restApi.advertiser.adgroup.dto.adgroup;
 
-import com.adplatform.restApi.advertiser.adaccount.dto.adaccount.AdAccountIdGetter;
+import com.adplatform.restApi.adaccount.dto.adaccount.AdAccountIdGetter;
 import com.adplatform.restApi.advertiser.adgroup.domain.AdGroup;
 import com.adplatform.restApi.advertiser.adgroup.dto.schedule.AdGroupScheduleDto;
 import com.adplatform.restApi.advertiser.adgroup.dto.target.AdGroupDemographicTargetDto;
 import com.adplatform.restApi.advertiser.campaign.dto.CampaignDto;
 import com.adplatform.restApi.advertiser.campaign.dto.CampaignIdGetter;
-import com.adplatform.restApi.advertiser.statistics.dto.ReportDto;
+import com.adplatform.restApi.statistics.dto.ReportDto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 

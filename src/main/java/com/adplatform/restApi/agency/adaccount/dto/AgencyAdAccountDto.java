@@ -1,15 +1,7 @@
 package com.adplatform.restApi.agency.adaccount.dto;
 
-import com.adplatform.restApi.advertiser.adaccount.domain.AdAccount;
-import com.adplatform.restApi.advertiser.company.domain.Company;
-import com.adplatform.restApi.advertiser.wallet.dto.WalletDto;
-import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 
 public class AgencyAdAccountDto {
 

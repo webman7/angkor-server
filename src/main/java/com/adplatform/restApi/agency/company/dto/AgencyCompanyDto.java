@@ -1,9 +1,8 @@
 package com.adplatform.restApi.agency.company.dto;
 
-import com.adplatform.restApi.advertiser.adaccount.domain.AdAccount;
-import com.adplatform.restApi.advertiser.company.domain.Company;
-import com.adplatform.restApi.advertiser.user.domain.User;
-import com.adplatform.restApi.advertiser.wallet.dto.WalletDto;
+import com.adplatform.restApi.adaccount.domain.AdAccount;
+import com.adplatform.restApi.company.domain.Company;
+import com.adplatform.restApi.wallet.dto.WalletDto;
 import com.adplatform.restApi.global.value.Address;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package com.adplatform.restApi.agency.businessright.dao;
 
-import com.adplatform.restApi.advertiser.adaccount.domain.AdAccount;
+import com.adplatform.restApi.adaccount.domain.AdAccount;
 import com.adplatform.restApi.agency.businessright.domain.BusinessRightRequest;
 import com.adplatform.restApi.agency.businessright.dto.BusinessRightDto;
 import com.adplatform.restApi.agency.businessright.dto.QBusinessRightDto_Response_Search;
@@ -18,9 +18,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Objects;
 
-import static com.adplatform.restApi.advertiser.adaccount.domain.QAdAccount.adAccount;
-import static com.adplatform.restApi.advertiser.user.domain.QUser.user;
+import static com.adplatform.restApi.adaccount.domain.QAdAccount.adAccount;
 import static com.adplatform.restApi.agency.businessright.domain.QBusinessRightRequest.businessRightRequest;
+import static com.adplatform.restApi.user.domain.QUser.user;
 import static com.querydsl.core.types.ExpressionUtils.as;
 
 @RequiredArgsConstructor

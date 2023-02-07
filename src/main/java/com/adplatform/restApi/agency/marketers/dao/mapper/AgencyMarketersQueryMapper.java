@@ -1,6 +1,5 @@
 package com.adplatform.restApi.agency.marketers.dao.mapper;
 
-import com.adplatform.restApi.advertiser.user.domain.User;
 import com.adplatform.restApi.agency.marketers.dto.AgencyMarketersDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

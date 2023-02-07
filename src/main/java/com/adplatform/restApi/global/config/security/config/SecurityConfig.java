@@ -17,7 +17,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import static com.adplatform.restApi.advertiser.user.domain.Role.Type.*;
+import static com.adplatform.restApi.user.domain.Role.Type.*;
 
 /**
  * @author Seohyun Lee

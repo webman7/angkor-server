@@ -1,6 +1,6 @@
 package com.adplatform.restApi.advertiser.report.dao.custom;
 
-import com.adplatform.restApi.advertiser.adaccount.domain.AdAccount;
+import com.adplatform.restApi.adaccount.domain.AdAccount;
 import com.adplatform.restApi.advertiser.report.dto.custom.QReportCustomDto_Response_Default;
 import com.adplatform.restApi.advertiser.report.dto.custom.ReportCustomDto;
 import com.adplatform.restApi.global.util.QuerydslOrderSpecifierUtil;

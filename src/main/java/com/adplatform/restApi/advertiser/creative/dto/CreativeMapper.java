@@ -7,7 +7,7 @@ import com.adplatform.restApi.advertiser.creative.domain.Creative;
 import com.adplatform.restApi.advertiser.creative.domain.CreativeFile;
 import com.adplatform.restApi.advertiser.creative.domain.CreativeLanding;
 import com.adplatform.restApi.advertiser.creative.domain.CreativeOpinionProofFile;
-import com.adplatform.restApi.advertiser.placement.domain.Placement;
+import com.adplatform.restApi.placement.domain.Placement;
 import com.adplatform.restApi.global.dto.BaseMapperConfig;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -1,12 +1,5 @@
 package com.adplatform.restApi.agency.marketers.api;
 
-import com.adplatform.restApi.advertiser.user.dao.UserRepository;
-import com.adplatform.restApi.advertiser.user.domain.User;
-import com.adplatform.restApi.advertiser.user.service.UserFindUtils;
-import com.adplatform.restApi.agency.adaccount.dto.AgencyAdAccountDto;
-import com.adplatform.restApi.agency.businessright.dto.BusinessRightDto;
-import com.adplatform.restApi.agency.company.dto.AgencyCompanyDto;
-import com.adplatform.restApi.agency.company.service.AgencyCompanyFindUtils;
 import com.adplatform.restApi.agency.marketers.dao.mapper.AgencyMarketersQueryMapper;
 import com.adplatform.restApi.agency.marketers.dto.AgencyMarketersDto;
 import com.adplatform.restApi.global.config.security.util.SecurityUtils;
@@ -18,9 +11,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController

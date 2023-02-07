@@ -1,6 +1,6 @@
 package com.adplatform.restApi.agency.businessright.service;
 
-import com.adplatform.restApi.advertiser.company.exception.CompanyNotFoundException;
+import com.adplatform.restApi.company.exception.CompanyNotFoundException;
 import com.adplatform.restApi.agency.businessright.dao.BusinessRightRequestRepository;
 import com.adplatform.restApi.agency.businessright.domain.BusinessRightRequest;
 

@@ -1,11 +1,11 @@
 package com.adplatform.restApi.agency.company.dao;
 
-import com.adplatform.restApi.advertiser.adaccount.domain.AdAccount;
-import com.adplatform.restApi.advertiser.adaccount.domain.AdAccountUser;
-import com.adplatform.restApi.advertiser.wallet.dto.QWalletDto_Response_WalletSpend;
+import com.adplatform.restApi.adaccount.domain.AdAccount;
+import com.adplatform.restApi.adaccount.domain.AdAccountUser;
 import com.adplatform.restApi.agency.company.dto.AgencyCompanyDto;
 import com.adplatform.restApi.agency.company.dto.QAgencyCompanyDto_Response_SearchForAdmin;
 import com.adplatform.restApi.global.util.QuerydslOrderSpecifierUtil;
+import com.adplatform.restApi.wallet.dto.QWalletDto_Response_WalletSpend;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -22,15 +22,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 
-import static com.adplatform.restApi.advertiser.adaccount.domain.QAdAccount.adAccount;
-import static com.adplatform.restApi.advertiser.adaccount.domain.QAdAccountUser.adAccountUser;
-import static com.adplatform.restApi.advertiser.company.domain.QCompany.company;
-import static com.adplatform.restApi.advertiser.statistics.domain.report.QReportAdGroupDaily.reportAdGroupDaily;
-import static com.adplatform.restApi.advertiser.statistics.domain.sale.QSaleAmountDaily.saleAmountDaily;
-import static com.adplatform.restApi.advertiser.user.domain.QUser.user;
-import static com.adplatform.restApi.advertiser.wallet.domain.QCash.cash;
-import static com.adplatform.restApi.advertiser.wallet.domain.QWalletCashTotal.walletCashTotal;
+import static com.adplatform.restApi.adaccount.domain.QAdAccount.adAccount;
+import static com.adplatform.restApi.adaccount.domain.QAdAccountUser.adAccountUser;
 import static com.adplatform.restApi.agency.businessright.domain.QBusinessRight.businessRight;
+import static com.adplatform.restApi.company.domain.QCompany.company;
+import static com.adplatform.restApi.statistics.domain.report.QReportAdGroupDaily.reportAdGroupDaily;
+import static com.adplatform.restApi.statistics.domain.sale.QSaleAmountDaily.saleAmountDaily;
+import static com.adplatform.restApi.user.domain.QUser.user;
+import static com.adplatform.restApi.wallet.domain.QCash.cash;
+import static com.adplatform.restApi.wallet.domain.QWalletCashTotal.walletCashTotal;
 import static com.querydsl.core.types.ExpressionUtils.as;
 import static com.querydsl.jpa.JPAExpressions.select;
 
