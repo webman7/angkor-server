@@ -26,11 +26,9 @@ since 1.0
             <if test="request.searchType == 'AD_ACCOUNT_NAME'">
                 AND ad.name LIKE CONCAT('%', #{request.searchKeyword}, '%')
             </if>
-            <if test="request.searchType == 'MARKETER_NAME'">
+            <if test="request.searchType == 'BUSINESS_REGISTRATION_NUMBER'">
                 AND ad.business_registration_number LIKE CONCAT('%', #{request.searchKeyword}, '%')
             </if>
-        </if>
-        <if test="request.status">
         </if>
     </sql>
 
