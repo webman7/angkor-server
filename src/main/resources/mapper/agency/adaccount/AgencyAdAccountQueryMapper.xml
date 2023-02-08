@@ -27,7 +27,7 @@ since 1.0
                 AND ad.name LIKE CONCAT('%', #{request.searchKeyword}, '%')
             </if>
             <if test="request.searchType == 'BUSINESS_REGISTRATION_NUMBER'">
-                AND ad.business_registration_number LIKE CONCAT('%', #{request.searchKeyword}, '%')
+                AND ad.business_registration_number = #{request.searchKeyword}
             </if>
         </if>
     </sql>
