@@ -24,7 +24,7 @@ public class AgencyMarketersCommandApi {
 
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{id}/roles")
-    public void updateUserRoles(@PathVariable Integer id, AgencyMarketersDto.Request.UpdateAgencyRoles request) {
+    public void updateUserRoles(@PathVariable Integer id, @RequestBody @Valid AgencyMarketersDto.Request.UpdateAgencyRoles request) {
         this.agencyMarketersService.updateUserRoles(request, id, SecurityUtils.getLoginUserNo());
     }
 }
