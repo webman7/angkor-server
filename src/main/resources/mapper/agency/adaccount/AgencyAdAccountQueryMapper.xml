@@ -41,7 +41,7 @@ since 1.0
                                         ON ad.id = br.adaccount_info_id
                                        AND br.start_date <![CDATA[ <= ]]> DATE_FORMAT(NOW(), '%Y%m%d')
                                        AND br.end_date <![CDATA[ >= ]]> DATE_FORMAT(NOW(), '%Y%m%d')
-         WHERE ad.business_right_yn = 'Y'
+         WHERE ad.request_business_right_yn = 'Y'
            AND ad.platform_type = #{request.platformType}
         <include refid="searchCondition"/>
     </sql>
