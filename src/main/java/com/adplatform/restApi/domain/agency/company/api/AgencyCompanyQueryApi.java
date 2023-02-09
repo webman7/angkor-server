@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -39,7 +40,7 @@ public class AgencyCompanyQueryApi {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}/walletSpendSummary")
-    public AgencyCompanyDto.Response.SpendSummary walletSpendSummary(@PathVariable Integer id) {
+    public List<AgencyCompanyDto.Response.SpendSummary> walletSpendSummary(@PathVariable Integer id) {
         return this.agencyCompanyQueryMapper.walletSpendSummary(id);
     }
 
