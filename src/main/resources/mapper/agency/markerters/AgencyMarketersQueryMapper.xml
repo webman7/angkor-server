@@ -56,6 +56,8 @@
 
     <select id="search" resultMap="mapSearch">
         <include refid="searchSelectQuery"/>
+        <include refid="common.sortAndOrder"/>
+        <include refid="common.limitAndOffset"/>
     </select>
 
     <select id="countSearch" resultType="long">
@@ -107,11 +109,12 @@
             </otherwise>
         </choose>
         GROUP BY ui.user_no
-        ORDER BY ui.reg_date DESC
     </sql>
 
     <select id="searchMarketers" resultMap="mapSearchMarketers">
         <include refid="searchMarketersSelectQuery"/>
+        <include refid="common.sortAndOrder"/>
+        <include refid="common.limitAndOffset"/>
     </select>
 
     <select id="countSearchMarketers" resultType="long">
