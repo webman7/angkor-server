@@ -42,7 +42,7 @@ since 1.0
                     (t1.supply_amount * t1.commission_rate / 100) AS commission_supply_amount, (t1.supply_amount * t1.commission_rate / 100 * 0.1) AS commission_vat_amount,
                     ((t1.supply_amount * t1.commission_rate / 100) + (t1.supply_amount * t1.commission_rate / 100 * 0.1)) AS commission_amount
                FROM (
-                    SELECT #{exeDate} AS stat_date, a.adaccount_info_id, a.owner_company_info_id, a.company_info_id, SUM(a.supply_amount) AS supply_amount, (SELECT commission_rate FROM platform_type_info WHERE platform_type = 'AD') AS commission_rate
+                    SELECT #{endDate} AS stat_date, a.adaccount_info_id, a.owner_company_info_id, a.company_info_id, SUM(a.supply_amount) AS supply_amount, (SELECT commission_rate FROM platform_type_info WHERE platform_type = 'AD') AS commission_rate
                       FROM adaccount_settlement_daily a
                      WHERE stat_date BETWEEN #{startDate} AND #{endDate}
                      GROUP BY a.adaccount_info_id, a.owner_company_info_id, a.company_info_id
@@ -56,7 +56,7 @@ since 1.0
              SELECT t1.adaccount_info_id, t1.owner_company_info_id, t1.company_info_id, t1.stat_date, t1.supply_amount,
                     (t1.supply_amount * 0.1) AS vat_amount, (t1.supply_amount + (t1.supply_amount * 0.1)) AS total_amount
               FROM (
-                   SELECT #{exeDate} AS stat_date, a.adaccount_info_id, a.owner_company_info_id, a.company_info_id, SUM(a.supply_amount) AS supply_amount
+                   SELECT #{endDate} AS stat_date, a.adaccount_info_id, a.owner_company_info_id, a.company_info_id, SUM(a.supply_amount) AS supply_amount
                      FROM adaccount_settlement_daily a
                     WHERE stat_date BETWEEN #{startDate} AND #{endDate}
                     GROUP BY a.adaccount_info_id, a.owner_company_info_id, a.company_info_id
@@ -74,7 +74,7 @@ since 1.0
                     (t1.supply_amount * 0.1) AS vat_amount,
                     (t1.supply_amount + (t1.supply_amount * 0.1)) AS total_amount
                FROM (
-                    SELECT #{exeDate} AS stat_date, a.adaccount_info_id, a.media_info_id, SUM(a.supply_amount) AS supply_amount
+                    SELECT #{endDate} AS stat_date, a.adaccount_info_id, a.media_info_id, SUM(a.supply_amount) AS supply_amount
                       FROM media_settlement_daily a
                      WHERE stat_date BETWEEN #{startDate} AND #{endDate}
                      GROUP BY a.adaccount_info_id, a.media_info_id

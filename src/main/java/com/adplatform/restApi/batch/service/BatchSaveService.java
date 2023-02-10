@@ -19,9 +19,11 @@ import com.adplatform.restApi.domain.wallet.dto.WalletDto;
 import com.adplatform.restApi.global.util.CommonUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -44,51 +46,83 @@ public class BatchSaveService {
 
 
     public void batchJob(Integer reportDate) {
+        try{
+            ////////////////////////////////////////////////////////////
+            // Daily Batch
+            ////////////////////////////////////////////////////////////
+            Calendar calendar = new GregorianCalendar();
+            SimpleDateFormat SDF = new SimpleDateFormat("yyyyMMdd");
+            calendar.add(Calendar.DATE, -1);
+            String chkDate = SDF.format(calendar.getTime());
 
-        ////////////////////////////////////////////////////////////
-        // Daily Batch
-        ////////////////////////////////////////////////////////////
-        Calendar calendar = new GregorianCalendar();
-        SimpleDateFormat SDF = new SimpleDateFormat("yyyyMMdd");
-        calendar.add(Calendar.DATE, -1);
-        String chkDate = SDF.format(calendar.getTime());
+            int exeDate = 0;
+            if (reportDate.equals(0)) {
+                exeDate = Integer.parseInt(chkDate);
+            } else {
+                exeDate = Integer.parseInt(CommonUtils.getBeforeYearMonthDayByYMD(String.valueOf(reportDate), 1));
+            }
 
-        int exeDate = 0;
-        if (reportDate.equals(0)) {
-            exeDate = Integer.parseInt(chkDate);
-        } else {
-            exeDate = Integer.parseInt(CommonUtils.getBeforeYearMonthDayByYMD(String.valueOf(reportDate), -1));
+            this.saleAmountDaily(exeDate);
+            try {
+                System.out.println("Sleep 3s: "  + LocalDateTime.now());
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            this.adAccountSettlementDaily(exeDate);
+            try {
+                System.out.println("Sleep 3s: "  + LocalDateTime.now());
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            this.mediaSettlementDaily(exeDate);
+            try {
+                System.out.println("Sleep 3s: "  + LocalDateTime.now());
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            ////////////////////////////////////////////////////////////
+            // Month Batch
+            ////////////////////////////////////////////////////////////
+            Calendar calendarMonth = new GregorianCalendar();
+            SimpleDateFormat SDFMonth = new SimpleDateFormat("yyyyMMdd");
+            String chkMonthDate = SDFMonth.format(calendarMonth.getTime());
+
+            int exeMonthDate = 0;
+            if (reportDate.equals(0)) {
+                exeMonthDate = Integer.parseInt(chkMonthDate);
+            } else {
+                exeMonthDate = reportDate;
+            }
+
+            if(String.valueOf(exeMonthDate).substring(6, 8).equals("01")) {
+                String BeforeMonthFirstDate = CommonUtils.getBeforeYearMonthByYMD(String.valueOf(exeMonthDate), 1);
+                String BeforeMonthLastDate = CommonUtils.getLastDayOfMonthByYMD(BeforeMonthFirstDate);
+                this.adAccountSettlementMonthly(Integer.parseInt(BeforeMonthFirstDate), Integer.parseInt(BeforeMonthLastDate));
+                try {
+                    System.out.println("Sleep 3s: "  + LocalDateTime.now());
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                this.adAccountTaxBillMonthly(Integer.parseInt(BeforeMonthFirstDate), Integer.parseInt(BeforeMonthLastDate));
+                try {
+                    System.out.println("Sleep 3s: "  + LocalDateTime.now());
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                // 매체 정산은 어떻게 할지 결정 후 추가
+    //            this.mediaSettlementMonthly(Integer.parseInt(BeforeMonthFirstDate), Integer.parseInt(BeforeMonthLastDate));
+                this.mediaTaxBillMonthly(Integer.parseInt(BeforeMonthFirstDate), Integer.parseInt(BeforeMonthLastDate));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        this.saleAmountDaily(exeDate);
-        this.adAccountSettlementDaily(exeDate);
-        this.mediaSettlementDaily(exeDate);
-
-        ////////////////////////////////////////////////////////////
-        // Month Batch
-        ////////////////////////////////////////////////////////////
-        Calendar calendarMonth = new GregorianCalendar();
-        SimpleDateFormat SDFMonth = new SimpleDateFormat("yyyyMMdd");
-        String chkMonthDate = SDFMonth.format(calendarMonth.getTime());
-
-        int exeMonthDate = 0;
-        if (reportDate.equals(0)) {
-            exeMonthDate = Integer.parseInt(chkMonthDate);
-        } else {
-            exeMonthDate = reportDate;
-        }
-
-        if(String.valueOf(exeMonthDate).substring(6, 8).equals("01")) {
-            String BeforeMonthFirstDate = CommonUtils.getBeforeYearMonthByYMD(String.valueOf(exeMonthDate), -1);
-            String BeforeMonthLastDate = CommonUtils.getLastDayOfMonthByYMD(BeforeMonthFirstDate);
-            this.adAccountSettlementMonthly(Integer.parseInt(BeforeMonthFirstDate), Integer.parseInt(BeforeMonthLastDate), Integer.parseInt(BeforeMonthLastDate));
-            this.adAccountTaxBillMonthly(Integer.parseInt(BeforeMonthFirstDate), Integer.parseInt(BeforeMonthLastDate), Integer.parseInt(BeforeMonthLastDate));
-            // 매체 정산은 어떻게 할지 결정 후 추가
-//            this.mediaSettlementMonthly(Integer.parseInt(BeforeMonthFirstDate), Integer.parseInt(BeforeMonthLastDate), Integer.parseInt(BeforeMonthLastDate));
-            this.mediaTaxBillMonthly(Integer.parseInt(BeforeMonthFirstDate), Integer.parseInt(BeforeMonthLastDate), Integer.parseInt(BeforeMonthLastDate));
-        }
-
-
 
     }
 
@@ -113,7 +147,7 @@ public class BatchSaveService {
         ////////////////////////////////////////////////////////////
         // 일별 금액 계산
         ////////////////////////////////////////////////////////////
-        List<BatchStatusDto.Response.ReportAdGroupCost> reportAdGroupCostsList = this.batchQueryMapper.reportAdGroupCost();
+        List<BatchStatusDto.Response.ReportAdGroupCost> reportAdGroupCostsList = this.batchQueryMapper.reportAdGroupCost(exeDate);
 
         for (BatchStatusDto.Response.ReportAdGroupCost co: reportAdGroupCostsList) {
             exeDate = co.getReportDate();
@@ -296,7 +330,7 @@ public class BatchSaveService {
         this.batchStatusRepository.save(batchStatus);
     }
 
-    public void adAccountSettlementMonthly(Integer firstDate, Integer lastDate, Integer exeDate) {
+    public void adAccountSettlementMonthly(Integer firstDate, Integer exeDate) {
         ////////////////////////////////////////////////////////////
         // Batch Code
         ////////////////////////////////////////////////////////////
@@ -308,7 +342,7 @@ public class BatchSaveService {
         // 선행 작업 체크
         ////////////////////////////////////////////////////////////
         // Batch Y Count
-        int repCnt = this.batchQueryMapper.getBatchStatusYNCount("D", lastDate, "adaccount_settlement_daily");
+        int repCnt = this.batchQueryMapper.getBatchStatusYNCount("D", exeDate, "adaccount_settlement_daily");
         if (repCnt == 0) {
             return;
         }
@@ -325,7 +359,7 @@ public class BatchSaveService {
         ////////////////////////////////////////////////////////////
         // 일별 정산
         ////////////////////////////////////////////////////////////
-        this.batchSaveQueryMapper.insertAdAccountSettlementMonthly(firstDate, lastDate, exeDate);
+        this.batchSaveQueryMapper.insertAdAccountSettlementMonthly(firstDate, exeDate);
 
         ////////////////////////////////////////////////////////////
         // 진행 완료
@@ -340,7 +374,7 @@ public class BatchSaveService {
         this.batchStatusRepository.save(batchStatus);
     }
 
-    public void mediaSettlementMonthly(Integer firstDate, Integer lastDate, Integer exeDate) {
+    public void mediaSettlementMonthly(Integer firstDate, Integer exeDate) {
         ////////////////////////////////////////////////////////////
         // Batch Code
         ////////////////////////////////////////////////////////////
@@ -352,7 +386,7 @@ public class BatchSaveService {
         // 선행 작업 체크
         ////////////////////////////////////////////////////////////
         // Batch Y Count
-        int repCnt = this.batchQueryMapper.getBatchStatusYNCount("D", lastDate, "media_settlement_daily");
+        int repCnt = this.batchQueryMapper.getBatchStatusYNCount("D", exeDate, "media_settlement_daily");
         if (repCnt == 0) {
             return;
         }
@@ -369,7 +403,7 @@ public class BatchSaveService {
         ////////////////////////////////////////////////////////////
         // 일별 정산
         ////////////////////////////////////////////////////////////
-        this.batchSaveQueryMapper.insertMediaSettlementMonthly(firstDate, lastDate, exeDate);
+        this.batchSaveQueryMapper.insertMediaSettlementMonthly(firstDate, exeDate);
 
         ////////////////////////////////////////////////////////////
         // 진행 완료
@@ -384,7 +418,7 @@ public class BatchSaveService {
         this.batchStatusRepository.save(batchStatus);
     }
 
-    public void adAccountTaxBillMonthly(Integer firstDate, Integer lastDate, Integer exeDate) {
+    public void adAccountTaxBillMonthly(Integer firstDate, Integer exeDate) {
         ////////////////////////////////////////////////////////////
         // Batch Code
         ////////////////////////////////////////////////////////////
@@ -396,7 +430,7 @@ public class BatchSaveService {
         // 선행 작업 체크
         ////////////////////////////////////////////////////////////
         // Batch Y Count
-        int repCnt = this.batchQueryMapper.getBatchStatusYNCount("D", lastDate, "adaccount_settlement_daily");
+        int repCnt = this.batchQueryMapper.getBatchStatusYNCount("D", exeDate, "adaccount_settlement_daily");
         if (repCnt == 0) {
             return;
         }
@@ -413,7 +447,7 @@ public class BatchSaveService {
         ////////////////////////////////////////////////////////////
         // 일별 정산
         ////////////////////////////////////////////////////////////
-        this.batchSaveQueryMapper.insertAdAccountTaxBillMonthly(firstDate, lastDate, exeDate);
+        this.batchSaveQueryMapper.insertAdAccountTaxBillMonthly(firstDate, exeDate);
 
         ////////////////////////////////////////////////////////////
         // 진행 완료
@@ -428,7 +462,7 @@ public class BatchSaveService {
         this.batchStatusRepository.save(batchStatus);
     }
 
-    public void mediaTaxBillMonthly(Integer firstDate, Integer lastDate, Integer exeDate) {
+    public void mediaTaxBillMonthly(Integer firstDate, Integer exeDate) {
         ////////////////////////////////////////////////////////////
         // Batch Code
         ////////////////////////////////////////////////////////////
@@ -440,7 +474,7 @@ public class BatchSaveService {
         // 선행 작업 체크
         ////////////////////////////////////////////////////////////
         // Batch Y Count
-        int repCnt = this.batchQueryMapper.getBatchStatusYNCount("D", lastDate, "media_settlement_daily");
+        int repCnt = this.batchQueryMapper.getBatchStatusYNCount("D", exeDate, "media_settlement_daily");
         if (repCnt == 0) {
             return;
         }
@@ -457,7 +491,7 @@ public class BatchSaveService {
         ////////////////////////////////////////////////////////////
         // 일별 정산
         ////////////////////////////////////////////////////////////
-        this.batchSaveQueryMapper.insertMediaTaxBillMonthly(firstDate, lastDate, exeDate);
+        this.batchSaveQueryMapper.insertMediaTaxBillMonthly(firstDate, exeDate);
 
         ////////////////////////////////////////////////////////////
         // 진행 완료

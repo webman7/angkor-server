@@ -8,7 +8,7 @@ import java.util.List;
 @Mapper
 public interface BatchQueryMapper {
 
-    List<BatchStatusDto.Response.ReportAdGroupCost> reportAdGroupCost();
+    List<BatchStatusDto.Response.ReportAdGroupCost> reportAdGroupCost(Integer exeDate);
 
     BatchStatusDto.Request.Search getBatchStatusYN(String type, Integer exeDate, String name);
 

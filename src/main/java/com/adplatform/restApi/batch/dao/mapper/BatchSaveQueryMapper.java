@@ -7,8 +7,8 @@ public interface BatchSaveQueryMapper {
 
     void insertAdAccountSettlementDaily(Integer statDate);
     void insertMediaSettlementDaily(Integer statDate);
-    void insertAdAccountSettlementMonthly(Integer statDate, Integer lashDate, Integer exeDate);
-    void insertAdAccountTaxBillMonthly(Integer statDate, Integer lashDate, Integer exeDate);
-    void insertMediaSettlementMonthly(Integer statDate, Integer lashDate, Integer exeDate);
-    void insertMediaTaxBillMonthly(Integer statDate, Integer lashDate, Integer exeDate);
+    void insertAdAccountSettlementMonthly(Integer startDate, Integer endDate);
+    void insertAdAccountTaxBillMonthly(Integer startDate, Integer endDate);
+    void insertMediaSettlementMonthly(Integer startDate, Integer endDate);
+    void insertMediaTaxBillMonthly(Integer startDate, Integer endDate);
 }
