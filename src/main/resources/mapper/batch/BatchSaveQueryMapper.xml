@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+author junny
+since 1.0
+-->
+<mapper namespace="com.adplatform.restApi.batch.dao.mapper.BatchSaveQueryMapper">
+    <insert id="insertAdAccountSettlementDaily">
+        INSERT INTO adaccount_settlement_daily (stat_date, adaccount_info_id, owner_company_info_id, company_info_id, supply_amount, vat_amount, total_amount)
+             SELECT a.stat_date, a.adaccount_info_id, a.owner_company_info_id, a.company_info_id, a.supply_amount,
+                    ROUND(a.supply_amount * 0.1, 2) AS vat_amount, ROUND((a.supply_amount + ROUND(a.supply_amount * 0.1, 2)), 2) AS total_amount
+               FROM (
+                    SELECT sd.stat_date, sd.adaccount_info_id, sd.owner_company_info_id, sd.company_info_id, SUM(sale_amount) AS supply_amount
+                      FROM sale_detail_amount_daily sd, cash_info ci
+                     WHERE sd.cash_info_id = ci.id
+                       AND ci.sale_affect_yn = 'Y'
+                       AND sd.stat_date = #{statDate}
+                     GROUP BY sd.stat_date, sd.adaccount_info_id
+                    ) a
+           GROUP BY a.stat_date, a.adaccount_info_id
+    </insert>
+
+    <insert id="insertMediaSettlementDaily">
+        INSERT INTO media_settlement_daily (stat_date, adaccount_info_id, media_info_id, company_info_id, supply_amount, vat_amount, total_amount)
+             SELECT a.stat_date, a.adaccount_info_id, a.media_info_id, a.company_info_id, a.supply_amount,
+                    ROUND(a.supply_amount * 0.1, 2) AS vat_amount, ROUND((a.supply_amount + ROUND(a.supply_amount * 0.1, 2)), 2) AS total_amount
+               FROM (
+                    SELECT rd.report_date AS stat_date, rd.adaccount_info_id, rd.media_info_id, mi.company_info_id, SUM(rd.cost) AS supply_amount
+                      FROM report_adgroup_daily rd, media_info mi
+                     WHERE rd.media_info_id = mi.id
+                       AND rd.report_date = #{statDate}
+                     GROUP BY rd.report_date, rd.adaccount_info_id, rd.media_info_id
+                    ) a
+              GROUP BY a.stat_date, a.adaccount_info_id, a.media_info_id
+    </insert>
+
+    <insert id="insertAdAccountSettlementMonthly">
+        INSERT INTO adaccount_settlement_monthly (adaccount_info_id, owner_company_info_id, company_info_id, stat_date, supply_amount, commission_rate, commission_supply_amount, commission_vat_amount, commission_amount)
+             SELECT t1.adaccount_info_id, t1.owner_company_info_id, t1.company_info_id, t1.stat_date, t1.supply_amount, t1.commission_rate,
+                    (t1.supply_amount * t1.commission_rate / 100) AS commission_supply_amount, (t1.supply_amount * t1.commission_rate / 100 * 0.1) AS commission_vat_amount,
+                    ((t1.supply_amount * t1.commission_rate / 100) + (t1.supply_amount * t1.commission_rate / 100 * 0.1)) AS commission_amount
+               FROM (
+                    SELECT #{exeDate} AS stat_date, a.adaccount_info_id, a.owner_company_info_id, a.company_info_id, SUM(a.supply_amount) AS supply_amount, (SELECT commission_rate FROM platform_type_info WHERE platform_type = 'AD') AS commission_rate
+                      FROM adaccount_settlement_daily a
+                     WHERE stat_date BETWEEN #{startDate} AND #{endDate}
+                     GROUP BY a.adaccount_info_id, a.owner_company_info_id, a.company_info_id
+                    ) t1
+              GROUP BY t1.adaccount_info_id, t1.owner_company_info_id, t1.company_info_id
+
+    </insert>
+
+    <insert id="insertAdAccountTaxBillMonthly">
+        INSERT INTO adaccount_tax_bill_monthly (adaccount_info_id, owner_company_info_id, company_info_id, stat_date, supply_amount, vat_amount, total_amount)
+             SELECT t1.adaccount_info_id, t1.owner_company_info_id, t1.company_info_id, t1.stat_date, t1.supply_amount,
+                    (t1.supply_amount * 0.1) AS vat_amount, (t1.supply_amount + (t1.supply_amount * 0.1)) AS total_amount
+              FROM (
+                   SELECT #{exeDate} AS stat_date, a.adaccount_info_id, a.owner_company_info_id, a.company_info_id, SUM(a.supply_amount) AS supply_amount
+                     FROM adaccount_settlement_daily a
+                    WHERE stat_date BETWEEN #{startDate} AND #{endDate}
+                    GROUP BY a.adaccount_info_id, a.owner_company_info_id, a.company_info_id
+                   ) t1
+             GROUP BY t1.adaccount_info_id, t1.owner_company_info_id, t1.company_info_id
+
+    </insert>
+
+    <insert id="insertMediaSettlementMonthly">
+    </insert>
+
+    <insert id="insertMediaTaxBillMonthly">
+        INSERT INTO media_tax_bill_monthly (adaccount_info_id, media_info_id, stat_date, supply_amount, vat_amount, total_amount)
+             SELECT t1.adaccount_info_id, t1.media_info_id, t1.stat_date, t1.supply_amount,
+                    (t1.supply_amount * 0.1) AS vat_amount,
+                    (t1.supply_amount + (t1.supply_amount * 0.1)) AS total_amount
+               FROM (
+                    SELECT #{exeDate} AS stat_date, a.adaccount_info_id, a.media_info_id, SUM(a.supply_amount) AS supply_amount
+                      FROM media_settlement_daily a
+                     WHERE stat_date BETWEEN #{startDate} AND #{endDate}
+                     GROUP BY a.adaccount_info_id, a.media_info_id
+                    ) t1
+              GROUP BY t1.adaccount_info_id, t1.media_info_id
+    </insert>
+</mapper>

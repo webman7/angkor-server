@@ -15,6 +15,6 @@ public class BatchCommandApi {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/daily")
     public void batchDaily(@RequestParam(value="exeDate", defaultValue="0") Integer exeDate) {
-        this.batchSaveService.settlementDaily(exeDate);
+        this.batchSaveService.batchJob(exeDate);
     }
 }

@@ -1,4 +1,4 @@
-package com.adplatform.restApi.domain.statistics.domain.sale;
+package com.adplatform.restApi.domain.statistics.domain.settlement;
 
 import lombok.*;
 
@@ -15,7 +15,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
-public class AdAccountIdStartDatePk implements Serializable {
+public class AdAccountIdStatDateSettlementPk implements Serializable {
     @Column(name = "adaccount_info_id")
     private Integer adAccountId;
 

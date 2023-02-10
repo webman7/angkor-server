@@ -17,7 +17,7 @@ import javax.persistence.*;
 @Table(name = "sale_amount_daily")
 public class SaleAmountDaily {
     @EmbeddedId
-    private final AdAccountIdStartDatePk id = new AdAccountIdStartDatePk();
+    private final AdAccountIdStatDatePk id = new AdAccountIdStatDatePk();
 
     @Column(name = "company_info_id")
     private int companyId;

@@ -14,28 +14,28 @@ since 1.0
 
     <update id="updateUserStatus">
         UPDATE user_info
-        SET active = #{request.status},
-        status_chg_user_no = #{loginUserNo},
-        status_chg_date = NOW(),
-        upd_user_no = #{loginUserNo},
-        upd_date = NOW()
-        WHERE user_no = #{user.id}
+           SET active = #{request.status},
+               status_chg_user_no = #{loginUserNo},
+               status_chg_date = NOW(),
+               upd_user_no = #{loginUserNo},
+               upd_date = NOW()
+         WHERE user_no = #{user.id}
     </update>
 
     <delete id="deleteUserRoles">
         DELETE FROM user_roles
-        WHERE user_no = #{userNo}
+              WHERE user_no = #{userNo}
     </delete>
 
     <update id="updateUserRoles">
         INSERT INTO user_roles (user_no, roles_info_id)
-        SELECT #{userNo}, id
-        FROM roles_info
-        <trim prefix="WHERE" prefixOverrides="AND | OR">
-            <foreach collection="request.agencyRoles" item="name" open="AND name IN (" separator=", " close=")">
-                #{name}
-            </foreach>
-        </trim>
+             SELECT #{userNo}, id
+               FROM roles_info
+            <trim prefix="WHERE" prefixOverrides="AND | OR">
+                <foreach collection="request.agencyRoles" item="name" open="AND name IN (" separator=", " close=")">
+                    #{name}
+                </foreach>
+            </trim>
     </update>
 
     <update id="updateUserUpdDate">
