@@ -65,7 +65,7 @@ public class SecurityConfig {
 
     private void userAntMatchers(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/users/**").hasAuthority(ROLE_ADMIN.name())
+                .antMatchers("/users/**").hasAnyAuthority(ROLE_ADMIN.name(), ROLE_OPERATOR.name(), ROLE_COMPANY_ADMINISTRATOR.name(), ROLE_COMPANY_GENERAL.name())
                 .antMatchers(HttpMethod.POST, "/change-password").authenticated()
                 .antMatchers(HttpMethod.POST, "/signup", "/login", "/find-password").permitAll();
     }
@@ -75,7 +75,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET, "/companies/search/for-signup").permitAll()
                 .antMatchers(HttpMethod.POST, "/companies/advertisers").permitAll()
                 .antMatchers(HttpMethod.POST, "/companies/agencies").hasAnyAuthority(ROLE_ADMIN.name())
-                .antMatchers("/companies/**").hasAuthority(ROLE_ADMIN.name());
+                .antMatchers("/companies/**").hasAnyAuthority(ROLE_ADMIN.name(), ROLE_OPERATOR.name(), ROLE_COMPANY_ADMINISTRATOR.name(), ROLE_COMPANY_GENERAL.name());
     }
 
     private void adAccountsAntMatchers(HttpSecurity http) throws Exception {
