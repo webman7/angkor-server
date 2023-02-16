@@ -2,8 +2,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: support@angkorchat.net
-    password: K6A7C%5nq2R42uW!
+    username: sgbo5003@gmail.com
+    password: sepunnhyozyilpto
     properties:
       mail:
         smtp:
