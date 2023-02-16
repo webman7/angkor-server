@@ -131,7 +131,20 @@ public class CreativeCommandService {
 
     public void changeConfig(Integer id, Creative.Config config) {
         Creative creative = CreativeFindUtils.findByIdOrElseThrow(id, this.creativeRepository);
-        if (config == Creative.Config.ON) creative.changeConfigOn();
-        else if (config == Creative.Config.OFF) creative.changeConfigOff();
+        if (config == Creative.Config.ON) {
+            creative.changeConfigOn();
+            // 승인여부 체크하여 Status 변경
+            if(creative.getSystemConfig().equals(Creative.SystemConfig.ON)) {
+                if(creative.getReviewStatus().equals(Creative.ReviewStatus.APPROVED)) {
+                    creative.changeStatusOperating();
+                } else {
+                    creative.changeStatusUnApproved();
+                }
+            }
+        }
+        else if (config == Creative.Config.OFF) {
+            creative.changeConfigOff();
+            creative.changeStatusOff();
+        }
     }
 }

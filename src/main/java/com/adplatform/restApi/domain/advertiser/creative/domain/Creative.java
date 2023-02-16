@@ -248,6 +248,18 @@ public class Creative extends BaseUpdatedEntity {
         this.config = Config.OFF;
     }
 
+    public void changeStatusOff() {
+        this.status = Status.OFF;
+    }
+
+    public void changeStatusOperating() {
+        this.status = Status.OPERATING;
+    }
+
+    public void changeStatusUnApproved() {
+        this.status = Status.UNAPPROVED;
+    }
+
     @Getter
     @NoArgsConstructor
     @Entity

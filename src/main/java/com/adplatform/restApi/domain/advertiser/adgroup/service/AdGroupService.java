@@ -21,6 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -110,7 +113,26 @@ public class AdGroupService {
 
     public void changeConfig(Integer id, AdGroup.Config config) {
         AdGroup adGroup = AdGroupFindUtils.findByIdOrElseThrow(id, this.adGroupRepository);
-        if (config == AdGroup.Config.ON) adGroup.changeConfigOn();
-        else if (config == AdGroup.Config.OFF) adGroup.changeConfigOff();
+        if (config == AdGroup.Config.ON) {
+            adGroup.changeConfigOn();
+            // 기간 체크하여 Status 변경
+            if(adGroup.getSystemConfig().equals(AdGroup.SystemConfig.ON)) {
+                Calendar calendar = new GregorianCalendar();
+                SimpleDateFormat SDF = new SimpleDateFormat("yyyyMMdd");
+
+                Integer chkDate = Integer.parseInt(SDF.format(calendar.getTime()));
+                if(adGroup.getAdGroupSchedule().getStartDate() < chkDate) {
+                    adGroup.changeStatusReady();
+                } else if (adGroup.getAdGroupSchedule().getStartDate() >= chkDate && adGroup.getAdGroupSchedule().getEndDate() <= chkDate) {
+                    adGroup.changeStatusLive();
+                } else {
+                    adGroup.changeStatusFinished();
+                }
+            }
+        }
+        else if (config == AdGroup.Config.OFF) {
+            adGroup.changeConfigOff();
+            adGroup.changeStatusOff();
+        }
     }
 }

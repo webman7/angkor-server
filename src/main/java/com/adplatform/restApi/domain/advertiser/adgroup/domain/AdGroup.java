@@ -328,4 +328,20 @@ public class AdGroup extends BaseUpdatedEntity {
     public void changeConfigOff() {
         this.config = Config.OFF;
     }
+
+    public void changeStatusOff() {
+        this.status = Status.OFF;
+    }
+
+    public void changeStatusReady() {
+        this.status = Status.READY;
+    }
+
+    public void changeStatusLive() {
+        this.status = Status.LIVE;
+    }
+
+    public void changeStatusFinished() {
+        this.status = Status.FINISHED;
+    }
 }

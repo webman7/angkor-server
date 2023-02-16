@@ -26,6 +26,9 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -211,7 +214,27 @@ public class CampaignCommandService {
 
     public void changeConfig(Integer id, Campaign.Config config) {
         Campaign campaign = CampaignFindUtils.findByIdOrElseThrow(id, this.campaignRepository);
-        if (config == Campaign.Config.ON) campaign.changeConfigOn();
-        else if (config == Campaign.Config.OFF) campaign.changeConfigOff();
+        if (config == Campaign.Config.ON) {
+            campaign.changeConfigOn();
+            // 기간 체크하여 Status 변경
+            if(campaign.getSystemConfig().equals(Campaign.SystemConfig.ON)) {
+                Calendar calendar = new GregorianCalendar();
+                SimpleDateFormat SDF = new SimpleDateFormat("yyyyMMdd");
+
+                Integer chkDate = Integer.parseInt(SDF.format(calendar.getTime()));
+
+                if (campaign.getStartDate() < chkDate) {
+                    campaign.changeStatusReady();
+                }
+                else if( campaign.getStartDate() >= chkDate && campaign.getEndDate() <= chkDate) {
+                    campaign.changeStatusLive();
+                } else {
+                    campaign.changeStatusFinished();
+                }
+            }
+        } else if (config == Campaign.Config.OFF) {
+            campaign.changeConfigOff();
+            campaign.changeStatusOff();
+        }
     }
 }
