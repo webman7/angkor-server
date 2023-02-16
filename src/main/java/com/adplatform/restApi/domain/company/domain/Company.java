@@ -35,7 +35,7 @@ public class Company extends BaseUpdatedEntity {
         /** 광고주 */
         ADVERTISER,
         /** 매체사 */
-        MEDIA,
+        MEDIA
     }
 
     @Column(name = "name")
