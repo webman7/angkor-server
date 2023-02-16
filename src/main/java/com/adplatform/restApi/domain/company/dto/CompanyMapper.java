@@ -27,6 +27,13 @@ public interface CompanyMapper {
     @Mapping(target = "active", expression = "java(true)")
     Company toAgencyEntity(CompanyDto.Request.Save request);
 
+    @Mapping(target = "type", expression = "java(Company.Type.Media)")
+    @Mapping(target = "address", source = "address")
+    @Mapping(target = "taxBillEmail1", qualifiedByName = "createEmail")
+    @Mapping(target = "taxBillEmail2", qualifiedByName = "createEmail")
+    @Mapping(target = "active", expression = "java(true)")
+    Company toMediaEntity(CompanyDto.Request.Save request);
+
     @Mapping(target = "address", source = "address")
     @Mapping(target = "taxBillEmail1", qualifiedByName = "getEmail")
     @Mapping(target = "taxBillEmail2", qualifiedByName = "getEmail")

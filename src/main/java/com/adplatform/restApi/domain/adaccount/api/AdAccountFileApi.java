@@ -520,9 +520,9 @@ public class AdAccountFileApi {
     private String getCompanyType(Company.Type companyType) {
         switch (companyType) {
             case AGENCY:
-                return "사업자(대행사)";
+                return "대행사";
             case ADVERTISER:
-                return "사업자(광고주)";
+                return "광고주";
         }
         return null;
     }

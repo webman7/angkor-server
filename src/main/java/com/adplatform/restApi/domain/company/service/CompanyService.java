@@ -33,6 +33,10 @@ public class CompanyService {
         this.companyRepository.save(this.companyMapper.toAgencyEntity(request));
     }
 
+    public void saveMedia(CompanyDto.Request.Save request) {
+        this.companyRepository.save(this.companyMapper.toMediaEntity(request));
+    }
+
     public void update(CompanyDto.Request.Update request) {
         this.companyRepository.save(CompanyFindUtils.findByIdOrElseThrow(request.getId(), this.companyRepository).update(request));
     }

@@ -31,6 +31,12 @@ public class CompanyCommandApi {
         this.companyService.saveAgency(request);
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/media")
+    public void saveMedia(@RequestBody @Valid CompanyDto.Request.Save request) {
+        this.companyService.saveMedia(request);
+    }
+
     @PatchMapping
     public ResponseEntity<Void> update(@RequestBody @Valid CompanyDto.Request.Update request) {
         this.companyService.update(request);
