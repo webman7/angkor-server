@@ -81,6 +81,8 @@ public class AdGroup extends BaseUpdatedEntity {
         OFF,
         /** 삭제 */
         DELETED,
+        /** 관리자 정지 */
+        ADMIN_STOP,
         /** 캠페인 일 예산 초과 */
         EXCEED_DAILY_BUDGET,
         /** 일시중지 */

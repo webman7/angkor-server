@@ -60,14 +60,14 @@ public class Creative extends BaseUpdatedEntity {
         OPERATING,
         /** 심사 미승인 */
         UNAPPROVED,
-        /** 기간 오류 */
-        INVALID_DATE,
-        /** 관리자 정지 */
-        MONITORING_REJECTED,
         /** 사용자 OFF */
         OFF,
         /** 삭제 */
         DELETED,
+        /** 관리자 정지 */
+        ADMIN_STOP,
+        /** 기간 오류 */
+        INVALID_DATE,
         /** 광고그룹 운영불가 */
         ADGROUP_UNAVAILABLE;
     }
