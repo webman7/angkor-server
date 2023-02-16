@@ -215,9 +215,10 @@ public class CampaignCommandService {
     public void changeConfig(Integer id, Campaign.Config config) {
         Campaign campaign = CampaignFindUtils.findByIdOrElseThrow(id, this.campaignRepository);
         if (config == Campaign.Config.ON) {
-            campaign.changeConfigOn();
             // 기간 체크하여 Status 변경
             if(campaign.getSystemConfig().equals(Campaign.SystemConfig.ON)) {
+                campaign.changeConfigOn();
+
                 Calendar calendar = new GregorianCalendar();
                 SimpleDateFormat SDF = new SimpleDateFormat("yyyyMMdd");
 

@@ -114,9 +114,10 @@ public class AdGroupService {
     public void changeConfig(Integer id, AdGroup.Config config) {
         AdGroup adGroup = AdGroupFindUtils.findByIdOrElseThrow(id, this.adGroupRepository);
         if (config == AdGroup.Config.ON) {
-            adGroup.changeConfigOn();
             // 기간 체크하여 Status 변경
             if(adGroup.getSystemConfig().equals(AdGroup.SystemConfig.ON)) {
+                adGroup.changeConfigOn();
+
                 Calendar calendar = new GregorianCalendar();
                 SimpleDateFormat SDF = new SimpleDateFormat("yyyyMMdd");
 
