@@ -224,10 +224,10 @@ public class CampaignCommandService {
 
                 Integer chkDate = Integer.parseInt(SDF.format(calendar.getTime()));
 
-                if (campaign.getStartDate() < chkDate) {
+                if (campaign.getStartDate() > chkDate) {
                     campaign.changeStatusReady();
                 }
-                else if( campaign.getStartDate() >= chkDate && campaign.getEndDate() <= chkDate) {
+                else if( campaign.getStartDate() <= chkDate && campaign.getEndDate() >= chkDate) {
                     campaign.changeStatusLive();
                 } else {
                     campaign.changeStatusFinished();

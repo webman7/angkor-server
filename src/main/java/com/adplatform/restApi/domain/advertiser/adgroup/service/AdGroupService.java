@@ -122,9 +122,9 @@ public class AdGroupService {
                 SimpleDateFormat SDF = new SimpleDateFormat("yyyyMMdd");
 
                 Integer chkDate = Integer.parseInt(SDF.format(calendar.getTime()));
-                if(adGroup.getAdGroupSchedule().getStartDate() < chkDate) {
+                if(adGroup.getAdGroupSchedule().getStartDate() > chkDate) {
                     adGroup.changeStatusReady();
-                } else if (adGroup.getAdGroupSchedule().getStartDate() >= chkDate && adGroup.getAdGroupSchedule().getEndDate() <= chkDate) {
+                } else if (adGroup.getAdGroupSchedule().getStartDate() <= chkDate && adGroup.getAdGroupSchedule().getEndDate() >= chkDate) {
                     adGroup.changeStatusLive();
                 } else {
                     adGroup.changeStatusFinished();
