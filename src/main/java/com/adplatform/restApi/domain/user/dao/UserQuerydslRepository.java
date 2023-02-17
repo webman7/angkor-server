@@ -1,6 +1,9 @@
 package com.adplatform.restApi.domain.user.dao;
 
+import com.adplatform.restApi.domain.history.domain.UserPasswordChangeHistory;
 import com.adplatform.restApi.domain.user.domain.User;
+import com.adplatform.restApi.domain.user.dto.auth.AuthDto;
+import com.adplatform.restApi.domain.user.dto.user.UserDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,5 +17,9 @@ public interface UserQuerydslRepository {
 
     Optional<User> findByLoginId(String loginId);
 
+    UserDto.Response.BaseInfo findUserByLoginIdAndName(String loginId, String name);
+
     List<Integer> findByUserRoles(Integer id);
+
+    Optional<UserPasswordChangeHistory> findPasswordCert(AuthDto.Request.FindPasswordCert request);
 }

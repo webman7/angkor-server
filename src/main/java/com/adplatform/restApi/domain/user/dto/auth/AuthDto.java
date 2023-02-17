@@ -52,14 +52,49 @@ public abstract class AuthDto {
 
         @Getter
         @Setter
+        public static class FindPasswordCert {
+            @NotEmpty
+            private String name;
+            @NotEmpty
+            @Email
+            private String id;
+            @NotEmpty
+            private String certNo;
+        }
+
+        @Getter
+        @Setter
+        public static class FindPasswordChange {
+            @NotEmpty
+            private String name;
+            @NotEmpty
+            @Email
+            private String id;
+            @NotEmpty
+            private String certNo;
+            private String historyId;
+            @NotEmpty
+            private String password;
+        }
+
+        @Getter
+        @Setter
         public static class ChangePassword {
             @NotEmpty
-            private String password1;
+            private String oldPassword;
             @NotEmpty
-            private String password2;
+            private String newPassword;
         }
     }
 
     public static abstract class Response {
+
+        @Getter
+        @Setter
+        public static class FindPasswordCert {
+            private String id;
+            private String name;
+            private String historyId;
+        }
     }
 }

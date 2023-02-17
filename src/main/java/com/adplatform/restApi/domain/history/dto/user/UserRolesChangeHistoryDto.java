@@ -1,4 +1,4 @@
-package com.adplatform.restApi.domain.history.dto.campaign;
+package com.adplatform.restApi.domain.history.dto.user;
 
 import lombok.Getter;
 import lombok.Setter;

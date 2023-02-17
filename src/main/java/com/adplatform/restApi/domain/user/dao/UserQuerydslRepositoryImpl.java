@@ -1,6 +1,11 @@
 package com.adplatform.restApi.domain.user.dao;
 
+import com.adplatform.restApi.domain.history.domain.UserPasswordChangeHistory;
+import com.adplatform.restApi.domain.user.domain.QUser;
 import com.adplatform.restApi.domain.user.domain.User;
+import com.adplatform.restApi.domain.user.dto.auth.AuthDto;
+import com.adplatform.restApi.domain.user.dto.user.QUserDto_Response_BaseInfo;
+import com.adplatform.restApi.domain.user.dto.user.UserDto;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -8,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+import static com.adplatform.restApi.domain.history.domain.QUserPasswordChangeHistory.userPasswordChangeHistory;
 import static com.adplatform.restApi.domain.user.domain.QRole.role;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
 import static com.adplatform.restApi.domain.user.domain.QUserRole.userRole;
@@ -31,12 +37,34 @@ public class UserQuerydslRepositoryImpl implements UserQuerydslRepository {
     }
 
     @Override
+    public UserDto.Response.BaseInfo findUserByLoginIdAndName(String loginId, String name) {
+        return this.query.select(new QUserDto_Response_BaseInfo(
+                user.id, user.loginId, user.name, user.phone
+                ))
+                .from(user)
+                .where(user.loginId.eq(loginId),
+                user.name.eq(name))
+                .fetchOne();
+    }
+
+    @Override
     public List<Integer> findByUserRoles(Integer id) {
         return this.query.select(userRole.role.id)
                 .from(user, userRole)
                 .where(user.id.eq(id),
                         user.id.eq(userRole.user.id))
                 .fetch();
+    }
+
+    @Override
+    public Optional<UserPasswordChangeHistory> findPasswordCert(AuthDto.Request.FindPasswordCert request) {
+        return Optional.ofNullable(this.query.selectFrom(userPasswordChangeHistory)
+                .where(userPasswordChangeHistory.userId.eq(request.getId()),
+                        userPasswordChangeHistory.userName.eq(request.getName()),
+                        userPasswordChangeHistory.status.eq(UserPasswordChangeHistory.Status.READY))
+                .orderBy(userPasswordChangeHistory.id.desc())
+                .limit(1)
+                .fetchOne());
     }
 
 //    @Override

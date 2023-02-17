@@ -1,12 +1,13 @@
 package com.adplatform.restApi.domain.user.service;
 
-import com.adplatform.restApi.domain.history.dto.campaign.UserLoginHistoryDto;
-import com.adplatform.restApi.domain.history.dto.campaign.UserLoginHistoryMapper;
-import com.adplatform.restApi.domain.history.dto.campaign.UserPasswordChangeHistoryDto;
-import com.adplatform.restApi.domain.history.dto.campaign.UserPasswordChangeHistoryMapper;
+import com.adplatform.restApi.domain.history.dto.user.UserLoginHistoryDto;
+import com.adplatform.restApi.domain.history.dto.user.UserLoginHistoryMapper;
+import com.adplatform.restApi.domain.history.dto.user.UserPasswordChangeHistoryDto;
+import com.adplatform.restApi.domain.history.dto.user.UserPasswordChangeHistoryMapper;
 import com.adplatform.restApi.domain.user.domain.Role;
 import com.adplatform.restApi.domain.user.domain.User;
 import com.adplatform.restApi.domain.user.domain.UserRole;
+import com.adplatform.restApi.domain.user.dto.user.UserDto;
 import com.adplatform.restApi.domain.user.exception.*;
 import com.adplatform.restApi.global.util.HttpReqRespUtils;
 import com.adplatform.restApi.domain.history.dao.user.UserLoginHistoryRepository;
@@ -19,6 +20,7 @@ import com.adplatform.restApi.domain.user.dto.auth.AuthMapper;
 import com.adplatform.restApi.global.config.security.dto.TokenDto;
 import com.adplatform.restApi.global.config.security.service.JwtProvider;
 import com.adplatform.restApi.global.config.security.util.SecurityUtils;
+import com.adplatform.restApi.global.util.RandomCodeGenerator;
 import com.adplatform.restApi.global.value.Email;
 import com.adplatform.restApi.infra.mail.event.FindPasswordEmailSentEvent;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @author Seohyun Lee
@@ -123,32 +127,62 @@ public class AuthService {
         this.userRepository.save(user.updateRole(new UserRole(user, role)));
     }
 
+    public UserDto.Response.BaseInfo findUser(AuthDto.Request.FindPassword request) {
+        return this.userQueryService.findUserByLoginIdAndName(request.getId(), request.getName());
+    }
     public void findPassword(AuthDto.Request.FindPassword request) {
-        String randomPassword = this.userQueryService.findByLoginIdAndName(request.getId(), request.getName())
-                .getPassword()
-                .changeToRandomPassword(this.passwordEncoder);
-        this.eventPublisher.publishEvent(new FindPasswordEmailSentEvent(new Email(request.getId()), randomPassword));
+//        String randomPassword = this.userQueryService.findByLoginIdAndName(request.getId(), request.getName())
+//                .getPassword()
+//                .changeToRandomPassword(this.passwordEncoder);
+
+        this.userQueryService.findByLoginIdAndName(request.getId(), request.getName());
+
+        RandomCodeGenerator randomCodeGenerator = new RandomCodeGenerator();
+        String randomCertNo = randomCodeGenerator.generate(10);
 
         // Password Change Log
         UserPasswordChangeHistoryDto.Request.Save history = new UserPasswordChangeHistoryDto.Request.Save();
         history.setUserId(request.getId());
         history.setUserName(request.getName());
+        history.setCertNo(randomCertNo);
         history.setRegIp(HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
         UserPasswordChangeHistory userPasswordChangeHistory = this.userPasswordChangeHistoryMapper.toEntity(history);
         this.userPasswordChangeHistoryRepository.save(userPasswordChangeHistory);
+
+        this.eventPublisher.publishEvent(new FindPasswordEmailSentEvent(new Email(request.getId()), randomCertNo));
+    }
+
+    public UserPasswordChangeHistory findPasswordCert(AuthDto.Request.FindPasswordCert request) {
+        UserPasswordChangeHistory userPasswordChangeHistory = this.userQueryService.findPasswordCert(request);
+        this.userPasswordChangeHistoryRepository.save(userPasswordChangeHistory.updateStatus(UserPasswordChangeHistory.Status.WAITING));
+        return userPasswordChangeHistory;
+    }
+
+    public void findPasswordChange(AuthDto.Request.FindPasswordChange request) {
+        UserPasswordChangeHistory userPasswordChangeHistory = this.userQueryService.findPasswordChange(request);
+
+        this.userPasswordChangeHistoryRepository.save(userPasswordChangeHistory.updateStatus(UserPasswordChangeHistory.Status.FINISHED));
+
+        this.userQueryService.findByLoginIdAndName(request.getId(), request.getName())
+                .getPassword()
+                .changePassword(this.passwordEncoder, request.getPassword());
     }
 
     public void changePassword(AuthDto.Request.ChangePassword request) {
-        this.validateIsEqualPassword(request.getPassword1(), request.getPassword2());
-        this.userQueryService.findByLoginIdOrElseThrow(SecurityUtils.getLoginUserLoginId())
-                .getPassword()
-                .changePassword(this.passwordEncoder, request.getPassword1());
-        // Password Change Log
-        UserPasswordChangeHistoryDto.Request.Save history = new UserPasswordChangeHistoryDto.Request.Save();
-        history.setUserId(SecurityUtils.getLoginUserLoginId());
-        history.setRegIp(HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
-        UserPasswordChangeHistory userPasswordChangeHistory = this.userPasswordChangeHistoryMapper.toEntity(history);
-        this.userPasswordChangeHistoryRepository.save(userPasswordChangeHistory);
+        User user = this.userQueryService.findByLoginIdOrElseThrow(SecurityUtils.getLoginUserLoginId());
+        if (!user.getPassword().validate(this.passwordEncoder, request.getOldPassword())) {
+            throw new PasswordNotEqualException();
+        } else {
+            this.userQueryService.findByLoginIdOrElseThrow(SecurityUtils.getLoginUserLoginId())
+                    .getPassword()
+                    .changePassword(this.passwordEncoder, request.getNewPassword());
+            // Password Change Log
+            UserPasswordChangeHistoryDto.Request.Save history = new UserPasswordChangeHistoryDto.Request.Save();
+            history.setUserId(SecurityUtils.getLoginUserLoginId());
+            history.setRegIp(HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
+            UserPasswordChangeHistory userPasswordChangeHistory = this.userPasswordChangeHistoryMapper.toEntity(history);
+            this.userPasswordChangeHistoryRepository.save(userPasswordChangeHistory);
+        }
     }
 
     private void validateIsEqualPassword(String password1, String password2) {

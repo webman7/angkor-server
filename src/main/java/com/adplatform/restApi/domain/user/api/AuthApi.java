@@ -1,6 +1,9 @@
 package com.adplatform.restApi.domain.user.api;
 
+import com.adplatform.restApi.domain.history.domain.UserPasswordChangeHistory;
+import com.adplatform.restApi.domain.user.domain.User;
 import com.adplatform.restApi.domain.user.dto.auth.AuthDto;
+import com.adplatform.restApi.domain.user.dto.user.UserDto;
 import com.adplatform.restApi.domain.user.service.AuthService;
 import com.adplatform.restApi.global.config.security.dto.TokenDto;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @author Seohyun Lee
@@ -36,13 +40,31 @@ public class AuthApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/find-password")
+    @PostMapping("/find/user")
+    public UserDto.Response.BaseInfo findUser(@RequestBody @Valid AuthDto.Request.FindPassword request) {
+        return this.authService.findUser(request);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/find/password")
     public void findPassword(@RequestBody @Valid AuthDto.Request.FindPassword request) {
         this.authService.findPassword(request);
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/change-password")
+    @PostMapping("/find/password/cert")
+    public UserPasswordChangeHistory findPasswordCert(@RequestBody @Valid AuthDto.Request.FindPasswordCert request) {
+        return this.authService.findPasswordCert(request);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/find/password/change")
+    public void findPasswordChange(@RequestBody @Valid AuthDto.Request.FindPasswordChange request) {
+        this.authService.findPasswordChange(request);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/password/change")
     public void changePassword(@RequestBody @Valid AuthDto.Request.ChangePassword request) {
         this.authService.changePassword(request);
     }

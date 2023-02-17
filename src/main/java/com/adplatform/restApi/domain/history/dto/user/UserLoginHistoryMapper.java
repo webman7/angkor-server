@@ -1,4 +1,4 @@
-package com.adplatform.restApi.domain.history.dto.campaign;
+package com.adplatform.restApi.domain.history.dto.user;
 
 import com.adplatform.restApi.global.dto.BaseMapperConfig;
 import com.adplatform.restApi.domain.history.domain.UserLoginHistory;

@@ -66,8 +66,8 @@ public class SecurityConfig {
     private void userAntMatchers(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/users/**").hasAnyAuthority(ROLE_ADMIN.name(), ROLE_OPERATOR.name(), ROLE_COMPANY_ADMINISTRATOR.name(), ROLE_COMPANY_GENERAL.name())
-                .antMatchers(HttpMethod.POST, "/change-password").authenticated()
-                .antMatchers(HttpMethod.POST, "/signup", "/login", "/find-password").permitAll();
+                .antMatchers(HttpMethod.POST, "/password/change").authenticated()
+                .antMatchers(HttpMethod.POST, "/signup", "/login", "/find/**").permitAll();
     }
 
     private void companyAntMatchers(HttpSecurity http) throws Exception {

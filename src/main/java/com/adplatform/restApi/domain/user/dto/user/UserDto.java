@@ -2,6 +2,7 @@ package com.adplatform.restApi.domain.user.dto.user;
 
 import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.user.domain.User;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -65,6 +66,23 @@ public abstract class UserDto {
             private String roles;
             private String company;
 
+        }
+
+        @Getter
+        @Setter
+        public static class BaseInfo {
+            private Integer id;
+            private String loginId;
+            private String name;
+            private String phone;
+
+            @QueryProjection
+            public BaseInfo(Integer id, String loginId, String name, String phone) {
+                this.id = id;
+                this.loginId = loginId;
+                this.name = name;
+                this.phone = phone;
+            }
         }
     }
 }
