@@ -22,7 +22,7 @@ public class EmailEventHandler {
     @Async
     @EventListener(FindPasswordEmailSentEvent.class)
     public void handleFindPasswordEmailSentEvent(FindPasswordEmailSentEvent event) {
-        String subject = "[유니온 모바일] 임시 비밀번호 안내";
+        String subject = "[유니온 모바일] 인증번호 안내";
         this.emailService.sendEmail(
                 event.getEmail(),
                 subject,
