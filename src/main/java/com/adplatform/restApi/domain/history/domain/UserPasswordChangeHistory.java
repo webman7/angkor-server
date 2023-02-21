@@ -8,9 +8,12 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -35,6 +38,12 @@ public class UserPasswordChangeHistory extends BaseCreatedEntity {
     private Status status;
     @Column(name = "reg_ip", length = 30)
     private String regIp;
+    @Column(name = "cert_ip", length = 30)
+    private String certIp;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Column(name = "cert_date")
+    private LocalDateTime certAt;
 
     @Builder
     public UserPasswordChangeHistory(
@@ -52,6 +61,13 @@ public class UserPasswordChangeHistory extends BaseCreatedEntity {
 
     public UserPasswordChangeHistory updateStatus(Status status) {
         this.status = status;
+        return this;
+    }
+
+    public UserPasswordChangeHistory updateFinished(Status status, String certIp) {
+        this.status = status;
+        this.certIp = certIp;
+        this.certAt = LocalDateTime.now();
         return this;
     }
 }

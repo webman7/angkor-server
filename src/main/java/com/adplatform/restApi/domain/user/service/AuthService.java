@@ -160,7 +160,7 @@ public class AuthService {
     public void findPasswordChange(AuthDto.Request.FindPasswordChange request) {
         UserPasswordChangeHistory userPasswordChangeHistory = this.userQueryService.findPasswordChange(request);
 
-        this.userPasswordChangeHistoryRepository.save(userPasswordChangeHistory.updateStatus(UserPasswordChangeHistory.Status.FINISHED));
+        this.userPasswordChangeHistoryRepository.save(userPasswordChangeHistory.updateFinished(UserPasswordChangeHistory.Status.FINISHED, HttpReqRespUtils.getClientIpAddressIfServletRequestExist()));
 
         this.userQueryService.findByLoginId(request.getId())
                 .getPassword()
