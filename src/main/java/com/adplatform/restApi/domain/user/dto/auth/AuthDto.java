@@ -72,8 +72,6 @@ public abstract class AuthDto {
         @Setter
         public static class FindPasswordChange {
             @NotEmpty
-            private String name;
-            @NotEmpty
             @Email
             private String id;
             @NotEmpty
