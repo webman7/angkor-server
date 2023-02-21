@@ -46,15 +46,15 @@ public class AuthApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/find/password")
-    public void findPassword(@RequestBody @Valid AuthDto.Request.FindPassword request) {
-        this.authService.findPassword(request);
+    @PostMapping("/find/password/cert")
+    public void findPasswordCert(@RequestBody @Valid AuthDto.Request.FindPasswordCert request) {
+        this.authService.findPasswordCert(request);
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/find/password/cert")
-    public UserPasswordChangeHistory findPasswordCert(@RequestBody @Valid AuthDto.Request.FindPasswordCert request) {
-        return this.authService.findPasswordCert(request);
+    @PostMapping("/find/password/confirm")
+    public UserPasswordChangeHistory findPasswordConfirm(@RequestBody @Valid AuthDto.Request.FindPasswordConfirm request) {
+        return this.authService.findPasswordConfirm(request);
     }
 
     @ResponseStatus(HttpStatus.OK)

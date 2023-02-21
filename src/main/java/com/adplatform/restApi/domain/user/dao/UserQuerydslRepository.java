@@ -21,5 +21,5 @@ public interface UserQuerydslRepository {
 
     List<Integer> findByUserRoles(Integer id);
 
-    Optional<UserPasswordChangeHistory> findPasswordCert(AuthDto.Request.FindPasswordCert request);
+    Optional<UserPasswordChangeHistory> findPasswordConfirm(AuthDto.Request.FindPasswordConfirm request);
 }

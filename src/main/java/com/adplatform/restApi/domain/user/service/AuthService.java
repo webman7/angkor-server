@@ -130,12 +130,12 @@ public class AuthService {
     public UserDto.Response.BaseInfo findUser(AuthDto.Request.FindPassword request) {
         return this.userQueryService.findUserByLoginIdAndName(request.getId(), request.getName());
     }
-    public void findPassword(AuthDto.Request.FindPassword request) {
+    public void findPasswordCert(AuthDto.Request.FindPasswordCert request) {
 //        String randomPassword = this.userQueryService.findByLoginIdAndName(request.getId(), request.getName())
 //                .getPassword()
 //                .changeToRandomPassword(this.passwordEncoder);
 
-        this.userQueryService.findByLoginIdAndName(request.getId(), request.getName());
+        this.userQueryService.findByLoginId(request.getId());
 
         RandomCodeGenerator randomCodeGenerator = new RandomCodeGenerator();
         String randomCertNo = randomCodeGenerator.generate(10);
@@ -143,7 +143,6 @@ public class AuthService {
         // Password Change Log
         UserPasswordChangeHistoryDto.Request.Save history = new UserPasswordChangeHistoryDto.Request.Save();
         history.setUserId(request.getId());
-        history.setUserName(request.getName());
         history.setCertNo(randomCertNo);
         history.setRegIp(HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
         UserPasswordChangeHistory userPasswordChangeHistory = this.userPasswordChangeHistoryMapper.toEntity(history);
@@ -152,8 +151,8 @@ public class AuthService {
         this.eventPublisher.publishEvent(new FindPasswordEmailSentEvent(new Email(request.getId()), randomCertNo));
     }
 
-    public UserPasswordChangeHistory findPasswordCert(AuthDto.Request.FindPasswordCert request) {
-        UserPasswordChangeHistory userPasswordChangeHistory = this.userQueryService.findPasswordCert(request);
+    public UserPasswordChangeHistory findPasswordConfirm(AuthDto.Request.FindPasswordConfirm request) {
+        UserPasswordChangeHistory userPasswordChangeHistory = this.userQueryService.findPasswordConfirm(request);
         this.userPasswordChangeHistoryRepository.save(userPasswordChangeHistory.updateStatus(UserPasswordChangeHistory.Status.WAITING));
         return userPasswordChangeHistory;
     }
@@ -163,7 +162,7 @@ public class AuthService {
 
         this.userPasswordChangeHistoryRepository.save(userPasswordChangeHistory.updateStatus(UserPasswordChangeHistory.Status.FINISHED));
 
-        this.userQueryService.findByLoginIdAndName(request.getId(), request.getName())
+        this.userQueryService.findByLoginId(request.getId())
                 .getPassword()
                 .changePassword(this.passwordEncoder, request.getPassword());
     }

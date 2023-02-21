@@ -50,16 +50,16 @@ public class UserQueryService {
                 .orElseThrow(RoleNotFoundException::new);
     }
 
-    public User findByLoginIdAndName(String loginId, String name) {
-        return this.userRepository.findByLoginIdAndName(loginId, name)
+    public User findByLoginId(String loginId) {
+        return this.userRepository.findByLoginId(loginId)
                 .orElseThrow(UserNotFoundException::new);
     }
     public UserDto.Response.BaseInfo findUserByLoginIdAndName(String loginId, String name) {
         return this.userRepository.findUserByLoginIdAndName(loginId, name);
     }
 
-    public UserPasswordChangeHistory findPasswordCert(AuthDto.Request.FindPasswordCert request) {
-        return this.userRepository.findPasswordCert(request)
+    public UserPasswordChangeHistory findPasswordConfirm(AuthDto.Request.FindPasswordConfirm request) {
+        return this.userRepository.findPasswordConfirm(request)
                 .orElseThrow(UserNotFoundException::new);
     }
 

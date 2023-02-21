@@ -57,10 +57,9 @@ public class UserQuerydslRepositoryImpl implements UserQuerydslRepository {
     }
 
     @Override
-    public Optional<UserPasswordChangeHistory> findPasswordCert(AuthDto.Request.FindPasswordCert request) {
+    public Optional<UserPasswordChangeHistory> findPasswordConfirm(AuthDto.Request.FindPasswordConfirm request) {
         return Optional.ofNullable(this.query.selectFrom(userPasswordChangeHistory)
                 .where(userPasswordChangeHistory.userId.eq(request.getId()),
-                        userPasswordChangeHistory.userName.eq(request.getName()),
                         userPasswordChangeHistory.status.eq(UserPasswordChangeHistory.Status.READY))
                 .orderBy(userPasswordChangeHistory.id.desc())
                 .limit(1)

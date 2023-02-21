@@ -54,7 +54,13 @@ public abstract class AuthDto {
         @Setter
         public static class FindPasswordCert {
             @NotEmpty
-            private String name;
+            @Email
+            private String id;
+        }
+
+        @Getter
+        @Setter
+        public static class FindPasswordConfirm {
             @NotEmpty
             @Email
             private String id;
