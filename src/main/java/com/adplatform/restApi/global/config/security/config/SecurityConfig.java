@@ -74,6 +74,7 @@ public class SecurityConfig {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/companies/search/for-signup").permitAll()
                 .antMatchers(HttpMethod.POST, "/companies/advertisers").permitAll()
+                .antMatchers(HttpMethod.GET, "/companies/registration/number").permitAll()
                 .antMatchers(HttpMethod.POST, "/companies/agencies").hasAnyAuthority(ROLE_ADMIN.name())
                 .antMatchers("/companies/**").hasAnyAuthority(ROLE_ADMIN.name(), ROLE_OPERATOR.name(), ROLE_COMPANY_ADMINISTRATOR.name(), ROLE_COMPANY_GENERAL.name());
     }
