@@ -12,4 +12,5 @@ public interface UserSaveQueryMapper {
     void deleteUserRoles(AgencyMarketersDto.Request.UpdateAgencyRoles request, Integer userNo, Integer loginUserNo);
     void updateUserUpdDate(Integer userNo, Integer loginUserNo);
     void insertUserApproveLog(UserDto.Request.UpdateStatus request, User user, Integer loginUserNo);
+    void myInfoModify(UserDto.Request.MyInfoModify request, Integer loginUserNo);
 }

@@ -26,6 +26,14 @@ public abstract class UserDto {
             private Integer id;
             private String status;
         }
+
+        @Getter
+        @Setter
+        public static class MyInfoModify {
+            private String name;
+            private String phone;
+        }
+
     }
 
     public static abstract class Response {

@@ -44,4 +44,14 @@ since 1.0
         upd_date = NOW()
         WHERE user_no = #{userNo}
     </update>
+
+    <update id="myInfoModify">
+        UPDATE user_info
+        SET user_name = #{request.name},
+            phone = #{request.phone},
+            upd_user_no = #{loginUserNo},
+            upd_date = NOW()
+        WHERE user_no = #{loginUserNo}
+    </update>
+
 </mapper>

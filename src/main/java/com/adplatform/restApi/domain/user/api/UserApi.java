@@ -5,11 +5,14 @@ import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.company.dto.CompanyMapper;
 import com.adplatform.restApi.domain.company.service.CompanyFindUtils;
 import com.adplatform.restApi.domain.user.dao.UserRepository;
+import com.adplatform.restApi.domain.user.dao.mapper.UserSaveQueryMapper;
 import com.adplatform.restApi.domain.user.domain.User;
+import com.adplatform.restApi.domain.user.dto.auth.AuthDto;
 import com.adplatform.restApi.domain.user.dto.user.UserDto;
 import com.adplatform.restApi.domain.user.dto.user.UserMapper;
 import com.adplatform.restApi.domain.user.service.UserFindUtils;
 import com.adplatform.restApi.domain.user.dao.mapper.UserQueryMapper;
+import com.adplatform.restApi.global.config.security.util.SecurityUtils;
 import com.adplatform.restApi.global.dto.PageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
@@ -18,6 +21,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -30,6 +34,8 @@ import java.util.List;
 public class UserApi {
     private final UserRepository userRepository;
     private final UserQueryMapper userQueryMapper;
+
+    private final UserSaveQueryMapper userSaveQueryMapper;
     private final UserMapper userMapper;
     private final CompanyRepository companyRepository;
     private final CompanyMapper companyMapper;
@@ -59,5 +65,11 @@ public class UserApi {
                 pageable,
                 this.userQueryMapper.countSearch(request)
         ));
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/my/modify")
+    public void myInfoModify(@RequestBody @Valid UserDto.Request.MyInfoModify request) {
+        this.userSaveQueryMapper.myInfoModify(request, SecurityUtils.getLoginUserNo());
     }
 }
