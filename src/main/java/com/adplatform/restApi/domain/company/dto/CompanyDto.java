@@ -105,6 +105,41 @@ public abstract class CompanyDto {
 
         @Getter
         @Setter
+        public static class CompanyInfo {
+            private Integer id;
+            private String name;
+            private Company.Type type;
+            private String registrationNumber;
+            private String representationName;
+            private Address address;
+            private String businessCategory;
+            private String businessItem;
+            private com.adplatform.restApi.global.value.Email taxBillEmail;
+
+            @QueryProjection
+            public CompanyInfo(Integer id,
+                                   String name,
+                                   Company.Type type,
+                                   String registrationNumber,
+                                   String representationName,
+                                   Address address,
+                                   String businessCategory,
+                                   String businessItem,
+                                   com.adplatform.restApi.global.value.Email taxBillEmail) {
+                this.id = id;
+                this.name = name;
+                this.type = type;
+                this.registrationNumber = registrationNumber;
+                this.representationName = representationName;
+                this.address = address;
+                this.businessCategory = businessCategory;
+                this.businessItem = businessItem;
+                this.taxBillEmail = taxBillEmail;
+            }
+        }
+
+        @Getter
+        @Setter
         public static class AdAccountDetail {
             private Integer id;
             private String name;

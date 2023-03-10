@@ -3,5 +3,56 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.adplatform.restApi.domain.business.dao.account.mapper.BusinessAccountQueryMapper">
+    <resultMap id="mapAccounts" type="com.adplatform.restApi.domain.business.dto.account.BusinessAccountDto$Response$Accounts">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="memberType" property="memberType"/>
+    </resultMap>
 
+    <sql id="accountsCondition1">
+        <if test="id">
+            AND a.id = #{id}
+        </if>
+        <if test="name">
+            AND a.name LIKE CONCAT('%', #{name}, '%')
+        </if>
+    </sql>
+
+    <sql id="accountsCondition2">
+        <if test="id">
+            AND c.business_account_info_id = #{id}
+        </if>
+        <if test="name">
+            AND e.name LIKE CONCAT('%', #{name}, '%')
+        </if>
+    </sql>
+
+    <sql id="accountsSelectQuery">
+        SELECT a.id AS id, a.name AS name, b.member_type AS memberType
+          FROM business_account_info a, business_account_user_info b
+         WHERE a.id = b.business_account_info_id
+           AND b.user_no = #{loginUserNo}
+           <include refid="accountsCondition1"/>
+           AND b.`status` = 'Y'
+        UNION
+        SELECT c.business_account_info_id AS id, e.name AS name, d.member_type AS memberType
+          FROM adaccount_info c, adaccount_user_info d, business_account_info e
+         WHERE c.id = d.adaccount_info_id
+           AND c.business_account_info_id = e.id
+           AND d.user_no = #{loginUserNo}
+           AND d.member_type = 'MEMBER'
+           <include refid="accountsCondition2"/>
+           AND d.`status` = 'Y'
+    </sql>
+
+    <select id="accounts" resultMap="mapAccounts">
+        <include refid="accountsSelectQuery"/>
+        <include refid="common.sortAndOrder"/>
+<!--        <include refid="common.limitAndOffset"/>-->
+    </select>
+
+    <select id="countAccounts" resultType="long">
+        SELECT COUNT(*)
+        FROM (<include refid="accountsSelectQuery"/>) a
+    </select>
 </mapper>

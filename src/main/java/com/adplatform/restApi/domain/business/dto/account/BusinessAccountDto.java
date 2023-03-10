@@ -23,17 +23,11 @@ public class BusinessAccountDto {
     public static abstract class Request {
         @Getter
         @Setter
-        public static class MyAccounts {
+        public static class Accounts {
             private Integer id;
             private String name;
             private Integer loginUserNo;
         }
-
-
-
-
-
-
 
         @Getter
         @Setter
@@ -70,6 +64,20 @@ public class BusinessAccountDto {
             @Email
             private String taxBillEmail;
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         @Getter
         @Setter
@@ -110,9 +118,10 @@ public class BusinessAccountDto {
     public static abstract class Response {
         @Getter
         @Setter
-        public static class MyAccounts {
+        public static class Accounts {
             private Integer id;
             private String name;
+            private String memberType;
         }
 
 

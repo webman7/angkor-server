@@ -47,13 +47,15 @@ public class WalletMaster extends BaseEntity {
     @Column(name = "close_date", columnDefinition = "INT")
     private Integer closeDate;
 
-    public WalletMaster(BusinessAccount businessAccount, Integer openDate) {
+    public WalletMaster(BusinessAccount businessAccount, Integer openDate, Float availableAmount, Float totalReserveAmount) {
         this.businessAccount = businessAccount;
         this.openDate = openDate;
+        this.availableAmount = availableAmount;
+        this.totalReserveAmount = totalReserveAmount;
     }
 
     public static WalletMaster create() {
-        return new WalletMaster(null, Integer.parseInt(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"))));
+        return new WalletMaster(null, Integer.parseInt(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"))), 0.0F, 0.0F);
     }
 
     public WalletMaster updateBusinessAccount(BusinessAccount businessAccount) {

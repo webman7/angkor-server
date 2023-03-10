@@ -20,5 +20,7 @@ public interface CompanyQuerydslRepository {
 
     Page<CompanyDto.Response.AdAccountDetail> registrationNumber(Pageable pageable, CompanyDto.Request.SearchKeyword searchRequest);
 
+    Integer registrationNumberCount(CompanyDto.Request.SearchKeyword searchRequest);
+
     List<CompanyDto.Response.Default> searchForSignUp(Company.Type type, String name);
 }

@@ -3,6 +3,7 @@ package com.adplatform.restApi.domain.company.dao;
 import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.company.dto.QCompanyDto_Response_AdAccountDetail;
+import com.adplatform.restApi.domain.company.dto.QCompanyDto_Response_CompanyInfo;
 import com.adplatform.restApi.domain.company.dto.QCompanyDto_Response_Default;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -80,6 +81,29 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                 .from(company);
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public Integer registrationNumberCount(CompanyDto.Request.SearchKeyword searchRequest) {
+        List<CompanyDto.Response.CompanyInfo> content = this.query
+                .select(new QCompanyDto_Response_CompanyInfo(
+                        company.id,
+                        company.name,
+                        company.type,
+                        company.registrationNumber,
+                        company.representationName,
+                        company.address,
+                        company.businessCategory,
+                        company.businessItem,
+                        company.taxBillEmail
+                ))
+                .from(company)
+                .where(
+                        this.registrationNumberEq(searchRequest.getSearchKeyword()),
+                        this.typeEq(searchRequest.getType()))
+                .fetch();
+
+        return content.size();
     }
 
     @Override

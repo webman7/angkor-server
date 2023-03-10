@@ -30,16 +30,16 @@ public class BusinessAccountQueryApi {
     private final BusinessAccountQueryMapper businessAccountQueryMapper;
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/myAccounts")
-    public PageDto<BusinessAccountDto.Response.MyAccounts> myAccounts(
+    @GetMapping("/accounts")
+    public PageDto<BusinessAccountDto.Response.Accounts> accounts(
             @PageableDefault Pageable pageable,
             @RequestParam(required = false) Integer id,
             @RequestParam(required = false) String name) {
 
         return PageDto.create(new PageImpl<>(
-                this.businessAccountQueryMapper.myAccounts(pageable, id, name, SecurityUtils.getLoginUserNo()),
+                this.businessAccountQueryMapper.accounts(pageable, id, name, SecurityUtils.getLoginUserNo()),
                 pageable,
-                this.businessAccountQueryMapper.countMyAccounts(id, name, SecurityUtils.getLoginUserNo())));
+                this.businessAccountQueryMapper.countAccounts(id, name, SecurityUtils.getLoginUserNo())));
     }
 
 

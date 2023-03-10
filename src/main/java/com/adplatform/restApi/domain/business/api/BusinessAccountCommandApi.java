@@ -17,12 +17,12 @@ import javax.validation.Valid;
  */
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/businessAccounts")
+@RequestMapping("/business")
 public class BusinessAccountCommandApi {
     private final BusinessAccountSaveService businessAccountSaveService;
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping
+    @PostMapping("/account")
     public void save(@RequestBody @Valid BusinessAccountDto.Request.Save request) {
         this.businessAccountSaveService.save(request, SecurityUtils.getLoginUserNo());
     }
