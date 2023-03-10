@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @Mapper(config = BaseMapperConfig.class)

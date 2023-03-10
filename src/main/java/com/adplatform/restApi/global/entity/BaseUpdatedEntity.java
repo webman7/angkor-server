@@ -12,7 +12,7 @@ import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @Getter

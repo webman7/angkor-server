@@ -33,6 +33,7 @@
          WHERE a.id = b.business_account_info_id
            AND b.user_no = #{loginUserNo}
            <include refid="accountsCondition1"/>
+           AND a.config IN ('ON', 'OFF')
            AND b.`status` = 'Y'
         UNION
         SELECT c.business_account_info_id AS id, e.name AS name, d.member_type AS memberType
@@ -42,6 +43,8 @@
            AND d.user_no = #{loginUserNo}
            AND d.member_type = 'MEMBER'
            <include refid="accountsCondition2"/>
+           AND e.config IN ('ON', 'OFF')
+           AND c.config IN ('ON', 'OFF')
            AND d.`status` = 'Y'
     </sql>
 

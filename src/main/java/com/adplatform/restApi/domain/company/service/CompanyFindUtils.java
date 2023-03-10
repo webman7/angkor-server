@@ -5,7 +5,7 @@ import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.company.exception.CompanyNotFoundException;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public class CompanyFindUtils {

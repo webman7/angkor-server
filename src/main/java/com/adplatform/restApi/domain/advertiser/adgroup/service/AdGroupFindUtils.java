@@ -5,7 +5,7 @@ import com.adplatform.restApi.domain.advertiser.adgroup.domain.AdGroup;
 import com.adplatform.restApi.domain.advertiser.adgroup.exception.AdGroupNotFoundException;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public class AdGroupFindUtils {

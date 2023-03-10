@@ -9,7 +9,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @Mapper(config = BaseMapperConfig.class, imports = Email.class)

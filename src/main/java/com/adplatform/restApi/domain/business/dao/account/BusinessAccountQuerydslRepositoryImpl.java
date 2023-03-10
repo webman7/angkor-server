@@ -1,5 +1,6 @@
 package com.adplatform.restApi.domain.business.dao.account;
 
+import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
 import com.adplatform.restApi.domain.business.domain.BusinessAccountUser;
 import com.adplatform.restApi.domain.business.domain.BusinessAccount;
 import com.adplatform.restApi.domain.business.dto.account.*;
@@ -9,6 +10,9 @@ import com.adplatform.restApi.domain.advertiser.campaign.domain.Campaign;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.advertiser.creative.domain.Creative;
 import com.adplatform.restApi.domain.advertiser.dashboard.dto.DashboardDto;
+import com.adplatform.restApi.domain.company.dto.QCompanyDto_Response_CompanyInfo;
+import com.adplatform.restApi.domain.user.domain.User;
+import com.adplatform.restApi.domain.user.dto.user.QUserDto_Response_BaseInfo;
 import com.adplatform.restApi.global.util.QuerydslOrderSpecifierUtil;
 import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_WalletBalance;
 import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_WalletSpend;
@@ -33,6 +37,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.adplatform.restApi.domain.adaccount.domain.QAdAccount.adAccount;
 import static com.adplatform.restApi.domain.business.domain.QBusinessAccount.businessAccount;
 import static com.adplatform.restApi.domain.business.domain.QBusinessAccountUser.businessAccountUser;
 import static com.adplatform.restApi.domain.business.dto.account.BusinessAccountDto.Request;
@@ -49,7 +54,7 @@ import static com.querydsl.core.types.ExpressionUtils.as;
 import static com.querydsl.jpa.JPAExpressions.select;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @Slf4j
@@ -386,132 +391,106 @@ public class BusinessAccountQuerydslRepositoryImpl implements BusinessAccountQue
         return this.query.select(new QBusinessAccountDto_Response_BusinessAccountInfo(
                         businessAccount.id,
                         businessAccount.name,
-                        businessAccount.config
+                        businessAccount.config,
+                        new QCompanyDto_Response_CompanyInfo(
+                            company.id,
+                            company.name,
+                            company.type,
+                            company.registrationNumber,
+                            company.representationName,
+                            company.address,
+                            company.businessCategory,
+                            company.businessItem,
+                            company.taxBillEmail
+                        )
                 ))
-                .from(businessAccount)
-                .where(businessAccount.id.eq(businessAccountId))
+                .from(businessAccount, company)
+                .where(businessAccount.id.eq(businessAccountId),
+                        businessAccount.company.id.eq(company.id)
+                )
                 .fetchOne();
     }
 
-//    @Override
-//    public BusinessAccountDto.Response.BusinessAccountCashInfo businessAccountCashInfo(Integer businessAccountId) {
-//        return this.query.select(new QBusinessAccountDto_Response_BusinessAccountCashInfo(
-//                        walletCashTotal.amount.sum(),
-//                        walletCashTotal.availableAmount.sum(),
-//                        walletCashTotal.reserveAmount.sum()
-//                ))
-//                .from(businessAccount, walletCashTotal)
-//                .where(businessAccount.id.eq(businessAccountId),
-//                       businessAccount.id.eq(walletCashTotal.id.walletMasterId)
-//                ).fetchOne();
-//    }
-
-//    @Override
-//    public List<BusinessAccountDto.Response.BusinessAccountCashDetailInfo> businessAccountCashDetailInfo(Integer businessAccountId) {
-//        return this.getBusinessAccountCashDetailInfoQuery(null, businessAccountId).fetch();
-//    }
-//
-//    private JPAQuery<Response.BusinessAccountCashDetailInfo> getBusinessAccountCashDetailInfoQuery(
-//            Pageable pageable,
-//            Integer businessAccountId) {
-//        LocalDate now = LocalDate.now();
-//        DateTimeFormatter yyyyMMdd = DateTimeFormatter.ofPattern("yyyyMMdd");
-//        JPAQuery<Response.BusinessAccountCashDetailInfo> query = this.query.select(
-//                        new QBusinessAccountDto_Response_BusinessAccountCashDetailInfo(
-//                                Expressions.as(Expressions.constant(businessAccountId), "id"),
-//                                cash.name,
-//                                cash.saleAffect,
-//                                cash.refund,
-//                                cash.priority,
-//                                walletCashTotal.cash.id,
-//                                as(walletCashTotal.amount.coalesce(0L), "amount"),
-//                                as(walletCashTotal.availableAmount.coalesce(0L), "availableAmount"),
-//                                as(walletCashTotal.reserveAmount.coalesce(0L), "reserveAmount")
-//                        )
-//                )
-//                .from(cash)
-//                .join(walletCashTotal).on(
-//                        walletCashTotal.id.cashId.eq(cash.id),
-//                        walletCashTotal.id.walletMasterId.eq(businessAccountId)
-//                )
-//                .where(walletCashTotal.id.cashId.in(Arrays.asList(1, 2))) ;
-//
-//        return Objects.nonNull(pageable)
-//                ? query.orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(BusinessAccount.class, "businessAccount", pageable.getSort()).toArray(OrderSpecifier[]::new))
-//                : query;
-//    }
-
     @Override
-    public void outOfBalanceUpdate(Integer businessAccountId, Boolean oufOfBalance) {
-//        this.query.update(businessAccount)
-//                .set(businessAccount.outOfBalance, oufOfBalance)
-//                .where(businessAccount.id.eq(businessAccountId))
-//                .execute();
+    public List<BusinessAccountDto.Response.BusinessAccountUserInfo> businessAccountUserInfo(Integer businessAccountId) {
+        return this.query.select(new QBusinessAccountDto_Response_BusinessAccountUserInfo(
+                        businessAccount.id,
+                        new QUserDto_Response_BaseInfo(
+                                user.id,
+                                user.loginId,
+                                user.name,
+                                user.phone
+                        ),
+                        businessAccountUser.memberType,
+                        businessAccountUser.accountingYN,
+                        businessAccountUser.status
+                ))
+                .from(businessAccount, businessAccountUser, user)
+                .where(businessAccount.id.eq(businessAccountId),
+                        businessAccountUser.businessAccount.id.eq(businessAccount.id),
+                        businessAccountUser.user.id.eq(user.id),
+                        user.active.in(User.Active.Y, User.Active.L)
+                )
+                .fetch();
     }
 
-//    @Override
-//    public DashboardDto.Response.BusinessAccountCountByAd businessAccountsCountByAd(Integer businessAccountId) {
-//        return this.query.select(new QDashboardDto_Response_BusinessAccountCountByAd(
-//                as(select(Wildcard.count)
-//                        .from(businessAccount, campaign)
-//                        .where(businessAccount.id.eq(campaign.businessAccount.id),
-//                                businessAccount.id.eq(businessAccountId),
-//                                campaign.config.eq(Campaign.Config.ON),
-//                                campaign.systemConfig.eq(Campaign.SystemConfig.ON),
-//                                campaign.status.eq(Campaign.Status.LIVE)),
-//                        "campaignCount"),
-//                as(select(Wildcard.count)
-//                                .from(businessAccount, campaign, adGroup)
-//                                .where(businessAccount.id.eq(campaign.businessAccount.id),
-//                                        businessAccount.id.eq(businessAccountId),
-//                                        campaign.id.eq(adGroup.campaign.id),
-//                                        campaign.config.eq(Campaign.Config.ON),
-//                                        campaign.systemConfig.eq(Campaign.SystemConfig.ON),
-//                                        campaign.status.eq(Campaign.Status.LIVE),
-//                                        adGroup.config.eq(AdGroup.Config.ON),
-//                                        adGroup.systemConfig.eq(AdGroup.SystemConfig.ON),
-//                                        adGroup.status.eq(AdGroup.Status.LIVE)),
-//                        "adgroupCount"),
-//                as(select(Wildcard.count)
-//                                .from(businessAccount, campaign, adGroup, creative)
-//                                .where(businessAccount.id.eq(campaign.businessAccount.id),
-//                                        businessAccount.id.eq(businessAccountId),
-//                                        campaign.id.eq(adGroup.campaign.id),
-//                                        adGroup.id.eq(creative.adGroup.id),
-//                                        campaign.config.eq(Campaign.Config.ON),
-//                                        campaign.systemConfig.eq(Campaign.SystemConfig.ON),
-//                                        campaign.status.eq(Campaign.Status.LIVE),
-//                                        adGroup.config.eq(AdGroup.Config.ON),
-//                                        adGroup.systemConfig.eq(AdGroup.SystemConfig.ON),
-//                                        adGroup.status.eq(AdGroup.Status.LIVE),
-//                                        creative.config.eq(Creative.Config.ON),
-//                                        creative.systemConfig.eq(Creative.SystemConfig.ON),
-//                                        creative.status.eq(Creative.Status.OPERATING)),
-//                        "creativeCount")
-//                ))
-//                .from(businessAccount)
-//                .where(businessAccount.id.eq(businessAccountId))
-//                .fetchOne();
-//    }
+    @Override
+    public BusinessAccountDto.Response.BusinessAccountUserInfo businessAccountUserInfo(Integer businessAccountId, Integer userNo) {
+        return this.query.select(new QBusinessAccountDto_Response_BusinessAccountUserInfo(
+                        businessAccount.id,
+                        new QUserDto_Response_BaseInfo(
+                                user.id,
+                                user.loginId,
+                                user.name,
+                                user.phone
+                        ),
+                        businessAccountUser.memberType,
+                        businessAccountUser.accountingYN,
+                        businessAccountUser.status
+                ))
+                .from(businessAccount, businessAccountUser, user)
+                .where(businessAccount.id.eq(businessAccountId),
+                        user.id.eq(userNo),
+                        businessAccountUser.businessAccount.id.eq(businessAccount.id),
+                        businessAccountUser.user.id.eq(user.id),
+                        user.active.in(User.Active.Y, User.Active.L)
+                )
+                .fetchOne();
+    }
 
-//    @Override
-//    public CompanyDto.Response.BusinessAccountDetail businessAccountByAdvertiser(Integer businessAccountId) {
-//        return this.query.select(new QCompanyDto_Response_BusinessAccountDetail(
-//                company.id,
-//                company.name,
-//                company.type,
-//                company.registrationNumber,
-//                company.representationName,
-//                company.address,
-//                company.businessCategory,
-//                company.businessItem,
-//                company.taxBillEmail
-//                ))
-//                .from(businessAccount, company)
-//                .where(businessAccount.id.eq(businessAccountId),
-//                       businessAccount.ownerCompany.id.eq(company.id))
-//                .fetchOne();
-//    }
+    @Override
+    public BusinessAccountDto.Response.BusinessAccountCashInfo businessAccountCashInfo(Integer businessAccountId) {
+        return this.query.select(new QBusinessAccountDto_Response_BusinessAccountCashInfo(
+                        walletMaster.availableAmount.sum(),
+                        walletMaster.totalReserveAmount.sum()
+                ))
+                .from(businessAccount, walletMaster)
+                .where(businessAccount.id.eq(businessAccountId),
+                       businessAccount.id.eq(walletMaster.id)
+                ).fetchOne();
+    }
+
+    @Override
+    public List<BusinessAccountDto.Response.AdAccountInfo> businessAccountByAdAccounts(Integer businessAccountId) {
+        return this.query.select(new QBusinessAccountDto_Response_AdAccountInfo(
+                    adAccount.id,
+                    adAccount.name,
+                    adAccount.config,
+                    adAccount.adminStop,
+                    adAccount.outOfBalance,
+                    new QBusinessAccountDto_Response_AdAccountBusinessAccountInfo(
+                        businessAccount.id,
+                        businessAccount.name,
+                        businessAccount.config
+                    )
+                ))
+                .from(businessAccount, adAccount)
+                .where(businessAccount.id.eq(businessAccountId),
+                       adAccount.businessAccount.id.eq(businessAccount.id),
+                       adAccount.config.in(AdAccount.Config.ON, AdAccount.Config.OFF)
+                )
+                .fetch();
+    }
 
     private BooleanExpression eqId(Integer id) {
         return id != null ? businessAccount.id.eq(id) : null;

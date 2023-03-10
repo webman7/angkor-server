@@ -5,7 +5,7 @@ import com.adplatform.restApi.domain.advertiser.creative.domain.Creative;
 import com.adplatform.restApi.domain.advertiser.creative.exception.CreativeNotFoundException;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public class CreativeFindUtils {

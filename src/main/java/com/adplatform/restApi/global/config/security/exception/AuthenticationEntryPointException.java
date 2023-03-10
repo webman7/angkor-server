@@ -1,7 +1,7 @@
 package com.adplatform.restApi.global.config.security.exception;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public class AuthenticationEntryPointException extends SecurityException {

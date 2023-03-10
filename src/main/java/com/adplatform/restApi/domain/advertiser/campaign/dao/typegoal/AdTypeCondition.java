@@ -9,7 +9,7 @@ import java.util.Objects;
 import static com.adplatform.restApi.domain.advertiser.campaign.domain.QAdType.adType;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public class AdTypeCondition {

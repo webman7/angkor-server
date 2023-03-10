@@ -3,7 +3,7 @@ package com.adplatform.restApi.global.config.security.aop;
 import java.lang.annotation.*;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  * @see com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccountByCreativeIdAspect AuthorizedAdAccountByCreativeIdAspect
  */

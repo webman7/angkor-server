@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public interface RoleRepository extends JpaRepository<Role, Long> {

@@ -7,7 +7,7 @@ import org.springframework.data.domain.AuditorAware;
 import java.util.Optional;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @Configuration

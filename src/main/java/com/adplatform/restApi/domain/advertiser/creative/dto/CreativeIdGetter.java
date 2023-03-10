@@ -1,7 +1,7 @@
 package com.adplatform.restApi.domain.advertiser.creative.dto;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @FunctionalInterface

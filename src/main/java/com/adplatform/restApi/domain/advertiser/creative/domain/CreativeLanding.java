@@ -10,7 +10,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @Getter

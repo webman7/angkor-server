@@ -14,7 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @RequiredArgsConstructor

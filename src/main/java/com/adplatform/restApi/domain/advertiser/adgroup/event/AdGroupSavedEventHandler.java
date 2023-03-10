@@ -6,7 +6,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @RequiredArgsConstructor

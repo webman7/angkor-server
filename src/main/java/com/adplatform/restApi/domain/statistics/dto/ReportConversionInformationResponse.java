@@ -4,7 +4,7 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @Getter

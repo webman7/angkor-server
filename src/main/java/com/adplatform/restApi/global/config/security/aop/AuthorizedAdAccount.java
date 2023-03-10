@@ -22,7 +22,7 @@ import java.lang.annotation.*;
  * {@link AuthorizedAdAccountByCampaignId}, {@link AuthorizedAdAccountByAdGroupId}, {@link AuthorizedAdAccountByCreativeId}
  * 를 사용한다.
  *
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  * @see com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccountAspect AuthorizedAdAccountAspect
  * @see AdAccountIdGetter AdAccountIdGetter

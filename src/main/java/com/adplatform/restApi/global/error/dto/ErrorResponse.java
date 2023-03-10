@@ -6,7 +6,7 @@ import lombok.Getter;
 import java.util.Map;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @Getter

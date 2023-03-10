@@ -4,7 +4,7 @@ import com.adplatform.restApi.domain.advertiser.adgroup.domain.AdGroupDemographi
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public interface AdGroupDemographicTargetRepository extends JpaRepository<AdGroupDemographicTarget, Integer> {

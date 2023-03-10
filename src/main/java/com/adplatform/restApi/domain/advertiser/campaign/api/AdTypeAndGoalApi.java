@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @RequiredArgsConstructor

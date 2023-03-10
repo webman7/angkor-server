@@ -5,7 +5,7 @@ import com.adplatform.restApi.domain.business.domain.BusinessAccountUser;
 import java.util.Optional;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public interface BusinessAccountUserQueryRepository {

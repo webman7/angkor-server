@@ -5,7 +5,7 @@ import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
 import java.util.Optional;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public interface AdAccountUserQueryRepository {

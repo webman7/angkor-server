@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @Mapper(config = BaseMapperConfig.class)

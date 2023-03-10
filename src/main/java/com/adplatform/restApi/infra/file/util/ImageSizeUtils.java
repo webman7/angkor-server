@@ -8,7 +8,7 @@ import java.io.IOException;
 /**
  * Image size calculate utility class.
  *
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public class ImageSizeUtils {

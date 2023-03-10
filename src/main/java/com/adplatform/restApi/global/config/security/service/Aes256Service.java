@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @Slf4j

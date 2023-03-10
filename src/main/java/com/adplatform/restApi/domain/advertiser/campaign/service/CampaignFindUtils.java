@@ -5,7 +5,7 @@ import com.adplatform.restApi.domain.advertiser.campaign.domain.Campaign;
 import com.adplatform.restApi.domain.advertiser.campaign.exception.CampaignNotFoundException;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public class CampaignFindUtils {

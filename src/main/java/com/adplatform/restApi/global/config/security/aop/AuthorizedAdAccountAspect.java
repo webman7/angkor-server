@@ -25,7 +25,7 @@ import static com.adplatform.restApi.global.config.security.aop.AdAccountUserVal
  * <p>
  * {@link AuthorizedAdAccount} Annotation과 함께 사용되며, 광고 계정 권한 인가에 대한 실제 로직이 담겨있는 Aspect 클래스이다.
  *
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  * @see com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount AuthorizedAdAccount
  * @see AdAccountIdGetter AdAccountIdGetter

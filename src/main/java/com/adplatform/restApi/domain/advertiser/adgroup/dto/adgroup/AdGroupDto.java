@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public abstract class AdGroupDto {

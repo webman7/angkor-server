@@ -8,7 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @Configuration

@@ -12,7 +12,7 @@ import static com.adplatform.restApi.domain.adaccount.domain.QAdAccountUser.adAc
 import static com.adplatform.restApi.domain.business.domain.QBusinessAccountUser.businessAccountUser;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @RequiredArgsConstructor

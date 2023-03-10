@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @Repository

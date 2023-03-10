@@ -1,7 +1,7 @@
 package com.adplatform.restApi.domain.user.exception;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public class WaitingApprovalUserException extends UserException {

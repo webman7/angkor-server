@@ -19,7 +19,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @Slf4j

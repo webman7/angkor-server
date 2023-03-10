@@ -5,7 +5,7 @@ import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
 import com.adplatform.restApi.domain.adaccount.exception.AdAccountNotFoundException;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public class AdAccountFindUtils {

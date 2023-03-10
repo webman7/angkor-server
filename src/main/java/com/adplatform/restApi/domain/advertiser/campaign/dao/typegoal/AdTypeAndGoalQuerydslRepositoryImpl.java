@@ -12,7 +12,7 @@ import static com.adplatform.restApi.domain.advertiser.campaign.domain.QAdTypeAn
 import static com.adplatform.restApi.domain.advertiser.campaign.domain.QCampaign.campaign;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @RequiredArgsConstructor

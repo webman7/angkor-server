@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @RequiredArgsConstructor
@@ -42,8 +42,42 @@ public class BusinessAccountQueryApi {
                 this.businessAccountQueryMapper.countAccounts(id, name, SecurityUtils.getLoginUserNo())));
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/account/counts")
+    public BusinessAccountDto.Response.BusinessAccountCount getCounts() {
+        return this.businessAccountRepository.countStatusYN(SecurityUtils.getLoginUserNo())
+                .orElse(new BusinessAccountDto.Response.BusinessAccountCount(0L, 0L));
+    }
 
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/account/{id}/cash")
+    public BusinessAccountDto.Response.BusinessAccountCashInfo businessAccountCashInfo(@PathVariable(name = "id") Integer businessAccountId) {
+        return this.businessAccountRepository.businessAccountCashInfo(businessAccountId);
+    }
 
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/account/{id}")
+    public BusinessAccountDto.Response.BusinessAccountInfo businessAccountInfo(@PathVariable(name = "id") Integer businessAccountId) {
+        return this.businessAccountRepository.businessAccountInfo(businessAccountId);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/account/{id}/users")
+    public List<BusinessAccountDto.Response.BusinessAccountUserInfo> businessAccountUserInfo(@PathVariable(name = "id") Integer businessAccountId) {
+        return this.businessAccountRepository.businessAccountUserInfo(businessAccountId);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/account/{id}/user/{userNo}")
+    public BusinessAccountDto.Response.BusinessAccountUserInfo businessAccountUserInfo(@PathVariable(name = "id") Integer businessAccountId, @PathVariable(name = "userNo") Integer userNo) {
+        return this.businessAccountRepository.businessAccountUserInfo(businessAccountId, userNo);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/account/{id}/adaccounts")
+    public List<BusinessAccountDto.Response.AdAccountInfo> businessAccountByAdAccounts(@PathVariable(name = "id") Integer businessAccountId) {
+        return this.businessAccountRepository.businessAccountByAdAccounts(businessAccountId);
+    }
 
 
 
@@ -96,35 +130,4 @@ public class BusinessAccountQueryApi {
             BusinessAccountDto.Request.ForCashSearch request) {
         return PageDto.create(this.businessAccountRepository.searchForCash(pageable, request));
     }
-
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/counts")
-    public BusinessAccountDto.Response.BusinessAccountCount getCounts() {
-        return this.businessAccountRepository.countStatusYN(SecurityUtils.getLoginUserNo())
-                .orElse(new BusinessAccountDto.Response.BusinessAccountCount(0L, 0L));
-    }
-
-//    @ResponseStatus(HttpStatus.OK)
-//    @GetMapping("/{id}")
-//    public BusinessAccountDto.Response.BusinessAccountInfo businessAccountInfo(@PathVariable(name = "id") Integer businessAccountId) {
-//        return this.businessAccountRepository.businessAccountInfo(businessAccountId);
-//    }
-//
-//    @ResponseStatus(HttpStatus.OK)
-//    @GetMapping("/{id}/cash")
-//    public BusinessAccountDto.Response.BusinessAccountCashInfo businessAccountCashInfo(@PathVariable(name = "id") Integer businessAccountId) {
-//        return this.businessAccountRepository.businessAccountCashInfo(businessAccountId);
-//    }
-//
-//    @ResponseStatus(HttpStatus.OK)
-//    @GetMapping("/{id}/cash/detail")
-//    public List<BusinessAccountDto.Response.BusinessAccountCashDetailInfo> businessAccountCashDetailInfo(@PathVariable(name = "id") Integer businessAccountId) {
-//        return this.businessAccountRepository.businessAccountCashDetailInfo(businessAccountId);
-//    }
-//
-//    @ResponseStatus(HttpStatus.OK)
-//    @GetMapping("/{id}/advertiser")
-//    public CompanyDto.Response.BusinessAccountDetail businessAccountByAdvertiser(@PathVariable(name = "id") Integer businessAccountId) {
-//        return this.businessAccountRepository.businessAccountByAdvertiser(businessAccountId);
-//    }
 }

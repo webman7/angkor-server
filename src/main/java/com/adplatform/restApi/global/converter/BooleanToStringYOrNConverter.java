@@ -8,7 +8,7 @@ import javax.persistence.AttributeConverter;
  * <p>{@code Boolean}을 {@code String} Y 또는 N으로 변환하거나,
  * <p>{@code String} Y 또는 N을 {@code Boolean} {@code true} 또는 {@code false}로 변환하는 컨버터 클래스이다.
  *
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  * @see javax.persistence.Convert Convert
  */

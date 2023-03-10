@@ -11,7 +11,7 @@ import java.io.File;
  * Local environment class.
  *
  * <p>로컬 환경에서 실행될 경우 스프링 컨테이너가 종료될 때 {@link LocalEnvironmentConfig#destroy()}가 실행된다.
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @Profile("local")

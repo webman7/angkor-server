@@ -15,7 +15,7 @@ import java.io.File;
 import java.util.UUID;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 //@Profile({"stage", "local", "dev"})

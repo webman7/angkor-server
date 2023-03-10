@@ -10,7 +10,7 @@ import static com.adplatform.restApi.domain.advertiser.adgroup.domain.QAdGroup.a
 import static java.util.Objects.nonNull;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public class AdGroupCondition {

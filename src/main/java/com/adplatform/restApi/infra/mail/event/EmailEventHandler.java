@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 /**
  * Email event Handler Class.
  *
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  * @see com.adplatform.restApi.infra.mail.event.FindPasswordEmailSentEvent FindPasswordEmailSentEvent
  */

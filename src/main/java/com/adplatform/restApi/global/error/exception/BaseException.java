@@ -1,7 +1,7 @@
 package com.adplatform.restApi.global.error.exception;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public abstract class BaseException extends RuntimeException {

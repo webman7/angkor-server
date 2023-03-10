@@ -5,7 +5,7 @@ import com.adplatform.restApi.domain.adaccount.dao.user.AdAccountUserRepository;
 import com.adplatform.restApi.domain.adaccount.exception.AdAccountUserNotFoundException;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public class AdAccountUserQueryUtils {

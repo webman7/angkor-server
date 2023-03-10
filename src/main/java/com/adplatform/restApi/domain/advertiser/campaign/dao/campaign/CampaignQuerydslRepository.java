@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public interface CampaignQuerydslRepository {

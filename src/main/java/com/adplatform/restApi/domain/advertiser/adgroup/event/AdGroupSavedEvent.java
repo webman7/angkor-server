@@ -10,7 +10,7 @@ import lombok.Getter;
 import java.util.List;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @Getter

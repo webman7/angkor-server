@@ -5,7 +5,7 @@ import com.adplatform.restApi.domain.business.domain.BusinessAccount;
 import com.adplatform.restApi.domain.business.exception.BusinessAccountNotFoundException;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public class BusinessAccountQueryUtils {

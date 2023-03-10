@@ -5,7 +5,7 @@ import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @MapperConfig(

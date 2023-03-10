@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @Slf4j

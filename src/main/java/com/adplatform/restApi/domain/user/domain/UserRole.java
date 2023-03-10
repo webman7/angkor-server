@@ -9,7 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 //@Getter

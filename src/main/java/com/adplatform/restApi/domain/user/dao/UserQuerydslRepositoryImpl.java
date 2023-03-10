@@ -17,7 +17,7 @@ import static com.adplatform.restApi.domain.history.domain.QUserPasswordChangeHi
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @RequiredArgsConstructor

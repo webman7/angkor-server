@@ -18,7 +18,7 @@ import static com.adplatform.restApi.domain.advertiser.creative.domain.QCreative
 import static com.adplatform.restApi.domain.advertiser.creative.domain.QCreativeOpinionProofFile.creativeOpinionProofFile;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @RequiredArgsConstructor

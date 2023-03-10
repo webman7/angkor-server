@@ -5,7 +5,7 @@ import com.adplatform.restApi.domain.advertiser.creative.dto.CreativeDto;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public interface FileService {

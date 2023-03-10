@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public class WalletDto {

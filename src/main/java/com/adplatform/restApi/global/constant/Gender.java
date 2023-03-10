@@ -1,7 +1,7 @@
 package com.adplatform.restApi.global.constant;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public enum Gender {

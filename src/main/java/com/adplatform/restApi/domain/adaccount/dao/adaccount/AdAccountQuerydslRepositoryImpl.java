@@ -52,7 +52,7 @@ import static com.querydsl.core.types.ExpressionUtils.as;
 import static com.querydsl.jpa.JPAExpressions.select;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @Slf4j

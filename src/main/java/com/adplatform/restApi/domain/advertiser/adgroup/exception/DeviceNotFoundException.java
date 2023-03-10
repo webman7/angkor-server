@@ -3,7 +3,7 @@ package com.adplatform.restApi.domain.advertiser.adgroup.exception;
 import com.adplatform.restApi.global.error.exception.BaseException;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public class DeviceNotFoundException extends BaseException {

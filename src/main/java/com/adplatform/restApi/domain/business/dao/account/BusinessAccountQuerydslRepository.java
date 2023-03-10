@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public interface BusinessAccountQuerydslRepository {
@@ -37,15 +37,18 @@ public interface BusinessAccountQuerydslRepository {
     Optional<BusinessAccountDto.Response.BusinessAccountCount> countStatusYN(Integer loginUserNo);
 
     BusinessAccountDto.Response.BusinessAccountInfo businessAccountInfo(Integer businessAccountId);
+    List<BusinessAccountDto.Response.BusinessAccountUserInfo> businessAccountUserInfo(Integer businessAccountId);
+    BusinessAccountDto.Response.BusinessAccountUserInfo businessAccountUserInfo(Integer businessAccountId, Integer userNo);
 
-//    BusinessAccountDto.Response.BusinessAccountCashInfo businessAccountCashInfo(Integer businessAccountId);
+    List<BusinessAccountDto.Response.AdAccountInfo> businessAccountByAdAccounts(Integer businessAccountId);
+
+
+
+    BusinessAccountDto.Response.BusinessAccountCashInfo businessAccountCashInfo(Integer businessAccountId);
 
 //    List<BusinessAccountDto.Response.BusinessAccountCashDetailInfo> businessAccountCashDetailInfo(Integer businessAccountId);
 
-    void outOfBalanceUpdate(Integer businessAccountId, Boolean oufOfBalance);
-
 //    DashboardDto.Response.BusinessAccountCountByAd businessAccountsCountByAd(Integer businessAccountId);
 //
-//    CompanyDto.Response.BusinessAccountDetail businessAccountByAdvertiser(Integer businessAccountId);
 
 }

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import static com.adplatform.restApi.global.config.security.aop.AdAccountUserValidationUtil.validateAdAccountUser;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @see com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccountByCreativeId AuthorizedAdAccountByCreativeId
  * @since 1.0
  */

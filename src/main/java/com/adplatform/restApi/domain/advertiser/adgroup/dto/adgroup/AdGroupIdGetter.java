@@ -1,7 +1,7 @@
 package com.adplatform.restApi.domain.advertiser.adgroup.dto.adgroup;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @FunctionalInterface

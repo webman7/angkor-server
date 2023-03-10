@@ -1,7 +1,7 @@
 package com.adplatform.restApi.global.config.security.constant;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public interface JwtProperties {

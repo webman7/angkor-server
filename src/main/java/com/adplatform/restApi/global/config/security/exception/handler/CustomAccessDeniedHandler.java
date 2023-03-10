@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @Component

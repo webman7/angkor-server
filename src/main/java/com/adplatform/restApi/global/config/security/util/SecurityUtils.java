@@ -8,7 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

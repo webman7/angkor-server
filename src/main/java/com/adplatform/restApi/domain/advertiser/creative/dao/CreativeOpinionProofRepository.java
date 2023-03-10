@@ -4,7 +4,7 @@ import com.adplatform.restApi.domain.advertiser.creative.domain.CreativeOpinionP
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public interface CreativeOpinionProofRepository extends JpaRepository<CreativeOpinionProofFile, Integer> {

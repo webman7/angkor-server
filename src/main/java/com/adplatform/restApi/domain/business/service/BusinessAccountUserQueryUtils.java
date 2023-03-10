@@ -5,7 +5,7 @@ import com.adplatform.restApi.domain.business.dao.user.BusinessAccountUserReposi
 import com.adplatform.restApi.domain.business.exception.BusinessAccountUserNotFoundException;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public class BusinessAccountUserQueryUtils {

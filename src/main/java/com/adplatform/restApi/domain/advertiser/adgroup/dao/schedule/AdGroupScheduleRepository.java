@@ -4,7 +4,7 @@ import com.adplatform.restApi.domain.advertiser.adgroup.domain.AdGroupSchedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public interface AdGroupScheduleRepository extends JpaRepository<AdGroupSchedule, Integer> {

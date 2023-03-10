@@ -9,7 +9,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public abstract class AuthDto {

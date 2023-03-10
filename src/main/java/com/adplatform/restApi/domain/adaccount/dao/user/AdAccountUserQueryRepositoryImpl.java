@@ -11,7 +11,7 @@ import java.util.Optional;
 import static com.adplatform.restApi.domain.adaccount.domain.QAdAccountUser.adAccountUser;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @RequiredArgsConstructor

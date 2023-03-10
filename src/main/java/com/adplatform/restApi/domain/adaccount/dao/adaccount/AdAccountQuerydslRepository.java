@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public interface AdAccountQuerydslRepository {

@@ -1,8 +1,13 @@
 package com.adplatform.restApi.domain.business.dto.account;
 
+import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
 import com.adplatform.restApi.domain.business.domain.BusinessAccount;
 import com.adplatform.restApi.domain.business.domain.BusinessAccountUser;
 import com.adplatform.restApi.domain.company.domain.Company;
+import com.adplatform.restApi.domain.company.dto.CompanyDto;
+import com.adplatform.restApi.domain.user.domain.User;
+import com.adplatform.restApi.domain.user.dto.user.QUserDto_Response_BaseInfo;
+import com.adplatform.restApi.domain.user.dto.user.UserDto;
 import com.adplatform.restApi.domain.wallet.dto.WalletDto;
 import com.adplatform.restApi.global.value.Address;
 import com.querydsl.core.annotations.QueryProjection;
@@ -15,7 +20,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public class BusinessAccountDto {
@@ -122,6 +127,122 @@ public class BusinessAccountDto {
             private Integer id;
             private String name;
             private String memberType;
+        }
+
+        @Getter
+        @Setter
+        public static class BusinessAccountCount {
+            private long statusYCount;
+            private long statusNCount;
+
+            @QueryProjection
+            public BusinessAccountCount(long statusYCount, long statusNCount) {
+                this.statusYCount = statusYCount;
+                this.statusNCount = statusNCount;
+            }
+        }
+        @Getter
+        @Setter
+        public static class BusinessAccountInfo {
+            private Integer id;
+            private String name;
+            private BusinessAccount.Config config;
+            private CompanyDto.Response.CompanyInfo company;
+
+            @QueryProjection
+            public BusinessAccountInfo(
+                    Integer id,
+                    String name,
+                    BusinessAccount.Config config,
+                    CompanyDto.Response.CompanyInfo company) {
+                this.id = id;
+                this.name = name;
+                this.config = config;
+                this.company = company;
+            }
+        }
+
+        @Getter
+        @Setter
+        public static class BusinessAccountUserInfo {
+            private Integer id;
+            private UserDto.Response.BaseInfo user;
+            private BusinessAccountUser.MemberType memberType;
+            private BusinessAccountUser.AccountingYN accountingYN;
+            private BusinessAccountUser.Status status;
+
+            @QueryProjection
+            public BusinessAccountUserInfo(
+                    Integer id,
+                    UserDto.Response.BaseInfo user,
+                    BusinessAccountUser.MemberType memberType,
+                    BusinessAccountUser.AccountingYN accountingYN,
+                    BusinessAccountUser.Status status) {
+                this.id = id;
+                this.user = user;
+                this.memberType = memberType;
+                this.accountingYN = accountingYN;
+                this.status = status;
+            }
+        }
+
+        @Getter
+        @Setter
+        public static class AdAccountBusinessAccountInfo {
+            private Integer id;
+            private String name;
+            private BusinessAccount.Config config;
+            @QueryProjection
+            public AdAccountBusinessAccountInfo(
+                    Integer id,
+                    String name,
+                    BusinessAccount.Config config) {
+                this.id = id;
+                this.name = name;
+                this.config = config;
+            }
+        }
+
+        @Getter
+        @Setter
+        public static class AdAccountInfo {
+            private Integer id;
+            private String name;
+            private AdAccount.Config config;
+            private boolean adminStop;
+            private boolean outOfBalance;
+            private BusinessAccountDto.Response.AdAccountBusinessAccountInfo business;
+
+            @QueryProjection
+            public AdAccountInfo(
+                    Integer id,
+                    String name,
+                    AdAccount.Config config,
+                    boolean adminStop,
+                    boolean outOfBalance,
+                    BusinessAccountDto.Response.AdAccountBusinessAccountInfo business) {
+                this.id = id;
+                this.name = name;
+                this.config = config;
+                this.adminStop = adminStop;
+                this.outOfBalance = outOfBalance;
+                this.business = business;
+            }
+        }
+
+        @Getter
+        @Setter
+        public static class BusinessAccountCashInfo {
+            private Float availableAmount;
+            private Float totalReserveAmount;
+
+            @QueryProjection
+            public BusinessAccountCashInfo(
+                    Float availableAmount,
+                    Float totalReserveAmount) {
+                this.availableAmount = availableAmount;
+                this.totalReserveAmount = totalReserveAmount;
+            }
         }
 
 
@@ -247,89 +368,6 @@ public class BusinessAccountDto {
                 this.config = config;
             }
         }
-        @Getter
-        @Setter
-        public static class BusinessAccountCount {
-            private long statusYCount;
-            private long statusNCount;
 
-            @QueryProjection
-            public BusinessAccountCount(long statusYCount, long statusNCount) {
-                this.statusYCount = statusYCount;
-                this.statusNCount = statusNCount;
-            }
-        }
-        @Getter
-        @Setter
-        public static class BusinessAccountInfo {
-            private Integer id;
-            private String name;
-            private BusinessAccount.Config config;
-
-            @QueryProjection
-            public BusinessAccountInfo(
-                    Integer id,
-                    String name,
-                    BusinessAccount.Config config) {
-                this.id = id;
-                this.name = name;
-                this.config = config;
-            }
-        }
-
-        @Getter
-        @Setter
-        public static class BusinessAccountCashInfo {
-            private Long amount;
-            private Long availableAmount;
-            private Long reserveAmount;
-
-            @QueryProjection
-            public BusinessAccountCashInfo(
-                    Long amount,
-                    Long availableAmount,
-                    Long reserveAmount) {
-                this.amount = amount;
-                this.availableAmount = availableAmount;
-                this.reserveAmount = reserveAmount;
-            }
-        }
-
-        @Getter
-        @Setter
-        public static class BusinessAccountCashDetailInfo {
-
-            private Integer id;
-            private String name;
-            private Boolean saleAffect;
-            private Boolean refund;
-            private Integer priority;
-            private Integer cashId;
-            private Long amount;
-            private Long availableAmount;
-            private Long reserveAmount;
-
-            @QueryProjection
-            public BusinessAccountCashDetailInfo(
-                    Integer id,
-                    String name,
-                    Boolean saleAffect,
-                    Boolean refund,
-                    Integer priority,
-                    Integer cashId,
-                    Long amount,
-                    Long availableAmount,
-                    Long reserveAmount) {
-                this.id = id;
-                this.name = name;
-                this.saleAffect = saleAffect;
-                this.refund = refund;
-                this.priority = priority;
-                this.cashId = cashId;
-                this.amount = amount;
-                this.availableAmount = availableAmount;
-                this.reserveAmount = reserveAmount;
-            }
-        }
     }
 }

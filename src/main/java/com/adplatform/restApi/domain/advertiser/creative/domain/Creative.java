@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @ToString

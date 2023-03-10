@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @RequiredArgsConstructor
@@ -22,7 +22,7 @@ public class BusinessAccountCommandApi {
     private final BusinessAccountSaveService businessAccountSaveService;
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/account")
+    @PostMapping
     public void save(@RequestBody @Valid BusinessAccountDto.Request.Save request) {
         this.businessAccountSaveService.save(request, SecurityUtils.getLoginUserNo());
     }

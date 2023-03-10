@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 import static java.lang.Math.abs;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @RequiredArgsConstructor

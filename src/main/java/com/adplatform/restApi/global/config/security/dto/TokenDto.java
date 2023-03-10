@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @Getter

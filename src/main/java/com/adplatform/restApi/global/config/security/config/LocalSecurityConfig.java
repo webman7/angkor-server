@@ -13,7 +13,7 @@ import org.springframework.security.web.header.writers.frameoptions.XFrameOption
 import java.util.List;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @Profile("local")

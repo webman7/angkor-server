@@ -3,7 +3,7 @@ package com.adplatform.restApi.domain.adaccount.exception;
 import com.adplatform.restApi.global.error.exception.BaseException;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public class AdAccountNotFoundException extends BaseException {

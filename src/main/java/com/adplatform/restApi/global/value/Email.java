@@ -9,7 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @Getter

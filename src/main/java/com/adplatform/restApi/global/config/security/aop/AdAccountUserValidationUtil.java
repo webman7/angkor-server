@@ -10,7 +10,7 @@ import com.adplatform.restApi.global.config.security.util.SecurityUtils;
 /**
  * 광고 계정 인가 유틸 클래스.
  *
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public class AdAccountUserValidationUtil {

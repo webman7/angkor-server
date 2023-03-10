@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 @AllArgsConstructor

@@ -10,7 +10,7 @@ import static com.adplatform.restApi.domain.advertiser.campaign.domain.QCampaign
 import static java.util.Objects.nonNull;
 
 /**
- * @author Seohyun Lee
+ * @author junny
  * @since 1.0
  */
 public class CampaignCondition {
