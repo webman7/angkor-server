@@ -1,10 +1,14 @@
 package com.adplatform.restApi.domain.business.service;
 
 import com.adplatform.restApi.domain.business.dao.account.BusinessAccountRepository;
+import com.adplatform.restApi.domain.business.dao.user.BusinessAccountUserRepository;
 import com.adplatform.restApi.domain.business.domain.BusinessAccount;
 import com.adplatform.restApi.domain.business.domain.BusinessAccountUser;
 import com.adplatform.restApi.domain.business.dto.account.BusinessAccountDto;
 import com.adplatform.restApi.domain.business.dto.account.BusinessAccountMapper;
+import com.adplatform.restApi.domain.business.dto.user.BusinessAccountUserDto;
+import com.adplatform.restApi.domain.business.dto.user.BusinessAccountUserMapper;
+import com.adplatform.restApi.domain.business.exception.BusinessAccountUserAlreadyExistException;
 import com.adplatform.restApi.domain.company.dao.CompanyRepository;
 import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
@@ -30,7 +34,9 @@ import java.util.List;
 @Service
 public class BusinessAccountSaveService {
     private final BusinessAccountRepository businessAccountRepository;
+    private final BusinessAccountUserRepository businessAccountUserRepository;
     private final BusinessAccountMapper businessAccountMapper;
+    private final BusinessAccountUserMapper businessAccountUserMapper;
     private final UserQueryService userQueryService;
     private final CompanyService companyService;
     private final CompanyMapper companyMapper;
@@ -64,6 +70,21 @@ public class BusinessAccountSaveService {
 //        System.out.println("==========================================================");
 //        this.walletMasterRepository.openDateUpdate(1, Integer.getInteger(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"))));
 //        System.out.println(WalletFindUtils.findByIdOrElseThrow(1, this.walletMasterRepository));
+    }
+
+    public void saveUser(BusinessAccountUserDto.Request.SaveUser request, Integer loginUserNo) {
+        // 회원 중복 체크
+        Integer count = this.businessAccountUserRepository.findByBusinessAccountIdAndUserIdCount(request.getId(), loginUserNo);
+
+        if(!count.equals(0)) {
+            throw new BusinessAccountUserAlreadyExistException();
+        }
+
+        // 인서트
+        User user = this.userQueryService.findByIdOrElseThrow(loginUserNo);
+        BusinessAccount businessAccount = BusinessAccountFindUtils.findByIdOrElseThrow(request.getId(), this.businessAccountRepository);
+        BusinessAccountUser businessAccountUser = this.businessAccountUserMapper.toEntity(request, businessAccount, user);
+        this.businessAccountUserRepository.save(businessAccountUser);
     }
 
     public void creditLimitUpdate(BusinessAccountDto.Request.CreditLimitUpdate request) {

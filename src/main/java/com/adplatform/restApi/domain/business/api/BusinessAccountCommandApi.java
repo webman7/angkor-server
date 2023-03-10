@@ -1,6 +1,7 @@
 package com.adplatform.restApi.domain.business.api;
 
 import com.adplatform.restApi.domain.business.domain.BusinessAccount;
+import com.adplatform.restApi.domain.business.dto.user.BusinessAccountUserDto;
 import com.adplatform.restApi.domain.business.service.BusinessAccountSaveService;
 import com.adplatform.restApi.domain.business.dto.account.BusinessAccountDto;
 import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount;
@@ -25,6 +26,12 @@ public class BusinessAccountCommandApi {
     @PostMapping
     public void save(@RequestBody @Valid BusinessAccountDto.Request.Save request) {
         this.businessAccountSaveService.save(request, SecurityUtils.getLoginUserNo());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("user")
+    public void saveUser(@RequestBody @Valid BusinessAccountUserDto.Request.SaveUser request) {
+        this.businessAccountSaveService.saveUser(request, SecurityUtils.getLoginUserNo());
     }
 
     @AuthorizedAdAccount
