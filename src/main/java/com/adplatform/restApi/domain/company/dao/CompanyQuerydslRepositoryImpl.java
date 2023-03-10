@@ -63,8 +63,7 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                         company.address,
                         company.businessCategory,
                         company.businessItem,
-                        company.taxBillEmail1,
-                        company.taxBillEmail2
+                        company.taxBillEmail
                 ))
                 .from(company)
                 .where(

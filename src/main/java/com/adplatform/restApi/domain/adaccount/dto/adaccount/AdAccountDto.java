@@ -2,6 +2,7 @@ package com.adplatform.restApi.domain.adaccount.dto.adaccount;
 
 import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
 import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
+import com.adplatform.restApi.domain.business.domain.BusinessAccount;
 import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.wallet.dto.WalletDto;
 import com.querydsl.core.annotations.QueryProjection;
@@ -23,24 +24,11 @@ public class AdAccountDto {
         @Setter
         public static class Save {
             @NotNull
-            private AdAccount.AdAccountType type;
-            @NotBlank
-            private String businessRegistrationNumber;
-//            @NotBlank
-            private String taxBillRegistrationNumber;
-            private Company ownerCompany;
-            @Size(min = 1, max = 20)
+            private Integer businessAccountId;
+
+            @Size(min = 1, max = 50)
             @NotBlank
             private String name;
-
-            private boolean agencyRegister;
-        }
-
-        @Getter
-        @Setter
-        public static class CreditLimitUpdate {
-            private Integer id;
-            private Integer creditLimit;
         }
 
         @Getter
@@ -55,7 +43,7 @@ public class AdAccountDto {
         public static class ForAgencySearch {
             private Integer id;
             private String name;
-            private Boolean preDeferredPayment;
+//            private Boolean prePayment;
 //            private AdAccount.CompanyType companyType;
 //            private List<WalletDto.Request.WalletSpend> walletSpend;
 //            private String config;
@@ -84,12 +72,10 @@ public class AdAccountDto {
         @Setter
         public static class ForAdminSearch {
             private Integer id;
+            private BusinessAccount businessAccount;
             private String name;
             private String marketerName;
-            private Company.Type companyType;
             private WalletDto.Response.WalletSpend walletSpend;
-            private Integer creditLimit;
-            private boolean preDeferredPayment;
             private AdAccount.Config config;
             private boolean adminStop;
             private boolean outOfBalance;
@@ -97,22 +83,18 @@ public class AdAccountDto {
             @QueryProjection
             public ForAdminSearch(
                     Integer id,
+                    BusinessAccount businessAccount,
                     String name,
                     String marketerName,
-                    Company.Type companyType,
                     WalletDto.Response.WalletSpend walletSpend,
-                    Integer creditLimit,
-                    boolean preDeferredPayment,
                     AdAccount.Config config,
                     boolean adminStop,
                     boolean outOfBalance) {
                 this.id = id;
+                this.businessAccount = businessAccount;
                 this.name = name;
                 this.marketerName = marketerName;
-                this.companyType = companyType;
                 this.walletSpend = walletSpend;
-                this.creditLimit = creditLimit;
-                this.preDeferredPayment = preDeferredPayment;
                 this.config = config;
                 this.adminStop = adminStop;
                 this.outOfBalance = outOfBalance;
@@ -122,12 +104,11 @@ public class AdAccountDto {
         @Setter
         public static class ForAgencySearch {
             private Integer id;
+
+            private BusinessAccount businessAccount;
             private String name;
             private String marketerName;
-            private Company.Type companyType;
             private WalletDto.Response.WalletSpend walletSpend;
-            private Integer creditLimit;
-            private boolean preDeferredPayment;
             private AdAccount.Config config;
             private boolean adminStop;
             private boolean outOfBalance;
@@ -135,22 +116,18 @@ public class AdAccountDto {
             @QueryProjection
             public ForAgencySearch(
                     Integer id,
+                    BusinessAccount businessAccount,
                     String name,
                     String marketerName,
-                    Company.Type companyType,
                     WalletDto.Response.WalletSpend walletSpend,
-                    Integer creditLimit,
-                    boolean preDeferredPayment,
                     AdAccount.Config config,
                     boolean adminStop,
                     boolean outOfBalance) {
                 this.id = id;
+                this.businessAccount = businessAccount;
                 this.name = name;
                 this.marketerName = marketerName;
-                this.companyType = companyType;
                 this.walletSpend = walletSpend;
-                this.creditLimit = creditLimit;
-                this.preDeferredPayment = preDeferredPayment;
                 this.config = config;
                 this.adminStop = adminStop;
                 this.outOfBalance = outOfBalance;
@@ -167,26 +144,22 @@ public class AdAccountDto {
             private AdAccount.Config config;
             private boolean adminStop;
             private boolean outOfBalance;
-            private AdAccountUser.RequestStatus requestStatus;
+            private AdAccountUser.Status status;
 
             @QueryProjection
             public ForAdvertiserSearch(
                     Integer id,
                     String name,
-                    String masterEmail,
-                    long memberSize,
                     AdAccount.Config config,
                     boolean adminStop,
                     boolean outOfBalance,
-                    AdAccountUser.RequestStatus requestStatus) {
+                    AdAccountUser.Status status) {
                 this.id = id;
                 this.name = name;
-                this.masterEmail = masterEmail;
-                this.memberSize = memberSize;
                 this.config = config;
                 this.adminStop = adminStop;
                 this.outOfBalance = outOfBalance;
-                this.requestStatus = requestStatus;
+                this.status = status;
             }
         }
         @Getter
@@ -194,11 +167,6 @@ public class AdAccountDto {
         public static class ForCashSearch {
             private Integer id;
             private String name;
-            private String marketerName;
-            private Company.Type companyType;
-            private WalletDto.Response.WalletBalance walletBalance;
-            private Integer creditLimit;
-            private boolean preDeferredPayment;
             private AdAccount.Config config;
             private boolean adminStop;
             private boolean outOfBalance;
@@ -207,21 +175,11 @@ public class AdAccountDto {
             public ForCashSearch(
                     Integer id,
                     String name,
-                    String marketerName,
-                    Company.Type companyType,
-                    WalletDto.Response.WalletBalance walletBalance,
-                    Integer creditLimit,
-                    boolean preDeferredPayment,
                     AdAccount.Config config,
                     boolean adminStop,
                     boolean outOfBalance) {
                 this.id = id;
                 this.name = name;
-                this.marketerName = marketerName;
-                this.companyType = companyType;
-                this.walletBalance = walletBalance;
-                this.creditLimit = creditLimit;
-                this.preDeferredPayment = preDeferredPayment;
                 this.config = config;
                 this.adminStop = adminStop;
                 this.outOfBalance = outOfBalance;
@@ -230,13 +188,13 @@ public class AdAccountDto {
         @Getter
         @Setter
         public static class AdAccountCount {
-            private long requestStatusYCount;
-            private long requestStatusNCount;
+            private long statusYCount;
+            private long statusNCount;
 
             @QueryProjection
-            public AdAccountCount(long requestStatusYCount, long requestStatusNCount) {
-                this.requestStatusYCount = requestStatusYCount;
-                this.requestStatusNCount = requestStatusNCount;
+            public AdAccountCount(long statusYCount, long statusNCount) {
+                this.statusYCount = statusYCount;
+                this.statusNCount = statusNCount;
             }
         }
         @Getter

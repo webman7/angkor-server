@@ -27,8 +27,6 @@ public class UserPasswordChangeHistory extends BaseCreatedEntity {
     }
     @Column(name = "user_id")
     private String userId;
-    @Column(name = "user_name")
-    private String userName;
 
     @Column(name = "cert_no")
     private String certNo;
@@ -48,12 +46,10 @@ public class UserPasswordChangeHistory extends BaseCreatedEntity {
     @Builder
     public UserPasswordChangeHistory(
             String userId,
-            String userName,
             String certNo,
             Status status,
             String regIp) {
         this.userId = userId;
-        this.userName = userName;
         this.certNo = certNo;
         this.status = status;
         this.regIp = regIp;

@@ -12,18 +12,18 @@ import javax.persistence.Table;
  * @author Seohyun Lee
  * @since 1.0
  */
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
-@Table(name = "user_roles")
+//@Getter
+//@Setter
+//@AllArgsConstructor
+//@NoArgsConstructor(access = AccessLevel.PROTECTED)
+//@Entity
+//@Table(name = "user_roles")
 public class UserRole extends BaseEntity {
-    @ManyToOne
-    @JoinColumn(name = "user_no")
-    private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "roles_info_id")
-    private Role role;
+//    @ManyToOne
+//    @JoinColumn(name = "user_no")
+//    private User user;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "roles_info_id")
+//    private Role role;
 }

@@ -6,55 +6,59 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "adaccount_tax_bill_monthly")
-public class AdAccountTaxBillMonthly extends BaseEntity {
+@Table(name = "adaccount_tax_bill")
+public class AdAccountTaxBill extends BaseEntity {
+    @Column(name = "business_account_info_id")
+    private int businessAccountId;
+
     @Column(name = "adaccount_info_id")
     private int adAccountId;
-
-    @Column(name = "owner_company_info_id")
-    private int ownerCompanyId;
-
-    @Column(name = "company_info_id")
-    private int companyId;
 
     @Column(name = "stat_date")
     private int statDate;
 
-    @Column(name = "supply_amount")
-    private int supplyAmount;
+    @Column(name = "supply_amount", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2)")
+    private Float supplyAmount;
 
-    @Column(name = "vat_amount")
-    private int vatAmount;
+    @Column(name = "vat_amount", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2)")
+    private Float vatAmount;
 
-    @Column(name = "total_amount")
-    private int totalAmount;
+    @Column(name = "total_amount", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2)")
+    private Float totalAmount;
 
     @Convert(converter = BooleanToStringYOrNConverter.class)
     @Column(name = "issue_status", nullable = false, columnDefinition = "CHAR(1)")
     private boolean issueStatus;
 
+    @Column(name = "issue_user_no")
+    private int issueUserNo;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Column(name = "issue_date")
+    private LocalDateTime issueAt;
+
     @Builder
-    public AdAccountTaxBillMonthly(
+    public AdAccountTaxBill(
+            Integer businessAccountId,
             Integer adAccountId,
-            Integer ownerCompanyId,
-            Integer companyId,
             Integer statDate,
-            Integer supplyAmount,
-            Integer vatAmount,
-            Integer totalAmount,
+            Float supplyAmount,
+            Float vatAmount,
+            Float totalAmount,
             boolean issueStatus) {
+        this.businessAccountId = businessAccountId;
         this.adAccountId = adAccountId;
-        this.ownerCompanyId = ownerCompanyId;
-        this.companyId = companyId;
         this.statDate = statDate;
         this.supplyAmount = supplyAmount;
         this.vatAmount = vatAmount;

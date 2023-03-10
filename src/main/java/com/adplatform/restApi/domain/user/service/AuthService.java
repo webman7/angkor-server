@@ -123,8 +123,7 @@ public class AuthService {
         this.userQueryService.validateExistsByLoginId(request);
         this.validateIsEqualPassword(request.getPassword1(), request.getPassword2());
         User user = this.authMapper.toEntity(request, this.passwordEncoder);
-        Role role = this.userQueryService.findRoleByType(Role.Type.ROLE_COMPANY_GENERAL);
-        this.userRepository.save(user.updateRole(new UserRole(user, role)));
+        this.userRepository.save(user);
     }
 
     public UserDto.Response.BaseInfo findUser(AuthDto.Request.FindPassword request) {

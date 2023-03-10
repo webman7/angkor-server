@@ -111,8 +111,8 @@ public class WalletLogQuerydslRepositoryImpl implements WalletLogQuerydslReposit
         JPAQuery<WalletDto.Response.CashSearch> query = this.query.select(
                         new QWalletDto_Response_CashSearch(
                                 walletLog.id,
+                                walletLog.businessAccountId,
                                 walletLog.adAccountId,
-                                walletLog.cashId,
                                 walletLog.summary,
                                 walletLog.inAmount,
                                 walletLog.outAmount,

@@ -24,22 +24,22 @@ public interface AdAccountQuerydslRepository {
     List<AdAccountDto.Response.ForAgencySearch> searchForAgency(AdAccountDto.Request.ForAgencySearch request, Integer userId);
 
     Page<AdAccountDto.Response.ForAdvertiserSearch> searchForAdvertiser(
-            Pageable pageable, Integer id, String name, Integer loginUserNo, AdAccountUser.RequestStatus requestStatus);
+            Pageable pageable, Integer id, String name, Integer loginUserNo, AdAccountUser.Status status);
 
     List<AdAccountDto.Response.ForAdvertiserSearch> searchForAdvertiser(
-            Integer id, String name, Integer loginUserNo, AdAccountUser.RequestStatus requestStatus);
+            Integer id, String name, Integer loginUserNo, AdAccountUser.Status status);
 
     Page<AdAccountDto.Response.ForCashSearch> searchForCash(Pageable pageable, AdAccountDto.Request.ForCashSearch request);
 
     List<AdAccountDto.Response.ForCashSearch> searchForCash(AdAccountDto.Request.ForCashSearch request);
 
-    Optional<AdAccountDto.Response.AdAccountCount> countRequestStatusYN(Integer loginUserNo);
+    Optional<AdAccountDto.Response.AdAccountCount> countStatusYN(Integer loginUserNo);
 
     AdAccountDto.Response.AdAccountInfo adAccountInfo(Integer adAccountId);
 
-    AdAccountDto.Response.AdAccountCashInfo adAccountCashInfo(Integer adAccountId);
+//    AdAccountDto.Response.AdAccountCashInfo adAccountCashInfo(Integer adAccountId);
 
-    List<AdAccountDto.Response.AdAccountCashDetailInfo> adAccountCashDetailInfo(Integer adAccountId);
+//    List<AdAccountDto.Response.AdAccountCashDetailInfo> adAccountCashDetailInfo(Integer adAccountId);
 
     void outOfBalanceUpdate(Integer adAccountId, Boolean oufOfBalance);
 

@@ -15,8 +15,8 @@ import javax.persistence.Embeddable;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
 public class ReportInformation {
-    @Column(name = "cost")
-    private int cost;
+    @Column(name = "cost", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2)")
+    private float cost;
 
     @Column(name = "impression")
     private int impression;

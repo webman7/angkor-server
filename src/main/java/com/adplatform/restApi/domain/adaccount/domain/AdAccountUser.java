@@ -30,7 +30,7 @@ public class AdAccountUser {
         MEMBER
     }
 
-    public enum RequestStatus {
+    public enum Status {
         /** 수락 */
         Y,
         /** 요청 */
@@ -59,8 +59,8 @@ public class AdAccountUser {
     private MemberType memberType;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "request_status", columnDefinition = "CHAR")
-    private RequestStatus requestStatus;
+    @Column(name = "status", columnDefinition = "CHAR")
+    private Status status;
 
     @CreatedBy
     @Column(name = "reg_user_no")
@@ -81,16 +81,16 @@ public class AdAccountUser {
     private LocalDateTime updatedAt;
 
     @Builder
-    public AdAccountUser(AdAccount adAccount, User user, MemberType memberType, RequestStatus requestStatus) {
+    public AdAccountUser(AdAccount adAccount, User user, MemberType memberType, Status status) {
         this.adAccount = adAccount;
         this.user = user;
         this.memberType = memberType;
-        this.requestStatus = requestStatus;
+        this.status = status;
         this.id.setAdAccountId(adAccount.getId());
         this.id.setUserId(user.getId());
     }
 
-    public void validateRequestStatus() {
-        if (!this.requestStatus.equals(RequestStatus.Y)) throw new AdAccountUserAuthorizationException();
+    public void validateStatus() {
+        if (!this.status.equals(Status.Y)) throw new AdAccountUserAuthorizationException();
     }
 }

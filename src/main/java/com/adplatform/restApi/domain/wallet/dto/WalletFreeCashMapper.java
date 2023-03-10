@@ -7,6 +7,6 @@ import org.mapstruct.Mapping;
 
 @Mapper(config = BaseMapperConfig.class)
 public interface WalletFreeCashMapper {
-    @Mapping(target = "status", expression = "java(WalletFreeCash.Status.READY)")
-    WalletFreeCash toEntity(WalletDto.Request.SaveFreeCash request, Integer loginUserNo);
+//    @Mapping(target = "status", expression = "java(WalletFreeCash.Status.READY)")
+//    WalletFreeCash toEntity(WalletDto.Request.SaveFreeCash request, Integer loginUserNo);
 }

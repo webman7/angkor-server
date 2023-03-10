@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author Seohyun Lee
  * @since 1.0
  */
-public interface CashRepository extends JpaRepository<Cash, Integer>, CashQuerydslRepository {
+public interface CashRepository /*extends JpaRepository<Cash, Integer>, CashQuerydslRepository*/ {
 }

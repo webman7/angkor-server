@@ -19,7 +19,7 @@ public interface UserQuerydslRepository {
 
     UserDto.Response.BaseInfo findUserByLoginIdAndName(String loginId, String name);
 
-    List<Integer> findByUserRoles(Integer id);
+//    List<Integer> findByUserRoles(Integer id);
 
     Optional<UserPasswordChangeHistory> findPasswordConfirm(AuthDto.Request.FindPasswordConfirm request);
 }

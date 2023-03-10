@@ -29,9 +29,9 @@ public class AdAccountQueryApi {
     public List<AdAccountDto.Response.ForAdvertiserSearch> searchForAdvertiser(
             @RequestParam(required = false) Integer id,
             @RequestParam(required = false) String name,
-            @RequestParam AdAccountUser.RequestStatus requestStatus) {
+            @RequestParam AdAccountUser.Status status) {
         return this.adAccountRepository.searchForAdvertiser(
-                id, name, SecurityUtils.getLoginUserNo(), requestStatus);
+                id, name, SecurityUtils.getLoginUserNo(), status);
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -56,9 +56,9 @@ public class AdAccountQueryApi {
             @PageableDefault Pageable pageable,
             @RequestParam(required = false) Integer id,
             @RequestParam(required = false) String name,
-            @RequestParam AdAccountUser.RequestStatus requestStatus) {
+            @RequestParam AdAccountUser.Status status) {
         return PageDto.create(this.adAccountRepository.searchForAdvertiser(
-                pageable, id, name, SecurityUtils.getLoginUserNo(), requestStatus));
+                pageable, id, name, SecurityUtils.getLoginUserNo(), status));
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -72,7 +72,7 @@ public class AdAccountQueryApi {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/counts")
     public AdAccountDto.Response.AdAccountCount getCounts() {
-        return this.adAccountRepository.countRequestStatusYN(SecurityUtils.getLoginUserNo())
+        return this.adAccountRepository.countStatusYN(SecurityUtils.getLoginUserNo())
                 .orElse(new AdAccountDto.Response.AdAccountCount(0L, 0L));
     }
 
@@ -82,17 +82,17 @@ public class AdAccountQueryApi {
         return this.adAccountRepository.adAccountInfo(adAccountId);
     }
 
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{id}/cash")
-    public AdAccountDto.Response.AdAccountCashInfo adAccountCashInfo(@PathVariable(name = "id") Integer adAccountId) {
-        return this.adAccountRepository.adAccountCashInfo(adAccountId);
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{id}/cash/detail")
-    public List<AdAccountDto.Response.AdAccountCashDetailInfo> adAccountCashDetailInfo(@PathVariable(name = "id") Integer adAccountId) {
-        return this.adAccountRepository.adAccountCashDetailInfo(adAccountId);
-    }
+//    @ResponseStatus(HttpStatus.OK)
+//    @GetMapping("/{id}/cash")
+//    public AdAccountDto.Response.AdAccountCashInfo adAccountCashInfo(@PathVariable(name = "id") Integer adAccountId) {
+//        return this.adAccountRepository.adAccountCashInfo(adAccountId);
+//    }
+//
+//    @ResponseStatus(HttpStatus.OK)
+//    @GetMapping("/{id}/cash/detail")
+//    public List<AdAccountDto.Response.AdAccountCashDetailInfo> adAccountCashDetailInfo(@PathVariable(name = "id") Integer adAccountId) {
+//        return this.adAccountRepository.adAccountCashDetailInfo(adAccountId);
+//    }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}/advertiser")

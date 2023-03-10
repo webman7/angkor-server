@@ -73,9 +73,10 @@ public class AdAccountFileApi {
                         c.getId(),
                         c.getName(),
                         this.getStatus(c.getConfig(), c.isAdminStop(), c.isOutOfBalance()),
-                        this.getCompanyType(c.getCompanyType()),
-                        c.isPreDeferredPayment() ? "후불" : "선불",
-                        c.getCreditLimit(),
+//                        this.getCompanyType(c.getCompanyType()),
+//                        c.isPrePayment() ? "후불" : "선불",
+//                        c.getCreditLimit(),
+                        "","","",
                         c.getWalletSpend().getCash(),
                         c.getWalletSpend().getTodaySpend(),
                         c.getWalletSpend().getYesterdaySpend(),
@@ -136,15 +137,18 @@ public class AdAccountFileApi {
                 cell.setCellStyle(dataStyle);
 
                 cell = row.createCell(columnNum++);
-                cell.setCellValue(this.getCompanyType(data.getCompanyType()));
+//                cell.setCellValue(this.getCompanyType(data.getCompanyType()));
+                cell.setCellValue("");
                 cell.setCellStyle(dataStyle);
 
                 cell = row.createCell(columnNum++);
-                cell.setCellValue(data.isPreDeferredPayment() ? "후불" : "선불");
+//                cell.setCellValue(data.isPrePayment() ? "후불" : "선불");
+                cell.setCellValue("");
                 cell.setCellStyle(dataStyle);
 
                 cell = row.createCell(columnNum++);
-                cell.setCellValue(data.getCreditLimit());
+//                cell.setCellValue(data.getCreditLimit());
+                cell.setCellValue("");
                 cell.setCellStyle(dataStyle);
 
                 cell = row.createCell(columnNum++);
@@ -195,9 +199,10 @@ public class AdAccountFileApi {
                         c.getId(),
                         c.getName(),
                         this.getStatus(c.getConfig(), c.isAdminStop(), c.isOutOfBalance()),
-                        this.getCompanyType(c.getCompanyType()),
-                        c.isPreDeferredPayment() ? "후불" : "선불",
-                        c.getCreditLimit(),
+//                        this.getCompanyType(c.getCompanyType()),
+//                        c.isPrePayment() ? "후불" : "선불",
+//                        c.getCreditLimit(),
+                        "","","",
                         c.getWalletSpend().getCash(),
                         c.getWalletSpend().getTodaySpend(),
                         c.getWalletSpend().getYesterdaySpend(),
@@ -258,15 +263,18 @@ public class AdAccountFileApi {
                 cell.setCellStyle(dataStyle);
 
                 cell = row.createCell(columnNum++);
-                cell.setCellValue(this.getCompanyType(data.getCompanyType()));
+//                cell.setCellValue(this.getCompanyType(data.getCompanyType()));
+                cell.setCellValue("");
                 cell.setCellStyle(dataStyle);
 
                 cell = row.createCell(columnNum++);
-                cell.setCellValue(data.isPreDeferredPayment() ? "후불" : "선불");
+//                cell.setCellValue(data.isPrePayment() ? "후불" : "선불");
+                cell.setCellValue("");
                 cell.setCellStyle(dataStyle);
 
                 cell = row.createCell(columnNum++);
-                cell.setCellValue(data.getCreditLimit());
+//                cell.setCellValue(data.getCreditLimit());
+                cell.setCellValue("");
                 cell.setCellStyle(dataStyle);
 
                 cell = row.createCell(columnNum++);
@@ -317,8 +325,10 @@ public class AdAccountFileApi {
                         c.getId(),
                         c.getName(),
                         this.getStatus(c.getConfig(), c.isAdminStop(), c.isOutOfBalance()),
-                        c.getWalletBalance().getCash(),
-                        c.getWalletBalance().getFreeCash())
+//                        c.getWalletBalance().getCash(),
+//                        c.getWalletBalance().getFreeCash()
+                        0, 0
+                )
         ));
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -375,11 +385,13 @@ public class AdAccountFileApi {
                 cell.setCellStyle(dataStyle);
 
                 cell = row.createCell(columnNum);
-                cell.setCellValue(data.getWalletBalance().getCash());
+//                cell.setCellValue(data.getWalletBalance().getCash());
+                cell.setCellValue(0);
                 cell.setCellStyle(dataStyle);
 
                 cell = row.createCell(columnNum);
-                cell.setCellValue(data.getWalletBalance().getFreeCash());
+//                cell.setCellValue(data.getWalletBalance().getFreeCash());
+                cell.setCellValue(0);
                 cell.setCellStyle(dataStyle);
             }
 
@@ -415,7 +427,8 @@ public class AdAccountFileApi {
                         c.getName(),
                         this.getStatus(c.getConfig(), c.isAdminStop(), c.isOutOfBalance()),
                         c.getMarketerName(),
-                        c.getCreditLimit(),
+//                        c.getCreditLimit(),
+                        0,
                         c.getWalletSpend().getCash())
         ));
 
@@ -477,7 +490,8 @@ public class AdAccountFileApi {
                 cell.setCellStyle(dataStyle);
 
                 cell = row.createCell(columnNum++);
-                cell.setCellValue(data.getCreditLimit());
+//                cell.setCellValue(data.getCreditLimit());
+                cell.setCellValue(0);
                 cell.setCellStyle(dataStyle);
 
                 cell = row.createCell(columnNum);
@@ -517,13 +531,13 @@ public class AdAccountFileApi {
         return null;
     }
 
-    private String getCompanyType(Company.Type companyType) {
-        switch (companyType) {
-            case AGENCY:
-                return "대행사";
-            case ADVERTISER:
-                return "광고주";
-        }
-        return null;
-    }
+//    private String getCompanyType(Company.Type companyType) {
+//        switch (companyType) {
+//            case AGENCY:
+//                return "대행사";
+//            case ADVERTISER:
+//                return "광고주";
+//        }
+//        return null;
+//    }
 }

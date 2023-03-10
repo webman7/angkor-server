@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface WalletFreeCashQuerydslRepository {
 
-    void updateFreeCashStats(Integer id, String status, Integer updateUserId);
-
-    Page<WalletDto.Response.FreeCashSearch> searchForFreeCash(Pageable pageable, WalletDto.Request.FreeCashSearch request);
+//    void updateFreeCashStats(Integer id, String status, Integer updateUserId);
+//
+//    Page<WalletDto.Response.FreeCashSearch> searchForFreeCash(Pageable pageable, WalletDto.Request.FreeCashSearch request);
 }

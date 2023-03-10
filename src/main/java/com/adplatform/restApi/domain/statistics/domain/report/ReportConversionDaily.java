@@ -19,6 +19,10 @@ import javax.persistence.*;
 @Table(name = "report_conversion_daily")
 public class ReportConversionDaily {
     @Id
+    @Column(name = "business_account_info_id")
+    private Integer businessAccountId;
+
+    @Id
     @Column(name = "adaccount_info_id")
     private Integer adAccountId;
 
@@ -31,12 +35,20 @@ public class ReportConversionDaily {
     private Integer adGroupId;
 
     @Id
-    @Column(name = "report_date")
-    private Integer reportDate;
+    @Column(name = "media_info_id")
+    private Integer mediaId;
+
+    @Id
+    @Column(name = "placement_info_id")
+    private Integer placementId;
 
     @Id
     @Column(name = "creative_info_id")
     private Integer creativeId;
+
+    @Id
+    @Column(name = "report_date")
+    private Integer reportDate;
 
     @Embedded
     private ReportConversionInformation information;

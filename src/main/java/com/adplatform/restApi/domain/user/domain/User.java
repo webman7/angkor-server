@@ -34,10 +34,6 @@ public class User extends BaseUpdatedEntity {
         Y, N, W, L, R
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "company_info_id")
-    private Company company;
-
     @Column(name = "user_id", nullable = false, length = 256, unique = true)
     private String loginId;
 
@@ -48,19 +44,12 @@ public class User extends BaseUpdatedEntity {
     @Column(name = "user_name", nullable = false, length = 50)
     private String name;
 
-    @Valid
-    @Embedded
-    private Email email;
-
     @Column(name = "phone", length = 20)
     private String phone;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "active", nullable = false, columnDefinition = "CHAR(1)")
     private Active active;
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private final Set<UserRole> roles = new HashSet<>();
 
     @Column(name = "status_chg_user_no")
     private Integer statusChangedUserNo;
@@ -70,28 +59,20 @@ public class User extends BaseUpdatedEntity {
     private LocalDateTime statusChangedAt;
 
     @Builder
-    public User(Company company, String loginId, String password, String name, String email, String phone, Active active) {
-        this.company = company;
+    public User(String loginId, String password, String name, String phone, Active active) {
         this.loginId = loginId;
         this.password = new Password(password);
         this.name = name;
-        this.email = new Email(email);
         this.phone = phone;
         this.active = active;
     }
 
-    public User updateCompany(Company company) {
-        this.company = company;
-        return this;
-    }
-
-    public User updateRole(UserRole role) {
-        this.roles.add(role);
-        return this;
-    }
-
-    public User updateActive(Active active) {
+    public void updateActive(Active active) {
         this.active = active;
-        return this;
     }
+
+//    public User updateActive(Active active) {
+//        this.active = active;
+//        return this;
+//    }
 }

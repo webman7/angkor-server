@@ -14,29 +14,29 @@ import javax.persistence.*;
 @Table(name = "campaign_budget_change_history")
 public class CampaignBudgetChangeHistory  extends BaseEntity {
 
+    @Column(name = "business_account_info_id", nullable = false)
+    private Integer businessAccountId;
+
     @Column(name = "adaccount_info_id", nullable = false)
     private Integer adAccountId;
 
     @Column(name = "campaign_info_id", nullable = false)
     private Integer campaignId;
 
-    @Column(name = "cash_info_id")
-    private Integer cashId;
+    @Column(name = "chg_amount", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2)")
+    private Float chgAmount;
 
-    @Column(name = "chg_amount", columnDefinition = "INT")
-    private Long chgAmount;
+    @Column(name = "available_amount", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2)")
+    private Float availableAmount;
 
-    @Column(name = "available_amount", columnDefinition = "INT")
-    private Long availableAmount;
+    @Column(name = "available_chg_amount", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2)")
+    private Float availableChgAmount;
 
-    @Column(name = "available_chg_amount", columnDefinition = "INT")
-    private Long availableChgAmount;
+    @Column(name = "reserve_amount", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2)")
+    private Float reserveAmount;
 
-    @Column(name = "reserve_amount", columnDefinition = "INT")
-    private Long reserveAmount;
-
-    @Column(name = "reserve_chg_amount", columnDefinition = "INT")
-    private Long reserveChgAmount;
+    @Column(name = "reserve_chg_amount", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2)")
+    private Float reserveChgAmount;
 
     @CreatedBy
     @Column(name = "reg_user_no")
@@ -44,18 +44,18 @@ public class CampaignBudgetChangeHistory  extends BaseEntity {
 
     @Builder
     public CampaignBudgetChangeHistory(
+            Integer businessAccountId,
             Integer adAccountId,
             Integer campaignId,
-            Integer cashId,
-            Long chgAmount,
-            Long availableAmount,
-            Long availableChgAmount,
-            Long reserveAmount,
-            Long reserveChgAmount,
+            Float chgAmount,
+            Float availableAmount,
+            Float availableChgAmount,
+            Float reserveAmount,
+            Float reserveChgAmount,
             Integer createdUserNo) {
+        this.businessAccountId = businessAccountId;
         this.adAccountId = adAccountId;
         this.campaignId = campaignId;
-        this.cashId = cashId;
         this.chgAmount = chgAmount;
         this.availableAmount = availableAmount;
         this.availableChgAmount = availableChgAmount;

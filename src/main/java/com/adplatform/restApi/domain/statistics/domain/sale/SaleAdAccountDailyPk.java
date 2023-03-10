@@ -6,16 +6,15 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 
-/**
- * @author Seohyun Lee
- * @since 1.0
- */
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
-public class AdAccountIdStatDatePk implements Serializable {
+public class SaleAdAccountDailyPk implements Serializable {
+    @Column(name = "business_account_info_id")
+    private Integer businessAccountId;
+
     @Column(name = "adaccount_info_id")
     private Integer adAccountId;
 

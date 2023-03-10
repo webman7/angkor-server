@@ -5,7 +5,7 @@ import com.adplatform.restApi.domain.agency.businessright.dao.BusinessRightReque
 import com.adplatform.restApi.domain.agency.businessright.domain.BusinessRightRequest;
 
 public class BusinessRightRequestFindUtils {
-    public static BusinessRightRequest findByIdOrElseThrow(Integer id, BusinessRightRequestRepository repository) {
-        return repository.findById(id).orElseThrow(CompanyNotFoundException::new);
-    }
+//    public static BusinessRightRequest findByIdOrElseThrow(Integer id, BusinessRightRequestRepository repository) {
+//        return repository.findById(id).orElseThrow(CompanyNotFoundException::new);
+//    }
 }

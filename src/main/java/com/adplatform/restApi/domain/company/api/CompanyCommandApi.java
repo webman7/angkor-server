@@ -19,17 +19,17 @@ import javax.validation.Valid;
 public class CompanyCommandApi {
     private final CompanyService companyService;
 
-    @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/advertisers")
-    public void saveAdvertiser(@RequestBody @Valid CompanyDto.Request.Save request) {
-        this.companyService.saveAdvertiser(request);
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/agencies")
-    public void saveAgency(@RequestBody @Valid CompanyDto.Request.Save request) {
-        this.companyService.saveAgency(request);
-    }
+//    @ResponseStatus(HttpStatus.OK)
+//    @PostMapping("/advertisers")
+//    public void saveAdvertiser(@RequestBody @Valid CompanyDto.Request.Save request) {
+//        this.companyService.saveAdvertiser(request);
+//    }
+//
+//    @ResponseStatus(HttpStatus.OK)
+//    @PostMapping("/agencies")
+//    public void saveAgency(@RequestBody @Valid CompanyDto.Request.Save request) {
+//        this.companyService.saveAgency(request);
+//    }
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/media")

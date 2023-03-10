@@ -27,12 +27,12 @@ public class AdAccountCommandApi {
         this.adAccountSaveService.save(request, SecurityUtils.getLoginUserNo());
     }
 
-    @AuthorizedAdAccount
-    @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/credit-limit")
-    public void creditLimitUpdate(@RequestBody @Valid AdAccountDto.Request.CreditLimitUpdate request) {
-        this.adAccountSaveService.creditLimitUpdate(request);
-    }
+//    @AuthorizedAdAccount
+//    @ResponseStatus(HttpStatus.OK)
+//    @PostMapping("/credit-limit")
+//    public void creditLimitUpdate(@RequestBody @Valid AdAccountDto.Request.CreditLimitUpdate request) {
+//        this.adAccountSaveService.creditLimitUpdate(request);
+//    }
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{id}/config/on")
     public void changeConfigOn(@PathVariable Integer id) {

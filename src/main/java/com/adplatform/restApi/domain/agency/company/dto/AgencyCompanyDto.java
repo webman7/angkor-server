@@ -47,9 +47,7 @@ public abstract class AgencyCompanyDto {
             private Address address;
             private String businessCategory;
             private String businessItem;
-            private String taxBillEmail1;
-            private String taxBillEmail2;
-            private boolean active;
+            private String taxBillEmail;
             private boolean deleted;
         }
 
@@ -62,7 +60,7 @@ public abstract class AgencyCompanyDto {
             private Company.Type companyType;
             private WalletDto.Response.WalletSpend walletSpend;
             private Integer creditLimit;
-            private boolean preDeferredPayment;
+            private boolean prePayment;
             private AdAccount.Config config;
             private boolean adminStop;
             private boolean outOfBalance;
@@ -75,7 +73,7 @@ public abstract class AgencyCompanyDto {
                     Company.Type companyType,
                     WalletDto.Response.WalletSpend walletSpend,
                     Integer creditLimit,
-                    boolean preDeferredPayment,
+                    boolean prePayment,
                     AdAccount.Config config,
                     boolean adminStop,
                     boolean outOfBalance) {
@@ -85,7 +83,7 @@ public abstract class AgencyCompanyDto {
                 this.companyType = companyType;
                 this.walletSpend = walletSpend;
                 this.creditLimit = creditLimit;
-                this.preDeferredPayment = preDeferredPayment;
+                this.prePayment = prePayment;
                 this.config = config;
                 this.adminStop = adminStop;
                 this.outOfBalance = outOfBalance;

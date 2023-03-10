@@ -33,7 +33,7 @@ public class BatchStatusDto {
             private Integer companyId;
             private Integer ownerCompanyId;
             private Integer reportDate;
-            private Long cost;
+            private Float cost;
         }
 
         @Getter

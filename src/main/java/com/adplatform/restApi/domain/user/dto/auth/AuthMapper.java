@@ -17,19 +17,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 @Mapper(config = BaseMapperConfig.class)
 public abstract class AuthMapper {
-    @Autowired
-    protected CompanyRepository companyRepository;
-
-    @Mapping(target = "company", source = "signUpDto.companyId", qualifiedByName = "mapCompany")
     @Mapping(target = "loginId", source = "signUpDto.id")
     @Mapping(target = "password", expression = "java(passwordEncoder.encode(signUpDto.getPassword1()))")
     @Mapping(target = "name", source = "signUpDto.name")
-    @Mapping(target = "email", ignore = true)
-    @Mapping(target = "active", expression = "java(User.Active.W)")
+    @Mapping(target = "active", expression = "java(User.Active.Y)")
     public abstract User toEntity(AuthDto.Request.SignUp signUpDto, PasswordEncoder passwordEncoder);
 
-    @Named("mapCompany")
-    protected Company mapCompany(Integer id) {
-        return CompanyFindUtils.findByIdOrElseThrow(id, this.companyRepository);
-    }
 }

@@ -1,6 +1,7 @@
 package com.adplatform.restApi.domain.adaccount.dao.user;
 
 import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
+import com.adplatform.restApi.domain.business.dao.user.BusinessAccountUserQueryRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -15,7 +16,7 @@ import static com.adplatform.restApi.domain.adaccount.domain.QAdAccountUser.adAc
  */
 @RequiredArgsConstructor
 @Repository
-public class AdAccountUserQueryRepositoryImpl implements AdAccountUserQueryRepository{
+public class AdAccountUserQueryRepositoryImpl implements AdAccountUserQueryRepository {
     private final JPAQueryFactory query;
 
     @Override

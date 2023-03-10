@@ -16,8 +16,7 @@
         <result column="zipCode" property="zipCode"/>
         <result column="businessCategory" property="businessCategory"/>
         <result column="businessItem" property="businessItem"/>
-        <result column="taxBillEmail1" property="taxBillEmail1"/>
-        <result column="taxBillEmail2" property="taxBillEmail2"/>
+        <result column="taxBillEmail" property="taxBillEmail"/>
     </resultMap>
 
     <sql id="mySelectQuery">
@@ -25,7 +24,7 @@
                ci.registration_number AS registrationNumber, ci.representation_name AS representationName,
                ci.base_address AS baseAddress, ci.detail_address AS detailAddress, ci.zip_code AS zipCode,
                ci.business_category AS businessCategory, ci.business_item AS businessItem,
-               ci.tax_bill_email1 AS taxBillEmail1, ci.tax_bill_email2 AS taxBillEmail2
+               ci.tax_bill_email AS taxBillEmail
           FROM user_info ui, company_info ci
          WHERE ui.company_info_id = ci.id
            AND ui.active = 'Y'

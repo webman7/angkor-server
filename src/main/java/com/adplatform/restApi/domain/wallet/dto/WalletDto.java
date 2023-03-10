@@ -18,14 +18,28 @@ public class WalletDto {
         @Setter
         public static class SaveCash {
             @NotNull
+            private int businessAccountId;
             private int adAccountId;
-            @NotNull
-            private int cashId;
-            private Long inAmount;
-            private Long outAmount;
+            private Float inAmount;
+            private Float outAmount;
             private Long pubAmount;
             private String summary;
             private String memo;
+        }
+
+        @Getter
+        @Setter
+        public static class SaveWalletLog {
+            @NotNull
+            private int businessAccountId;
+            private int adAccountId;
+            private String summary;
+            private Float inAmount;
+            private Float outAmount;
+            private String memo;
+            private int walletChargeLogId;
+            private int walletAutoChargeLogId;
+            private int walletRefundId;
         }
 
         @Getter
@@ -35,7 +49,7 @@ public class WalletDto {
             private int adAccountId;
             @NotNull
             private int cashId;
-            private Long pubAmount;
+            private Float pubAmount;
             private int expireDate;
             private String summary;
             private String status;
@@ -65,13 +79,13 @@ public class WalletDto {
         @Getter
         @Setter
         public static class WalletSpend {
-            private Long cash;
-            private int todaySpend;
-            private int yesterdaySpend;
-            private int monthSpend;
+            private Float cash;
+            private Float todaySpend;
+            private Float yesterdaySpend;
+            private Float monthSpend;
 
             @QueryProjection
-            public WalletSpend(Long cash, int todaySpend, int yesterdaySpend, int monthSpend) {
+            public WalletSpend(Float cash, Float todaySpend, Float yesterdaySpend, Float monthSpend) {
                 this.cash = cash;
                 this.todaySpend = todaySpend;
                 this.yesterdaySpend = yesterdaySpend;
@@ -82,13 +96,10 @@ public class WalletDto {
         @Getter
         @Setter
         public static class WalletBalance {
-            private Long cash;
-            private Long freeCash;
-
+            private Float cash;
             @QueryProjection
-            public WalletBalance(Long cash, Long freeCash) {
+            public WalletBalance(Float cash) {
                 this.cash = cash;
-                this.freeCash = freeCash;
             }
         }
 
@@ -107,12 +118,12 @@ public class WalletDto {
         @Setter
         public static class WalletCashTotal {
             private int cashId;
-            private Long amount;
-            private Long availableAmount;
-            private Long reserveAmount;
+            private Float amount;
+            private Float availableAmount;
+            private Float reserveAmount;
 
             @QueryProjection
-            public WalletCashTotal(Integer cashId, Long amount, Long availableAmount, Long reserveAmount) {
+            public WalletCashTotal(Integer cashId, Float amount, Float availableAmount, Float reserveAmount) {
                 this.cashId = cashId;
                 this.amount = amount;
                 this.availableAmount = availableAmount;
@@ -120,62 +131,61 @@ public class WalletDto {
             }
         }
 
-        @Getter
-        @Setter
-        public static class FreeCashSearch {
-            private int id;
-            private int adAccountId;
-            private int cashId;
-            private String summary;
-            private Long pubAmount;
-            private int expireDate;
-            private WalletFreeCash.Status status;
-            private String memo;
-            private int createdUserNo;
-            private String createdUserId;
-            private LocalDateTime createdAt;
-            private int updatedUserNo;
-            private String updatedUserId;
-            private LocalDateTime updatedAt;
-
-            @QueryProjection
-            public FreeCashSearch(int id, int adAccountId, int cashId, String summary, Long pubAmount, int expireDate, WalletFreeCash.Status status, String memo, int createdUserNo, String createdUserId, LocalDateTime createdAt, int updatedUserNo, String updatedUserId, LocalDateTime updatedAt) {
-                this.id = id;
-                this.adAccountId = adAccountId;
-                this.cashId = cashId;
-                this.summary = summary;
-                this.pubAmount = pubAmount;
-                this.expireDate = expireDate;
-                this.status = status;
-                this.memo = memo;
-                this.createdUserNo = createdUserNo;
-                this.createdUserId = createdUserId;
-                this.createdAt = createdAt;
-                this.updatedUserNo = updatedUserNo;
-                this.updatedUserId = updatedUserId;
-                this.updatedAt = updatedAt;
-            }
-
-        }
+//        @Getter
+//        @Setter
+//        public static class FreeCashSearch {
+//            private int id;
+//            private int adAccountId;
+//            private int cashId;
+//            private String summary;
+//            private Float pubAmount;
+//            private int expireDate;
+//            private WalletFreeCash.Status status;
+//            private String memo;
+//            private int createdUserNo;
+//            private String createdUserId;
+//            private LocalDateTime createdAt;
+//            private int updatedUserNo;
+//            private String updatedUserId;
+//            private LocalDateTime updatedAt;
+//
+//            @QueryProjection
+//            public FreeCashSearch(int id, int adAccountId, String summary, Float pubAmount, int expireDate, WalletFreeCash.Status status, String memo, int createdUserNo, String createdUserId, LocalDateTime createdAt, int updatedUserNo, String updatedUserId, LocalDateTime updatedAt) {
+//                this.id = id;
+//                this.adAccountId = adAccountId;
+//                this.summary = summary;
+//                this.pubAmount = pubAmount;
+//                this.expireDate = expireDate;
+//                this.status = status;
+//                this.memo = memo;
+//                this.createdUserNo = createdUserNo;
+//                this.createdUserId = createdUserId;
+//                this.createdAt = createdAt;
+//                this.updatedUserNo = updatedUserNo;
+//                this.updatedUserId = updatedUserId;
+//                this.updatedAt = updatedAt;
+//            }
+//
+//        }
 
         @Getter
         @Setter
         public static class CashSearch {
             private int id;
+            private int businessAccountId;
             private int adAccountId;
-            private int cashId;
             private String summary;
-            private Long inAmount;
-            private Long outAmount;
+            private Float inAmount;
+            private Float outAmount;
             private String memo;
             private int createdUserNo;
             private String createdUserId;
             private LocalDateTime createdAt;
             @QueryProjection
-            public CashSearch(int id, int adAccountId, int cashId, String summary, Long inAmount, Long outAmount, String memo, int createdUserNo, String createdUserId, LocalDateTime createdAt) {
+            public CashSearch(int id, int businessAccountId, int adAccountId, String summary, Float inAmount, Float outAmount, String memo, int createdUserNo, String createdUserId, LocalDateTime createdAt) {
                 this.id = id;
+                this.businessAccountId = businessAccountId;
                 this.adAccountId = adAccountId;
-                this.cashId = cashId;
                 this.summary = summary;
                 this.inAmount = inAmount;
                 this.outAmount = outAmount;

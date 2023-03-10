@@ -10,14 +10,14 @@ public class CampaignBudgetChangeHistoryDto {
         @Setter
         public static class Save {
             private int id;
+            private int businessAccountId;
             private int adAccountId;
             private int campaignId;
-            private int cashId;
-            private Long chgAmount;
-            private Long availableAmount;
-            private Long availableChgAmount;
-            private Long reserveAmount;
-            private Long reserveChgAmount;
+            private Float chgAmount;
+            private Float availableAmount;
+            private Float availableChgAmount;
+            private Float reserveAmount;
+            private Float reserveChgAmount;
         }
     }
 }

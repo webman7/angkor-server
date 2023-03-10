@@ -43,11 +43,8 @@ public abstract class UserDto {
             private Integer id;
             private String loginId;
             private String name;
-            private String email;
             private String phone;
             private User.Active active;
-            private List<Integer> roles;
-            private Company company;
 
 //            @QueryProjection
 //            public Detail(Integer id, String loginId, String name, String email, String phone, User.Active active, List<String> roles, String company) {
@@ -68,12 +65,8 @@ public abstract class UserDto {
             private Integer id;
             private String loginId;
             private String name;
-            private String email;
             private String phone;
             private String active;
-            private String roles;
-            private String company;
-
         }
 
         @Getter

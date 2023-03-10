@@ -15,8 +15,11 @@ import java.io.Serializable;
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReportAdGroupDailyId implements Serializable {
+    private Integer businessAccountId;
     private Integer adAccountId;
     private Integer campaignId;
     private Integer adGroupId;
+    private Integer mediaId;
+    private Integer placementId;
     private Integer reportDate;
 }

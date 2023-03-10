@@ -50,8 +50,7 @@ public class AgencyMarketersDto {
             private String zipCode;
             private String businessCategory;
             private String businessItem;
-            private String taxBillEmail1;
-            private String taxBillEmail2;
+            private String taxBillEmail;
         }
 
         @Getter

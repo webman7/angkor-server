@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface BusinessRightQuerydslRepository {
 
-    List<BusinessRightDto.Response.BusinessRightDetail> getBusinessRight(Integer adAccountId, Integer companyId);
+//    List<BusinessRightDto.Response.BusinessRightDetail> getBusinessRight(Integer adAccountId, Integer companyId);
 }

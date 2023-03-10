@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface AgencyCompanyQuerydslRepository {
 
-    Page<AgencyCompanyDto.Response.SearchForAdmin> searchForAdmin(Pageable pageable, AgencyCompanyDto.Request.Search request, Integer companyId);
-
-    List<AgencyCompanyDto.Response.SearchForAdmin> searchForAdmin(AgencyCompanyDto.Request.Search request, Integer companyId);
+//    Page<AgencyCompanyDto.Response.SearchForAdmin> searchForAdmin(Pageable pageable, AgencyCompanyDto.Request.Search request, Integer companyId);
+//
+//    List<AgencyCompanyDto.Response.SearchForAdmin> searchForAdmin(AgencyCompanyDto.Request.Search request, Integer companyId);
 }

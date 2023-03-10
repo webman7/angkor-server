@@ -26,18 +26,18 @@ public class AgencyTaxBillQueryApi {
     private final UserRepository userRepository;
     private final AgencyTaxBillQueryMapper agencyTaxBillQueryMapper;
 
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/search")
-    public PageDto<AgencyTaxBillDto.Response.Search> search(
-            @PageableDefault Pageable pageable,
-            AgencyTaxBillDto.Request.Search request) {
-
-        User user = UserFindUtils.findByIdOrElseThrow(SecurityUtils.getLoginUserNo(), this.userRepository);
-        request.setCompanyId(user.getCompany().getId());
-
-        return PageDto.create(new PageImpl<>(
-                this.agencyTaxBillQueryMapper.search(request, pageable),
-                pageable,
-                this.agencyTaxBillQueryMapper.countSearch(request)));
-    }
+//    @ResponseStatus(HttpStatus.OK)
+//    @GetMapping("/search")
+//    public PageDto<AgencyTaxBillDto.Response.Search> search(
+//            @PageableDefault Pageable pageable,
+//            AgencyTaxBillDto.Request.Search request) {
+//
+//        User user = UserFindUtils.findByIdOrElseThrow(SecurityUtils.getLoginUserNo(), this.userRepository);
+//        request.setCompanyId(user.getCompany().getId());
+//
+//        return PageDto.create(new PageImpl<>(
+//                this.agencyTaxBillQueryMapper.search(request, pageable),
+//                pageable,
+//                this.agencyTaxBillQueryMapper.countSearch(request)));
+//    }
 }

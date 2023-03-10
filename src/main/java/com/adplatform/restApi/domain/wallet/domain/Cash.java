@@ -15,22 +15,22 @@ import javax.persistence.Table;
  * @author Seohyun Lee
  * @since 1.0
  */
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
-@Table(name = "cash_info")
+//@Getter
+//@NoArgsConstructor(access = AccessLevel.PROTECTED)
+//@Entity
+//@Table(name = "cash_info")
 public class Cash extends BaseEntity {
-    @Column(name = "name", length = 45)
-    private String name;
-
-    @Convert(converter = BooleanToStringYOrNConverter.class)
-    @Column(name = "sale_affect_yn", columnDefinition = "CHAR")
-    private boolean saleAffect;
-
-    @Convert(converter = BooleanToStringYOrNConverter.class)
-    @Column(name = "refund_yn", columnDefinition = "CHAR")
-    private boolean refund;
-
-    @Column(name = "priority", columnDefinition = "TINYINT")
-    private int priority;
+//    @Column(name = "name", length = 45)
+//    private String name;
+//
+//    @Convert(converter = BooleanToStringYOrNConverter.class)
+//    @Column(name = "sale_affect_yn", columnDefinition = "CHAR")
+//    private boolean saleAffect;
+//
+//    @Convert(converter = BooleanToStringYOrNConverter.class)
+//    @Column(name = "refund_yn", columnDefinition = "CHAR")
+//    private boolean refund;
+//
+//    @Column(name = "priority", columnDefinition = "TINYINT")
+//    private int priority;
 }

@@ -1,6 +1,7 @@
 package com.adplatform.restApi.domain.placement.domain;
 
 import com.adplatform.restApi.domain.advertiser.adgroup.domain.Media;
+import com.adplatform.restApi.domain.business.domain.BusinessAccountUser;
 import com.adplatform.restApi.global.converter.BooleanToStringYOrNConverter;
 import com.adplatform.restApi.global.entity.BaseUpdatedEntity;
 import lombok.AccessLevel;
@@ -17,6 +18,15 @@ import javax.persistence.*;
 @Table(name = "placement_info")
 public class Placement extends BaseUpdatedEntity {
 
+    public enum Status {
+        /** 승인 */
+        Y,
+        /** 미승인 */
+        N,
+        /** 삭제 */
+        D
+    }
+
     @Column(name = "name", length = 20, nullable = false)
     private String name;
 
@@ -28,12 +38,7 @@ public class Placement extends BaseUpdatedEntity {
 
     private Integer height;
 
-    /**
-     * 지면 삭제 여부<br/>
-     * {@link Boolean#TRUE true}: 지면 삭제됨.<br>
-     * {@link Boolean#FALSE false}: 지면 설정됨.
-     */
-    @Convert(converter = BooleanToStringYOrNConverter.class)
-    @Column(name = "del_yn", columnDefinition = "CHAR")
-    private boolean deleted;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", columnDefinition = "CHAR")
+    private Status status;
 }

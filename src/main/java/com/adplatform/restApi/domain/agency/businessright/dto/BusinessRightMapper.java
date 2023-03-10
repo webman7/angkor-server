@@ -6,5 +6,5 @@ import org.mapstruct.Mapper;
 
 @Mapper(config = BaseMapperConfig.class)
 public interface BusinessRightMapper {
-    BusinessRight toEntity(BusinessRightDto.Request.Save request);
+//    BusinessRight toEntity(BusinessRightDto.Request.Save request);
 }

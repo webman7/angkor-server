@@ -30,9 +30,9 @@ public class Password {
     @Column(name = "pwd_wrong_cnt")
     private int wrongCount;
 
-    @Convert(converter = BooleanToStringYOrNConverter.class)
-    @Column(name = "first_pwd_yn", columnDefinition = "CHAR")
-    private boolean needChange;
+//    @Convert(converter = BooleanToStringYOrNConverter.class)
+//    @Column(name = "first_pwd_yn", columnDefinition = "CHAR")
+//    private boolean needChange;
 
     @LastModifiedDate
     @Column(name = "pwd_upd_date")
@@ -62,13 +62,13 @@ public class Password {
         String randomPassword = new RandomCodeGenerator().generate(8);
         this.value = passwordEncoder.encode(randomPassword);
         this.wrongCount = 0;
-        this.needChange = true;
+//        this.needChange = true;
         return randomPassword;
     }
 
     public void changePassword(PasswordEncoder passwordEncoder, String rawPassword) {
         this.value = passwordEncoder.encode(rawPassword);
         this.wrongCount = 0;
-        this.needChange = false;
+//        this.needChange = false;
     }
 }

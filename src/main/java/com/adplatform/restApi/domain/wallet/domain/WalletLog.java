@@ -11,30 +11,44 @@ import javax.persistence.*;
 @Table(name = "wallet_log")
 public class WalletLog extends BaseCreatedEntity {
 
+    @Column(name = "business_account_info_id")
+    private int businessAccountId;
+
     @Column(name = "adaccount_info_id")
     private int adAccountId;
 
-    @Column(name = "cash_info_id")
-    private Integer cashId;
     @Column(name = "summary", length = 40)
     private String summary;
 
-    @Column(name = "out_amount", columnDefinition = "INT")
-    private Long outAmount;
+    @Column(name = "out_amount", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2)")
+    private Float outAmount;
 
-    @Column(name = "in_amount", columnDefinition = "INT")
-    private Long inAmount;
+    @Column(name = "in_amount", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2)")
+    private Float inAmount;
 
     @Column(name = "memo", length = 100)
     private String memo;
 
+    @Column(name = "wallet_charge_log_id")
+    private int walletChargeLogId;
+
+    @Column(name = "wallet_auto_charge_log_id")
+    private int walletAutoChargeLogId;
+
+    @Column(name = "wallet_refund_id")
+    private int walletRefundId;
+
+
     @Builder
-    public WalletLog(Integer adAccountId, Integer cashId, String summary, Long outAmount, Long inAmount, String memo) {
+    public WalletLog(Integer businessAccountId, Integer adAccountId, String summary, Float outAmount, Float inAmount, String memo, Integer walletChargeLogId, Integer walletAutoChargeLogId, Integer walletRefundId) {
+        this.businessAccountId = businessAccountId;
         this.adAccountId = adAccountId;
-        this.cashId = cashId;
         this.summary = summary;
         this.outAmount = outAmount;
         this.inAmount = inAmount;
         this.memo = memo;
+        this.walletChargeLogId = walletChargeLogId;
+        this.walletAutoChargeLogId = walletAutoChargeLogId;
+        this.walletRefundId = walletRefundId;
     }
 }

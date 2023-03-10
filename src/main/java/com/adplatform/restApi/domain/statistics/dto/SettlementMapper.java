@@ -1,9 +1,5 @@
 package com.adplatform.restApi.domain.statistics.dto;
 
-import com.adplatform.restApi.domain.statistics.domain.settlement.AdAccountSettlementDaily;
-import com.adplatform.restApi.domain.statistics.domain.settlement.AdAccountSettlementMonthly;
-import com.adplatform.restApi.domain.statistics.domain.settlement.MediaSettlementDaily;
-import com.adplatform.restApi.domain.statistics.domain.settlement.MediaSettlementMonthly;
 import com.adplatform.restApi.global.dto.BaseMapperConfig;
 import org.mapstruct.Mapper;
 

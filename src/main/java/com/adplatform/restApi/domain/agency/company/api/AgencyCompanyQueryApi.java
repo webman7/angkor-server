@@ -31,12 +31,12 @@ public class AgencyCompanyQueryApi {
     private final UserRepository userRepository;
     private final AgencyCompanyMapper agencyCompanyMapper;
 
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/my")
-    public AgencyCompanyDto.Response.Detail my() {
-        User user = UserFindUtils.findByIdOrElseThrow(SecurityUtils.getLoginUserNo(), this.userRepository);
-        return this.agencyCompanyMapper.toDetailResponse(AgencyCompanyFindUtils.findByIdOrElseThrow(user.getCompany().getId(), this.agencyCompanyRepository), user.getId(), user.getName(), user.getLoginId());
-    }
+//    @ResponseStatus(HttpStatus.OK)
+//    @GetMapping("/my")
+//    public AgencyCompanyDto.Response.Detail my() {
+//        User user = UserFindUtils.findByIdOrElseThrow(SecurityUtils.getLoginUserNo(), this.userRepository);
+//        return this.agencyCompanyMapper.toDetailResponse(AgencyCompanyFindUtils.findByIdOrElseThrow(user.getCompany().getId(), this.agencyCompanyRepository), user.getId(), user.getName(), user.getLoginId());
+//    }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}/walletSpendSummary")
@@ -44,17 +44,17 @@ public class AgencyCompanyQueryApi {
         return this.agencyCompanyQueryMapper.walletSpendSummary(id);
     }
 
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{id}/adaccounts/search")
-    public PageDto<AgencyCompanyDto.Response.SearchForAdmin> searchForAdmin(
-            @PathVariable Integer id,
-            @PageableDefault Pageable pageable,
-            AgencyCompanyDto.Request.Search request) {
-        Calendar calendar = new GregorianCalendar();
-        SimpleDateFormat SDF = new SimpleDateFormat("yyyyMMdd");
-        String chkDate = SDF.format(calendar.getTime());
-        request.setCurrDate(Integer.parseInt(chkDate));
-
-        return PageDto.create(this.agencyCompanyRepository.searchForAdmin(pageable, request, id));
-    }
+//    @ResponseStatus(HttpStatus.OK)
+//    @GetMapping("/{id}/adaccounts/search")
+//    public PageDto<AgencyCompanyDto.Response.SearchForAdmin> searchForAdmin(
+//            @PathVariable Integer id,
+//            @PageableDefault Pageable pageable,
+//            AgencyCompanyDto.Request.Search request) {
+//        Calendar calendar = new GregorianCalendar();
+//        SimpleDateFormat SDF = new SimpleDateFormat("yyyyMMdd");
+//        String chkDate = SDF.format(calendar.getTime());
+//        request.setCurrDate(Integer.parseInt(chkDate));
+//
+//        return PageDto.create(this.agencyCompanyRepository.searchForAdmin(pageable, request, id));
+//    }
 }

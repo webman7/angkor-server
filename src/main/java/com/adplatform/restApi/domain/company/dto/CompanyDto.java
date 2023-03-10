@@ -62,10 +62,8 @@ public abstract class CompanyDto {
 
             @NotNull
             @Email
-            private String taxBillEmail1;
+            private String taxBillEmail;
 
-            @Email
-            private String taxBillEmail2;
         }
 
         @Getter
@@ -101,9 +99,7 @@ public abstract class CompanyDto {
             private Address address;
             private String businessCategory;
             private String businessItem;
-            private String taxBillEmail1;
-            private String taxBillEmail2;
-            private boolean active;
+            private String taxBillEmail;
             private boolean deleted;
         }
 
@@ -118,8 +114,7 @@ public abstract class CompanyDto {
             private Address address;
             private String businessCategory;
             private String businessItem;
-            private com.adplatform.restApi.global.value.Email taxBillEmail1;
-            private com.adplatform.restApi.global.value.Email taxBillEmail2;
+            private com.adplatform.restApi.global.value.Email taxBillEmail;
 
             @QueryProjection
             public AdAccountDetail(Integer id,
@@ -130,8 +125,7 @@ public abstract class CompanyDto {
                                    Address address,
                                    String businessCategory,
                                    String businessItem,
-                                   com.adplatform.restApi.global.value.Email taxBillEmail1,
-                                   com.adplatform.restApi.global.value.Email taxBillEmail2) {
+                                   com.adplatform.restApi.global.value.Email taxBillEmail) {
                 this.id = id;
                 this.name = name;
                 this.type = type;
@@ -140,8 +134,7 @@ public abstract class CompanyDto {
                 this.address = address;
                 this.businessCategory = businessCategory;
                 this.businessItem = businessItem;
-                this.taxBillEmail1 = taxBillEmail1;
-                this.taxBillEmail2 = taxBillEmail2;
+                this.taxBillEmail = taxBillEmail;
             }
         }
     }

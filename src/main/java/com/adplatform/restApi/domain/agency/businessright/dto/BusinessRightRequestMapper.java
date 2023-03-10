@@ -7,6 +7,6 @@ import org.mapstruct.Mapping;
 
 @Mapper(config = BaseMapperConfig.class)
 public interface BusinessRightRequestMapper {
-    @Mapping(target = "status", expression = "java(BusinessRightRequest.Status.REQUESTED)")
-    BusinessRightRequest toEntity(BusinessRightDto.Request.SaveRequest request);
+//    @Mapping(target = "status", expression = "java(BusinessRightRequest.Status.REQUESTED)")
+//    BusinessRightRequest toEntity(BusinessRightDto.Request.SaveRequest request);
 }

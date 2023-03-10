@@ -14,9 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.adplatform.restApi.domain.history.domain.QUserPasswordChangeHistory.userPasswordChangeHistory;
-import static com.adplatform.restApi.domain.user.domain.QRole.role;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
-import static com.adplatform.restApi.domain.user.domain.QUserRole.userRole;
 
 /**
  * @author Seohyun Lee
@@ -30,8 +28,6 @@ public class UserQuerydslRepositoryImpl implements UserQuerydslRepository {
     @Override
     public Optional<User> findByLoginId(String loginId) {
         return Optional.ofNullable(this.query.selectFrom(user)
-                .join(user.roles, userRole).fetchJoin()
-                .join(userRole.role, role).fetchJoin()
                 .where(user.loginId.eq(loginId))
                 .fetchOne());
     }
@@ -47,14 +43,14 @@ public class UserQuerydslRepositoryImpl implements UserQuerydslRepository {
                 .fetchOne();
     }
 
-    @Override
-    public List<Integer> findByUserRoles(Integer id) {
-        return this.query.select(userRole.role.id)
-                .from(user, userRole)
-                .where(user.id.eq(id),
-                        user.id.eq(userRole.user.id))
-                .fetch();
-    }
+//    @Override
+//    public List<Integer> findByUserRoles(Integer id) {
+//        return this.query.select(userRole.role.id)
+//                .from(user, userRole)
+//                .where(user.id.eq(id),
+//                        user.id.eq(userRole.user.id))
+//                .fetch();
+//    }
 
     @Override
     public Optional<UserPasswordChangeHistory> findPasswordConfirm(AuthDto.Request.FindPasswordConfirm request) {

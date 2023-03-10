@@ -13,8 +13,7 @@ public interface AgencyCompanyMapper {
     @Mapping(target = "userName", source = "userName")
     @Mapping(target = "loginId", source = "loginId")
     @Mapping(target = "address", source = "company.address")
-    @Mapping(target = "taxBillEmail1", qualifiedByName = "getEmail")
-    @Mapping(target = "taxBillEmail2", qualifiedByName = "getEmail")
+    @Mapping(target = "taxBillEmail", qualifiedByName = "getEmail")
     AgencyCompanyDto.Response.Detail toDetailResponse(Company company, Integer userId, String userName, String loginId);
 
     @Named("getEmail")
