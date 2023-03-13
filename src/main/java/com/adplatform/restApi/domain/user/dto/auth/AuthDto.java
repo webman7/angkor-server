@@ -42,8 +42,6 @@ public abstract class AuthDto {
         @Setter
         public static class FindPassword {
             @NotEmpty
-            private String name;
-            @NotEmpty
             @Email
             private String id;
         }

@@ -17,7 +17,7 @@ public interface UserQuerydslRepository {
 
     Optional<User> findByLoginId(String loginId);
 
-    UserDto.Response.BaseInfo findUserByLoginIdAndName(String loginId, String name);
+    UserDto.Response.BaseInfo findUserByLoginId(String loginId);
 
 //    List<Integer> findByUserRoles(Integer id);
 

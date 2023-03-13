@@ -54,8 +54,8 @@ public class UserQueryService {
         return this.userRepository.findByLoginId(loginId)
                 .orElseThrow(UserNotFoundException::new);
     }
-    public UserDto.Response.BaseInfo findUserByLoginIdAndName(String loginId, String name) {
-        return this.userRepository.findUserByLoginIdAndName(loginId, name);
+    public UserDto.Response.BaseInfo findUserByLoginId(String loginId) {
+        return this.userRepository.findUserByLoginId(loginId);
     }
 
     public UserPasswordChangeHistory findPasswordConfirm(AuthDto.Request.FindPasswordConfirm request) {

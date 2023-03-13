@@ -127,7 +127,7 @@ public class AuthService {
     }
 
     public UserDto.Response.BaseInfo findUser(AuthDto.Request.FindPassword request) {
-        return this.userQueryService.findUserByLoginIdAndName(request.getId(), request.getName());
+        return this.userQueryService.findUserByLoginId(request.getId());
     }
     public void findPasswordCert(AuthDto.Request.FindPasswordCert request) {
 //        String randomPassword = this.userQueryService.findByLoginIdAndName(request.getId(), request.getName())

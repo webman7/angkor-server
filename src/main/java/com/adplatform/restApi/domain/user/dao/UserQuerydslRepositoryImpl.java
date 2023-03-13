@@ -33,24 +33,14 @@ public class UserQuerydslRepositoryImpl implements UserQuerydslRepository {
     }
 
     @Override
-    public UserDto.Response.BaseInfo findUserByLoginIdAndName(String loginId, String name) {
+    public UserDto.Response.BaseInfo findUserByLoginId(String loginId) {
         return this.query.select(new QUserDto_Response_BaseInfo(
                 user.id, user.loginId, user.name, user.phone
                 ))
                 .from(user)
-                .where(user.loginId.eq(loginId),
-                user.name.eq(name))
+                .where(user.loginId.eq(loginId))
                 .fetchOne();
     }
-
-//    @Override
-//    public List<Integer> findByUserRoles(Integer id) {
-//        return this.query.select(userRole.role.id)
-//                .from(user, userRole)
-//                .where(user.id.eq(id),
-//                        user.id.eq(userRole.user.id))
-//                .fetch();
-//    }
 
     @Override
     public Optional<UserPasswordChangeHistory> findPasswordConfirm(AuthDto.Request.FindPasswordConfirm request) {
@@ -61,6 +51,16 @@ public class UserQuerydslRepositoryImpl implements UserQuerydslRepository {
                 .limit(1)
                 .fetchOne());
     }
+
+
+//    @Override
+//    public List<Integer> findByUserRoles(Integer id) {
+//        return this.query.select(userRole.role.id)
+//                .from(user, userRole)
+//                .where(user.id.eq(id),
+//                        user.id.eq(userRole.user.id))
+//                .fetch();
+//    }
 
 //    @Override
 //    public Page<UserDto.Response.Detail> search(Pageable pageable) {
