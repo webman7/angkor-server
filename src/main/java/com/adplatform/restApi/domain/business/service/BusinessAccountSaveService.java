@@ -14,6 +14,7 @@ import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.company.dto.CompanyMapper;
 import com.adplatform.restApi.domain.company.exception.CompanyAlreadyExistException;
+import com.adplatform.restApi.domain.company.service.CompanyFindUtils;
 import com.adplatform.restApi.domain.company.service.CompanyService;
 import com.adplatform.restApi.domain.history.dao.business.user.BusinessAccountUserInfoHistoryRepository;
 import com.adplatform.restApi.domain.history.domain.business.user.BusinessAccountUserInfoHistory;
@@ -22,7 +23,6 @@ import com.adplatform.restApi.domain.history.dto.business.user.BusinessAccountUs
 import com.adplatform.restApi.domain.user.dto.user.UserDto;
 import com.adplatform.restApi.domain.user.service.UserQueryService;
 import com.adplatform.restApi.domain.user.domain.User;
-import com.adplatform.restApi.domain.wallet.dao.walletmaster.WalletMasterRepository;
 import com.adplatform.restApi.domain.wallet.domain.WalletMaster;
 import com.adplatform.restApi.global.config.security.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
@@ -78,6 +78,18 @@ public class BusinessAccountSaveService {
 //        System.out.println("==========================================================");
 //        this.walletMasterRepository.openDateUpdate(1, Integer.getInteger(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"))));
 //        System.out.println(WalletFindUtils.findByIdOrElseThrow(1, this.walletMasterRepository));
+    }
+
+    public void update(BusinessAccountDto.Request.Update request, Integer loginUserNo) {
+        this.businessAccountRepository.save(BusinessAccountFindUtils.findByIdOrElseThrow(request.getId(), this.businessAccountRepository).update(request));
+        CompanyDto.Request.Update requestCompany = new CompanyDto.Request.Update();
+        requestCompany.setName(request.getCompanyName());
+        requestCompany.setAddress(request.getAddress());
+        requestCompany.setBusinessItem(request.getBusinessItem());
+        requestCompany.setBusinessCategory(request.getBusinessCategory());
+        requestCompany.setRepresentationName(request.getRepresentationName());
+        requestCompany.setTaxBillEmail(request.getTaxBillEmail());
+        this.companyRepository.save(CompanyFindUtils.findByIdOrElseThrow(request.getCompanyId(), this.companyRepository).update(requestCompany));
     }
 
     public void saveUserInvite(BusinessAccountUserDto.Request.SaveUser request, Integer loginUserNo) {

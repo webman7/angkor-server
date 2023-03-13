@@ -8,6 +8,7 @@ import com.adplatform.restApi.domain.wallet.domain.WalletMaster;
 import com.adplatform.restApi.domain.user.domain.User;
 import com.adplatform.restApi.global.converter.BooleanToStringYOrNConverter;
 import com.adplatform.restApi.global.entity.BaseUpdatedEntity;
+import com.adplatform.restApi.global.value.Email;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -84,6 +85,12 @@ public class BusinessAccount extends BaseUpdatedEntity {
         this.creditLimit = creditLimit;
         this.prePayment = prePayment;
         this.config = config;
+    }
+
+    public BusinessAccount update(BusinessAccountDto.Request.Update request) {
+        this.name = request.getName();
+        return this;
+
     }
 
     public BusinessAccount addBusinessAccountUser(User user, BusinessAccountUser.MemberType memberType, BusinessAccountUser.AccountingYN accountingYN, BusinessAccountUser.Status status) {

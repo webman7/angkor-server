@@ -70,6 +70,41 @@ public class BusinessAccountDto {
             private String taxBillEmail;
         }
 
+        @Getter
+        @Setter
+        public static class Update {
+
+            private Integer id;
+            @Size(min = 1, max = 50)
+            private String name;
+
+            @Size(min = 1, max = 50)
+            private String companyName;
+
+            private Integer companyId;
+
+            @NotBlank
+            @Size(min = 1, max = 20)
+            private String registrationNumber;
+
+            @NotBlank
+            @Size(min = 1, max = 50)
+            private String representationName;
+
+            @NotBlank
+            @Size(min = 1, max = 20)
+            private String businessCategory;
+
+            @NotBlank
+            @Size(min = 1, max = 50)
+            private String businessItem;
+
+            private Address address;
+
+            @NotNull
+            @Email
+            private String taxBillEmail;
+        }
 
 
 

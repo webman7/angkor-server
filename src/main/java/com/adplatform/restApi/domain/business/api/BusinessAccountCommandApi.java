@@ -8,6 +8,7 @@ import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount;
 import com.adplatform.restApi.global.config.security.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,6 +27,12 @@ public class BusinessAccountCommandApi {
     @PostMapping
     public void save(@RequestBody @Valid BusinessAccountDto.Request.Save request) {
         this.businessAccountSaveService.save(request, SecurityUtils.getLoginUserNo());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping
+    public void update(@RequestBody @Valid BusinessAccountDto.Request.Update request) {
+        this.businessAccountSaveService.update(request, SecurityUtils.getLoginUserNo());
     }
 
     @ResponseStatus(HttpStatus.OK)
