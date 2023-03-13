@@ -26,8 +26,6 @@ public abstract class AuthDto {
         @Getter
         @Setter
         public static class SignUp {
-            @NotNull
-            private Integer companyId;
             @NotEmpty
             @Email
             private String id;
