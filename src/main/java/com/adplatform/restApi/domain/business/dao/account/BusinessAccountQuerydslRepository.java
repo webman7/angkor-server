@@ -37,9 +37,6 @@ public interface BusinessAccountQuerydslRepository {
     Optional<BusinessAccountDto.Response.BusinessAccountCount> countStatusYN(Integer loginUserNo);
 
     BusinessAccountDto.Response.BusinessAccountInfo businessAccountInfo(Integer businessAccountId);
-    List<BusinessAccountDto.Response.BusinessAccountUserInfo> businessAccountUserInfo(Integer businessAccountId);
-    BusinessAccountDto.Response.BusinessAccountUserInfo businessAccountUserInfo(Integer businessAccountId, Integer userNo);
-
     List<BusinessAccountDto.Response.AdAccountInfo> businessAccountByAdAccounts(Integer businessAccountId);
 
 

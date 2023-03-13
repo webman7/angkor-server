@@ -164,29 +164,6 @@ public class BusinessAccountDto {
             }
         }
 
-        @Getter
-        @Setter
-        public static class BusinessAccountUserInfo {
-            private Integer id;
-            private UserDto.Response.BaseInfo user;
-            private BusinessAccountUser.MemberType memberType;
-            private BusinessAccountUser.AccountingYN accountingYN;
-            private BusinessAccountUser.Status status;
-
-            @QueryProjection
-            public BusinessAccountUserInfo(
-                    Integer id,
-                    UserDto.Response.BaseInfo user,
-                    BusinessAccountUser.MemberType memberType,
-                    BusinessAccountUser.AccountingYN accountingYN,
-                    BusinessAccountUser.Status status) {
-                this.id = id;
-                this.user = user;
-                this.memberType = memberType;
-                this.accountingYN = accountingYN;
-                this.status = status;
-            }
-        }
 
         @Getter
         @Setter

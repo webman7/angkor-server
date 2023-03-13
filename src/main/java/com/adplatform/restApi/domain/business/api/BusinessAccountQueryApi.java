@@ -3,8 +3,10 @@ package com.adplatform.restApi.domain.business.api;
 import com.adplatform.restApi.domain.agency.marketers.dto.AgencyMarketersDto;
 import com.adplatform.restApi.domain.business.dao.account.BusinessAccountRepository;
 import com.adplatform.restApi.domain.business.dao.account.mapper.BusinessAccountQueryMapper;
+import com.adplatform.restApi.domain.business.dao.user.BusinessAccountUserRepository;
 import com.adplatform.restApi.domain.business.domain.BusinessAccountUser;
 import com.adplatform.restApi.domain.business.dto.account.BusinessAccountDto;
+import com.adplatform.restApi.domain.business.dto.user.BusinessAccountUserDto;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.global.config.security.util.SecurityUtils;
 import com.adplatform.restApi.global.dto.PageDto;
@@ -26,7 +28,7 @@ import java.util.List;
 @RequestMapping("/business")
 public class BusinessAccountQueryApi {
     private final BusinessAccountRepository businessAccountRepository;
-
+    private final BusinessAccountUserRepository businessAccountUserRepository;
     private final BusinessAccountQueryMapper businessAccountQueryMapper;
 
     @ResponseStatus(HttpStatus.OK)
@@ -63,14 +65,20 @@ public class BusinessAccountQueryApi {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/account/{id}/users")
-    public List<BusinessAccountDto.Response.BusinessAccountUserInfo> businessAccountUserInfo(@PathVariable(name = "id") Integer businessAccountId) {
-        return this.businessAccountRepository.businessAccountUserInfo(businessAccountId);
+    public List<BusinessAccountUserDto.Response.BusinessAccountUserInfo> businessAccountUserInfo(@PathVariable(name = "id") Integer businessAccountId) {
+        return this.businessAccountUserRepository.businessAccountUserInfo(businessAccountId);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/account/{id}/users/request")
+    public List<BusinessAccountUserDto.Response.BusinessAccountUserInfo> businessAccountRequestUserInfo(@PathVariable(name = "id") Integer businessAccountId) {
+        return this.businessAccountUserRepository.businessAccountRequestUserInfo(businessAccountId);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/account/{id}/user/{userNo}")
-    public BusinessAccountDto.Response.BusinessAccountUserInfo businessAccountUserInfo(@PathVariable(name = "id") Integer businessAccountId, @PathVariable(name = "userNo") Integer userNo) {
-        return this.businessAccountRepository.businessAccountUserInfo(businessAccountId, userNo);
+    public BusinessAccountUserDto.Response.BusinessAccountUserInfo businessAccountUserInfo(@PathVariable(name = "id") Integer businessAccountId, @PathVariable(name = "userNo") Integer userNo) {
+        return this.businessAccountUserRepository.businessAccountUserInfo(businessAccountId, userNo);
     }
 
     @ResponseStatus(HttpStatus.OK)

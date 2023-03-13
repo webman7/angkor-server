@@ -29,9 +29,27 @@ public class BusinessAccountCommandApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("user")
-    public void saveUser(@RequestBody @Valid BusinessAccountUserDto.Request.SaveUser request) {
-        this.businessAccountSaveService.saveUser(request, SecurityUtils.getLoginUserNo());
+    @PostMapping("user/invite")
+    public void saveUserInvite(@RequestBody @Valid BusinessAccountUserDto.Request.SaveUser request) {
+        this.businessAccountSaveService.saveUserInvite(request, SecurityUtils.getLoginUserNo());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("user/status")
+    public void updateUserStatus(@RequestBody @Valid BusinessAccountUserDto.Request.UserStatusUpdate request) {
+        this.businessAccountSaveService.updateUserStatus(request, SecurityUtils.getLoginUserNo());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("user/accounting")
+    public void updateUserAccounting(@RequestBody @Valid BusinessAccountUserDto.Request.UserUpdate request) {
+        this.businessAccountSaveService.updateUserAccounting(request, SecurityUtils.getLoginUserNo());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("user")
+    public void deleteUser(@RequestBody @Valid BusinessAccountUserDto.Request.UserUpdate request) {
+        this.businessAccountSaveService.deleteUser(request, SecurityUtils.getLoginUserNo());
     }
 
     @AuthorizedAdAccount

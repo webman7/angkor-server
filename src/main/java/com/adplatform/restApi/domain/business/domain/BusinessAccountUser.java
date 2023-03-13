@@ -46,7 +46,9 @@ public class BusinessAccountUser {
         /** 거부 */
         R,
         /** 요청 취소 */
-        C
+        C,
+        /** 삭제 */
+        D
     }
 
     @EmbeddedId
@@ -105,5 +107,15 @@ public class BusinessAccountUser {
 
     public void validateStatus() {
         if (!this.status.equals(Status.Y)) throw new BusinessAccountUserAuthorizationException();
+    }
+
+    public void changeStatusY() {
+        this.status = Status.Y;
+    }
+    public void changeStatusR() {
+        this.status = Status.R;
+    }
+    public void changeStatusC() {
+        this.status = Status.C;
     }
 }

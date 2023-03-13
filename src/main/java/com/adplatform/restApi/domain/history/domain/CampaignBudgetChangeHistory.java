@@ -12,7 +12,7 @@ import javax.persistence.*;
 @EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "campaign_budget_change_history")
-public class CampaignBudgetChangeHistory  extends BaseEntity {
+public class CampaignBudgetChangeHistory extends BaseEntity {
 
     @Column(name = "business_account_info_id", nullable = false)
     private Integer businessAccountId;

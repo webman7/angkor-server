@@ -412,53 +412,6 @@ public class BusinessAccountQuerydslRepositoryImpl implements BusinessAccountQue
     }
 
     @Override
-    public List<BusinessAccountDto.Response.BusinessAccountUserInfo> businessAccountUserInfo(Integer businessAccountId) {
-        return this.query.select(new QBusinessAccountDto_Response_BusinessAccountUserInfo(
-                        businessAccount.id,
-                        new QUserDto_Response_BaseInfo(
-                                user.id,
-                                user.loginId,
-                                user.name,
-                                user.phone
-                        ),
-                        businessAccountUser.memberType,
-                        businessAccountUser.accountingYN,
-                        businessAccountUser.status
-                ))
-                .from(businessAccount, businessAccountUser, user)
-                .where(businessAccount.id.eq(businessAccountId),
-                        businessAccountUser.businessAccount.id.eq(businessAccount.id),
-                        businessAccountUser.user.id.eq(user.id),
-                        user.active.in(User.Active.Y, User.Active.L)
-                )
-                .fetch();
-    }
-
-    @Override
-    public BusinessAccountDto.Response.BusinessAccountUserInfo businessAccountUserInfo(Integer businessAccountId, Integer userNo) {
-        return this.query.select(new QBusinessAccountDto_Response_BusinessAccountUserInfo(
-                        businessAccount.id,
-                        new QUserDto_Response_BaseInfo(
-                                user.id,
-                                user.loginId,
-                                user.name,
-                                user.phone
-                        ),
-                        businessAccountUser.memberType,
-                        businessAccountUser.accountingYN,
-                        businessAccountUser.status
-                ))
-                .from(businessAccount, businessAccountUser, user)
-                .where(businessAccount.id.eq(businessAccountId),
-                        user.id.eq(userNo),
-                        businessAccountUser.businessAccount.id.eq(businessAccount.id),
-                        businessAccountUser.user.id.eq(user.id),
-                        user.active.in(User.Active.Y, User.Active.L)
-                )
-                .fetchOne();
-    }
-
-    @Override
     public BusinessAccountDto.Response.BusinessAccountCashInfo businessAccountCashInfo(Integer businessAccountId) {
         return this.query.select(new QBusinessAccountDto_Response_BusinessAccountCashInfo(
                         walletMaster.availableAmount.sum(),
