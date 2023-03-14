@@ -53,6 +53,39 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
     }
 
     @Override
+    public Page<CompanyDto.Response.CompanyInfo> searchMedia(Pageable pageable, CompanyDto.Request.SearchMedia searchRequest) {
+        List<CompanyDto.Response.CompanyInfo> content = this.query
+                .select(new QCompanyDto_Response_CompanyInfo(
+                        company.id,
+                        company.name,
+                        company.type,
+                        company.registrationNumber,
+                        company.representationName,
+                        company.address,
+                        company.businessCategory,
+                        company.businessItem,
+                        company.taxBillEmail
+                ))
+                .from(company)
+                .where(
+                        this.nameContains(searchRequest.getName()),
+                        this.registrationNumberEq(searchRequest.getRegistrationNumber()),
+                        company.type.eq(Company.Type.MEDIA))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = this.query.select(company.count())
+                .where(
+                        this.nameContains(searchRequest.getName()),
+                        this.registrationNumberEq(searchRequest.getRegistrationNumber()),
+                        company.type.eq(Company.Type.MEDIA))
+                .from(company);
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    @Override
     public Page<CompanyDto.Response.AdAccountDetail> registrationNumber(Pageable pageable, CompanyDto.Request.SearchKeyword searchRequest) {
         List<CompanyDto.Response.AdAccountDetail> content = this.query
                 .select(new QCompanyDto_Response_AdAccountDetail(
@@ -128,6 +161,6 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
     }
 
     private BooleanExpression registrationNumberEq(String registrationNumber) {
-        return nonNull(registrationNumber) ? company.registrationNumber.eq(registrationNumber) : null;
+        return StringUtils.hasText(registrationNumber) ? company.registrationNumber.eq(registrationNumber) : null;
     }
 }

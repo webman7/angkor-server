@@ -85,7 +85,7 @@ public class AdAccountUserQueryRepositoryImpl implements AdAccountUserQueryRepos
                 .where(adAccount.id.eq(adAccountId),
                         adAccountUser.adAccount.id.eq(adAccount.id),
                         adAccountUser.user.id.eq(user.id),
-                        adAccountUser.status.in(AdAccountUser.Status.Y, AdAccountUser.Status.R, AdAccountUser.Status.C),
+                        adAccountUser.status.in(AdAccountUser.Status.N, AdAccountUser.Status.R, AdAccountUser.Status.C),
                         user.active.in(User.Active.Y, User.Active.L)
                 )
                 .fetch();

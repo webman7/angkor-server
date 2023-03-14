@@ -1,9 +1,12 @@
 package com.adplatform.restApi.domain.company.api;
 
+import com.adplatform.restApi.domain.business.dto.user.BusinessAccountUserDto;
 import com.adplatform.restApi.domain.company.dao.CompanyRepository;
+import com.adplatform.restApi.domain.company.dao.user.MediaCompanyUserRepository;
 import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.company.dto.CompanyMapper;
+import com.adplatform.restApi.domain.company.dto.user.MediaCompanyUserDto;
 import com.adplatform.restApi.domain.company.service.CompanyFindUtils;
 import com.adplatform.restApi.global.dto.PageDto;
 import lombok.RequiredArgsConstructor;
@@ -24,12 +27,51 @@ import java.util.List;
 public class CompanyQueryApi {
     private final CompanyRepository companyRepository;
     private final CompanyMapper companyMapper;
+    private final MediaCompanyUserRepository mediaCompanyUserRepository;
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
     public CompanyDto.Response.Detail findById(@PathVariable Integer id) {
         return this.companyMapper.toDetailResponse(CompanyFindUtils.findByIdOrElseThrow(id, this.companyRepository));
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("media/search")
+    public PageDto<CompanyDto.Response.CompanyInfo> searchMedia(
+            @PageableDefault Pageable pageable,
+            CompanyDto.Request.SearchMedia searchRequest) {
+        return PageDto.create(this.companyRepository.searchMedia(pageable, searchRequest));
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}/users")
+    public List<MediaCompanyUserDto.Response.MediaCompanyUserInfo> mediaCompanyUserInfo(@PathVariable(name = "id") Integer companyId) {
+        return this.mediaCompanyUserRepository.mediaCompanyUserInfo(companyId);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}/users/request")
+    public List<MediaCompanyUserDto.Response.MediaCompanyUserInfo> mediaCompanyRequestUserInfo(@PathVariable(name = "id") Integer companyId) {
+        return this.mediaCompanyUserRepository.mediaCompanyRequestUserInfo(companyId);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}/user/{userNo}")
+    public MediaCompanyUserDto.Response.MediaCompanyUserInfo mediaCompanyUserInfo(@PathVariable(name = "id") Integer companyId, @PathVariable(name = "userNo") Integer userNo) {
+        return this.mediaCompanyUserRepository.mediaCompanyUserInfo(companyId, userNo);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/search")

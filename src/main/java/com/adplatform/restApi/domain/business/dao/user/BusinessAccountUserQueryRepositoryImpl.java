@@ -89,7 +89,7 @@ public class BusinessAccountUserQueryRepositoryImpl implements BusinessAccountUs
                 .where(businessAccount.id.eq(businessAccountId),
                         businessAccountUser.businessAccount.id.eq(businessAccount.id),
                         businessAccountUser.user.id.eq(user.id),
-                        businessAccountUser.status.in(BusinessAccountUser.Status.Y, BusinessAccountUser.Status.R, BusinessAccountUser.Status.C),
+                        businessAccountUser.status.in(BusinessAccountUser.Status.N, BusinessAccountUser.Status.R, BusinessAccountUser.Status.C),
                         user.active.in(User.Active.Y, User.Active.L)
                 )
                 .fetch();

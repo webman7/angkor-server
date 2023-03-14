@@ -34,6 +34,13 @@ public abstract class CompanyDto {
             private String searchKeyword;
         }
 
+        @Getter
+        @Setter
+        public static class SearchMedia {
+            private String name;
+            private String registrationNumber;
+        }
+
 
         @Getter
         @Setter
@@ -75,6 +82,7 @@ public abstract class CompanyDto {
     }
 
     public static abstract class Response {
+
         @Getter
         @Setter
         public static class Default {
