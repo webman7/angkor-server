@@ -65,11 +65,19 @@ public class CompanyService {
             throw new MediaCompanyUserAlreadyExistException();
         }
 
+        Integer count1 = this.mediaCompanyUserRepository.findByCompanyIdCount(request.getCompanyId());
         // 인서트
         User user = this.userQueryService.findByIdOrElseThrow(userInfo.getId());
         Company company = CompanyFindUtils.findByIdOrElseThrow(request.getCompanyId(), this.companyRepository);
-        MediaCompanyUser mediaCompanyUser = this.mediaCompanyUserMapper.toEntityInvite(request, company, user);
-        this.mediaCompanyUserRepository.save(mediaCompanyUser);
+        if(count1.equals(0)) {
+            MediaCompanyUser mediaCompanyUser = this.mediaCompanyUserMapper.toEntity(request, company, user);
+            this.mediaCompanyUserRepository.save(mediaCompanyUser);
+        } else {
+            MediaCompanyUser mediaCompanyUser = this.mediaCompanyUserMapper.toEntityInvite(request, company, user);
+            this.mediaCompanyUserRepository.save(mediaCompanyUser);
+        }
+
+
     }
 
     public void saveUserInvite(MediaCompanyUserDto.Request.SaveUser request, Integer loginUserNo) {

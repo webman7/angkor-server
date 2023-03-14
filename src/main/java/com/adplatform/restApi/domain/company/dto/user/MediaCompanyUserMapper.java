@@ -10,6 +10,12 @@ import org.mapstruct.Mapping;
 public interface MediaCompanyUserMapper {
     @Mapping(target = "company", source = "company")
     @Mapping(target = "user", source = "user")
+    @Mapping(target = "accountingYN", expression = "java(MediaCompanyUser.AccountingYN.Y)")
+    @Mapping(target = "status", expression = "java(MediaCompanyUser.Status.Y)")
+    MediaCompanyUser toEntity(MediaCompanyUserDto.Request.SaveUser request, Company company, User user);
+
+    @Mapping(target = "company", source = "company")
+    @Mapping(target = "user", source = "user")
     @Mapping(target = "accountingYN", expression = "java(MediaCompanyUser.AccountingYN.N)")
     @Mapping(target = "status", expression = "java(MediaCompanyUser.Status.Y)")
     MediaCompanyUser toEntityInvite(MediaCompanyUserDto.Request.SaveUser request, Company company, User user);
