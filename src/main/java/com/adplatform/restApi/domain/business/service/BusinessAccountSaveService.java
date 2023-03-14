@@ -85,6 +85,7 @@ public class BusinessAccountSaveService {
         CompanyDto.Request.Update requestCompany = new CompanyDto.Request.Update();
         requestCompany.setName(request.getCompanyName());
         requestCompany.setAddress(request.getAddress());
+        requestCompany.setRegistrationNumber(request.getRegistrationNumber());
         requestCompany.setBusinessItem(request.getBusinessItem());
         requestCompany.setBusinessCategory(request.getBusinessCategory());
         requestCompany.setRepresentationName(request.getRepresentationName());
