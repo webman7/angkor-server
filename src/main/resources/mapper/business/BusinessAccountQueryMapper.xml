@@ -7,6 +7,7 @@
         <id column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="memberType" property="memberType"/>
+        <result column="adAccountId" property="adAccountId"/>
     </resultMap>
 
     <sql id="accountsCondition1">
@@ -28,7 +29,11 @@
     </sql>
 
     <sql id="accountsSelectQuery">
-        SELECT a.id AS id, a.name AS name, b.member_type AS memberType
+        SELECT a.id AS id, a.name AS name, b.member_type AS memberType, (SELECT id
+                                                                           FROM adaccount_info ai
+                                                                          WHERE ai.business_account_info_id = a.id
+                                                                          ORDER BY ai.id ASC
+                                                                          LIMIT 0,1)  AS adAccountId
           FROM business_account_info a, business_account_user_info b
          WHERE a.id = b.business_account_info_id
            AND b.user_no = #{loginUserNo}
@@ -36,7 +41,7 @@
            AND a.config IN ('ON', 'OFF')
            AND b.`status` = 'Y'
         UNION
-        SELECT c.business_account_info_id AS id, e.name AS name, d.member_type AS memberType
+        SELECT c.business_account_info_id AS id, e.name AS name, d.member_type AS memberType, c.id AS adAccountId
           FROM adaccount_info c, adaccount_user_info d, business_account_info e
          WHERE c.id = d.adaccount_info_id
            AND c.business_account_info_id = e.id
@@ -46,6 +51,12 @@
            AND e.config IN ('ON', 'OFF')
            AND c.config IN ('ON', 'OFF')
            AND d.`status` = 'Y'
+           AND e.id NOT IN (SELECT a.id
+                             FROM business_account_info a, business_account_user_info b
+                            WHERE a.id = b.business_account_info_id
+                              AND b.user_no = #{loginUserNo}
+                              AND a.config IN ('ON', 'OFF')
+                              AND b.`status` = 'Y')
     </sql>
 
     <select id="accounts" resultMap="mapAccounts">

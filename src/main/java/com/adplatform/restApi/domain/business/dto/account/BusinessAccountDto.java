@@ -1,6 +1,7 @@
 package com.adplatform.restApi.domain.business.dto.account;
 
 import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
+import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto;
 import com.adplatform.restApi.domain.business.domain.BusinessAccount;
 import com.adplatform.restApi.domain.business.domain.BusinessAccountUser;
 import com.adplatform.restApi.domain.company.domain.Company;
@@ -164,6 +165,7 @@ public class BusinessAccountDto {
             private Integer id;
             private String name;
             private String memberType;
+            private Integer adAccountId;
         }
 
         @Getter
