@@ -1,8 +1,11 @@
 package com.adplatform.restApi.domain.adaccount.api;
 
 import com.adplatform.restApi.domain.adaccount.dao.adaccount.AdAccountRepository;
+import com.adplatform.restApi.domain.adaccount.dao.user.AdAccountUserRepository;
 import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto;
+import com.adplatform.restApi.domain.adaccount.dto.user.AdAccountUserDto;
+import com.adplatform.restApi.domain.business.dto.user.BusinessAccountUserDto;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.global.config.security.util.SecurityUtils;
 import com.adplatform.restApi.global.dto.PageDto;
@@ -23,6 +26,46 @@ import java.util.List;
 @RequestMapping("/adaccounts")
 public class AdAccountQueryApi {
     private final AdAccountRepository adAccountRepository;
+    private final AdAccountUserRepository adAccountUserRepository;
+
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}")
+    public AdAccountDto.Response.AdAccountInfo adAccountInfo(@PathVariable(name = "id") Integer adAccountId) {
+        return this.adAccountRepository.adAccountInfo(adAccountId);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}/users")
+    public List<AdAccountUserDto.Response.AdAccountUserInfo> adAccountUserInfo(@PathVariable(name = "id") Integer adAccountId) {
+        return this.adAccountUserRepository.adAccountUserInfo(adAccountId);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}/users/request")
+    public List<AdAccountUserDto.Response.AdAccountUserInfo> adAccountRequestUserInfo(@PathVariable(name = "id") Integer adAccountId) {
+        return this.adAccountUserRepository.adAccountRequestUserInfo(adAccountId);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}/user/{userNo}")
+    public AdAccountUserDto.Response.AdAccountUserInfo adAccountUserInfo(@PathVariable(name = "id") Integer adAccountId, @PathVariable(name = "userNo") Integer userNo) {
+        return this.adAccountUserRepository.adAccountUserInfo(adAccountId, userNo);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/all")
@@ -77,9 +120,9 @@ public class AdAccountQueryApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{id}")
-    public AdAccountDto.Response.AdAccountInfo adAccountInfo(@PathVariable(name = "id") Integer adAccountId) {
-        return this.adAccountRepository.adAccountInfo(adAccountId);
+    @GetMapping("/{id}/advertiser")
+    public CompanyDto.Response.AdAccountDetail adAccountByAdvertiser(@PathVariable(name = "id") Integer adAccountId) {
+        return this.adAccountRepository.adAccountByAdvertiser(adAccountId);
     }
 
 //    @ResponseStatus(HttpStatus.OK)
@@ -94,9 +137,4 @@ public class AdAccountQueryApi {
 //        return this.adAccountRepository.adAccountCashDetailInfo(adAccountId);
 //    }
 
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{id}/advertiser")
-    public CompanyDto.Response.AdAccountDetail adAccountByAdvertiser(@PathVariable(name = "id") Integer adAccountId) {
-        return this.adAccountRepository.adAccountByAdvertiser(adAccountId);
-    }
 }

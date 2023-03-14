@@ -115,7 +115,7 @@ public class BusinessAccountSaveService {
         this.businessAccountUserRepository.save(businessAccountUser);
     }
 
-    public void updateUserStatus(BusinessAccountUserDto.Request.UserStatusUpdate request, Integer loginUserNo) {
+    public void updateUserMember(BusinessAccountUserDto.Request.UserMemberUpdate request, Integer loginUserNo) {
 
         // MASTER 권한 체크
         BusinessAccountUserDto.Response.BusinessAccountUserInfo businessAccountUserInfo = this.businessAccountUserRepository.businessAccountUserInfo(request.getBusinessAccountId(), loginUserNo);
@@ -124,15 +124,6 @@ public class BusinessAccountSaveService {
         }
 
         BusinessAccountUser businessAccountUser = BusinessAccountUserQueryUtils.findByBusinessAccountIdAndUserIdOrElseThrow(request.getBusinessAccountId(), request.getId(), this.businessAccountUserRepository);
-
-        // 비즈니스 회원 상태 업데이트
-        if(request.getStatus() == BusinessAccountUser.Status.Y) {
-            businessAccountUser.changeStatusY();
-        } else if(request.getStatus() == BusinessAccountUser.Status.R) {
-            businessAccountUser.changeStatusR();
-        } else if(request.getStatus() == BusinessAccountUser.Status.C) {
-            businessAccountUser.changeStatusC();
-        }
 
         // 히스토리 저장
         BusinessAccountUserInfoHistoryDto.Request.Save history = new BusinessAccountUserInfoHistoryDto.Request.Save();
@@ -147,6 +138,49 @@ public class BusinessAccountSaveService {
         history.setUpdatedAt(businessAccountUser.getUpdatedAt());
         BusinessAccountUserInfoHistory businessAccountUserInfoHistory = this.businessAccountUserInfoHistoryMapper.toEntity(history, SecurityUtils.getLoginUserNo());
         this.businessAccountUserInfoHistoryRepository.save(businessAccountUserInfoHistory);
+
+        // 비즈니스 회원 상태 업데이트
+        if(request.getMemberType() == BusinessAccountUser.MemberType.MASTER) {
+            businessAccountUser.changeMemberTypeMaster();
+        } else if(request.getMemberType() == BusinessAccountUser.MemberType.OPERATOR) {
+            businessAccountUser.changeMemberTypeOperator();
+        } else if(request.getMemberType() == BusinessAccountUser.MemberType.MEMBER) {
+            businessAccountUser.changeMemberTypeMember();
+        }
+    }
+
+    public void updateUserStatus(BusinessAccountUserDto.Request.UserStatusUpdate request, Integer loginUserNo) {
+
+        // MASTER 권한 체크
+        BusinessAccountUserDto.Response.BusinessAccountUserInfo businessAccountUserInfo = this.businessAccountUserRepository.businessAccountUserInfo(request.getBusinessAccountId(), loginUserNo);
+        if(businessAccountUserInfo.getMemberType() != BusinessAccountUser.MemberType.MASTER) {
+            throw new BusinessAccountUserAuthorizationException();
+        }
+
+        BusinessAccountUser businessAccountUser = BusinessAccountUserQueryUtils.findByBusinessAccountIdAndUserIdOrElseThrow(request.getBusinessAccountId(), request.getId(), this.businessAccountUserRepository);
+
+        // 히스토리 저장
+        BusinessAccountUserInfoHistoryDto.Request.Save history = new BusinessAccountUserInfoHistoryDto.Request.Save();
+        history.setBusinessAccountId(businessAccountUser.getBusinessAccount().getId());
+        history.setUserNo(businessAccountUser.getUser().getId());
+        history.setMemberType(businessAccountUser.getMemberType());
+        history.setAccountingYN(businessAccountUser.getAccountingYN());
+        history.setStatus(businessAccountUser.getStatus());
+        history.setRegUserNo(businessAccountUser.getCreatedUserNo());
+        history.setCreatedAt(businessAccountUser.getCreatedAt());
+        history.setUpdUserNo(businessAccountUser.getUpdatedUserNo());
+        history.setUpdatedAt(businessAccountUser.getUpdatedAt());
+        BusinessAccountUserInfoHistory businessAccountUserInfoHistory = this.businessAccountUserInfoHistoryMapper.toEntity(history, SecurityUtils.getLoginUserNo());
+        this.businessAccountUserInfoHistoryRepository.save(businessAccountUserInfoHistory);
+
+        // 비즈니스 회원 상태 업데이트
+        if(request.getStatus() == BusinessAccountUser.Status.Y) {
+            businessAccountUser.changeStatusY();
+        } else if(request.getStatus() == BusinessAccountUser.Status.R) {
+            businessAccountUser.changeStatusR();
+        } else if(request.getStatus() == BusinessAccountUser.Status.C) {
+            businessAccountUser.changeStatusC();
+        }
     }
 
     public void updateUserAccounting(BusinessAccountUserDto.Request.UserUpdate request, Integer loginUserNo) {
@@ -168,9 +202,6 @@ public class BusinessAccountSaveService {
             throw new BusinessAccountUserAccountingExistException();
         }
 
-        // 권한 변경
-        this.businessAccountUserRepository.updateAccounting(businessAccountUser.getBusinessAccount().getId(), loginUserNo, BusinessAccountUser.AccountingYN.N);
-
         // 히스토리 저장
         BusinessAccountUserInfoHistoryDto.Request.Save history = new BusinessAccountUserInfoHistoryDto.Request.Save();
         history.setBusinessAccountId(businessAccountUser.getBusinessAccount().getId());
@@ -186,7 +217,7 @@ public class BusinessAccountSaveService {
         this.businessAccountUserInfoHistoryRepository.save(businessAccountUserInfoHistory);
 
         // 권한 변경
-        this.businessAccountUserRepository.updateAccounting(businessAccountUser2.getBusinessAccount().getId(), request.getId(), BusinessAccountUser.AccountingYN.Y);
+        this.businessAccountUserRepository.updateAccounting(businessAccountUser.getBusinessAccount().getId(), loginUserNo, BusinessAccountUser.AccountingYN.N);
 
         // 히스토리 저장
         BusinessAccountUserInfoHistoryDto.Request.Save history2 = new BusinessAccountUserInfoHistoryDto.Request.Save();
@@ -201,6 +232,9 @@ public class BusinessAccountSaveService {
         history2.setUpdatedAt(businessAccountUser2.getUpdatedAt());
         BusinessAccountUserInfoHistory businessAccountUserInfoHistory2 = this.businessAccountUserInfoHistoryMapper.toEntity(history2, SecurityUtils.getLoginUserNo());
         this.businessAccountUserInfoHistoryRepository.save(businessAccountUserInfoHistory2);
+
+        // 권한 변경
+        this.businessAccountUserRepository.updateAccounting(businessAccountUser2.getBusinessAccount().getId(), request.getId(), BusinessAccountUser.AccountingYN.Y);
     }
 
     public void deleteUser(BusinessAccountUserDto.Request.UserUpdate request, Integer loginUserNo) {

@@ -1,42 +1,42 @@
-package com.adplatform.restApi.domain.business.dto.user;
+package com.adplatform.restApi.domain.adaccount.dto.user;
 
-import com.adplatform.restApi.domain.business.domain.BusinessAccountUser;
+import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
 import com.adplatform.restApi.domain.user.dto.user.UserDto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
 
-public class BusinessAccountUserDto {
+public class AdAccountUserDto {
 
     public static abstract class Request {
         @Getter
         @Setter
         public static class SaveUser {
-            private Integer businessAccountId;
+            private Integer adAccountId;
             private String userId;
-            private BusinessAccountUser.MemberType memberType;
+            private AdAccountUser.MemberType memberType;
         }
 
         @Getter
         @Setter
         public static class UserStatusUpdate {
-            private Integer businessAccountId;
+            private Integer adAccountId;
             private Integer id;
-            private BusinessAccountUser.Status status;
+            private AdAccountUser.Status status;
         }
 
         @Getter
         @Setter
         public static class UserMemberUpdate {
-            private Integer businessAccountId;
+            private Integer adAccountId;
             private Integer id;
-            private BusinessAccountUser.MemberType memberType;
+            private AdAccountUser.MemberType memberType;
         }
 
         @Getter
         @Setter
         public static class UserUpdate {
-            private Integer businessAccountId;
+            private Integer adAccountId;
             private Integer id;
         }
     }
@@ -44,24 +44,21 @@ public class BusinessAccountUserDto {
     public static abstract class Response {
         @Getter
         @Setter
-        public static class BusinessAccountUserInfo {
+        public static class AdAccountUserInfo {
             private Integer id;
             private UserDto.Response.BaseInfo user;
-            private BusinessAccountUser.MemberType memberType;
-            private BusinessAccountUser.AccountingYN accountingYN;
-            private BusinessAccountUser.Status status;
+            private AdAccountUser.MemberType memberType;
+            private AdAccountUser.Status status;
 
             @QueryProjection
-            public BusinessAccountUserInfo(
+            public AdAccountUserInfo(
                     Integer id,
                     UserDto.Response.BaseInfo user,
-                    BusinessAccountUser.MemberType memberType,
-                    BusinessAccountUser.AccountingYN accountingYN,
-                    BusinessAccountUser.Status status) {
+                    AdAccountUser.MemberType memberType,
+                    AdAccountUser.Status status) {
                 this.id = id;
                 this.user = user;
                 this.memberType = memberType;
-                this.accountingYN = accountingYN;
                 this.status = status;
             }
         }

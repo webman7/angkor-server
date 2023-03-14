@@ -42,6 +42,12 @@ public class BusinessAccountCommandApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("user/member")
+    public void updateUserMember(@RequestBody @Valid BusinessAccountUserDto.Request.UserMemberUpdate request) {
+        this.businessAccountSaveService.updateUserMember(request, SecurityUtils.getLoginUserNo());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @PatchMapping("user/status")
     public void updateUserStatus(@RequestBody @Valid BusinessAccountUserDto.Request.UserStatusUpdate request) {
         this.businessAccountSaveService.updateUserStatus(request, SecurityUtils.getLoginUserNo());

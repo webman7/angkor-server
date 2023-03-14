@@ -118,4 +118,14 @@ public class BusinessAccountUser {
     public void changeStatusC() {
         this.status = Status.C;
     }
+
+    public void changeMemberTypeMaster() {
+        this.memberType = MemberType.MASTER;
+    }
+    public void changeMemberTypeOperator() {
+        this.memberType = MemberType.OPERATOR;
+    }
+    public void changeMemberTypeMember() {
+        this.memberType = MemberType.MEMBER;
+    }
 }

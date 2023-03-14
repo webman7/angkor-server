@@ -33,6 +33,17 @@ public class AdAccountDto {
 
         @Getter
         @Setter
+        public static class Update {
+
+            private Integer id;
+
+            @Size(min = 1, max = 50)
+            @NotBlank
+            private String name;
+        }
+
+        @Getter
+        @Setter
         public static class OutOfBalanceUpdate {
             private Integer id;
             private Boolean outOfBalance;

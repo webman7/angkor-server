@@ -38,7 +38,9 @@ public class AdAccountUser {
         /** 거부 */
         R,
         /** 요청 취소 */
-        C
+        C,
+        /** 삭제 */
+        D
     }
 
     @EmbeddedId
@@ -92,5 +94,25 @@ public class AdAccountUser {
 
     public void validateStatus() {
         if (!this.status.equals(Status.Y)) throw new AdAccountUserAuthorizationException();
+    }
+
+    public void changeStatusY() {
+        this.status = AdAccountUser.Status.Y;
+    }
+    public void changeStatusR() {
+        this.status = AdAccountUser.Status.R;
+    }
+    public void changeStatusC() {
+        this.status = AdAccountUser.Status.C;
+    }
+
+    public void changeMemberTypeMaster() {
+        this.memberType = AdAccountUser.MemberType.MASTER;
+    }
+    public void changeMemberTypeOperator() {
+        this.memberType = AdAccountUser.MemberType.OPERATOR;
+    }
+    public void changeMemberTypeMember() {
+        this.memberType = AdAccountUser.MemberType.MEMBER;
     }
 }

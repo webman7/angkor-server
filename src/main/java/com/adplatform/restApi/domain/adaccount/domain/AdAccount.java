@@ -3,6 +3,7 @@ package com.adplatform.restApi.domain.adaccount.domain;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto;
 import com.adplatform.restApi.domain.advertiser.campaign.domain.Campaign;
 import com.adplatform.restApi.domain.business.domain.BusinessAccount;
+import com.adplatform.restApi.domain.business.dto.account.BusinessAccountDto;
 import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.wallet.domain.Cash;
 import com.adplatform.restApi.domain.wallet.domain.WalletMaster;
@@ -72,6 +73,11 @@ public class AdAccount extends BaseUpdatedEntity {
         this.config = config;
         this.adminStop = adminStop;
         this.outOfBalance = outOfBalance;
+    }
+
+    public AdAccount update(AdAccountDto.Request.Update request) {
+        this.name = request.getName();
+        return this;
     }
 
     public AdAccount addAdAccountUser(User user, AdAccountUser.MemberType memberType, AdAccountUser.Status status) {
