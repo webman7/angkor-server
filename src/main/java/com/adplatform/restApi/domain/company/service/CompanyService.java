@@ -64,8 +64,12 @@ public class CompanyService {
     public void update(CompanyDto.Request.Update request) {
         try{
             Company company = CompanyFindUtils.findByIdOrElseThrow(request.getId(), this.companyRepository).update(request);
-            request.getBusinessFiles().forEach(file -> company.addBusinessFile(this.saveCompanyFile(request, company, file)));
-            request.getBankFiles().forEach(file -> company.addBankFile(this.saveCompanyFile(request, company, file)));
+            if(request.getBusinessFiles().size() > 0) {
+                request.getBusinessFiles().forEach(file -> company.addBusinessFile(this.saveCompanyFile(request, company, file)));
+            }
+            if(request.getBankFiles().size() > 0) {
+                request.getBankFiles().forEach(file -> company.addBankFile(this.saveCompanyFile(request, company, file)));
+            }
 //            this.companyRepository.save(company);
         }catch (Exception e){
             throw new CompanyUpdateException();

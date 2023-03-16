@@ -64,7 +64,10 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                         company.address,
                         company.businessCategory,
                         company.businessItem,
-                        company.taxBillEmail
+                        company.taxBillEmail,
+                        company.bank,
+                        company.accountNumber,
+                        company.accountOwner
                 ))
                 .from(company)
                 .where(
@@ -128,7 +131,10 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                         company.address,
                         company.businessCategory,
                         company.businessItem,
-                        company.taxBillEmail
+                        company.taxBillEmail,
+                        company.bank,
+                        company.accountNumber,
+                        company.accountOwner
                 ))
                 .from(company)
                 .where(

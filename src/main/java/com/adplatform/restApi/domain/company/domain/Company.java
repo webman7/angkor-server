@@ -1,8 +1,10 @@
 package com.adplatform.restApi.domain.company.domain;
 
 import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
+import com.adplatform.restApi.domain.advertiser.adgroup.domain.Media;
 import com.adplatform.restApi.domain.advertiser.creative.domain.CreativeFile;
 import com.adplatform.restApi.domain.advertiser.creative.domain.CreativeOpinionProofFile;
+import com.adplatform.restApi.domain.bank.domain.Bank;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.user.domain.User;
 import com.adplatform.restApi.global.converter.BooleanToStringYOrNConverter;
@@ -65,6 +67,16 @@ public class Company extends BaseUpdatedEntity {
     @AttributeOverride(name = "address", column = @Column(name = "tax_bill_email", length = 60))
     private Email taxBillEmail;
 
+    @ManyToOne
+    @JoinColumn(name = "bank_info_id", nullable = false)
+    private Bank bank;
+
+    @Column(name = "account_number", length = 30)
+    private String accountNumber;
+
+    @Column(name = "account_owner", length = 50)
+    private String accountOwner;
+
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<CompanyFile> businessFiles = new ArrayList<>();
 
@@ -89,7 +101,10 @@ public class Company extends BaseUpdatedEntity {
             Address address,
             String businessCategory,
             String businessItem,
-            Email taxBillEmail) {
+            Email taxBillEmail,
+            Bank bank,
+            String accountNumber,
+            String accountOwner) {
         this.name = name;
         this.type = type;
         this.registrationNumber = registrationNumber;
@@ -98,6 +113,9 @@ public class Company extends BaseUpdatedEntity {
         this.businessCategory = businessCategory;
         this.businessItem = businessItem;
         this.taxBillEmail = new Email(taxBillEmail.getAddress());
+        this.bank = bank;
+        this.accountNumber = accountNumber;
+        this.accountOwner = accountOwner;
         this.deleted = false;
     }
 
@@ -109,6 +127,9 @@ public class Company extends BaseUpdatedEntity {
         this.businessCategory = request.getBusinessCategory();
         this.businessItem = request.getBusinessItem();
         this.taxBillEmail = new Email(request.getTaxBillEmail());
+        this.bank = request.getBank();
+        this.accountNumber = request.getAccountNumber();
+        this.accountOwner = request.getAccountOwner();
         return this;
     }
 

@@ -403,7 +403,10 @@ public class BusinessAccountQuerydslRepositoryImpl implements BusinessAccountQue
                             company.address,
                             company.businessCategory,
                             company.businessItem,
-                            company.taxBillEmail
+                            company.taxBillEmail,
+                            company.bank,
+                            company.accountNumber,
+                            company.accountOwner
                         )
                 ))
                 .from(businessAccount, company)

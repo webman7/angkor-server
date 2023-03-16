@@ -18,6 +18,9 @@ public interface CompanyMapper {
     @Mapping(target = "type", expression = "java(Company.Type.BUSINESS)")
     @Mapping(target = "address", source = "address")
     @Mapping(target = "taxBillEmail", qualifiedByName = "createEmail")
+    @Mapping(target = "bank", ignore = true)
+    @Mapping(target = "accountNumber", ignore = true)
+    @Mapping(target = "accountOwner", ignore = true)
     Company toBusinessEntity(BusinessAccountDto.Request.Save request);
 
     @Mapping(target = "type", expression = "java(Company.Type.MEDIA)")

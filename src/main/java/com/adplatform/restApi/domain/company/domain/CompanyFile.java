@@ -13,22 +13,18 @@ import javax.persistence.*;
 @Entity
 @Table(name = "company_files")
 public class CompanyFile extends BaseEntity {
-    public enum Type {
-        BUSINESS, BANK
-    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_info_id")
     private Company company;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "type", length = 20)
-    private Type type;
+    private String type;
 
     @Embedded
     private FileInformation information;
 
-    public CompanyFile(Company company, Type type, FileInformation information) {
+    public CompanyFile(Company company, String type, FileInformation information) {
         this.company = company;
         this.type = type;
         this.information = information;

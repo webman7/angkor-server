@@ -1,6 +1,7 @@
 package com.adplatform.restApi.domain.company.dto;
 
 import com.adplatform.restApi.domain.advertiser.creative.domain.CreativeFile;
+import com.adplatform.restApi.domain.bank.domain.Bank;
 import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.company.domain.CompanyFile;
 import com.adplatform.restApi.global.value.Address;
@@ -75,13 +76,12 @@ public abstract class CompanyDto {
             @NotNull
             @Email
             private String taxBillEmail;
-
-            @NotNull
-            private CompanyFile.Type type;
-            @NotNull
-            @Size(min = 1, max = 100)
+            private String type;
             private List<MultipartFile> businessFiles = new ArrayList<>();
             private List<MultipartFile> bankFiles = new ArrayList<>();
+            private Bank bank;
+            private String accountNumber;
+            private String accountOwner;
 
         }
 
@@ -120,6 +120,9 @@ public abstract class CompanyDto {
             private String businessCategory;
             private String businessItem;
             private String taxBillEmail;
+            private Bank bank;
+            private String accountNumber;
+            private String accountOwner;
             private boolean deleted;
         }
 
@@ -135,6 +138,9 @@ public abstract class CompanyDto {
             private String businessCategory;
             private String businessItem;
             private com.adplatform.restApi.global.value.Email taxBillEmail;
+            private Bank bank;
+            private String accountNumber;
+            private String accountOwner;
 
             @QueryProjection
             public CompanyInfo(Integer id,
@@ -145,7 +151,10 @@ public abstract class CompanyDto {
                                    Address address,
                                    String businessCategory,
                                    String businessItem,
-                                   com.adplatform.restApi.global.value.Email taxBillEmail) {
+                                   com.adplatform.restApi.global.value.Email taxBillEmail,
+                               Bank bank,
+                               String accountNumber,
+                               String accountOwner) {
                 this.id = id;
                 this.name = name;
                 this.type = type;
@@ -155,6 +164,9 @@ public abstract class CompanyDto {
                 this.businessCategory = businessCategory;
                 this.businessItem = businessItem;
                 this.taxBillEmail = taxBillEmail;
+                this.bank = bank;
+                this.accountNumber = accountNumber;
+                this.accountOwner = accountOwner;
             }
         }
 
