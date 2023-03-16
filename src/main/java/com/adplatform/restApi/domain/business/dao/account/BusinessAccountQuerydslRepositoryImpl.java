@@ -1,6 +1,7 @@
 package com.adplatform.restApi.domain.business.dao.account;
 
 import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
+import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
 import com.adplatform.restApi.domain.business.domain.BusinessAccountUser;
 import com.adplatform.restApi.domain.business.domain.BusinessAccount;
 import com.adplatform.restApi.domain.business.dto.account.*;
@@ -38,6 +39,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.adplatform.restApi.domain.adaccount.domain.QAdAccount.adAccount;
+import static com.adplatform.restApi.domain.adaccount.domain.QAdAccountUser.adAccountUser;
 import static com.adplatform.restApi.domain.business.domain.QBusinessAccount.businessAccount;
 import static com.adplatform.restApi.domain.business.domain.QBusinessAccountUser.businessAccountUser;
 import static com.adplatform.restApi.domain.business.dto.account.BusinessAccountDto.Request;
@@ -430,17 +432,31 @@ public class BusinessAccountQuerydslRepositoryImpl implements BusinessAccountQue
                     adAccount.name,
                     adAccount.config,
                     adAccount.adminStop,
-                    adAccount.outOfBalance,
-                    new QBusinessAccountDto_Response_AdAccountBusinessAccountInfo(
-                        businessAccount.id,
-                        businessAccount.name,
-                        businessAccount.config
-                    )
+                    adAccount.outOfBalance
                 ))
                 .from(businessAccount, adAccount)
                 .where(businessAccount.id.eq(businessAccountId),
                        adAccount.businessAccount.id.eq(businessAccount.id),
                        adAccount.config.in(AdAccount.Config.ON, AdAccount.Config.OFF)
+                )
+                .fetch();
+    }
+
+    @Override
+    public List<BusinessAccountDto.Response.AdAccountMemberInfo> businessAccountByAdAccountsMember(Integer businessAccountId, Integer loginUserNo) {
+        return this.query.select(new QBusinessAccountDto_Response_AdAccountMemberInfo(
+                        adAccount.id,
+                        adAccount.name,
+                        adAccountUser.memberType
+                ))
+                .from(businessAccount, adAccount, adAccountUser)
+                .where(businessAccount.id.eq(businessAccountId),
+                        adAccount.businessAccount.id.eq(businessAccount.id),
+                        adAccount.id.eq(adAccountUser.id.adAccountId),
+                        adAccountUser.user.id.eq(loginUserNo),
+                        businessAccount.config.in(BusinessAccount.Config.ON, BusinessAccount.Config.OFF),
+                        adAccount.config.in(AdAccount.Config.ON, AdAccount.Config.OFF),
+                        adAccountUser.status.eq(AdAccountUser.Status.Y)
                 )
                 .fetch();
     }

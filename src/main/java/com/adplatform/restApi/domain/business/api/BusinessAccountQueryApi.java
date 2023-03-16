@@ -82,11 +82,16 @@ public class BusinessAccountQueryApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/account/{id}/adaccounts")
+    @GetMapping("/account/{id}/adaccounts/master")
     public List<BusinessAccountDto.Response.AdAccountInfo> businessAccountByAdAccounts(@PathVariable(name = "id") Integer businessAccountId) {
         return this.businessAccountRepository.businessAccountByAdAccounts(businessAccountId);
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/account/{id}/adaccounts/member")
+    public List<BusinessAccountDto.Response.AdAccountMemberInfo> businessAccountByAdAccountsMember(@PathVariable(name = "id") Integer businessAccountId) {
+        return this.businessAccountRepository.businessAccountByAdAccountsMember(businessAccountId, SecurityUtils.getLoginUserNo());
+    }
 
 
 

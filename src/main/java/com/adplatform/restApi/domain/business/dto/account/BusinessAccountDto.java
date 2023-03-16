@@ -1,6 +1,7 @@
 package com.adplatform.restApi.domain.business.dto.account;
 
 import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
+import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto;
 import com.adplatform.restApi.domain.business.domain.BusinessAccount;
 import com.adplatform.restApi.domain.business.domain.BusinessAccountUser;
@@ -227,7 +228,6 @@ public class BusinessAccountDto {
             private AdAccount.Config config;
             private boolean adminStop;
             private boolean outOfBalance;
-            private BusinessAccountDto.Response.AdAccountBusinessAccountInfo business;
 
             @QueryProjection
             public AdAccountInfo(
@@ -235,14 +235,30 @@ public class BusinessAccountDto {
                     String name,
                     AdAccount.Config config,
                     boolean adminStop,
-                    boolean outOfBalance,
-                    BusinessAccountDto.Response.AdAccountBusinessAccountInfo business) {
+                    boolean outOfBalance) {
                 this.id = id;
                 this.name = name;
                 this.config = config;
                 this.adminStop = adminStop;
                 this.outOfBalance = outOfBalance;
-                this.business = business;
+            }
+        }
+
+        @Getter
+        @Setter
+        public static class AdAccountMemberInfo {
+            private Integer id;
+            private String name;
+            private AdAccountUser.MemberType memberType;
+
+            @QueryProjection
+            public AdAccountMemberInfo(
+                    Integer id,
+                    String name,
+                    AdAccountUser.MemberType memberType) {
+                this.id = id;
+                this.name = name;
+                this.memberType = memberType;
             }
         }
 

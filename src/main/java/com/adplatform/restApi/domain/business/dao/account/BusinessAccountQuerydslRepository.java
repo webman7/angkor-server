@@ -39,6 +39,7 @@ public interface BusinessAccountQuerydslRepository {
     BusinessAccountDto.Response.BusinessAccountInfo businessAccountInfo(Integer businessAccountId);
     List<BusinessAccountDto.Response.AdAccountInfo> businessAccountByAdAccounts(Integer businessAccountId);
 
+    List<BusinessAccountDto.Response.AdAccountMemberInfo> businessAccountByAdAccountsMember(Integer businessAccountId, Integer loginUserNo);
 
 
     BusinessAccountDto.Response.BusinessAccountCashInfo businessAccountCashInfo(Integer businessAccountId);
