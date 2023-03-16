@@ -3,6 +3,7 @@ package com.adplatform.restApi.domain.business.dto.account;
 import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
 import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto;
+import com.adplatform.restApi.domain.bank.domain.Bank;
 import com.adplatform.restApi.domain.business.domain.BusinessAccount;
 import com.adplatform.restApi.domain.business.domain.BusinessAccountUser;
 import com.adplatform.restApi.domain.company.domain.Company;
@@ -267,6 +268,39 @@ public class BusinessAccountDto {
             }
         }
 
+        @Getter
+        @Setter
+        public static class CompanyInfo {
+            private Integer id;
+            private String name;
+            private Company.Type type;
+            private String registrationNumber;
+            private String representationName;
+            private Address address;
+            private String businessCategory;
+            private String businessItem;
+            private com.adplatform.restApi.global.value.Email taxBillEmail;
+            @QueryProjection
+            public CompanyInfo(Integer id,
+                               String name,
+                               Company.Type type,
+                               String registrationNumber,
+                               String representationName,
+                               Address address,
+                               String businessCategory,
+                               String businessItem,
+                               com.adplatform.restApi.global.value.Email taxBillEmail) {
+                this.id = id;
+                this.name = name;
+                this.type = type;
+                this.registrationNumber = registrationNumber;
+                this.representationName = representationName;
+                this.address = address;
+                this.businessCategory = businessCategory;
+                this.businessItem = businessItem;
+                this.taxBillEmail = taxBillEmail;
+            }
+        }
 
 
 

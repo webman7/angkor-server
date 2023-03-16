@@ -394,7 +394,7 @@ public class BusinessAccountQuerydslRepositoryImpl implements BusinessAccountQue
                         businessAccount.id,
                         businessAccount.name,
                         businessAccount.config,
-                        new QCompanyDto_Response_CompanyInfo(
+                        new QBusinessAccountDto_Response_CompanyInfo(
                             company.id,
                             company.name,
                             company.type,
