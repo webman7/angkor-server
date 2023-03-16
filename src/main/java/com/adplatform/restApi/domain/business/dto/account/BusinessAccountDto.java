@@ -1,16 +1,9 @@
 package com.adplatform.restApi.domain.business.dto.account;
 
-import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
 import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
-import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto;
-import com.adplatform.restApi.domain.bank.domain.Bank;
 import com.adplatform.restApi.domain.business.domain.BusinessAccount;
 import com.adplatform.restApi.domain.business.domain.BusinessAccountUser;
 import com.adplatform.restApi.domain.company.domain.Company;
-import com.adplatform.restApi.domain.company.dto.CompanyDto;
-import com.adplatform.restApi.domain.user.domain.User;
-import com.adplatform.restApi.domain.user.dto.user.QUserDto_Response_BaseInfo;
-import com.adplatform.restApi.domain.user.dto.user.UserDto;
 import com.adplatform.restApi.domain.wallet.dto.WalletDto;
 import com.adplatform.restApi.global.value.Address;
 import com.querydsl.core.annotations.QueryProjection;
@@ -188,14 +181,14 @@ public class BusinessAccountDto {
             private Integer id;
             private String name;
             private BusinessAccount.Config config;
-            private CompanyDto.Response.CompanyInfo company;
+            private CompanyInfo company;
 
             @QueryProjection
             public BusinessAccountInfo(
                     Integer id,
                     String name,
                     BusinessAccount.Config config,
-                    CompanyDto.Response.CompanyInfo company) {
+                    CompanyInfo company) {
                 this.id = id;
                 this.name = name;
                 this.config = config;

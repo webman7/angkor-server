@@ -6,20 +6,11 @@ import com.adplatform.restApi.domain.business.domain.BusinessAccountUser;
 import com.adplatform.restApi.domain.business.domain.BusinessAccount;
 import com.adplatform.restApi.domain.business.dto.account.*;
 import com.adplatform.restApi.domain.business.dto.account.BusinessAccountDto;
-import com.adplatform.restApi.domain.advertiser.adgroup.domain.AdGroup;
-import com.adplatform.restApi.domain.advertiser.campaign.domain.Campaign;
-import com.adplatform.restApi.domain.company.dto.CompanyDto;
-import com.adplatform.restApi.domain.advertiser.creative.domain.Creative;
-import com.adplatform.restApi.domain.advertiser.dashboard.dto.DashboardDto;
-import com.adplatform.restApi.domain.company.dto.QCompanyDto_Response_CompanyInfo;
-import com.adplatform.restApi.domain.user.domain.User;
-import com.adplatform.restApi.domain.user.dto.user.QUserDto_Response_BaseInfo;
 import com.adplatform.restApi.global.util.QuerydslOrderSpecifierUtil;
 import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_WalletBalance;
 import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_WalletSpend;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -44,9 +35,6 @@ import static com.adplatform.restApi.domain.business.domain.QBusinessAccount.bus
 import static com.adplatform.restApi.domain.business.domain.QBusinessAccountUser.businessAccountUser;
 import static com.adplatform.restApi.domain.business.dto.account.BusinessAccountDto.Request;
 import static com.adplatform.restApi.domain.business.dto.account.BusinessAccountDto.Response;
-import static com.adplatform.restApi.domain.advertiser.adgroup.domain.QAdGroup.adGroup;
-import static com.adplatform.restApi.domain.advertiser.campaign.domain.QCampaign.campaign;
-import static com.adplatform.restApi.domain.advertiser.creative.domain.QCreative.creative;
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
 import static com.adplatform.restApi.domain.statistics.domain.report.QReportAdGroupDaily.reportAdGroupDaily;
 import static com.adplatform.restApi.domain.statistics.domain.sale.QSaleAdAccountDaily.saleAdAccountDaily;
@@ -403,10 +391,7 @@ public class BusinessAccountQuerydslRepositoryImpl implements BusinessAccountQue
                             company.address,
                             company.businessCategory,
                             company.businessItem,
-                            company.taxBillEmail,
-                            company.bank,
-                            company.accountNumber,
-                            company.accountOwner
+                            company.taxBillEmail
                         )
                 ))
                 .from(businessAccount, company)
