@@ -14,6 +14,7 @@ import lombok.SneakyThrows;
 @Getter
 @Builder(access = AccessLevel.PROTECTED)
 public class TokenDto {
+    private Integer userNo;
     private String userId;
     private String userName;
     private String accessToken;
@@ -22,6 +23,7 @@ public class TokenDto {
     @SneakyThrows
     public static TokenDto create(Aes256Service aes256Service, User user, String accessToken, String refreshToken) {
         return TokenDto.builder()
+                .userNo(user.getId())
                 .userId(aes256Service.encrypt(user.getLoginId()))
                 .userName(aes256Service.encrypt(user.getName()))
                 .accessToken(accessToken)
