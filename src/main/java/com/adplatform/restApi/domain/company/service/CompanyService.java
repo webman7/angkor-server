@@ -1,8 +1,11 @@
 package com.adplatform.restApi.domain.company.service;
 
+import com.adplatform.restApi.domain.advertiser.creative.exception.CreativeUpdateException;
+import com.adplatform.restApi.domain.company.domain.FileInformation;
 import com.adplatform.restApi.domain.company.dao.CompanyRepository;
 import com.adplatform.restApi.domain.company.dao.user.MediaCompanyUserRepository;
 import com.adplatform.restApi.domain.company.domain.Company;
+import com.adplatform.restApi.domain.company.domain.CompanyFile;
 import com.adplatform.restApi.domain.company.domain.MediaCompanyUser;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.company.dto.CompanyMapper;
@@ -18,9 +21,15 @@ import com.adplatform.restApi.domain.user.dto.user.UserDto;
 import com.adplatform.restApi.domain.user.exception.UserNotFoundException;
 import com.adplatform.restApi.domain.user.service.UserQueryService;
 import com.adplatform.restApi.global.config.security.util.SecurityUtils;
+import com.adplatform.restApi.infra.file.service.FileService;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * @author junny
@@ -32,6 +41,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class CompanyService {
     private final CompanyRepository companyRepository;
     private final CompanyMapper companyMapper;
+
+    private final FileService fileService;
     private final UserQueryService userQueryService;
     private final MediaCompanyUserRepository mediaCompanyUserRepository;
     private final MediaCompanyUserMapper mediaCompanyUserMapper;
@@ -44,11 +55,52 @@ public class CompanyService {
     }
 
     public void saveMedia(CompanyDto.Request.Save request) {
-        this.companyRepository.save(this.companyMapper.toMediaEntity(request));
+        Company company = this.companyMapper.toMediaEntity(request);
+        request.getBusinessFiles().forEach(file -> company.addBusinessFile(this.saveCompanyFile(request, company, file)));
+        request.getBankFiles().forEach(file -> company.addBankFile(this.saveCompanyFile(request, company, file)));
+        this.companyRepository.save(company);
     }
 
     public void update(CompanyDto.Request.Update request) {
-        this.companyRepository.save(CompanyFindUtils.findByIdOrElseThrow(request.getId(), this.companyRepository).update(request));
+        try{
+            Company company = CompanyFindUtils.findByIdOrElseThrow(request.getId(), this.companyRepository).update(request);
+            request.getBusinessFiles().forEach(file -> company.addBusinessFile(this.saveCompanyFile(request, company, file)));
+            request.getBankFiles().forEach(file -> company.addBankFile(this.saveCompanyFile(request, company, file)));
+//            this.companyRepository.save(company);
+        }catch (Exception e){
+            throw new CompanyUpdateException();
+        }
+    }
+
+    @SneakyThrows
+    private CompanyFile saveCompanyFile(CompanyDto.Request.Save request, Company company, MultipartFile file) {
+        String originalFilename = file.getOriginalFilename();
+        String mimetype = Files.probeContentType(Paths.get(originalFilename));
+        String savedFileUrl = this.fileService.saveCompany(request, file);
+        int index = savedFileUrl.lastIndexOf("/");
+        String savedFilename = savedFileUrl.substring(index+1);
+        return new CompanyFile(company, request.getType(), this.companyFileInformation(file, savedFileUrl, savedFilename, originalFilename, mimetype));
+    }
+
+    @SneakyThrows
+    private FileInformation companyFileInformation(MultipartFile file, String savedFileUrl, String savedFilename, String originalFilename, String mimetype) {
+        FileInformation.FileType fileType;
+        if (mimetype.startsWith("image")) {
+            fileType = FileInformation.FileType.IMAGE;
+        } else if (mimetype.startsWith("application/pdf")) {
+            fileType = FileInformation.FileType.PDF;
+        } else {
+            throw new UnsupportedOperationException();
+        }
+
+        return FileInformation.builder()
+                .url(savedFileUrl)
+                .fileType(fileType)
+                .fileSize(file.getSize())
+                .filename(savedFilename)
+                .originalFileName(originalFilename)
+                .mimeType(mimetype)
+                .build();
     }
 
     public void delete(Integer id) {

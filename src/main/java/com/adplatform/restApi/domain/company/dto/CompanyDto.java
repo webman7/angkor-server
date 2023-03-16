@@ -1,15 +1,20 @@
 package com.adplatform.restApi.domain.company.dto;
 
+import com.adplatform.restApi.domain.advertiser.creative.domain.CreativeFile;
 import com.adplatform.restApi.domain.company.domain.Company;
+import com.adplatform.restApi.domain.company.domain.CompanyFile;
 import com.adplatform.restApi.global.value.Address;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author junny
@@ -70,6 +75,13 @@ public abstract class CompanyDto {
             @NotNull
             @Email
             private String taxBillEmail;
+
+            @NotNull
+            private CompanyFile.Type type;
+            @NotNull
+            @Size(min = 1, max = 100)
+            private List<MultipartFile> businessFiles = new ArrayList<>();
+            private List<MultipartFile> bankFiles = new ArrayList<>();
 
         }
 

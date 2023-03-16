@@ -1,6 +1,8 @@
 package com.adplatform.restApi.domain.company.domain;
 
 import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
+import com.adplatform.restApi.domain.advertiser.creative.domain.CreativeFile;
+import com.adplatform.restApi.domain.advertiser.creative.domain.CreativeOpinionProofFile;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.user.domain.User;
 import com.adplatform.restApi.global.converter.BooleanToStringYOrNConverter;
@@ -63,6 +65,12 @@ public class Company extends BaseUpdatedEntity {
     @AttributeOverride(name = "address", column = @Column(name = "tax_bill_email", length = 60))
     private Email taxBillEmail;
 
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<CompanyFile> businessFiles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<CompanyFile> bankFiles = new ArrayList<>();
+
     /**
      * 삭제 여부.<br/>
      * {@link Boolean#TRUE true}: 삭제됨.<br/>
@@ -106,5 +114,13 @@ public class Company extends BaseUpdatedEntity {
 
     public void delete() {
         this.deleted = true;
+    }
+
+    public void addBusinessFile(CompanyFile file) {
+        this.businessFiles.add(file);
+    }
+
+    public void addBankFile(CompanyFile file) {
+        this.bankFiles.add(file);
     }
 }
