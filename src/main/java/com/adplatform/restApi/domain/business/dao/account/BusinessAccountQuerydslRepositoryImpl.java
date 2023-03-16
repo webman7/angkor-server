@@ -429,10 +429,7 @@ public class BusinessAccountQuerydslRepositoryImpl implements BusinessAccountQue
     public List<BusinessAccountDto.Response.AdAccountInfo> businessAccountByAdAccounts(Integer businessAccountId) {
         return this.query.select(new QBusinessAccountDto_Response_AdAccountInfo(
                     adAccount.id,
-                    adAccount.name,
-                    adAccount.config,
-                    adAccount.adminStop,
-                    adAccount.outOfBalance
+                    adAccount.name
                 ))
                 .from(businessAccount, adAccount)
                 .where(businessAccount.id.eq(businessAccountId),
