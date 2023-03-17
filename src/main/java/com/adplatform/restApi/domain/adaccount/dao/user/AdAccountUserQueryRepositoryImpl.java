@@ -5,6 +5,7 @@ import com.adplatform.restApi.domain.adaccount.dto.user.AdAccountUserDto;
 import com.adplatform.restApi.domain.adaccount.dto.user.QAdAccountUserDto_Response_AdAccountUserInfo;
 import com.adplatform.restApi.domain.user.domain.User;
 import com.adplatform.restApi.domain.user.dto.user.QUserDto_Response_BaseInfo;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -115,7 +116,7 @@ public class AdAccountUserQueryRepositoryImpl implements AdAccountUserQueryRepos
     }
 
     @Override
-    public void deleteByAdAccountIdAndUserIdCount(Integer adAccountId, Integer userId) {
+    public void deleteByAdAccountIdAndUserId(Integer adAccountId, Integer userId) {
         this.query.delete(adAccountUser)
                 .where(adAccountUser.id.adAccountId.eq(adAccountId), adAccountUser.id.userId.eq(userId))
                 .execute();

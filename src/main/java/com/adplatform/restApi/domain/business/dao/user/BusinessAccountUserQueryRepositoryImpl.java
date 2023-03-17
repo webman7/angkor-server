@@ -1,6 +1,8 @@
 package com.adplatform.restApi.domain.business.dao.user;
 
 import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
+import com.adplatform.restApi.domain.adaccount.dto.user.AdAccountUserDto;
+import com.adplatform.restApi.domain.adaccount.dto.user.QAdAccountUserDto_Response_AdAccountUserInfo;
 import com.adplatform.restApi.domain.business.domain.BusinessAccountUser;
 import com.adplatform.restApi.domain.business.dto.user.BusinessAccountUserDto;
 import com.adplatform.restApi.domain.business.dto.user.QBusinessAccountUserDto_Response_BusinessAccountUserInfo;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+import static com.adplatform.restApi.domain.adaccount.domain.QAdAccount.adAccount;
+import static com.adplatform.restApi.domain.adaccount.domain.QAdAccountUser.adAccountUser;
 import static com.adplatform.restApi.domain.business.domain.QBusinessAccount.businessAccount;
 import static com.adplatform.restApi.domain.business.domain.QBusinessAccountUser.businessAccountUser;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
@@ -120,7 +124,7 @@ public class BusinessAccountUserQueryRepositoryImpl implements BusinessAccountUs
     }
 
     @Override
-    public void deleteByBusinessAccountIdAndUserIdCount(Integer businessAccountId, Integer userId) {
+    public void deleteByBusinessAccountIdAndUserId(Integer businessAccountId, Integer userId) {
         this.query.delete(businessAccountUser)
                 .where(businessAccountUser.id.businessAccountId.eq(businessAccountId), businessAccountUser.id.userId.eq(userId))
                 .execute();
@@ -133,4 +137,27 @@ public class BusinessAccountUserQueryRepositoryImpl implements BusinessAccountUs
                 .where(businessAccountUser.id.businessAccountId.eq(businessAccountId), businessAccountUser.id.userId.eq(userId))
                 .execute();
     }
+
+    @Override
+    public List<AdAccountUserDto.Response.AdAccountUserInfo> adAccountByBusinessAccountIdAndUserId(Integer businessAccountId, Integer userId) {
+        return this.query.select(new QAdAccountUserDto_Response_AdAccountUserInfo(
+                adAccount.id,
+                new QUserDto_Response_BaseInfo(
+                        user.id,
+                        user.loginId,
+                        user.name,
+                        user.phone
+                ),
+                adAccountUser.memberType,
+                adAccountUser.status
+                ))
+                .from(businessAccount, adAccount, adAccountUser)
+                .where(
+                        businessAccount.id.eq(adAccount.businessAccount.id),
+                        adAccount.id.eq(adAccountUser.id.adAccountId),
+                        businessAccount.id.eq(businessAccountId),
+                        adAccountUser.id.userId.eq(userId)
+                ).fetch();
+    }
+
 }

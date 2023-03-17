@@ -1,5 +1,10 @@
 package com.adplatform.restApi.domain.business.service;
 
+import com.adplatform.restApi.batch.dto.BatchStatusDto;
+import com.adplatform.restApi.domain.adaccount.dao.user.AdAccountUserRepository;
+import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
+import com.adplatform.restApi.domain.adaccount.dto.user.AdAccountUserDto;
+import com.adplatform.restApi.domain.adaccount.service.AdAccountUserQueryUtils;
 import com.adplatform.restApi.domain.business.dao.account.BusinessAccountRepository;
 import com.adplatform.restApi.domain.business.dao.user.BusinessAccountUserRepository;
 import com.adplatform.restApi.domain.business.domain.BusinessAccount;
@@ -16,8 +21,12 @@ import com.adplatform.restApi.domain.company.dto.CompanyMapper;
 import com.adplatform.restApi.domain.company.exception.CompanyAlreadyExistException;
 import com.adplatform.restApi.domain.company.service.CompanyFindUtils;
 import com.adplatform.restApi.domain.company.service.CompanyService;
+import com.adplatform.restApi.domain.history.dao.adaccount.user.AdAccountUserInfoHistoryRepository;
 import com.adplatform.restApi.domain.history.dao.business.user.BusinessAccountUserInfoHistoryRepository;
+import com.adplatform.restApi.domain.history.domain.adaccount.user.AdAccountUserInfoHistory;
 import com.adplatform.restApi.domain.history.domain.business.user.BusinessAccountUserInfoHistory;
+import com.adplatform.restApi.domain.history.dto.adaccount.user.AdAccountUserInfoHistoryDto;
+import com.adplatform.restApi.domain.history.dto.adaccount.user.AdAccountUserInfoHistoryMapper;
 import com.adplatform.restApi.domain.history.dto.business.user.BusinessAccountUserInfoHistoryDto;
 import com.adplatform.restApi.domain.history.dto.business.user.BusinessAccountUserInfoHistoryMapper;
 import com.adplatform.restApi.domain.user.dto.user.UserDto;
@@ -45,6 +54,10 @@ public class BusinessAccountSaveService {
     private final BusinessAccountUserMapper businessAccountUserMapper;
     private final BusinessAccountUserInfoHistoryRepository businessAccountUserInfoHistoryRepository;
     private final BusinessAccountUserInfoHistoryMapper businessAccountUserInfoHistoryMapper;
+
+    private final AdAccountUserRepository adAccountUserRepository;
+    private final AdAccountUserInfoHistoryRepository adAccountUserInfoHistoryRepository;
+    private final AdAccountUserInfoHistoryMapper adAccountUserInfoHistoryMapper;
     private final UserQueryService userQueryService;
     private final CompanyService companyService;
     private final CompanyMapper companyMapper;
@@ -269,8 +282,31 @@ public class BusinessAccountSaveService {
         BusinessAccountUserInfoHistory businessAccountUserInfoHistory = this.businessAccountUserInfoHistoryMapper.toEntity(history, SecurityUtils.getLoginUserNo());
         this.businessAccountUserInfoHistoryRepository.save(businessAccountUserInfoHistory);
 
-        // 삭제
-        this.businessAccountUserRepository.deleteByBusinessAccountIdAndUserIdCount(businessAccountUser.getBusinessAccount().getId(), businessAccountUser.getUser().getId());
+        // 비즈니스 계정 삭제
+        this.businessAccountUserRepository.deleteByBusinessAccountIdAndUserId(businessAccountUser.getBusinessAccount().getId(), businessAccountUser.getUser().getId());
+
+        // 광고 계정 삭제
+        List<AdAccountUserDto.Response.AdAccountUserInfo> adAccountUserInfo = this.businessAccountUserRepository.adAccountByBusinessAccountIdAndUserId(businessAccountUser.getBusinessAccount().getId(), businessAccountUser.getUser().getId());
+
+        for (AdAccountUserDto.Response.AdAccountUserInfo co: adAccountUserInfo) {
+            AdAccountUser adAccountUser = AdAccountUserQueryUtils.findByAdAccountIdAndUserIdOrElseThrow(co.getId(), co.getUser().getId(), this.adAccountUserRepository);
+
+            // 히스토리 저장
+            AdAccountUserInfoHistoryDto.Request.Save history2 = new AdAccountUserInfoHistoryDto.Request.Save();
+            history2.setAdAccountId(adAccountUser.getAdAccount().getId());
+            history2.setUserNo(adAccountUser.getUser().getId());
+            history2.setMemberType(adAccountUser.getMemberType());
+            history2.setStatus(AdAccountUser.Status.D);
+            history2.setRegUserNo(adAccountUser.getCreatedUserNo());
+            history2.setCreatedAt(adAccountUser.getCreatedAt());
+            history2.setUpdUserNo(adAccountUser.getUpdatedUserNo());
+            history2.setUpdatedAt(adAccountUser.getUpdatedAt());
+            AdAccountUserInfoHistory adAccountUserInfoHistory = this.adAccountUserInfoHistoryMapper.toEntity(history2, SecurityUtils.getLoginUserNo());
+            this.adAccountUserInfoHistoryRepository.save(adAccountUserInfoHistory);
+
+            // 삭제
+            this.adAccountUserRepository.deleteByAdAccountIdAndUserId(adAccountUser.getAdAccount().getId(), adAccountUser.getUser().getId());
+        }
     }
 
     public void creditLimitUpdate(BusinessAccountDto.Request.CreditLimitUpdate request) {

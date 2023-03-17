@@ -1,5 +1,6 @@
 package com.adplatform.restApi.domain.business.dao.user;
 
+import com.adplatform.restApi.domain.adaccount.dto.user.AdAccountUserDto;
 import com.adplatform.restApi.domain.business.domain.BusinessAccountUser;
 import com.adplatform.restApi.domain.business.dto.account.BusinessAccountDto;
 import com.adplatform.restApi.domain.business.dto.user.BusinessAccountUserDto;
@@ -18,7 +19,8 @@ public interface BusinessAccountUserQueryRepository {
     List<BusinessAccountUserDto.Response.BusinessAccountUserInfo> businessAccountUserInfo(Integer businessAccountId);
     List<BusinessAccountUserDto.Response.BusinessAccountUserInfo> businessAccountRequestUserInfo(Integer businessAccountId);
     BusinessAccountUserDto.Response.BusinessAccountUserInfo businessAccountUserInfo(Integer businessAccountId, Integer userNo);
-    void deleteByBusinessAccountIdAndUserIdCount(Integer businessAccountId, Integer userId);
-
+    void deleteByBusinessAccountIdAndUserId(Integer businessAccountId, Integer userId);
     void updateAccounting(Integer businessAccountId, Integer userId, BusinessAccountUser.AccountingYN accountingYN);
+    List<AdAccountUserDto.Response.AdAccountUserInfo> adAccountByBusinessAccountIdAndUserId(Integer businessAccountId, Integer userId);
+
 }

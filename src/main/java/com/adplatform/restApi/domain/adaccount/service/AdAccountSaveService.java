@@ -173,7 +173,7 @@ public class AdAccountSaveService {
         this.adAccountUserInfoHistoryRepository.save(adAccountUserInfoHistory);
 
         // 삭제
-        this.adAccountUserRepository.deleteByAdAccountIdAndUserIdCount(adAccountUser.getAdAccount().getId(), adAccountUser.getUser().getId());
+        this.adAccountUserRepository.deleteByAdAccountIdAndUserId(adAccountUser.getAdAccount().getId(), adAccountUser.getUser().getId());
     }
 
     public void changeConfig(Integer id, AdAccount.Config config) {

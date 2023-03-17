@@ -18,5 +18,6 @@ public interface AdAccountUserQueryRepository {
     List<AdAccountUserDto.Response.AdAccountUserInfo> adAccountUserInfo(Integer adAccountId);
     List<AdAccountUserDto.Response.AdAccountUserInfo> adAccountRequestUserInfo(Integer adAccountId);
     AdAccountUserDto.Response.AdAccountUserInfo adAccountUserInfo(Integer adAccountId, Integer userNo);
-    void deleteByAdAccountIdAndUserIdCount(Integer adAccountId, Integer userId);
+
+    void deleteByAdAccountIdAndUserId(Integer adAccountId, Integer userId);
 }
