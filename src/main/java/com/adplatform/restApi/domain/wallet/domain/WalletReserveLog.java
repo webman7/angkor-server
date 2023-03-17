@@ -8,9 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
@@ -35,7 +33,8 @@ public class WalletReserveLog extends BaseEntity {
     @Column(name = "campaign_info_id")
     private Integer campaignId;
 
-    @Column(name = "fluctuation")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "fluctuation", columnDefinition = "CHAR")
     private Fluctuation fluctuation;
 
     @Column(name = "total_reserve_amount", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2)")
