@@ -1,6 +1,6 @@
 package com.adplatform.restApi.domain.advertiser.adgroup.dto.media;
 
-import com.adplatform.restApi.domain.advertiser.adgroup.domain.Media;
+import com.adplatform.restApi.domain.media.domain.Media;
 import com.adplatform.restApi.global.dto.BaseMapperConfig;
 import org.mapstruct.Mapper;
 

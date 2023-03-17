@@ -20,8 +20,8 @@ import static com.adplatform.restApi.domain.advertiser.adgroup.domain.QAdGroup.a
 import static com.adplatform.restApi.domain.advertiser.adgroup.domain.QAdGroupDemographicTarget.adGroupDemographicTarget;
 import static com.adplatform.restApi.domain.advertiser.adgroup.domain.QAdGroupSchedule.adGroupSchedule;
 import static com.adplatform.restApi.domain.advertiser.adgroup.domain.QDevice.device;
-import static com.adplatform.restApi.domain.advertiser.adgroup.domain.QMedia.media;
 import static com.adplatform.restApi.domain.advertiser.campaign.domain.QCampaign.campaign;
+import static com.adplatform.restApi.domain.media.domain.QMedia.media;
 import static java.util.Objects.nonNull;
 
 /**

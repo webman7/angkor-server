@@ -5,7 +5,7 @@ import com.adplatform.restApi.domain.advertiser.adgroup.dao.device.DeviceReposit
 import com.adplatform.restApi.domain.advertiser.adgroup.dao.media.MediaRepository;
 import com.adplatform.restApi.domain.advertiser.adgroup.domain.AdGroup;
 import com.adplatform.restApi.domain.advertiser.adgroup.domain.Device;
-import com.adplatform.restApi.domain.advertiser.adgroup.domain.Media;
+import com.adplatform.restApi.domain.media.domain.Media;
 import com.adplatform.restApi.domain.advertiser.adgroup.dto.adgroup.AdGroupDto;
 import com.adplatform.restApi.domain.advertiser.adgroup.dto.adgroup.AdGroupMapper;
 import com.adplatform.restApi.domain.advertiser.adgroup.event.AdGroupSavedEvent;

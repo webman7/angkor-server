@@ -3,6 +3,7 @@ package com.adplatform.restApi.domain.advertiser.adgroup.domain;
 import com.adplatform.restApi.domain.advertiser.adgroup.dto.adgroup.AdGroupDto;
 import com.adplatform.restApi.domain.advertiser.campaign.domain.Campaign;
 import com.adplatform.restApi.domain.advertiser.creative.domain.Creative;
+import com.adplatform.restApi.domain.media.domain.Media;
 import com.adplatform.restApi.global.converter.BooleanToStringYOrNConverter;
 import com.adplatform.restApi.global.entity.BaseUpdatedEntity;
 import lombok.*;

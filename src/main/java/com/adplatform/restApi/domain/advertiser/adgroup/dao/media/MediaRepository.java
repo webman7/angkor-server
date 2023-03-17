@@ -1,6 +1,6 @@
 package com.adplatform.restApi.domain.advertiser.adgroup.dao.media;
 
-import com.adplatform.restApi.domain.advertiser.adgroup.domain.Media;
+import com.adplatform.restApi.domain.media.domain.Media;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -16,6 +16,12 @@ public class CreativePlacementId implements Serializable {
     @Column(name = "placement_info_id")
     private Integer placementId;
 
+    @Column(name = "category_info_id")
+    private Integer categoryId;
+
+    @Column(name = "media_info_id")
+    private Integer mediaId;
+
     @Column(name = "creative_info_id")
     private Integer creativeId;
 }

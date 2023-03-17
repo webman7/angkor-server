@@ -1,5 +1,7 @@
 package com.adplatform.restApi.domain.advertiser.adgroup.domain;
 
+import com.adplatform.restApi.domain.media.domain.Category;
+import com.adplatform.restApi.domain.media.domain.Media;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -19,6 +21,11 @@ public class AdGroupMedia {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "adgroup_info_id")
     private AdGroup adGroup;
+
+    @MapsId("categoryId")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_info_id")
+    private Category category;
 
     @MapsId("mediaId")
     @ManyToOne(fetch = FetchType.LAZY)

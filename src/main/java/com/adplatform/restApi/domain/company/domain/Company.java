@@ -1,12 +1,7 @@
 package com.adplatform.restApi.domain.company.domain;
 
-import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
-import com.adplatform.restApi.domain.advertiser.adgroup.domain.Media;
-import com.adplatform.restApi.domain.advertiser.creative.domain.CreativeFile;
-import com.adplatform.restApi.domain.advertiser.creative.domain.CreativeOpinionProofFile;
 import com.adplatform.restApi.domain.bank.domain.Bank;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
-import com.adplatform.restApi.domain.user.domain.User;
 import com.adplatform.restApi.global.converter.BooleanToStringYOrNConverter;
 import com.adplatform.restApi.global.entity.BaseUpdatedEntity;
 import com.adplatform.restApi.global.value.Address;

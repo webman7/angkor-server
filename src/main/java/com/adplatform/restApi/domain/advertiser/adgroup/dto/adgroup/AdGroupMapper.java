@@ -2,7 +2,7 @@ package com.adplatform.restApi.domain.advertiser.adgroup.dto.adgroup;
 
 import com.adplatform.restApi.domain.advertiser.adgroup.domain.AdGroup;
 import com.adplatform.restApi.domain.advertiser.adgroup.domain.Device;
-import com.adplatform.restApi.domain.advertiser.adgroup.domain.Media;
+import com.adplatform.restApi.domain.media.domain.Media;
 import com.adplatform.restApi.domain.advertiser.adgroup.dto.schedule.AdGroupScheduleMapper;
 import com.adplatform.restApi.domain.advertiser.adgroup.dto.target.AdGroupDemographicTargetMapper;
 import com.adplatform.restApi.domain.advertiser.adgroup.event.AdGroupSavedEvent;

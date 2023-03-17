@@ -1,6 +1,8 @@
 package com.adplatform.restApi.domain.advertiser.creative.domain;
 
-import com.adplatform.restApi.domain.placement.domain.Placement;
+import com.adplatform.restApi.domain.media.domain.Category;
+import com.adplatform.restApi.domain.media.domain.Media;
+import com.adplatform.restApi.domain.media.domain.Placement;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -20,6 +22,16 @@ public class CreativePlacement {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "creative_info_id")
     private Creative creative;
+
+    @MapsId("categoryId")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_info_id")
+    private Category category;
+
+    @MapsId("mediaId")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "media_info_id")
+    private Media media;
 
     @MapsId("placementId")
     @ManyToOne(fetch = FetchType.LAZY)

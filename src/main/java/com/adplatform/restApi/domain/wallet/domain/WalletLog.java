@@ -12,10 +12,10 @@ import javax.persistence.*;
 public class WalletLog extends BaseCreatedEntity {
 
     @Column(name = "business_account_info_id")
-    private int businessAccountId;
+    private Integer businessAccountId;
 
     @Column(name = "adaccount_info_id")
-    private int adAccountId;
+    private Integer adAccountId;
 
     @Column(name = "summary", length = 40)
     private String summary;
@@ -30,13 +30,13 @@ public class WalletLog extends BaseCreatedEntity {
     private String memo;
 
     @Column(name = "wallet_charge_log_id")
-    private int walletChargeLogId;
+    private Integer walletChargeLogId;
 
     @Column(name = "wallet_auto_charge_log_id")
-    private int walletAutoChargeLogId;
+    private Integer walletAutoChargeLogId;
 
     @Column(name = "wallet_refund_id")
-    private int walletRefundId;
+    private Integer walletRefundId;
 
 
     @Builder
