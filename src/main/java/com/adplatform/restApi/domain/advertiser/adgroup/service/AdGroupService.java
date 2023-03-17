@@ -2,9 +2,9 @@ package com.adplatform.restApi.domain.advertiser.adgroup.service;
 
 import com.adplatform.restApi.domain.advertiser.adgroup.dao.adgroup.AdGroupRepository;
 import com.adplatform.restApi.domain.advertiser.adgroup.dao.device.DeviceRepository;
-import com.adplatform.restApi.domain.advertiser.adgroup.dao.media.MediaRepository;
 import com.adplatform.restApi.domain.advertiser.adgroup.domain.AdGroup;
 import com.adplatform.restApi.domain.advertiser.adgroup.domain.Device;
+import com.adplatform.restApi.domain.media.dao.MediaRepository;
 import com.adplatform.restApi.domain.media.domain.Media;
 import com.adplatform.restApi.domain.advertiser.adgroup.dto.adgroup.AdGroupDto;
 import com.adplatform.restApi.domain.advertiser.adgroup.dto.adgroup.AdGroupMapper;

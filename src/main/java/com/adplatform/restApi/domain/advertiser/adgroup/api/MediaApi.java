@@ -1,8 +1,8 @@
 package com.adplatform.restApi.domain.advertiser.adgroup.api;
 
-import com.adplatform.restApi.domain.advertiser.adgroup.dao.media.MediaRepository;
 import com.adplatform.restApi.domain.advertiser.adgroup.dto.media.MediaDto;
 import com.adplatform.restApi.domain.advertiser.adgroup.dto.media.MediaMapper;
+import com.adplatform.restApi.domain.media.dao.MediaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
 @Repository
-public class MediaPlacementQuerydslRepositoryImpl implements MediaCategoryQuerydslRepository {
+public class MediaPlacementQuerydslRepositoryImpl implements MediaPlacementQuerydslRepository {
 
     private final JPAQueryFactory query;
 }

@@ -26,9 +26,6 @@ public class MediaPlacement extends BaseUpdatedEntity {
         D
     }
 
-    @Column(name = "name", length = 20, nullable = false)
-    private String name;
-
     @ManyToOne
     @JoinColumn(name = "media_info_id", nullable = false)
     private Media media;
