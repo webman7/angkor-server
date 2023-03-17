@@ -34,8 +34,6 @@ public abstract class PlacementDto {
         public static class ForSearchAll {
             @NotNull
             private Integer id;
-
-            private Integer mediaId;
             private String name;
             private Integer width;
             private Integer height;
@@ -43,12 +41,10 @@ public abstract class PlacementDto {
             @QueryProjection
             public ForSearchAll(
                     Integer id,
-                    Integer mediaId,
                     String name,
                     Integer width,
                     Integer height) {
                 this.id = id;
-                this.mediaId = mediaId;
                 this.name = name;
                 this.width = width;
                 this.height = height;

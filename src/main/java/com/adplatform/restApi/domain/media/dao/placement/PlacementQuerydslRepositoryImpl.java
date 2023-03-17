@@ -35,17 +35,14 @@ public class PlacementQuerydslRepositoryImpl implements PlacementQuerydslReposit
 
         JPAQuery<PlacementDto.Response.ForSearchAll> query = this.query.select(new QPlacementDto_Response_ForSearchAll(
                         placement.id,
-                        placement.media.id,
                         placement.name,
                         placement.width,
                         placement.height))
                 .from(placement, media, adGroupMedia)
                 .where(
-                        placement.media.id.eq(media.id),
                         media.id.eq(adGroupMedia.media.id),
                         this.eqAdGroupId(adGroupId),
-                        this.eqMediaId(mediaId))
-                .groupBy(placement.id, placement.media.id);
+                        this.eqMediaId(mediaId));
 
         return Objects.nonNull(pageable)
                 ? query.orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(Placement.class, "placement", pageable.getSort()).toArray(OrderSpecifier[]::new))
