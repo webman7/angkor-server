@@ -8,6 +8,9 @@ import com.adplatform.restApi.domain.user.dto.user.QUserDto_Response_BaseInfo;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -47,8 +50,8 @@ public class AdAccountUserQueryRepositoryImpl implements AdAccountUserQueryRepos
 
 
     @Override
-    public List<AdAccountUserDto.Response.AdAccountUserInfo> adAccountUserInfo(Integer adAccountId) {
-        return this.query.select(new QAdAccountUserDto_Response_AdAccountUserInfo(
+    public Page<AdAccountUserDto.Response.AdAccountUserInfo> adAccountUserInfo(Integer adAccountId, Pageable pageable) {
+        List<AdAccountUserDto.Response.AdAccountUserInfo> content = this.query.select(new QAdAccountUserDto_Response_AdAccountUserInfo(
                         adAccount.id,
                         new QUserDto_Response_BaseInfo(
                                 user.id,
@@ -66,7 +69,20 @@ public class AdAccountUserQueryRepositoryImpl implements AdAccountUserQueryRepos
                         adAccountUser.status.in(AdAccountUser.Status.Y),
                         user.active.in(User.Active.Y, User.Active.L)
                 )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        JPAQuery<Long> countQuery = this.query.select(adAccountUser.count())
+                .from(adAccount, adAccountUser, user)
+                .where(adAccount.id.eq(adAccountId),
+                        adAccountUser.adAccount.id.eq(adAccount.id),
+                        adAccountUser.user.id.eq(user.id),
+                        adAccountUser.status.in(AdAccountUser.Status.Y),
+                        user.active.in(User.Active.Y, User.Active.L)
+                );
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
     @Override

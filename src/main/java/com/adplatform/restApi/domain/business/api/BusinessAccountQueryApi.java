@@ -1,13 +1,11 @@
 package com.adplatform.restApi.domain.business.api;
 
-import com.adplatform.restApi.domain.agency.marketers.dto.AgencyMarketersDto;
 import com.adplatform.restApi.domain.business.dao.account.BusinessAccountRepository;
 import com.adplatform.restApi.domain.business.dao.account.mapper.BusinessAccountQueryMapper;
 import com.adplatform.restApi.domain.business.dao.user.BusinessAccountUserRepository;
 import com.adplatform.restApi.domain.business.domain.BusinessAccountUser;
 import com.adplatform.restApi.domain.business.dto.account.BusinessAccountDto;
 import com.adplatform.restApi.domain.business.dto.user.BusinessAccountUserDto;
-import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.global.config.security.util.SecurityUtils;
 import com.adplatform.restApi.global.dto.PageDto;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +15,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -65,8 +64,10 @@ public class BusinessAccountQueryApi {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/account/{id}/users")
-    public List<BusinessAccountUserDto.Response.BusinessAccountUserInfo> businessAccountUserInfo(@PathVariable(name = "id") Integer businessAccountId) {
-        return this.businessAccountUserRepository.businessAccountUserInfo(businessAccountId);
+    public PageDto<BusinessAccountUserDto.Response.BusinessAccountUserInfo> businessAccountUserInfo(
+            @PathVariable(name = "id") Integer businessAccountId,
+            @PageableDefault Pageable pageable) {
+        return PageDto.create(this.businessAccountUserRepository.businessAccountUserInfo(businessAccountId, pageable));
     }
 
     @ResponseStatus(HttpStatus.OK)

@@ -3,14 +3,22 @@ package com.adplatform.restApi.domain.business.dao.user;
 import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
 import com.adplatform.restApi.domain.adaccount.dto.user.AdAccountUserDto;
 import com.adplatform.restApi.domain.adaccount.dto.user.QAdAccountUserDto_Response_AdAccountUserInfo;
+import com.adplatform.restApi.domain.advertiser.adgroup.dao.adgroup.AdGroupCondition;
+import com.adplatform.restApi.domain.advertiser.adgroup.domain.AdGroup;
+import com.adplatform.restApi.domain.advertiser.adgroup.dto.adgroup.AdGroupDto;
 import com.adplatform.restApi.domain.business.domain.BusinessAccountUser;
 import com.adplatform.restApi.domain.business.dto.user.BusinessAccountUserDto;
 import com.adplatform.restApi.domain.business.dto.user.QBusinessAccountUserDto_Response_BusinessAccountUserInfo;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.user.domain.User;
 import com.adplatform.restApi.domain.user.dto.user.QUserDto_Response_BaseInfo;
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,6 +26,8 @@ import java.util.Optional;
 
 import static com.adplatform.restApi.domain.adaccount.domain.QAdAccount.adAccount;
 import static com.adplatform.restApi.domain.adaccount.domain.QAdAccountUser.adAccountUser;
+import static com.adplatform.restApi.domain.advertiser.adgroup.domain.QAdGroup.adGroup;
+import static com.adplatform.restApi.domain.advertiser.campaign.domain.QCampaign.campaign;
 import static com.adplatform.restApi.domain.business.domain.QBusinessAccount.businessAccount;
 import static com.adplatform.restApi.domain.business.domain.QBusinessAccountUser.businessAccountUser;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
@@ -50,10 +60,9 @@ public class BusinessAccountUserQueryRepositoryImpl implements BusinessAccountUs
         return content.size();
     }
 
-
     @Override
-    public List<BusinessAccountUserDto.Response.BusinessAccountUserInfo> businessAccountUserInfo(Integer businessAccountId) {
-        return this.query.select(new QBusinessAccountUserDto_Response_BusinessAccountUserInfo(
+    public Page<BusinessAccountUserDto.Response.BusinessAccountUserInfo> businessAccountUserInfo(Integer businessAccountId, Pageable pageable) {
+        List<BusinessAccountUserDto.Response.BusinessAccountUserInfo> content = this.query.select(new QBusinessAccountUserDto_Response_BusinessAccountUserInfo(
                         businessAccount.id,
                         new QUserDto_Response_BaseInfo(
                                 user.id,
@@ -72,7 +81,20 @@ public class BusinessAccountUserQueryRepositoryImpl implements BusinessAccountUs
                         businessAccountUser.status.in(BusinessAccountUser.Status.Y),
                         user.active.in(User.Active.Y, User.Active.L)
                 )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        JPAQuery<Long> countQuery = this.query.select(businessAccountUser.count())
+                .from(businessAccount, businessAccountUser, user)
+                .where(businessAccount.id.eq(businessAccountId),
+                        businessAccountUser.businessAccount.id.eq(businessAccount.id),
+                        businessAccountUser.user.id.eq(user.id),
+                        businessAccountUser.status.in(BusinessAccountUser.Status.Y),
+                        user.active.in(User.Active.Y, User.Active.L)
+                );
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
     @Override

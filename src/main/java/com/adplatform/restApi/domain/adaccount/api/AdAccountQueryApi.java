@@ -37,8 +37,10 @@ public class AdAccountQueryApi {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}/users")
-    public List<AdAccountUserDto.Response.AdAccountUserInfo> adAccountUserInfo(@PathVariable(name = "id") Integer adAccountId) {
-        return this.adAccountUserRepository.adAccountUserInfo(adAccountId);
+    public PageDto<AdAccountUserDto.Response.AdAccountUserInfo> adAccountUserInfo(
+            @PathVariable(name = "id") Integer adAccountId,
+            @PageableDefault Pageable pageable) {
+        return PageDto.create(this.adAccountUserRepository.adAccountUserInfo(adAccountId, pageable));
     }
 
     @ResponseStatus(HttpStatus.OK)
