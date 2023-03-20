@@ -56,6 +56,20 @@ public class AdAccountSaveService {
         this.adAccountRepository.save(AdAccountFindUtils.findByIdOrElseThrow(request.getId(), this.adAccountRepository).update(request));
     }
 
+    public void delete(AdAccountDto.Request.Update request, Integer loginUserNo) {
+        // MASTER 권한 체크
+        AdAccountUserDto.Response.AdAccountUserInfo adAccountUserInfo = this.adAccountUserRepository.adAccountUserInfo(request.getId(), loginUserNo);
+        if(adAccountUserInfo.getMemberType() != AdAccountUser.MemberType.MASTER) {
+            throw new AdAccountUserAuthorizationException();
+        }
+
+        // 광고계정 삭제시 고려해야 할 점 더 찾아 봐야 함
+        // 남은 금액 및 유저 등등
+
+//        this.adAccountRepository.save(AdAccountFindUtils.findByIdOrElseThrow(request.getId(), this.adAccountRepository).delete(request));
+
+    }
+
     public void saveUserInvite(AdAccountUserDto.Request.SaveUser request, Integer loginUserNo) {
 
         // MASTER 권한 체크

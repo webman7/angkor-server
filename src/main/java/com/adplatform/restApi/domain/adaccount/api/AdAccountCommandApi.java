@@ -34,6 +34,12 @@ public class AdAccountCommandApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping
+    public void delete(@RequestBody @Valid AdAccountDto.Request.Update request) {
+        this.adAccountSaveService.delete(request, SecurityUtils.getLoginUserNo());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @PostMapping("user/invite")
     public void saveUserInvite(@RequestBody @Valid AdAccountUserDto.Request.SaveUser request) {
         this.adAccountSaveService.saveUserInvite(request, SecurityUtils.getLoginUserNo());

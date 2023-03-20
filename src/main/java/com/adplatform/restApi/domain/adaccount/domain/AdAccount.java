@@ -80,6 +80,11 @@ public class AdAccount extends BaseUpdatedEntity {
         return this;
     }
 
+    public AdAccount delete(AdAccountDto.Request.Update request) {
+        this.config = Config.DEL;
+        return this;
+    }
+
     public AdAccount addAdAccountUser(User user, AdAccountUser.MemberType memberType, AdAccountUser.Status status) {
         this.adAccountUsers.add(new AdAccountUser(this, user, memberType, status));
         return this;
