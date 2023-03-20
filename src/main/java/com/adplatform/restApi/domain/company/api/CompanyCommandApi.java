@@ -40,8 +40,8 @@ public class CompanyCommandApi {
     }
 
     @PatchMapping
-    public ResponseEntity<Void> update(@RequestBody @Valid CompanyDto.Request.Update request) {
-        this.companyService.update(request);
+    public ResponseEntity<Void> updateMedia(@RequestBody @Valid CompanyDto.Request.Update request) {
+        this.companyService.updateMedia(request);
         return ResponseEntity.ok().build();
     }
 

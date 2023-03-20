@@ -61,7 +61,7 @@ public class CompanyService {
         this.companyRepository.save(company);
     }
 
-    public void update(CompanyDto.Request.Update request) {
+    public void updateMedia(CompanyDto.Request.Update request) {
         try{
             Company company = CompanyFindUtils.findByIdOrElseThrow(request.getId(), this.companyRepository).update(request);
             if(request.getBusinessFiles().size() > 0) {
