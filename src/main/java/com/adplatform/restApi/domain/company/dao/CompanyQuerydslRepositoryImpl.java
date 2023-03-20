@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
+import static com.adplatform.restApi.domain.bank.domain.QBank.bank;
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
 import static java.util.Objects.nonNull;
 
@@ -70,6 +71,7 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                         company.accountOwner
                 ))
                 .from(company)
+                .leftJoin(company.bank, bank)
                 .where(
                         this.nameContains(searchRequest.getName()),
                         this.registrationNumberEq(searchRequest.getRegistrationNumber()),
@@ -137,6 +139,7 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                         company.accountOwner
                 ))
                 .from(company)
+                .leftJoin(company.bank, bank)
                 .where(
                         this.registrationNumberEq(searchRequest.getSearchKeyword()),
                         this.typeEq(searchRequest.getType()))
