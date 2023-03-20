@@ -18,13 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/category")
 public class CategoryQueryApi {
 
-    CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
-//    @ResponseStatus(HttpStatus.OK)
-//    @GetMapping("search")
-//    public PageDto<CategoryDto.Response.CategoryInfo> search(
-//            @PageableDefault Pageable pageable,
-//            CompanyDto.Request.SearchMedia searchRequest) {
-//        return PageDto.create(this.categoryRepository.search(pageable, searchRequest));
-//    }
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("search")
+    public PageDto<CategoryDto.Response.CategoryInfo> search(
+            @PageableDefault Pageable pageable) {
+        return PageDto.create(this.categoryRepository.search(pageable));
+    }
 }

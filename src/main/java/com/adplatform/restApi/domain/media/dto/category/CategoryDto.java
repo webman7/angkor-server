@@ -1,5 +1,6 @@
 package com.adplatform.restApi.domain.media.dto.category;
 
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,10 +35,24 @@ public class CategoryDto {
         public static class BankInfo {
 
             private Integer id;
-
-            @Size(min = 1, max = 50)
-            @NotBlank
             private String name;
         }
+
+
+        @Getter
+        @Setter
+        public static class CategoryInfo {
+
+            private Integer id;
+            private String name;
+
+            @QueryProjection
+            public CategoryInfo(Integer id, String name) {
+                this.id = id;
+                this.name = name;
+            }
+        }
+
+
     }
 }

@@ -1,8 +1,5 @@
 package com.adplatform.restApi.domain.media.service;
 
-import com.adplatform.restApi.domain.advertiser.adgroup.service.AdGroupFindUtils;
-import com.adplatform.restApi.domain.company.domain.Company;
-import com.adplatform.restApi.domain.company.service.CompanyFindUtils;
 import com.adplatform.restApi.domain.media.dao.category.CategoryRepository;
 import com.adplatform.restApi.domain.media.domain.Category;
 import com.adplatform.restApi.domain.media.dto.category.CategoryDto;
@@ -17,9 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CategorySaveService {
 
-    CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
-    CategoryMapper categoryMapper;
+    private final CategoryMapper categoryMapper;
 
     public void save(CategoryDto.Request.Save request) {
         Category category = this.categoryMapper.toEntity(request);

@@ -27,8 +27,7 @@ public class Category extends BaseUpdatedEntity {
     private boolean deleted;
 
     @Builder
-    public Category(
-            String name) {
+    public Category(String name) {
         this.name = name;
         this.deleted = false;
     }
