@@ -183,7 +183,7 @@ public class CompanyService {
         MediaCompanyUserInfoHistory mediaCompanyUserInfoHistory = this.mediaCompanyUserInfoHistoryMapper.toEntity(history, SecurityUtils.getLoginUserNo());
         this.mediaCompanyUserInfoHistoryRepository.save(mediaCompanyUserInfoHistory);
 
-        // 비즈니스 회원 상태 업데이트
+        // 매체사 회원 상태 업데이트
         if(request.getMemberType() == MediaCompanyUser.MemberType.MASTER) {
             mediaCompanyUser.changeMemberTypeMaster();
         } else if(request.getMemberType() == MediaCompanyUser.MemberType.OPERATOR) {
@@ -217,7 +217,7 @@ public class CompanyService {
         MediaCompanyUserInfoHistory mediaCompanyUserInfoHistory = this.mediaCompanyUserInfoHistoryMapper.toEntity(history, SecurityUtils.getLoginUserNo());
         this.mediaCompanyUserInfoHistoryRepository.save(mediaCompanyUserInfoHistory);
 
-        // 비즈니스 회원 상태 업데이트
+        // 매체사 회원 상태 업데이트
         if(request.getStatus() == MediaCompanyUser.Status.Y) {
             mediaCompanyUser.changeStatusY();
         } else if(request.getStatus() == MediaCompanyUser.Status.R) {
