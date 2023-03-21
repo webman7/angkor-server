@@ -15,7 +15,7 @@ public interface FileService {
 
     String saveProofFile(Creative creative, MultipartFile file);
 
-    String saveCompany(CompanyDto.Request.Save request, MultipartFile file);
+    String saveCompany(CompanyDto.Request.Save request, MultipartFile file, String fType);
 
     String saveMedia(MediaDto.Request.Save request, MultipartFile file);
 

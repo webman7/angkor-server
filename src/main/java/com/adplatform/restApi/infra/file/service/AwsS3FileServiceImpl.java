@@ -21,7 +21,7 @@ public class AwsS3FileServiceImpl implements FileService {
     }
 
     @Override
-    public String saveCompany(CompanyDto.Request.Save request, MultipartFile file) {
+    public String saveCompany(CompanyDto.Request.Save request, MultipartFile file, String fType) {
         return null;
     }
 

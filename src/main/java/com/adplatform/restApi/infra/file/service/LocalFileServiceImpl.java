@@ -71,8 +71,8 @@ public class LocalFileServiceImpl implements FileService {
 
     @SneakyThrows
     @Override
-    public String saveCompany(CompanyDto.Request.Save request, MultipartFile file) {
-        String filePath = FILE_COMPANY_PATH + request.getType();
+    public String saveCompany(CompanyDto.Request.Save request, MultipartFile file, String fType) {
+        String filePath = FILE_COMPANY_PATH + request.getType() + "/" + fType;
         String ymdPath = UpLoadFileUtils.calcPath(filePath);
         String uploadPath = filePath + ymdPath + "/";
         File savedFile = new File(String.format(

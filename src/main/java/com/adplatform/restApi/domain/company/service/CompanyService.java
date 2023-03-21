@@ -92,7 +92,7 @@ public class CompanyService {
     private CompanyFile saveCompanyFile(CompanyDto.Request.Save request, Company company, MultipartFile file, String fType) {
         String originalFilename = file.getOriginalFilename();
         String mimetype = Files.probeContentType(Paths.get(originalFilename));
-        String savedFileUrl = this.fileService.saveCompany(request, file);
+        String savedFileUrl = this.fileService.saveCompany(request, file, fType);
         int index = savedFileUrl.lastIndexOf("/");
         String savedFilename = savedFileUrl.substring(index+1);
         return new CompanyFile(company, fType, this.companyFileInformation(file, savedFileUrl, savedFilename, originalFilename, mimetype));
