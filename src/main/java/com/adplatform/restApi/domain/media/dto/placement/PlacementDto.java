@@ -1,5 +1,6 @@
 package com.adplatform.restApi.domain.media.dto.placement;
 
+import com.adplatform.restApi.domain.media.domain.Placement;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,21 +13,70 @@ public abstract class PlacementDto {
 
         @Getter
         @Setter
-        public static class Search implements PlacementIdGetter {
-            @NotNull
-            private Integer placementId;
-
-            private Integer mediaId;
+        public static class Save {
             private String name;
             private Integer width;
             private Integer height;
+            private String widthHeightRate;
+            private String memo;
+            private String adminMemo;
+        }
+
+        @Getter
+        @Setter
+        public static class Update {
+            private Integer id;
+            private String name;
+            private String memo;
+            private String adminMemo;
+        }
+
+        @Getter
+        @Setter
+        public static class Search {
+            @NotNull
+            private Integer id;
+            private String name;
+            private Integer width;
+            private Integer height;
+            private String widthHeightRate;
+            private String memo;
+            private String adminMemo;
         }
     }
 
     public abstract static class Response {
-
-        @NoArgsConstructor
-        public static class Default extends PlacementDto.Request.Search {
+        @Getter
+        @Setter
+        public static class Search {
+            @NotNull
+            private Integer id;
+            private String name;
+            private Integer width;
+            private Integer height;
+            private String widthHeightRate;
+            private String memo;
+            private String adminMemo;
+            private Placement.Status status;
+            @QueryProjection
+            public Search(
+                    Integer id,
+                    String name,
+                    Integer width,
+                    Integer height,
+                    String widthHeightRate,
+                    String memo,
+                    String adminMemo,
+                    Placement.Status status) {
+                this.id = id;
+                this.name = name;
+                this.width = width;
+                this.height = height;
+                this.widthHeightRate = widthHeightRate;
+                this.memo = memo;
+                this.adminMemo = adminMemo;
+                this.status = status;
+            }
         }
 
         @Getter
@@ -37,17 +87,26 @@ public abstract class PlacementDto {
             private String name;
             private Integer width;
             private Integer height;
+            private String widthHeightRate;
+            private String memo;
+            private String adminMemo;
 
             @QueryProjection
             public ForSearchAll(
                     Integer id,
                     String name,
                     Integer width,
-                    Integer height) {
+                    Integer height,
+                    String widthHeightRate,
+                    String memo,
+                    String adminMemo) {
                 this.id = id;
                 this.name = name;
                 this.width = width;
                 this.height = height;
+                this.widthHeightRate = widthHeightRate;
+                this.memo = memo;
+                this.adminMemo = adminMemo;
             }
         }
     }

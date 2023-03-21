@@ -48,8 +48,14 @@ public class Company extends BaseUpdatedEntity {
     @Column(name = "representation_name", length = 50)
     private String representationName;
 
-    @Embedded
-    private Address address;
+    @Column(name = "base_address", length = 100)
+    private String baseAddress;
+
+    @Column(name = "detail_address", length = 50)
+    private String detailAddress;
+
+    @Column(name = "zip_code", length = 10)
+    private String zipCode;
 
     @Column(name = "business_category", length = 20)
     private String businessCategory;
@@ -63,7 +69,7 @@ public class Company extends BaseUpdatedEntity {
     private Email taxBillEmail;
 
     @ManyToOne
-    @JoinColumn(name = "bank_info_id", nullable = false)
+    @JoinColumn(name = "bank_info_id")
     private Bank bank;
 
     @Column(name = "account_number", length = 30)
@@ -93,7 +99,9 @@ public class Company extends BaseUpdatedEntity {
             Type type,
             String registrationNumber,
             String representationName,
-            Address address,
+            String baseAddress,
+            String detailAddress,
+            String zipCode,
             String businessCategory,
             String businessItem,
             Email taxBillEmail,
@@ -104,7 +112,9 @@ public class Company extends BaseUpdatedEntity {
         this.type = type;
         this.registrationNumber = registrationNumber;
         this.representationName = representationName;
-        this.address = address;
+        this.baseAddress = baseAddress;
+        this.detailAddress = detailAddress;
+        this.zipCode = zipCode;
         this.businessCategory = businessCategory;
         this.businessItem = businessItem;
         this.taxBillEmail = new Email(taxBillEmail.getAddress());
@@ -114,15 +124,17 @@ public class Company extends BaseUpdatedEntity {
         this.deleted = false;
     }
 
-    public Company update(CompanyDto.Request.Update request) {
+    public Company update(CompanyDto.Request.Update request, Bank bank) {
         this.name = request.getName();
         this.registrationNumber = request.getRegistrationNumber();
         this.representationName = request.getRepresentationName();
-        this.address = request.getAddress();
+        this.baseAddress = request.getBaseAddress();
+        this.detailAddress = request.getDetailAddress();
+        this.zipCode = request.getZipCode();
         this.businessCategory = request.getBusinessCategory();
         this.businessItem = request.getBusinessItem();
         this.taxBillEmail = new Email(request.getTaxBillEmail());
-        this.bank = request.getBank();
+        this.bank = bank;
         this.accountNumber = request.getAccountNumber();
         this.accountOwner = request.getAccountOwner();
         return this;

@@ -3,13 +3,16 @@ package com.adplatform.restApi.domain.media.dao.placement;
 import com.adplatform.restApi.domain.media.domain.Placement;
 import com.adplatform.restApi.domain.media.dto.placement.PlacementDto;
 import com.adplatform.restApi.domain.media.dto.placement.QPlacementDto_Response_ForSearchAll;
+import com.adplatform.restApi.domain.media.dto.placement.QPlacementDto_Response_Search;
 import com.adplatform.restApi.global.util.QuerydslOrderSpecifierUtil;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -25,7 +28,35 @@ public class PlacementQuerydslRepositoryImpl implements PlacementQuerydslReposit
 
     private final JPAQueryFactory query;
 
-//    @Override
+    @Override
+    public Page<PlacementDto.Response.Search> search(Pageable pageable) {
+        List<PlacementDto.Response.Search> content = this.query.select(
+                        new QPlacementDto_Response_Search(
+                                placement.id,
+                                placement.name,
+                                placement.width,
+                                placement.height,
+                                placement.widthHeightRate,
+                                placement.memo,
+                                placement.adminMemo,
+                                placement.status)
+                )
+                .from(placement)
+                .where(placement.status.in(Placement.Status.Y, Placement.Status.N)
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = this.query.select(placement.count())
+                .from(placement)
+                .where(placement.status.in(Placement.Status.Y, Placement.Status.N)
+                );
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    @Override
     public List<PlacementDto.Response.ForSearchAll> searchForAll(Integer adGroupId, Integer mediaId) {
         return this.getSearchForAllQuery(null, adGroupId, mediaId).fetch();
     }
@@ -37,7 +68,10 @@ public class PlacementQuerydslRepositoryImpl implements PlacementQuerydslReposit
                         placement.id,
                         placement.name,
                         placement.width,
-                        placement.height))
+                        placement.height,
+                        placement.widthHeightRate,
+                        placement.memo,
+                        placement.adminMemo))
                 .from(placement, media, adGroupMedia)
                 .where(
                         media.id.eq(adGroupMedia.media.id),

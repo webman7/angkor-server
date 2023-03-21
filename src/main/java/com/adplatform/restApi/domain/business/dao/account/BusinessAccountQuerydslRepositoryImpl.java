@@ -388,7 +388,9 @@ public class BusinessAccountQuerydslRepositoryImpl implements BusinessAccountQue
                             company.type,
                             company.registrationNumber,
                             company.representationName,
-                            company.address,
+                            company.baseAddress,
+                            company.detailAddress,
+                            company.zipCode,
                             company.businessCategory,
                             company.businessItem,
                             company.taxBillEmail

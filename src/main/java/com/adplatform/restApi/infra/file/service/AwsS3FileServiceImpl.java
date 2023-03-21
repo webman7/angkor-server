@@ -3,6 +3,7 @@ package com.adplatform.restApi.infra.file.service;
 import com.adplatform.restApi.domain.advertiser.creative.domain.Creative;
 import com.adplatform.restApi.domain.advertiser.creative.dto.CreativeDto;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
+import com.adplatform.restApi.domain.media.dto.MediaDto;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +22,11 @@ public class AwsS3FileServiceImpl implements FileService {
 
     @Override
     public String saveCompany(CompanyDto.Request.Save request, MultipartFile file) {
+        return null;
+    }
+
+    @Override
+    public String saveMedia(MediaDto.Request.Save request, MultipartFile file) {
         return null;
     }
 

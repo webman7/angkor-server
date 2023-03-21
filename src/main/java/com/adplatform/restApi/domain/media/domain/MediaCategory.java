@@ -20,7 +20,7 @@ public class MediaCategory {
     @JoinColumn(name = "media_info_id")
     private Media media;
 
-    @MapsId("placementId")
+    @MapsId("categoryId")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_info_id")
     private Category category;

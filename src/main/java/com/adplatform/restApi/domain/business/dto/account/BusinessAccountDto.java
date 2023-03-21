@@ -58,9 +58,9 @@ public class BusinessAccountDto {
             @NotBlank
             @Size(min = 1, max = 50)
             private String businessItem;
-
-            private Address address;
-
+            private String baseAddress;
+            private String detailAddress;
+            private String zipCode;
             @NotNull
             @Email
             private String taxBillEmail;
@@ -95,7 +95,9 @@ public class BusinessAccountDto {
             @Size(min = 1, max = 50)
             private String businessItem;
 
-            private Address address;
+            private String baseAddress;
+            private String detailAddress;
+            private String zipCode;
 
             @NotNull
             @Email
@@ -269,7 +271,9 @@ public class BusinessAccountDto {
             private Company.Type type;
             private String registrationNumber;
             private String representationName;
-            private Address address;
+            private String baseAddress;
+            private String detailAddress;
+            private String zipCode;
             private String businessCategory;
             private String businessItem;
             private com.adplatform.restApi.global.value.Email taxBillEmail;
@@ -279,7 +283,9 @@ public class BusinessAccountDto {
                                Company.Type type,
                                String registrationNumber,
                                String representationName,
-                               Address address,
+                               String baseAddress,
+                               String detailAddress,
+                               String zipCode,
                                String businessCategory,
                                String businessItem,
                                com.adplatform.restApi.global.value.Email taxBillEmail) {
@@ -288,7 +294,9 @@ public class BusinessAccountDto {
                 this.type = type;
                 this.registrationNumber = registrationNumber;
                 this.representationName = representationName;
-                this.address = address;
+                this.baseAddress = baseAddress;
+                this.detailAddress = detailAddress;
+                this.zipCode = zipCode;
                 this.businessCategory = businessCategory;
                 this.businessItem = businessItem;
                 this.taxBillEmail = taxBillEmail;

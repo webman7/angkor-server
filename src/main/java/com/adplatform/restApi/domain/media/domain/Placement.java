@@ -1,13 +1,12 @@
 package com.adplatform.restApi.domain.media.domain;
 
-import com.adplatform.restApi.domain.media.domain.Media;
+import com.adplatform.restApi.domain.media.dto.placement.PlacementDto;
 import com.adplatform.restApi.global.entity.BaseUpdatedEntity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @ToString
 @Getter
@@ -46,4 +45,41 @@ public class Placement extends BaseUpdatedEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", columnDefinition = "CHAR")
     private Status status;
+
+    @Column(name = "approve_user_no")
+    private Integer approveUserNo;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Column(name = "approve_date")
+    private LocalDateTime approveAt;
+
+    @Builder
+    public Placement(
+            String name,
+            Integer width,
+            Integer height,
+            String widthHeightRate,
+            String memo,
+            String adminMemo,
+            Status status
+    ) {
+        this.name = name;
+        this.width = width;
+        this.height = height;
+        this.widthHeightRate = widthHeightRate;
+        this.memo = memo;
+        this.adminMemo = adminMemo;
+        this.status = status;
+    }
+
+    public Placement update(PlacementDto.Request.Update request) {
+        this.name = request.getName();
+        this.memo = request.getMemo();
+        this.adminMemo = request.getAdminMemo();
+        return this;
+    }
+
+    public void delete() {
+        this.status = Status.D;
+    }
 }

@@ -5,6 +5,8 @@ import com.adplatform.restApi.domain.adaccount.dao.user.AdAccountUserRepository;
 import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
 import com.adplatform.restApi.domain.adaccount.dto.user.AdAccountUserDto;
 import com.adplatform.restApi.domain.adaccount.service.AdAccountUserQueryUtils;
+import com.adplatform.restApi.domain.bank.domain.Bank;
+import com.adplatform.restApi.domain.bank.service.BankFindUtils;
 import com.adplatform.restApi.domain.business.dao.account.BusinessAccountRepository;
 import com.adplatform.restApi.domain.business.dao.user.BusinessAccountUserRepository;
 import com.adplatform.restApi.domain.business.domain.BusinessAccount;
@@ -94,16 +96,19 @@ public class BusinessAccountSaveService {
     }
 
     public void update(BusinessAccountDto.Request.Update request, Integer loginUserNo) {
+
         this.businessAccountRepository.save(BusinessAccountFindUtils.findByIdOrElseThrow(request.getId(), this.businessAccountRepository).update(request));
         CompanyDto.Request.Update requestCompany = new CompanyDto.Request.Update();
         requestCompany.setName(request.getCompanyName());
-        requestCompany.setAddress(request.getAddress());
+        requestCompany.setBaseAddress(request.getBaseAddress());
+        requestCompany.setDetailAddress(request.getDetailAddress());
+        requestCompany.setZipCode(request.getZipCode());
         requestCompany.setRegistrationNumber(request.getRegistrationNumber());
         requestCompany.setBusinessItem(request.getBusinessItem());
         requestCompany.setBusinessCategory(request.getBusinessCategory());
         requestCompany.setRepresentationName(request.getRepresentationName());
         requestCompany.setTaxBillEmail(request.getTaxBillEmail());
-        this.companyRepository.save(CompanyFindUtils.findByIdOrElseThrow(request.getCompanyId(), this.companyRepository).update(requestCompany));
+        this.companyRepository.save(CompanyFindUtils.findByIdOrElseThrow(request.getCompanyId(), this.companyRepository).update(requestCompany, null));
     }
 
     public void saveUserInvite(BusinessAccountUserDto.Request.SaveUser request, Integer loginUserNo) {

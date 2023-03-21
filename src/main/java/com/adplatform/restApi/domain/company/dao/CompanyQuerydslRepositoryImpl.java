@@ -1,6 +1,8 @@
 package com.adplatform.restApi.domain.company.dao;
 
+import com.adplatform.restApi.domain.advertiser.creative.domain.CreativeFile;
 import com.adplatform.restApi.domain.company.domain.Company;
+import com.adplatform.restApi.domain.company.domain.CompanyFile;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.company.dto.QCompanyDto_Response_AdAccountDetail;
 import com.adplatform.restApi.domain.company.dto.QCompanyDto_Response_CompanyInfo;
@@ -17,8 +19,13 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
+import static com.adplatform.restApi.domain.advertiser.creative.domain.QCreative.creative;
+import static com.adplatform.restApi.domain.advertiser.creative.domain.QCreativeFile.creativeFile;
 import static com.adplatform.restApi.domain.bank.domain.QBank.bank;
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
+import static com.adplatform.restApi.domain.company.domain.QCompanyFile.companyFile;
+import static com.adplatform.restApi.domain.media.domain.QMedia.media;
+import static com.adplatform.restApi.domain.media.domain.QMediaFile.mediaFile;
 import static java.util.Objects.nonNull;
 
 /**
@@ -62,7 +69,9 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                         company.type,
                         company.registrationNumber,
                         company.representationName,
-                        company.address,
+                        company.baseAddress,
+                        company.detailAddress,
+                        company.zipCode,
                         company.businessCategory,
                         company.businessItem,
                         company.taxBillEmail,
@@ -99,7 +108,9 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                         company.type,
                         company.registrationNumber,
                         company.representationName,
-                        company.address,
+                        company.baseAddress,
+                        company.detailAddress,
+                        company.zipCode,
                         company.businessCategory,
                         company.businessItem,
                         company.taxBillEmail
@@ -130,7 +141,9 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                         company.type,
                         company.registrationNumber,
                         company.representationName,
-                        company.address,
+                        company.baseAddress,
+                        company.detailAddress,
+                        company.zipCode,
                         company.businessCategory,
                         company.businessItem,
                         company.taxBillEmail,
@@ -147,6 +160,58 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
 
         return content.size();
     }
+
+    @Override
+    public Integer findByRegistrationNumberCount(String registrationNumber) {
+        List<CompanyDto.Response.CompanyInfo> content = this.query
+                .select(new QCompanyDto_Response_CompanyInfo(
+                        company.id,
+                        company.name,
+                        company.type,
+                        company.registrationNumber,
+                        company.representationName,
+                        company.baseAddress,
+                        company.detailAddress,
+                        company.zipCode,
+                        company.businessCategory,
+                        company.businessItem,
+                        company.taxBillEmail,
+                        company.bank,
+                        company.accountNumber,
+                        company.accountOwner
+                ))
+                .from(company)
+                .leftJoin(company.bank, bank)
+                .where(
+                        this.registrationNumberEq(registrationNumber)
+                )
+                .fetch();
+
+        return content.size();
+    }
+
+    @Override
+    public List<CompanyFile> findDetailFilesById(Integer id) {
+        return this.query.select(companyFile)
+                .from(company, companyFile)
+                .where(company.id.eq(id),
+                        company.id.eq(companyFile.company.id))
+                .fetch();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @Override
     public List<CompanyDto.Response.Default> searchForSignUp(Company.Type type, String name) {

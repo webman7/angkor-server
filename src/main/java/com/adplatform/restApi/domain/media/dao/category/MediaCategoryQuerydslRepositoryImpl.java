@@ -4,9 +4,17 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import static com.adplatform.restApi.domain.advertiser.creative.domain.QCreative_CreativePlacement.creativePlacement;
+import static com.adplatform.restApi.domain.media.domain.QMediaCategory.mediaCategory;
+
 @RequiredArgsConstructor
 @Repository
 public class MediaCategoryQuerydslRepositoryImpl implements MediaCategoryQuerydslRepository {
 
     private final JPAQueryFactory query;
+
+    @Override
+    public void deleteMediaCategory(Integer mediaId) {
+        this.query.delete(mediaCategory).where(mediaCategory.id.mediaId.eq(mediaId)).execute();
+    }
 }

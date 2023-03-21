@@ -1,6 +1,8 @@
 package com.adplatform.restApi.domain.company.service;
 
-import com.adplatform.restApi.domain.advertiser.creative.exception.CreativeUpdateException;
+import com.adplatform.restApi.domain.bank.dao.BankRepository;
+import com.adplatform.restApi.domain.bank.domain.Bank;
+import com.adplatform.restApi.domain.bank.service.BankFindUtils;
 import com.adplatform.restApi.domain.company.domain.FileInformation;
 import com.adplatform.restApi.domain.company.dao.CompanyRepository;
 import com.adplatform.restApi.domain.company.dao.user.MediaCompanyUserRepository;
@@ -40,8 +42,8 @@ import java.nio.file.Paths;
 @Service
 public class CompanyService {
     private final CompanyRepository companyRepository;
+    private final BankRepository bankRepository;
     private final CompanyMapper companyMapper;
-
     private final FileService fileService;
     private final UserQueryService userQueryService;
     private final MediaCompanyUserRepository mediaCompanyUserRepository;
@@ -55,7 +57,15 @@ public class CompanyService {
     }
 
     public void saveMedia(CompanyDto.Request.Save request) {
-        Company company = this.companyMapper.toMediaEntity(request);
+        Integer count = this.companyRepository.findByRegistrationNumberCount(request.getRegistrationNumber());
+
+        if(!count.equals(0)) {
+            throw new MediaCompanyUserAlreadyExistException();
+        }
+
+        Bank bank = BankFindUtils.findByIdOrElseThrow(request.getBankId(), this.bankRepository);
+
+        Company company = this.companyMapper.toMediaEntity(request, bank);
         request.getBusinessFiles().forEach(file -> company.addBusinessFile(this.saveCompanyFile(request, company, file)));
         request.getBankFiles().forEach(file -> company.addBankFile(this.saveCompanyFile(request, company, file)));
         this.companyRepository.save(company);
@@ -63,7 +73,9 @@ public class CompanyService {
 
     public void updateMedia(CompanyDto.Request.Update request) {
         try{
-            Company company = CompanyFindUtils.findByIdOrElseThrow(request.getId(), this.companyRepository).update(request);
+            Bank bank = BankFindUtils.findByIdOrElseThrow(request.getBankId(), this.bankRepository);
+
+            Company company = CompanyFindUtils.findByIdOrElseThrow(request.getId(), this.companyRepository).update(request, bank);
             if(request.getBusinessFiles().size() > 0) {
                 request.getBusinessFiles().forEach(file -> company.addBusinessFile(this.saveCompanyFile(request, company, file)));
             }

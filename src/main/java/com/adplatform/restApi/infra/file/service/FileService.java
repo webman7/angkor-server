@@ -1,5 +1,6 @@
 package com.adplatform.restApi.infra.file.service;
 
+import com.adplatform.restApi.domain.media.dto.MediaDto;
 import com.adplatform.restApi.domain.advertiser.creative.domain.Creative;
 import com.adplatform.restApi.domain.advertiser.creative.dto.CreativeDto;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
@@ -15,6 +16,8 @@ public interface FileService {
     String saveProofFile(Creative creative, MultipartFile file);
 
     String saveCompany(CompanyDto.Request.Save request, MultipartFile file);
+
+    String saveMedia(MediaDto.Request.Save request, MultipartFile file);
 
     byte[] findByName(String filename);
 

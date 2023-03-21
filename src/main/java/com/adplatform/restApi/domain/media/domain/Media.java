@@ -1,8 +1,7 @@
 package com.adplatform.restApi.domain.media.domain;
 
-import com.adplatform.restApi.domain.business.domain.BusinessAccountUser;
 import com.adplatform.restApi.domain.company.domain.Company;
-import com.adplatform.restApi.global.converter.BooleanToStringYOrNConverter;
+import com.adplatform.restApi.domain.media.dto.MediaDto;
 import com.adplatform.restApi.global.entity.BaseUpdatedEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -12,6 +11,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author junny
@@ -47,8 +50,18 @@ public class Media extends BaseUpdatedEntity {
     @Column(name = "app_secret", length = 128)
     private String appSecret;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "media_category_info",
+            joinColumns = @JoinColumn(name = "media_info_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_info_id"))
+    private final Set<Category> category = new HashSet<>();
+
     @Column(name = "url", length = 256)
     private String url;
+
+    @OneToMany(mappedBy = "media", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<MediaFile> mediaFiles = new ArrayList<>();
 
     @Column(name = "exp_inventory", columnDefinition = "INT")
     private Integer expInventory;
@@ -74,15 +87,33 @@ public class Media extends BaseUpdatedEntity {
     public Media(
             String name,
             Company company,
+            List<Category> category,
             String url,
             Integer expInventory,
             Status status,
             String memo) {
         this.name = name;
         this.company = company;
+        this.category.addAll(category);
         this.url = url;
         this.expInventory = expInventory;
         this.status = status;
         this.memo = memo;
+    }
+
+     public Media update(MediaDto.Request.Update request) {
+        this.name = request.getName();
+        this.url = request.getUrl();
+        this.expInventory = request.getExpInventory();
+        this.memo = request.getMemo();
+        return this;
+    }
+
+    public void delete() {
+        this.status = Media.Status.D;
+    }
+
+    public void addMediaFile(MediaFile file) {
+        this.mediaFiles.add(file);
     }
 }
