@@ -39,17 +39,18 @@ public abstract class CompanyMapper {
     @Mapping(target = "taxBillEmail", qualifiedByName = "createEmail")
     public abstract Company toMediaEntity(CompanyDto.Request.Save request, Bank bank);
 
-    @Mapping(target = "taxBillEmail", qualifiedByName = "getEmail")
-    public abstract CompanyDto.Response.Detail toDetailResponse(Company company);
+//    @Mapping(target = "taxBillEmail", qualifiedByName = "getEmail")
+//    public abstract CompanyDto.Response.Detail toDetailResponse(Company company);
 
-//    @Mapping(target = "files", source = "companyFile")
-//    @Mapping(target = "type", source = "company.type")
+    @Mapping(target = "files", source = "companyFile")
+    @Mapping(target = "type", source = "company.type")
+    @Mapping(target = "taxBillEmail", qualifiedByName = "getEmail")
 //    @Mapping(target = "files.fileSize", source = "companyFile.fileSize")
 //    @Mapping(target = "files.filename", source = "companyFile.filename")
 //    @Mapping(target = "files.originalFileName", source = "companyFile.originalFileName")
 //    @Mapping(target = "files.url", source = "companyFile.url")
 //    @Mapping(target = "files.mimeType", source = "companyFile.mimeType")
-//    public abstract CompanyDto.Response.Detail toDetailResponse(Company company, List<CompanyFile> companyFile);
+    public abstract CompanyDto.Response.Detail toDetailResponse(Company company, List<CompanyFileDto.Response.Default> companyFile);
 
     @Named("getEmail")
     String getEmail(Email email) {

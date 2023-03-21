@@ -4,6 +4,7 @@ import com.adplatform.restApi.domain.advertiser.creative.domain.CreativeFile;
 import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.company.domain.CompanyFile;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
+import com.adplatform.restApi.domain.company.dto.CompanyFileDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -28,7 +29,7 @@ public interface CompanyQuerydslRepository {
 
     Integer findByRegistrationNumberCount(String registrationNumber);
 
-    List<CompanyFile> findDetailFilesById(Integer id);
+    List<CompanyFileDto.Response.Default> findDetailFilesById(Integer id);
 
     List<CompanyDto.Response.Default> searchForSignUp(Company.Type type, String name);
 }

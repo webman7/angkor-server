@@ -1,5 +1,7 @@
 package com.adplatform.restApi.domain.company.api;
 
+import com.adplatform.restApi.domain.company.domain.CompanyFile;
+import com.adplatform.restApi.domain.company.dto.CompanyFileDto;
 import com.adplatform.restApi.domain.company.exception.CompanyNotFoundException;
 import com.adplatform.restApi.domain.company.dao.CompanyRepository;
 import com.adplatform.restApi.domain.company.dao.user.MediaCompanyUserRepository;
@@ -33,9 +35,10 @@ public class CompanyQueryApi {
     @GetMapping("/{id}")
     public CompanyDto.Response.Detail findById(@PathVariable Integer id) {
         Company company = this.companyRepository.findById(id).orElseThrow(CompanyNotFoundException::new);
-        System.out.println(this.companyRepository.findDetailFilesById(id));
+        List<CompanyFileDto.Response.Default> companyFile = this.companyRepository.findDetailFilesById(id);
 
-        return this.companyMapper.toDetailResponse(CompanyFindUtils.findByIdOrElseThrow(id, this.companyRepository));
+
+        return this.companyMapper.toDetailResponse(CompanyFindUtils.findByIdOrElseThrow(id, this.companyRepository), this.companyRepository.findDetailFilesById(id));
 //        return this.companyMapper.toDetailResponse(CompanyFindUtils.findByIdOrElseThrow(id, this.companyRepository),
 //                this.companyRepository.findDetailFilesById(id));
     }

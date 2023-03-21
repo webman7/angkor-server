@@ -126,7 +126,7 @@ public abstract class CompanyDto {
             private Bank bank;
             private String accountNumber;
             private String accountOwner;
-//            private List<CompanyFileDto> files;
+            private List<CompanyFileDto.Response.Default> files;
 
             @QueryProjection
             public Detail(Integer id,
@@ -142,8 +142,8 @@ public abstract class CompanyDto {
                                String taxBillEmail,
                                Bank bank,
                                String accountNumber,
-                               String accountOwner
-//                               List<CompanyFileDto> files
+                               String accountOwner,
+                               List<CompanyFileDto.Response.Default> files
                                ) {
                 this.id = id;
                 this.name = name;
@@ -159,7 +159,7 @@ public abstract class CompanyDto {
                 this.bank = bank;
                 this.accountNumber = accountNumber;
                 this.accountOwner = accountOwner;
-//                this.files = files;
+                this.files = files;
             }
         }
 

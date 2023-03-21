@@ -3,10 +3,7 @@ package com.adplatform.restApi.domain.company.dao;
 import com.adplatform.restApi.domain.advertiser.creative.domain.CreativeFile;
 import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.company.domain.CompanyFile;
-import com.adplatform.restApi.domain.company.dto.CompanyDto;
-import com.adplatform.restApi.domain.company.dto.QCompanyDto_Response_AdAccountDetail;
-import com.adplatform.restApi.domain.company.dto.QCompanyDto_Response_CompanyInfo;
-import com.adplatform.restApi.domain.company.dto.QCompanyDto_Response_Default;
+import com.adplatform.restApi.domain.company.dto.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -191,8 +188,17 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
     }
 
     @Override
-    public List<CompanyFile> findDetailFilesById(Integer id) {
-        return this.query.select(companyFile)
+    public List<CompanyFileDto.Response.Default> findDetailFilesById(Integer id) {
+        return this.query.select(new QCompanyFileDto_Response_Default(
+                companyFile.id,
+                companyFile.company.id,
+                companyFile.type,
+                companyFile.information.fileSize,
+                companyFile.information.filename,
+                companyFile.information.originalFileName,
+                companyFile.information.url,
+                companyFile.information.mimeType
+                ))
                 .from(company, companyFile)
                 .where(company.id.eq(id),
                         company.id.eq(companyFile.company.id))
