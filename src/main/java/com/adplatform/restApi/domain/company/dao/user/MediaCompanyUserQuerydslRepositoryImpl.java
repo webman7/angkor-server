@@ -1,12 +1,17 @@
 package com.adplatform.restApi.domain.company.dao.user;
 
+import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.company.domain.MediaCompanyUser;
 import com.adplatform.restApi.domain.company.dto.user.MediaCompanyUserDto;
 import com.adplatform.restApi.domain.company.dto.user.QMediaCompanyUserDto_Response_MediaCompanyUserInfo;
 import com.adplatform.restApi.domain.user.domain.User;
 import com.adplatform.restApi.domain.user.dto.user.QUserDto_Response_BaseInfo;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -52,10 +57,9 @@ public class MediaCompanyUserQuerydslRepositoryImpl implements MediaCompanyUserQ
         return content.size();
     }
 
-
     @Override
-    public List<MediaCompanyUserDto.Response.MediaCompanyUserInfo> mediaCompanyUserInfo(Integer companyId) {
-        return this.query.select(new QMediaCompanyUserDto_Response_MediaCompanyUserInfo(
+    public Page<MediaCompanyUserDto.Response.MediaCompanyUserInfo> mediaCompanyUserInfo(Pageable pageable, Integer companyId) {
+        List<MediaCompanyUserDto.Response.MediaCompanyUserInfo> content = this.query.select(new QMediaCompanyUserDto_Response_MediaCompanyUserInfo(
                         company.id,
                         new QUserDto_Response_BaseInfo(
                                 user.id,
@@ -74,8 +78,45 @@ public class MediaCompanyUserQuerydslRepositoryImpl implements MediaCompanyUserQ
                         mediaCompanyUser.status.in(MediaCompanyUser.Status.Y),
                         user.active.in(User.Active.Y, User.Active.L)
                 )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        JPAQuery<Long> countQuery = this.query.select(mediaCompanyUser.count())
+                .from(company, mediaCompanyUser, user)
+                .where(company.id.eq(companyId),
+                        mediaCompanyUser.company.id.eq(company.id),
+                        mediaCompanyUser.user.id.eq(user.id),
+                        mediaCompanyUser.status.in(MediaCompanyUser.Status.Y),
+                        user.active.in(User.Active.Y, User.Active.L)
+                );
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
+
+//    @Override
+//    public List<MediaCompanyUserDto.Response.MediaCompanyUserInfo> mediaCompanyUserInfo(Integer companyId) {
+//        return this.query.select(new QMediaCompanyUserDto_Response_MediaCompanyUserInfo(
+//                        company.id,
+//                        new QUserDto_Response_BaseInfo(
+//                                user.id,
+//                                user.loginId,
+//                                user.name,
+//                                user.phone
+//                        ),
+//                        mediaCompanyUser.memberType,
+//                        mediaCompanyUser.accountingYN,
+//                        mediaCompanyUser.status
+//                ))
+//                .from(company, mediaCompanyUser, user)
+//                .where(company.id.eq(companyId),
+//                        mediaCompanyUser.company.id.eq(company.id),
+//                        mediaCompanyUser.user.id.eq(user.id),
+//                        mediaCompanyUser.status.in(MediaCompanyUser.Status.Y),
+//                        user.active.in(User.Active.Y, User.Active.L)
+//                )
+//                .fetch();
+//    }
 
     @Override
     public List<MediaCompanyUserDto.Response.MediaCompanyUserInfo> mediaCompanyRequestUserInfo(Integer companyId) {
