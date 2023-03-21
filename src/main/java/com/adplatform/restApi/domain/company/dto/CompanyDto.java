@@ -165,6 +165,63 @@ public abstract class CompanyDto {
 
         @Getter
         @Setter
+        public static class MediaDetail {
+            private Integer id;
+            private String name;
+            private Company.Type type;
+            private String registrationNumber;
+            private String representationName;
+            private String baseAddress;
+            private String detailAddress;
+            private String zipCode;
+            private String businessCategory;
+            private String businessItem;
+            private String taxBillEmail;
+            private Bank bank;
+            private String accountNumber;
+            private String accountOwner;
+            private CompanyFileDto.Response.Default businessFile;
+            private CompanyFileDto.Response.Default bankFile;
+
+            @QueryProjection
+            public MediaDetail(Integer id,
+                          String name,
+                          Company.Type type,
+                          String registrationNumber,
+                          String representationName,
+                          String baseAddress,
+                          String detailAddress,
+                          String zipCode,
+                          String businessCategory,
+                          String businessItem,
+                          String taxBillEmail,
+                          Bank bank,
+                          String accountNumber,
+                          String accountOwner,
+                          CompanyFileDto.Response.Default businessFile,
+                          CompanyFileDto.Response.Default bankFile
+            ) {
+                this.id = id;
+                this.name = name;
+                this.type = type;
+                this.registrationNumber = registrationNumber;
+                this.representationName = representationName;
+                this.baseAddress = baseAddress;
+                this.detailAddress = detailAddress;
+                this.zipCode = zipCode;
+                this.businessCategory = businessCategory;
+                this.businessItem = businessItem;
+                this.taxBillEmail = taxBillEmail;
+                this.bank = bank;
+                this.accountNumber = accountNumber;
+                this.accountOwner = accountOwner;
+                this.businessFile = businessFile;
+                this.bankFile = bankFile;
+            }
+        }
+
+        @Getter
+        @Setter
         public static class CompanyInfo {
             private Integer id;
             private String name;
@@ -180,6 +237,8 @@ public abstract class CompanyDto {
             private Bank bank;
             private String accountNumber;
             private String accountOwner;
+            private String businessFileUrl;
+            private String bankFileUrl;
 
             @QueryProjection
             public CompanyInfo(Integer id,
@@ -195,7 +254,9 @@ public abstract class CompanyDto {
                                    com.adplatform.restApi.global.value.Email taxBillEmail,
                                Bank bank,
                                String accountNumber,
-                               String accountOwner) {
+                               String accountOwner,
+                               String businessFileUrl,
+                               String bankFileUrl) {
                 this.id = id;
                 this.name = name;
                 this.type = type;
@@ -210,6 +271,8 @@ public abstract class CompanyDto {
                 this.bank = bank;
                 this.accountNumber = accountNumber;
                 this.accountOwner = accountOwner;
+                this.businessFileUrl = businessFileUrl;
+                this.bankFileUrl = bankFileUrl;
             }
         }
 

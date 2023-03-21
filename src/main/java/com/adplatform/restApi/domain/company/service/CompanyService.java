@@ -66,8 +66,8 @@ public class CompanyService {
         Bank bank = BankFindUtils.findByIdOrElseThrow(request.getBankId(), this.bankRepository);
 
         Company company = this.companyMapper.toMediaEntity(request, bank);
-        request.getBusinessFiles().forEach(file -> company.addBusinessFile(this.saveCompanyFile(request, company, file)));
-        request.getBankFiles().forEach(file -> company.addBankFile(this.saveCompanyFile(request, company, file)));
+        request.getBusinessFiles().forEach(file -> company.addBusinessFile(this.saveCompanyFile(request, company, file, "BUSINESS")));
+        request.getBankFiles().forEach(file -> company.addBankFile(this.saveCompanyFile(request, company, file, "BANK")));
         this.companyRepository.save(company);
     }
 
@@ -77,10 +77,10 @@ public class CompanyService {
 
             Company company = CompanyFindUtils.findByIdOrElseThrow(request.getId(), this.companyRepository).update(request, bank);
             if(request.getBusinessFiles().size() > 0) {
-                request.getBusinessFiles().forEach(file -> company.addBusinessFile(this.saveCompanyFile(request, company, file)));
+                request.getBusinessFiles().forEach(file -> company.addBusinessFile(this.saveCompanyFile(request, company, file, "BUSINESS")));
             }
             if(request.getBankFiles().size() > 0) {
-                request.getBankFiles().forEach(file -> company.addBankFile(this.saveCompanyFile(request, company, file)));
+                request.getBankFiles().forEach(file -> company.addBankFile(this.saveCompanyFile(request, company, file, "BANK")));
             }
 //            this.companyRepository.save(company);
         }catch (Exception e){
@@ -89,13 +89,13 @@ public class CompanyService {
     }
 
     @SneakyThrows
-    private CompanyFile saveCompanyFile(CompanyDto.Request.Save request, Company company, MultipartFile file) {
+    private CompanyFile saveCompanyFile(CompanyDto.Request.Save request, Company company, MultipartFile file, String fType) {
         String originalFilename = file.getOriginalFilename();
         String mimetype = Files.probeContentType(Paths.get(originalFilename));
         String savedFileUrl = this.fileService.saveCompany(request, file);
         int index = savedFileUrl.lastIndexOf("/");
         String savedFilename = savedFileUrl.substring(index+1);
-        return new CompanyFile(company, request.getType(), this.companyFileInformation(file, savedFileUrl, savedFilename, originalFilename, mimetype));
+        return new CompanyFile(company, fType, this.companyFileInformation(file, savedFileUrl, savedFilename, originalFilename, mimetype));
     }
 
     @SneakyThrows

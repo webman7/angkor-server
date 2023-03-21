@@ -1,8 +1,7 @@
 package com.adplatform.restApi.domain.company.dao;
 
-import com.adplatform.restApi.domain.advertiser.creative.domain.CreativeFile;
+import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
 import com.adplatform.restApi.domain.company.domain.Company;
-import com.adplatform.restApi.domain.company.domain.CompanyFile;
 import com.adplatform.restApi.domain.company.dto.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -16,13 +15,14 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
-import static com.adplatform.restApi.domain.advertiser.creative.domain.QCreative.creative;
-import static com.adplatform.restApi.domain.advertiser.creative.domain.QCreativeFile.creativeFile;
+import static com.adplatform.restApi.domain.adaccount.domain.QAdAccount.adAccount;
+import static com.adplatform.restApi.domain.adaccount.domain.QAdAccountUser.adAccountUser;
 import static com.adplatform.restApi.domain.bank.domain.QBank.bank;
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
 import static com.adplatform.restApi.domain.company.domain.QCompanyFile.companyFile;
-import static com.adplatform.restApi.domain.media.domain.QMedia.media;
-import static com.adplatform.restApi.domain.media.domain.QMediaFile.mediaFile;
+import static com.adplatform.restApi.domain.user.domain.QUser.user;
+import static com.querydsl.core.types.ExpressionUtils.as;
+import static com.querydsl.jpa.JPAExpressions.select;
 import static java.util.Objects.nonNull;
 
 /**
@@ -74,7 +74,19 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                         company.taxBillEmail,
                         company.bank,
                         company.accountNumber,
-                        company.accountOwner
+                        company.accountOwner,
+                        as(select(companyFile.information.url)
+                                .from(companyFile)
+                                .where(companyFile.company.id.eq(company.id),
+                                        companyFile.type.eq("BUSINESS")
+                                )
+                                .orderBy(companyFile.id.desc()), "businessFileUrl"),
+                        as(select(companyFile.information.url)
+                                .from(companyFile)
+                                .where(companyFile.company.id.eq(company.id),
+                                        companyFile.type.eq("BANK")
+                                )
+                                .orderBy(companyFile.id.desc()), "bankFileUrl")
                 ))
                 .from(company)
                 .leftJoin(company.bank, bank)
@@ -146,7 +158,19 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                         company.taxBillEmail,
                         company.bank,
                         company.accountNumber,
-                        company.accountOwner
+                        company.accountOwner,
+                        as(select(companyFile.information.url)
+                                .from(companyFile)
+                                .where(companyFile.company.id.eq(company.id),
+                                        companyFile.type.eq("BUSINESS")
+                                )
+                                .orderBy(companyFile.id.desc()), "businessFileUrl"),
+                        as(select(companyFile.information.url)
+                                .from(companyFile)
+                                .where(companyFile.company.id.eq(company.id),
+                                        companyFile.type.eq("BANK")
+                                )
+                                .orderBy(companyFile.id.desc()), "bankFileUrl")
                 ))
                 .from(company)
                 .leftJoin(company.bank, bank)
@@ -175,7 +199,19 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                         company.taxBillEmail,
                         company.bank,
                         company.accountNumber,
-                        company.accountOwner
+                        company.accountOwner,
+                        as(select(companyFile.information.url)
+                                .from(companyFile)
+                                .where(companyFile.company.id.eq(company.id),
+                                        companyFile.type.eq("BUSINESS")
+                                )
+                                .orderBy(companyFile.id.desc()), "businessFileUrl"),
+                        as(select(companyFile.information.url)
+                                .from(companyFile)
+                                .where(companyFile.company.id.eq(company.id),
+                                        companyFile.type.eq("BANK")
+                                )
+                                .orderBy(companyFile.id.desc()), "bankFileUrl")
                 ))
                 .from(company)
                 .leftJoin(company.bank, bank)
@@ -187,23 +223,65 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
         return content.size();
     }
 
+//    @Override
+//    public List<CompanyFileDto.Response.Default> findDetailFilesById(Integer id) {
+//        return this.query.select(new QCompanyFileDto_Response_Default(
+//                companyFile.id,
+//                companyFile.company.id,
+//                companyFile.type,
+//                companyFile.information.fileSize,
+//                companyFile.information.filename,
+//                companyFile.information.originalFileName,
+//                companyFile.information.url,
+//                companyFile.information.mimeType
+//                ))
+//                .from(company, companyFile)
+//                .where(company.id.eq(id),
+//                        company.id.eq(companyFile.company.id))
+//                .fetch();
+//    }
+
     @Override
-    public List<CompanyFileDto.Response.Default> findDetailFilesById(Integer id) {
+    public CompanyFileDto.Response.Default findDetailBusinessFilesById(Integer id) {
         return this.query.select(new QCompanyFileDto_Response_Default(
-                companyFile.id,
-                companyFile.company.id,
-                companyFile.type,
-                companyFile.information.fileSize,
-                companyFile.information.filename,
-                companyFile.information.originalFileName,
-                companyFile.information.url,
-                companyFile.information.mimeType
+                        companyFile.id,
+                        companyFile.company.id,
+                        companyFile.type,
+                        companyFile.information.fileSize,
+                        companyFile.information.filename,
+                        companyFile.information.originalFileName,
+                        companyFile.information.url,
+                        companyFile.information.mimeType
                 ))
                 .from(company, companyFile)
                 .where(company.id.eq(id),
+                        companyFile.type.eq("BUSINESS"),
                         company.id.eq(companyFile.company.id))
-                .fetch();
+                .orderBy(companyFile.id.desc())
+                .fetchOne();
     }
+
+    @Override
+    public CompanyFileDto.Response.Default findDetailBankFilesById(Integer id) {
+        return this.query.select(new QCompanyFileDto_Response_Default(
+                        companyFile.id,
+                        companyFile.company.id,
+                        companyFile.type,
+                        companyFile.information.fileSize,
+                        companyFile.information.filename,
+                        companyFile.information.originalFileName,
+                        companyFile.information.url,
+                        companyFile.information.mimeType
+                ))
+                .from(company, companyFile)
+                .where(company.id.eq(id),
+                        companyFile.type.eq("BANK"),
+                        company.id.eq(companyFile.company.id))
+                .orderBy(companyFile.id.desc())
+                .fetchOne();
+    }
+
+
 
 
 

@@ -39,18 +39,32 @@ public abstract class CompanyMapper {
     @Mapping(target = "taxBillEmail", qualifiedByName = "createEmail")
     public abstract Company toMediaEntity(CompanyDto.Request.Save request, Bank bank);
 
+    @Mapping(target = "id", source = "company.id")
+    @Mapping(target = "businessFile", source = "businessFile")
+    @Mapping(target = "bankFile", source = "bankFile")
+    @Mapping(target = "type", source = "company.type")
+    @Mapping(target = "taxBillEmail", qualifiedByName = "getEmail")
+    public abstract CompanyDto.Response.MediaDetail toMediaDetailResponse(Company company, CompanyFileDto.Response.Default businessFile, CompanyFileDto.Response.Default bankFile);
+
+
+
+
+
+
+
+
 //    @Mapping(target = "taxBillEmail", qualifiedByName = "getEmail")
 //    public abstract CompanyDto.Response.Detail toDetailResponse(Company company);
 
-    @Mapping(target = "files", source = "companyFile")
-    @Mapping(target = "type", source = "company.type")
-    @Mapping(target = "taxBillEmail", qualifiedByName = "getEmail")
-//    @Mapping(target = "files.fileSize", source = "companyFile.fileSize")
-//    @Mapping(target = "files.filename", source = "companyFile.filename")
-//    @Mapping(target = "files.originalFileName", source = "companyFile.originalFileName")
-//    @Mapping(target = "files.url", source = "companyFile.url")
-//    @Mapping(target = "files.mimeType", source = "companyFile.mimeType")
-    public abstract CompanyDto.Response.Detail toDetailResponse(Company company, List<CompanyFileDto.Response.Default> companyFile);
+//    @Mapping(target = "files", source = "companyFile")
+//    @Mapping(target = "type", source = "company.type")
+//    @Mapping(target = "taxBillEmail", qualifiedByName = "getEmail")
+////    @Mapping(target = "files.fileSize", source = "companyFile.fileSize")
+////    @Mapping(target = "files.filename", source = "companyFile.filename")
+////    @Mapping(target = "files.originalFileName", source = "companyFile.originalFileName")
+////    @Mapping(target = "files.url", source = "companyFile.url")
+////    @Mapping(target = "files.mimeType", source = "companyFile.mimeType")
+//    public abstract CompanyDto.Response.Detail toDetailResponse(Company company, List<CompanyFileDto.Response.Default> companyFile);
 
     @Named("getEmail")
     String getEmail(Email email) {

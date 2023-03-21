@@ -29,7 +29,11 @@ public interface CompanyQuerydslRepository {
 
     Integer findByRegistrationNumberCount(String registrationNumber);
 
-    List<CompanyFileDto.Response.Default> findDetailFilesById(Integer id);
+//    List<CompanyFileDto.Response.Default> findDetailFilesById(Integer id);
+
+    CompanyFileDto.Response.Default findDetailBusinessFilesById(Integer id);
+
+    CompanyFileDto.Response.Default findDetailBankFilesById(Integer id);
 
     List<CompanyDto.Response.Default> searchForSignUp(Company.Type type, String name);
 }

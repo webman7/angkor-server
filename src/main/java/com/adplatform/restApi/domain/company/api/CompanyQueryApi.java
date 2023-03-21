@@ -31,16 +31,27 @@ public class CompanyQueryApi {
     private final CompanyMapper companyMapper;
     private final MediaCompanyUserRepository mediaCompanyUserRepository;
 
+//    @ResponseStatus(HttpStatus.OK)
+//    @GetMapping("/{id}")
+//    public CompanyDto.Response.Detail findById(@PathVariable Integer id) {
+//        Company company = this.companyRepository.findById(id).orElseThrow(CompanyNotFoundException::new);
+//        List<CompanyFileDto.Response.Default> companyFile = this.companyRepository.findDetailFilesById(id);
+//
+//
+//        return this.companyMapper.toDetailResponse(CompanyFindUtils.findByIdOrElseThrow(id, this.companyRepository), this.companyRepository.findDetailFilesById(id));
+//    }
+
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{id}")
-    public CompanyDto.Response.Detail findById(@PathVariable Integer id) {
+    @GetMapping("/media/{id}")
+    public CompanyDto.Response.MediaDetail findById(@PathVariable Integer id) {
         Company company = this.companyRepository.findById(id).orElseThrow(CompanyNotFoundException::new);
-        List<CompanyFileDto.Response.Default> companyFile = this.companyRepository.findDetailFilesById(id);
+//        CompanyFileDto.Response.Default businessFile = this.companyRepository.findDetailBusinessFilesById(id);
+//        CompanyFileDto.Response.Default bankFile = this.companyRepository.findDetailBankFilesById(id);
 
 
-        return this.companyMapper.toDetailResponse(CompanyFindUtils.findByIdOrElseThrow(id, this.companyRepository), this.companyRepository.findDetailFilesById(id));
-//        return this.companyMapper.toDetailResponse(CompanyFindUtils.findByIdOrElseThrow(id, this.companyRepository),
-//                this.companyRepository.findDetailFilesById(id));
+        return this.companyMapper.toMediaDetailResponse(CompanyFindUtils.findByIdOrElseThrow(id, this.companyRepository),
+                this.companyRepository.findDetailBusinessFilesById(id),
+                this.companyRepository.findDetailBankFilesById(id));
     }
 
     @ResponseStatus(HttpStatus.OK)
