@@ -20,10 +20,13 @@ import java.util.List;
 
 import static com.adplatform.restApi.domain.advertiser.adgroup.domain.QAdGroupMedia.adGroupMedia;
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
+import static com.adplatform.restApi.domain.company.domain.QCompanyFile.companyFile;
 import static com.adplatform.restApi.domain.media.domain.QMedia.media;
 import static com.adplatform.restApi.domain.media.domain.QMediaCategory.mediaCategory;
 import static com.adplatform.restApi.domain.media.domain.QMediaFile.mediaFile;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
+import static com.querydsl.core.types.ExpressionUtils.as;
+import static com.querydsl.jpa.JPAExpressions.select;
 import static java.util.Objects.nonNull;
 
 @RequiredArgsConstructor
@@ -42,7 +45,15 @@ public class MediaQuerydslRepositoryImpl implements MediaQuerydslRepository {
                                 media.appKey,
                                 media.appSecret,
                                 media.url,
-                                mediaFile.information.url,
+                                as(select(mediaFile.information.url)
+                                        .from(mediaFile)
+                                        .where(mediaFile.media.id.eq(company.id),
+                                                mediaFile.id.eq(select(mediaFile.id.max())
+                                                        .from(mediaFile)
+                                                        .where(mediaFile.media.id.eq(media.id)
+                                                        )
+                                                        .orderBy(mediaFile.id.desc()))
+                                        ), "mediaFileUrl"),
                                 media.expInventory,
                                 media.memo,
                                 media.adminMemo,

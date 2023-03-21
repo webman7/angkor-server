@@ -19,12 +19,12 @@ public class MediaCommandApi {
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping
-    public void save(@RequestBody @Valid MediaDto.Request.Save request) {
+    public void save(@Valid MediaDto.Request.Save request) {
         this.mediaSaveService.save(request);
     }
 
     @PatchMapping
-    public ResponseEntity<Void> update(@RequestBody @Valid MediaDto.Request.Update request) {
+    public ResponseEntity<Void> update(@Valid MediaDto.Request.Update request) {
         this.mediaSaveService.update(request);
         return ResponseEntity.ok().build();
     }
