@@ -1,6 +1,5 @@
 package com.adplatform.restApi.domain.company.dao;
 
-import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
 import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.company.dto.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -15,12 +14,9 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
-import static com.adplatform.restApi.domain.adaccount.domain.QAdAccount.adAccount;
-import static com.adplatform.restApi.domain.adaccount.domain.QAdAccountUser.adAccountUser;
 import static com.adplatform.restApi.domain.bank.domain.QBank.bank;
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
 import static com.adplatform.restApi.domain.company.domain.QCompanyFile.companyFile;
-import static com.adplatform.restApi.domain.user.domain.QUser.user;
 import static com.querydsl.core.types.ExpressionUtils.as;
 import static com.querydsl.jpa.JPAExpressions.select;
 import static java.util.Objects.nonNull;
@@ -80,13 +76,15 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                                 .where(companyFile.company.id.eq(company.id),
                                         companyFile.type.eq("BUSINESS")
                                 )
-                                .orderBy(companyFile.id.desc()), "businessFileUrl"),
+                                .orderBy(companyFile.id.desc())
+                                .limit(1), "businessFileUrl"),
                         as(select(companyFile.information.url)
                                 .from(companyFile)
                                 .where(companyFile.company.id.eq(company.id),
                                         companyFile.type.eq("BANK")
                                 )
-                                .orderBy(companyFile.id.desc()), "bankFileUrl")
+                                .orderBy(companyFile.id.desc())
+                                .limit(1), "bankFileUrl")
                 ))
                 .from(company)
                 .leftJoin(company.bank, bank)
@@ -164,13 +162,15 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                                 .where(companyFile.company.id.eq(company.id),
                                         companyFile.type.eq("BUSINESS")
                                 )
-                                .orderBy(companyFile.id.desc()), "businessFileUrl"),
+                                .orderBy(companyFile.id.desc())
+                                .limit(1), "businessFileUrl"),
                         as(select(companyFile.information.url)
                                 .from(companyFile)
                                 .where(companyFile.company.id.eq(company.id),
                                         companyFile.type.eq("BANK")
                                 )
-                                .orderBy(companyFile.id.desc()), "bankFileUrl")
+                                .orderBy(companyFile.id.desc())
+                                .limit(1), "bankFileUrl")
                 ))
                 .from(company)
                 .leftJoin(company.bank, bank)
@@ -205,13 +205,15 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                                 .where(companyFile.company.id.eq(company.id),
                                         companyFile.type.eq("BUSINESS")
                                 )
-                                .orderBy(companyFile.id.desc()), "businessFileUrl"),
+                                .orderBy(companyFile.id.desc())
+                                .limit(1), "businessFileUrl"),
                         as(select(companyFile.information.url)
                                 .from(companyFile)
                                 .where(companyFile.company.id.eq(company.id),
                                         companyFile.type.eq("BANK")
                                 )
-                                .orderBy(companyFile.id.desc()), "bankFileUrl")
+                                .orderBy(companyFile.id.desc())
+                                .limit(1), "bankFileUrl")
                 ))
                 .from(company)
                 .leftJoin(company.bank, bank)
@@ -258,6 +260,7 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                         companyFile.type.eq("BUSINESS"),
                         company.id.eq(companyFile.company.id))
                 .orderBy(companyFile.id.desc())
+                .limit(1)
                 .fetchOne();
     }
 
@@ -278,6 +281,7 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                         companyFile.type.eq("BANK"),
                         company.id.eq(companyFile.company.id))
                 .orderBy(companyFile.id.desc())
+                .limit(1)
                 .fetchOne();
     }
 
