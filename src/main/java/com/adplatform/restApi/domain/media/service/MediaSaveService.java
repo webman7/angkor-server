@@ -63,13 +63,13 @@ public class MediaSaveService {
         Integer mediaId = this.mediaRepository.save(media).getId();
 
         // 루프 돌면서 인서트
-        List<Category> category = this.findByCategoryId(request.getCategory());
-
-        for (Category ca: category) {
-            System.out.println("=============================");
-            System.out.println(ca.getId());
-            this.mediaCategoryRepository.insertMediaCategory(mediaId, ca.getId());
-        }
+//        List<Category> category = this.findByCategoryId(request.getCategory());
+//
+//        for (Category ca: category) {
+//            System.out.println("=============================");
+//            System.out.println(ca.getId());
+//            this.mediaCategoryRepository.insertMediaCategory(mediaId, ca.getId());
+//        }
     }
 
     public void updateAdmin(MediaDto.Request.Update request) {

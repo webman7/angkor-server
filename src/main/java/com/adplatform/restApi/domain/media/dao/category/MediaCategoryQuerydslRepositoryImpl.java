@@ -17,4 +17,10 @@ public class MediaCategoryQuerydslRepositoryImpl implements MediaCategoryQueryds
     public void deleteMediaCategory(Integer mediaId) {
         this.query.delete(mediaCategory).where(mediaCategory.id.mediaId.eq(mediaId)).execute();
     }
+
+    @Override
+    public void insertMediaCategory(Integer mediaId, Integer categoryId) {
+//        this.query.insert(mediaCategory).columns(mediaCategory.media.id, mediaCategory.category.id)
+//                .values(mediaId, categoryId).execute();
+    }
 }
