@@ -17,6 +17,8 @@ public interface MediaCompanyUserQuerydslRepository {
 //    List<MediaCompanyUserDto.Response.MediaCompanyUserInfo> mediaCompanyUserInfo(Integer companyId);
     Page<MediaCompanyUserDto.Response.MediaCompanyUserInfo> mediaCompanyUserInfo(Pageable pageable, Integer companyId);
     List<MediaCompanyUserDto.Response.MediaCompanyUserInfo> mediaCompanyRequestUserInfo(Integer companyId);
+    List<MediaCompanyUserDto.Response.MediaCompanyUserInfo> mediaCompanyMasterUserInfo(Integer companyId);
+
     MediaCompanyUserDto.Response.MediaCompanyUserInfo mediaCompanyUserInfo(Integer companyId, Integer userNo);
     void deleteByCompanyIdAndUserIdCount(Integer companyId, Integer userId);
 

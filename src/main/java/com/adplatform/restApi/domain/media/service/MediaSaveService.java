@@ -4,6 +4,7 @@ import com.adplatform.restApi.domain.company.dao.CompanyRepository;
 import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.company.service.CompanyFindUtils;
 import com.adplatform.restApi.domain.media.dao.category.CategoryRepository;
+import com.adplatform.restApi.domain.media.dao.category.MediaCategoryRepository;
 import com.adplatform.restApi.domain.media.domain.*;
 import com.adplatform.restApi.domain.media.dao.MediaRepository;
 import com.adplatform.restApi.domain.media.dto.MediaDto;
@@ -30,7 +31,7 @@ public class MediaSaveService {
 
     private final MediaMapper mediaMapper;
     private final MediaRepository mediaRepository;
-
+    private final MediaCategoryRepository mediaCategoryRepository;
     private final CompanyRepository companyRepository;
     private final CategoryRepository categoryRepository;
 
@@ -56,14 +57,18 @@ public class MediaSaveService {
     public void saveAdmin(MediaDto.Request.Save request) {
         Company company = CompanyFindUtils.findByIdOrElseThrow(request.getCompanyId(), this.companyRepository);
         Media media = this.mediaMapper.toEntity(request, company);
-        request.getMediaFiles().forEach(file -> media.addMediaFile(this.saveMediaFile(request, media, file)));
-        this.mediaRepository.save(media);
+        if(request.getMediaFiles().size() > 0) {
+            request.getMediaFiles().forEach(file -> media.addMediaFile(this.saveMediaFile(request, media, file)));
+        }
+        Integer mediaId = this.mediaRepository.save(media).getId();
 
+        // 루프 돌면서 인서트
         List<Category> category = this.findByCategoryId(request.getCategory());
 
         for (Category ca: category) {
-
-
+            System.out.println("=============================");
+            System.out.println(ca.getId());
+            this.mediaCategoryRepository.insertMediaCategory(mediaId, ca.getId());
         }
     }
 

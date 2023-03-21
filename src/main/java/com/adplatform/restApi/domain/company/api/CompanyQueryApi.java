@@ -84,6 +84,12 @@ public class CompanyQueryApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}/users/master")
+    public List<MediaCompanyUserDto.Response.MediaCompanyUserInfo> mediaCompanyMasterUserInfo(@PathVariable(name = "id") Integer companyId) {
+        return this.mediaCompanyUserRepository.mediaCompanyMasterUserInfo(companyId);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}/user/{userNo}")
     public MediaCompanyUserDto.Response.MediaCompanyUserInfo mediaCompanyUserInfo(@PathVariable(name = "id") Integer companyId, @PathVariable(name = "userNo") Integer userNo) {
         return this.mediaCompanyUserRepository.mediaCompanyUserInfo(companyId, userNo);

@@ -143,6 +143,31 @@ public class MediaCompanyUserQuerydslRepositoryImpl implements MediaCompanyUserQ
     }
 
     @Override
+    public List<MediaCompanyUserDto.Response.MediaCompanyUserInfo> mediaCompanyMasterUserInfo(Integer companyId) {
+        return this.query.select(new QMediaCompanyUserDto_Response_MediaCompanyUserInfo(
+                        company.id,
+                        new QUserDto_Response_BaseInfo(
+                                user.id,
+                                user.loginId,
+                                user.name,
+                                user.phone
+                        ),
+                        mediaCompanyUser.memberType,
+                        mediaCompanyUser.accountingYN,
+                        mediaCompanyUser.status
+                ))
+                .from(company, mediaCompanyUser, user)
+                .where(company.id.eq(companyId),
+                        mediaCompanyUser.company.id.eq(company.id),
+                        mediaCompanyUser.user.id.eq(user.id),
+                        mediaCompanyUser.memberType.eq(MediaCompanyUser.MemberType.MASTER),
+                        mediaCompanyUser.status.in(MediaCompanyUser.Status.Y),
+                        user.active.in(User.Active.Y, User.Active.L)
+                )
+                .fetch();
+    }
+
+    @Override
     public MediaCompanyUserDto.Response.MediaCompanyUserInfo mediaCompanyUserInfo(Integer companyId, Integer userNo) {
         return this.query.select(new QMediaCompanyUserDto_Response_MediaCompanyUserInfo(
                         company.id,
