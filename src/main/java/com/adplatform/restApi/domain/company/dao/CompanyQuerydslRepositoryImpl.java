@@ -72,19 +72,27 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                         company.accountNumber,
                         company.accountOwner,
                         as(select(companyFile.information.url)
-                                .from(companyFile)
-                                .where(companyFile.company.id.eq(company.id),
-                                        companyFile.type.eq("BUSINESS")
-                                )
-                                .orderBy(companyFile.id.desc())
-                                .limit(1), "businessFileUrl"),
+                                        .from(companyFile)
+                                        .where(companyFile.company.id.eq(company.id),
+                                                companyFile.type.eq("BUSINESS"),
+                                                companyFile.id.eq(select(companyFile.id.max())
+                                                        .from(companyFile)
+                                                        .where(companyFile.company.id.eq(company.id),
+                                                                companyFile.type.eq("BUSINESS")
+                                                        )
+                                                        .orderBy(companyFile.id.desc()))
+                                        ), "businessFileUrl"),
                         as(select(companyFile.information.url)
                                 .from(companyFile)
                                 .where(companyFile.company.id.eq(company.id),
-                                        companyFile.type.eq("BANK")
-                                )
-                                .orderBy(companyFile.id.desc())
-                                .limit(1), "bankFileUrl")
+                                        companyFile.type.eq("BANK"),
+                                        companyFile.id.eq(select(companyFile.id.max())
+                                                        .from(companyFile)
+                                                        .where(companyFile.company.id.eq(company.id),
+                                                                companyFile.type.eq("BANK")
+                                                        )
+                                                        .orderBy(companyFile.id.desc()))
+                                ), "bankFileUrl")
                 ))
                 .from(company)
                 .leftJoin(company.bank, bank)
