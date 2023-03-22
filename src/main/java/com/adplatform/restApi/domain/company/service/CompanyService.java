@@ -63,12 +63,19 @@ public class CompanyService {
             throw new MediaCompanyUserAlreadyExistException();
         }
 
-        Bank bank = BankFindUtils.findByIdOrElseThrow(request.getBankId(), this.bankRepository);
+        if(request.getBankId().equals(0)) {
+            Company company = this.companyMapper.toMediaNoBankEntity(request);
+            request.getBusinessFiles().forEach(file -> company.addBusinessFile(this.saveCompanyFile(request, company, file, "BUSINESS")));
+            request.getBankFiles().forEach(file -> company.addBankFile(this.saveCompanyFile(request, company, file, "BANK")));
+            this.companyRepository.save(company);
+        } else {
+            Bank bank = BankFindUtils.findByIdOrElseThrow(request.getBankId(), this.bankRepository);
 
-        Company company = this.companyMapper.toMediaEntity(request, bank);
-        request.getBusinessFiles().forEach(file -> company.addBusinessFile(this.saveCompanyFile(request, company, file, "BUSINESS")));
-        request.getBankFiles().forEach(file -> company.addBankFile(this.saveCompanyFile(request, company, file, "BANK")));
-        this.companyRepository.save(company);
+            Company company = this.companyMapper.toMediaEntity(request, bank);
+            request.getBusinessFiles().forEach(file -> company.addBusinessFile(this.saveCompanyFile(request, company, file, "BUSINESS")));
+            request.getBankFiles().forEach(file -> company.addBankFile(this.saveCompanyFile(request, company, file, "BANK")));
+            this.companyRepository.save(company);
+        }
     }
 
     public void updateMedia(CompanyDto.Request.Update request) {

@@ -39,6 +39,15 @@ public abstract class CompanyMapper {
     @Mapping(target = "taxBillEmail", qualifiedByName = "createEmail")
     public abstract Company toMediaEntity(CompanyDto.Request.Save request, Bank bank);
 
+    @Mapping(target = "name", source = "request.name")
+    @Mapping(target = "type", expression = "java(Company.Type.MEDIA)")
+    @Mapping(target = "baseAddress", source = "request.baseAddress")
+    @Mapping(target = "detailAddress", source = "request.detailAddress")
+    @Mapping(target = "zipCode", source = "request.zipCode")
+    @Mapping(target = "bank", ignore = true)
+    @Mapping(target = "taxBillEmail", qualifiedByName = "createEmail")
+    public abstract Company toMediaNoBankEntity(CompanyDto.Request.Save request);
+
     @Mapping(target = "id", source = "company.id")
     @Mapping(target = "businessFile", source = "businessFile")
     @Mapping(target = "bankFile", source = "bankFile")
