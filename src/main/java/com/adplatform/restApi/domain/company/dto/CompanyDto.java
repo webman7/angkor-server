@@ -5,6 +5,7 @@ import com.adplatform.restApi.domain.advertiser.creative.dto.CreativeFileDto;
 import com.adplatform.restApi.domain.bank.domain.Bank;
 import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.company.domain.CompanyFile;
+import com.adplatform.restApi.domain.company.domain.FileInformation;
 import com.adplatform.restApi.global.value.Address;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
@@ -238,7 +239,9 @@ public abstract class CompanyDto {
             private String accountNumber;
             private String accountOwner;
             private String businessFileUrl;
+            private FileInformation.FileType businessFileType;
             private String bankFileUrl;
+            private FileInformation.FileType bankFileType;
 
             @QueryProjection
             public CompanyInfo(Integer id,
@@ -256,7 +259,9 @@ public abstract class CompanyDto {
                                String accountNumber,
                                String accountOwner,
                                String businessFileUrl,
-                               String bankFileUrl) {
+                               FileInformation.FileType businessFileType,
+                               String bankFileUrl,
+                               FileInformation.FileType bankFileType) {
                 this.id = id;
                 this.name = name;
                 this.type = type;
@@ -272,7 +277,9 @@ public abstract class CompanyDto {
                 this.accountNumber = accountNumber;
                 this.accountOwner = accountOwner;
                 this.businessFileUrl = businessFileUrl;
+                this.businessFileType = businessFileType;
                 this.bankFileUrl = bankFileUrl;
+                this.bankFileType = bankFileType;
             }
         }
 

@@ -5,11 +5,13 @@ import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.company.service.CompanyFindUtils;
 import com.adplatform.restApi.domain.media.dao.category.CategoryRepository;
 import com.adplatform.restApi.domain.media.dao.category.MediaCategoryRepository;
+import com.adplatform.restApi.domain.media.dao.category.mapper.MediaCategorySaveQueryMapper;
 import com.adplatform.restApi.domain.media.domain.*;
 import com.adplatform.restApi.domain.media.dao.MediaRepository;
 import com.adplatform.restApi.domain.media.dto.MediaDto;
 import com.adplatform.restApi.domain.media.dto.MediaMapper;
 import com.adplatform.restApi.domain.media.dto.category.MediaCategoryDto;
+import com.adplatform.restApi.domain.media.dto.category.MediaCategoryMapper;
 import com.adplatform.restApi.domain.media.exception.MediaUpdateException;
 import com.adplatform.restApi.domain.media.exception.CategoryNotFoundException;
 import com.adplatform.restApi.infra.file.service.FileService;
@@ -32,14 +34,18 @@ public class MediaSaveService {
     private final MediaMapper mediaMapper;
     private final MediaRepository mediaRepository;
     private final MediaCategoryRepository mediaCategoryRepository;
+    private final MediaCategoryMapper mediaCategoryMapper;
     private final CompanyRepository companyRepository;
     private final CategoryRepository categoryRepository;
+    private final MediaCategorySaveQueryMapper mediaCategorySaveQueryMapper;
 
     private final FileService fileService;
     public void save(MediaDto.Request.Save request) {
         Company company = CompanyFindUtils.findByIdOrElseThrow(request.getCompanyId(), this.companyRepository);
         Media media = this.mediaMapper.toEntity(request, company);
-        request.getMediaFiles().forEach(file -> media.addMediaFile(this.saveMediaFile(request, media, file)));
+        if(request.getMediaFiles().size() > 0) {
+            request.getMediaFiles().forEach(file -> media.addMediaFile(this.saveMediaFile(request, media, file)));
+        }
         this.mediaRepository.save(media);
     }
 
@@ -57,27 +63,72 @@ public class MediaSaveService {
     public void saveAdmin(MediaDto.Request.Save request) {
         Company company = CompanyFindUtils.findByIdOrElseThrow(request.getCompanyId(), this.companyRepository);
         Media media = this.mediaMapper.toEntity(request, company);
+
         if(request.getMediaFiles().size() > 0) {
             request.getMediaFiles().forEach(file -> media.addMediaFile(this.saveMediaFile(request, media, file)));
         }
         Integer mediaId = this.mediaRepository.save(media).getId();
+        //관리자 메모 업데이트
+        MediaFindUtils.findByIdOrElseThrow(mediaId, this.mediaRepository).saveAdminMemo(request);
 
         // 루프 돌면서 인서트
-//        List<Category> category = this.findByCategoryId(request.getCategory());
-//
-//        for (Category ca: category) {
-//            System.out.println("=============================");
-//            System.out.println(ca.getId());
-//            this.mediaCategoryRepository.insertMediaCategory(mediaId, ca.getId());
-//        }
+        List<Category> category = this.findByCategoryId(request.getCategory());
+        for (Category ca: category) {
+            this.mediaCategorySaveQueryMapper.insertMediaCategory(mediaId, ca.getId());
+        }
     }
 
     public void updateAdmin(MediaDto.Request.Update request) {
         try{
-            Media media = MediaFindUtils.findByIdOrElseThrow(request.getId(), this.mediaRepository).update(request);
+            Media media = MediaFindUtils.findByIdOrElseThrow(request.getId(), this.mediaRepository).update(request).updateAdminMemo(request);
             if(request.getMediaFiles().size() > 0) {
                 request.getMediaFiles().forEach(file -> media.addMediaFile(this.saveMediaFile(request, media, file)));
             }
+
+            // 매체 카테고리 삭제
+            this.mediaCategorySaveQueryMapper.deleteMediaCategory(request.getId());
+
+            // 루프 돌면서 인서트
+            List<Category> category = this.findByCategoryId(request.getCategory());
+            for (Category ca: category) {
+                this.mediaCategorySaveQueryMapper.insertMediaCategory(media.getId(), ca.getId());
+            }
+
+        }catch (Exception e){
+            throw new MediaUpdateException();
+        }
+    }
+
+    public void updateAdminApprove(MediaDto.Request.Confirm request) {
+        try{
+            Media media = MediaFindUtils.findByIdOrElseThrow(request.getId(), this.mediaRepository).updateAdminApprove(request);
+
+            // 매체 카테고리 삭제
+            this.mediaCategorySaveQueryMapper.deleteMediaCategory(request.getId());
+
+            // 루프 돌면서 인서트
+            List<Category> category = this.findByCategoryId(request.getCategory());
+            for (Category ca: category) {
+                this.mediaCategorySaveQueryMapper.insertMediaCategory(media.getId(), ca.getId());
+            }
+        }catch (Exception e){
+            throw new MediaUpdateException();
+        }
+    }
+
+    public void updateAdminReject(MediaDto.Request.Confirm request) {
+        try{
+            Media media = MediaFindUtils.findByIdOrElseThrow(request.getId(), this.mediaRepository).updateStatusAdminMemo(request);
+            media.changeStatusR();
+        }catch (Exception e){
+            throw new MediaUpdateException();
+        }
+    }
+
+    public void updateAdminDelete(MediaDto.Request.Confirm request) {
+        try{
+            Media media = MediaFindUtils.findByIdOrElseThrow(request.getId(), this.mediaRepository).updateStatusAdminMemo(request);
+            media.changeStatusD();
         }catch (Exception e){
             throw new MediaUpdateException();
         }

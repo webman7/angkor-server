@@ -19,12 +19,12 @@ public class MediaCommandApi {
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping
-    public void save(@Valid MediaDto.Request.Save request) {
+    public void save(@RequestBody @Valid MediaDto.Request.Save request) {
         this.mediaSaveService.save(request);
     }
 
     @PatchMapping
-    public ResponseEntity<Void> update(@Valid MediaDto.Request.Update request) {
+    public ResponseEntity<Void> update(@RequestBody @Valid MediaDto.Request.Update request) {
         this.mediaSaveService.update(request);
         return ResponseEntity.ok().build();
     }
@@ -37,7 +37,23 @@ public class MediaCommandApi {
 
     @PatchMapping("/admin")
     public ResponseEntity<Void> updateAdmin(@RequestBody @Valid MediaDto.Request.Update request) {
-        this.mediaSaveService.update(request);
+        this.mediaSaveService.updateAdmin(request);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/admin/approve")
+    public ResponseEntity<Void> updateAdminApprove(@RequestBody @Valid MediaDto.Request.Confirm request) {
+        this.mediaSaveService.updateAdminApprove(request);
+        return ResponseEntity.ok().build();
+    }
+    @PatchMapping("/admin/reject")
+    public ResponseEntity<Void> updateAdminReject(@RequestBody @Valid MediaDto.Request.Confirm request) {
+        this.mediaSaveService.updateAdminReject(request);
+        return ResponseEntity.ok().build();
+    }
+    @PatchMapping("/admin/delete")
+    public ResponseEntity<Void> updateAdminDelete(@RequestBody @Valid MediaDto.Request.Confirm request) {
+        this.mediaSaveService.updateAdminDelete(request);
         return ResponseEntity.ok().build();
     }
 

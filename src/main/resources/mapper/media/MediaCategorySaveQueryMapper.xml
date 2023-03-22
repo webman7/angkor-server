@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+author junny
+since 1.0
+-->
+<mapper namespace="com.adplatform.restApi.domain.media.dao.category.mapper.MediaCategorySaveQueryMapper">
+    <insert id="insertMediaCategory">
+        INSERT IGNORE INTO media_category_info (media_info_id, category_info_id)
+           VALUES (#{mediaId}, #{categoryId})
+    </insert>
+
+    <delete id="deleteMediaCategory">
+        DELETE FROM media_category_info
+              WHERE media_info_id = #{mediaId}
+    </delete>
+</mapper>

@@ -1,6 +1,7 @@
 package com.adplatform.restApi.domain.company.dto;
 
 
+import com.adplatform.restApi.domain.company.domain.FileInformation;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +17,7 @@ public class CompanyFileDto {
             private Integer id;
             private Integer companyId;
             private String type;
+            private FileInformation.FileType fileType;
             private long fileSize;
             private String filename;
             private String originalFileName;
@@ -27,6 +29,7 @@ public class CompanyFileDto {
                     Integer id,
                     Integer companyId,
                     String type,
+                    FileInformation.FileType fileType,
                     long fileSize,
                     String filename,
                     String originalFileName,
@@ -36,6 +39,7 @@ public class CompanyFileDto {
                 this.id = id;
                 this.companyId = companyId;
                 this.type = type;
+                this.fileType = fileType;
                 this.fileSize = fileSize;
                 this.filename = filename;
                 this.originalFileName = originalFileName;

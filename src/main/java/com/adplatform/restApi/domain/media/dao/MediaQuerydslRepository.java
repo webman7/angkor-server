@@ -8,7 +8,7 @@ public interface MediaQuerydslRepository {
 
     Page<MediaDto.Response.Search> search(Pageable pageable, MediaDto.Request.Search searchRequest);
 
-
+    String findByMediaIdFileUrl(Integer id);
 
 
 

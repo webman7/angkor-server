@@ -82,6 +82,17 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                                                         )
                                                         .orderBy(companyFile.id.desc()))
                                         ), "businessFileUrl"),
+                        as(select(companyFile.information.fileType)
+                                .from(companyFile)
+                                .where(companyFile.company.id.eq(company.id),
+                                        companyFile.type.eq("BUSINESS"),
+                                        companyFile.id.eq(select(companyFile.id.max())
+                                                .from(companyFile)
+                                                .where(companyFile.company.id.eq(company.id),
+                                                        companyFile.type.eq("BUSINESS")
+                                                )
+                                                .orderBy(companyFile.id.desc()))
+                                ), "businessFileType"),
                         as(select(companyFile.information.url)
                                 .from(companyFile)
                                 .where(companyFile.company.id.eq(company.id),
@@ -92,7 +103,18 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                                                                 companyFile.type.eq("BANK")
                                                         )
                                                         .orderBy(companyFile.id.desc()))
-                                ), "bankFileUrl")
+                                ), "bankFileUrl"),
+                        as(select(companyFile.information.fileType)
+                                .from(companyFile)
+                                .where(companyFile.company.id.eq(company.id),
+                                        companyFile.type.eq("BANK"),
+                                        companyFile.id.eq(select(companyFile.id.max())
+                                                .from(companyFile)
+                                                .where(companyFile.company.id.eq(company.id),
+                                                        companyFile.type.eq("BANK")
+                                                )
+                                                .orderBy(companyFile.id.desc()))
+                                ), "bankFileType")
                 ))
                 .from(company)
                 .leftJoin(company.bank, bank)
@@ -172,13 +194,27 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                                 )
                                 .orderBy(companyFile.id.desc())
                                 .limit(1), "businessFileUrl"),
+                        as(select(companyFile.information.fileType)
+                                .from(companyFile)
+                                .where(companyFile.company.id.eq(company.id),
+                                        companyFile.type.eq("BUSINESS")
+                                )
+                                .orderBy(companyFile.id.desc())
+                                .limit(1), "businessFileType"),
                         as(select(companyFile.information.url)
                                 .from(companyFile)
                                 .where(companyFile.company.id.eq(company.id),
                                         companyFile.type.eq("BANK")
                                 )
                                 .orderBy(companyFile.id.desc())
-                                .limit(1), "bankFileUrl")
+                                .limit(1), "bankFileUrl"),
+                        as(select(companyFile.information.fileType)
+                                .from(companyFile)
+                                .where(companyFile.company.id.eq(company.id),
+                                        companyFile.type.eq("BANK")
+                                )
+                                .orderBy(companyFile.id.desc())
+                                .limit(1), "bankFileType")
                 ))
                 .from(company)
                 .leftJoin(company.bank, bank)
@@ -215,13 +251,27 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                                 )
                                 .orderBy(companyFile.id.desc())
                                 .limit(1), "businessFileUrl"),
+                        as(select(companyFile.information.fileType)
+                                .from(companyFile)
+                                .where(companyFile.company.id.eq(company.id),
+                                        companyFile.type.eq("BUSINESS")
+                                )
+                                .orderBy(companyFile.id.desc())
+                                .limit(1), "businessFileType"),
                         as(select(companyFile.information.url)
                                 .from(companyFile)
                                 .where(companyFile.company.id.eq(company.id),
                                         companyFile.type.eq("BANK")
                                 )
                                 .orderBy(companyFile.id.desc())
-                                .limit(1), "bankFileUrl")
+                                .limit(1), "bankFileUrl"),
+                        as(select(companyFile.information.fileType)
+                                .from(companyFile)
+                                .where(companyFile.company.id.eq(company.id),
+                                        companyFile.type.eq("BANK")
+                                )
+                                .orderBy(companyFile.id.desc())
+                                .limit(1), "bankFileType")
                 ))
                 .from(company)
                 .leftJoin(company.bank, bank)
@@ -257,6 +307,7 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                         companyFile.id,
                         companyFile.company.id,
                         companyFile.type,
+                        companyFile.information.fileType,
                         companyFile.information.fileSize,
                         companyFile.information.filename,
                         companyFile.information.originalFileName,
@@ -278,6 +329,7 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                         companyFile.id,
                         companyFile.company.id,
                         companyFile.type,
+                        companyFile.information.fileType,
                         companyFile.information.fileSize,
                         companyFile.information.filename,
                         companyFile.information.originalFileName,

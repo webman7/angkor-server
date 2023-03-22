@@ -2,11 +2,13 @@ package com.adplatform.restApi.domain.media.dao;
 
 import com.adplatform.restApi.domain.company.dto.QCompanyDto_Response_Default;
 import com.adplatform.restApi.domain.media.domain.Media;
+import com.adplatform.restApi.domain.media.domain.MediaCategory;
 import com.adplatform.restApi.domain.media.dto.MediaDto;
 import com.adplatform.restApi.domain.media.dto.QMediaDto_Response_Search;
 import com.adplatform.restApi.domain.media.dto.category.QMediaAndCategoryDto;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ import static com.adplatform.restApi.domain.media.domain.QMediaCategory.mediaCat
 import static com.adplatform.restApi.domain.media.domain.QMediaFile.mediaFile;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
 import static com.querydsl.core.types.ExpressionUtils.as;
+import static com.querydsl.core.types.ExpressionUtils.list;
 import static com.querydsl.jpa.JPAExpressions.select;
 import static java.util.Objects.nonNull;
 
@@ -47,7 +50,7 @@ public class MediaQuerydslRepositoryImpl implements MediaQuerydslRepository {
                                 media.url,
                                 as(select(mediaFile.information.url)
                                         .from(mediaFile)
-                                        .where(mediaFile.media.id.eq(company.id),
+                                        .where(mediaFile.media.id.eq(media.id),
                                                 mediaFile.id.eq(select(mediaFile.id.max())
                                                         .from(mediaFile)
                                                         .where(mediaFile.media.id.eq(media.id)
@@ -81,6 +84,17 @@ public class MediaQuerydslRepositoryImpl implements MediaQuerydslRepository {
                 );
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public String findByMediaIdFileUrl(Integer id) {
+        return this.query.select(mediaFile.information.url)
+                .from(mediaFile)
+                .where(mediaFile.id.eq(select(mediaFile.id.max())
+                                .from(mediaFile)
+                                .where(mediaFile.media.id.eq(id)
+                                )))
+                .fetchOne();
     }
 
 

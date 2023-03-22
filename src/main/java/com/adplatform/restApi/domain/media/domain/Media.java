@@ -1,7 +1,9 @@
 package com.adplatform.restApi.domain.media.domain;
 
+import com.adplatform.restApi.domain.advertiser.adgroup.domain.AdGroup;
 import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.media.dto.MediaDto;
+import com.adplatform.restApi.global.config.security.util.SecurityUtils;
 import com.adplatform.restApi.global.entity.BaseUpdatedEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -87,15 +89,15 @@ public class Media extends BaseUpdatedEntity {
     public Media(
             String name,
             Company company,
-            List<Category> category,
             String url,
+//            List<Category> category,
             Integer expInventory,
             Status status,
             String memo) {
         this.name = name;
         this.company = company;
-        this.category.addAll(category);
         this.url = url;
+//        this.category.addAll(category);
         this.expInventory = expInventory;
         this.status = status;
         this.memo = memo;
@@ -107,6 +109,36 @@ public class Media extends BaseUpdatedEntity {
         this.expInventory = request.getExpInventory();
         this.memo = request.getMemo();
         return this;
+    }
+
+    public Media saveAdminMemo(MediaDto.Request.Save request) {
+        this.adminMemo = request.getAdminMemo();
+        return this;
+    }
+
+    public Media updateAdminMemo(MediaDto.Request.Update request) {
+        this.adminMemo = request.getAdminMemo();
+        return this;
+    }
+
+    public Media updateStatusAdminMemo(MediaDto.Request.Confirm request) {
+        this.adminMemo = request.getAdminMemo();
+        return this;
+    }
+
+    public Media updateAdminApprove(MediaDto.Request.Confirm request) {
+        this.approveUserNo = SecurityUtils.getLoginUserNo();
+        this.approveAt = LocalDateTime.now();
+        this.adminMemo = request.getAdminMemo();
+        this.status = Status.Y;
+        return this;
+    }
+
+    public void changeStatusR() {
+        this.status = Status.R;
+    }
+    public void changeStatusD() {
+        this.status = Status.D;
     }
 
     public void delete() {
