@@ -1,10 +1,7 @@
 package com.adplatform.restApi.domain.media.dto;
 
 import com.adplatform.restApi.domain.company.domain.Company;
-import com.adplatform.restApi.domain.media.domain.Category;
-import com.adplatform.restApi.domain.media.domain.Media;
-import com.adplatform.restApi.domain.media.domain.MediaCategory;
-import com.adplatform.restApi.domain.media.domain.Placement;
+import com.adplatform.restApi.domain.media.domain.*;
 import com.adplatform.restApi.global.dto.BaseMapperConfig;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -27,7 +24,8 @@ public interface MediaMapper {
     @Mapping(target = "company", source = "company")
     @Mapping(target = "category", source = "category")
     @Mapping(target = "mediaFileUrl", source = "mediaFileUrl")
-    MediaDto.Response.MediaInfo toCategoryResponse(Media media, Company company, List<Category> category, String mediaFileUrl);
+    @Mapping(target = "mediaFileType", source = "mediaFileType")
+    MediaDto.Response.MediaInfo toCategoryResponse(Media media, Company company, List<Category> category, String mediaFileUrl, FileInformation.FileType mediaFileType);
 
     @Named("mapCategory")
     default List<Integer> mapCategory(Collection<Category> category) {

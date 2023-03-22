@@ -1,6 +1,7 @@
 package com.adplatform.restApi.domain.media.dao;
 
 import com.adplatform.restApi.domain.company.dto.QCompanyDto_Response_Default;
+import com.adplatform.restApi.domain.media.domain.FileInformation;
 import com.adplatform.restApi.domain.media.domain.Media;
 import com.adplatform.restApi.domain.media.domain.MediaCategory;
 import com.adplatform.restApi.domain.media.dto.MediaDto;
@@ -27,8 +28,8 @@ import static com.adplatform.restApi.domain.media.domain.QMedia.media;
 import static com.adplatform.restApi.domain.media.domain.QMediaCategory.mediaCategory;
 import static com.adplatform.restApi.domain.media.domain.QMediaFile.mediaFile;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
-import static com.querydsl.core.types.ExpressionUtils.as;
-import static com.querydsl.core.types.ExpressionUtils.list;
+import static com.querydsl.core.group.GroupBy.groupBy;
+import static com.querydsl.core.types.ExpressionUtils.*;
 import static com.querydsl.jpa.JPAExpressions.select;
 import static java.util.Objects.nonNull;
 
@@ -57,6 +58,15 @@ public class MediaQuerydslRepositoryImpl implements MediaQuerydslRepository {
                                                         )
                                                         .orderBy(mediaFile.id.desc()))
                                         ), "mediaFileUrl"),
+                                as(select(mediaFile.information.fileType)
+                                        .from(mediaFile)
+                                        .where(mediaFile.media.id.eq(media.id),
+                                                mediaFile.id.eq(select(mediaFile.id.max())
+                                                        .from(mediaFile)
+                                                        .where(mediaFile.media.id.eq(media.id)
+                                                        )
+                                                        .orderBy(mediaFile.id.desc()))
+                                        ), "mediaFileType"),
                                 media.expInventory,
                                 media.memo,
                                 media.adminMemo,
@@ -97,6 +107,16 @@ public class MediaQuerydslRepositoryImpl implements MediaQuerydslRepository {
                 .fetchOne();
     }
 
+    @Override
+    public FileInformation.FileType findByMediaIdFileType(Integer id) {
+        return this.query.select(mediaFile.information.fileType)
+                .from(mediaFile)
+                .where(mediaFile.id.eq(select(mediaFile.id.max())
+                        .from(mediaFile)
+                        .where(mediaFile.media.id.eq(id)
+                        )))
+                .fetchOne();
+    }
 
     private BooleanExpression statusEq(String status) {
         if(status.equals("N")) {

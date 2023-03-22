@@ -5,6 +5,7 @@ import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.media.dao.category.MediaCategoryRepository;
 import com.adplatform.restApi.domain.media.domain.Category;
+import com.adplatform.restApi.domain.media.domain.FileInformation;
 import com.adplatform.restApi.domain.media.domain.MediaCategory;
 import com.adplatform.restApi.domain.media.dto.MediaMapper;
 import com.adplatform.restApi.domain.media.dto.category.MediaCategoryDto;
@@ -49,8 +50,9 @@ public class MediaQueryApi {
 
         List<Category> category = this.mediaCategoryRepository.findByMediaIdCategory(id);
         String mediaFileUrl = this.mediaRepository.findByMediaIdFileUrl(id);
+        FileInformation.FileType mediaFileType = this.mediaRepository.findByMediaIdFileType(id);
 
 
-        return this.mediaMapper.toCategoryResponse(MediaFindUtils.findByIdOrElseThrow(id, this.mediaRepository), company, category, mediaFileUrl);
+        return this.mediaMapper.toCategoryResponse(MediaFindUtils.findByIdOrElseThrow(id, this.mediaRepository), company, category, mediaFileUrl, mediaFileType);
     }
 }

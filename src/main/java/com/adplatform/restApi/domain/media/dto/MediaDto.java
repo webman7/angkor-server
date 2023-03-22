@@ -3,6 +3,7 @@ package com.adplatform.restApi.domain.media.dto;
 import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.media.domain.Category;
+import com.adplatform.restApi.domain.media.domain.FileInformation;
 import com.adplatform.restApi.domain.media.domain.Media;
 import com.adplatform.restApi.domain.media.domain.MediaCategory;
 import com.adplatform.restApi.domain.media.dto.category.MediaCategoryDto;
@@ -78,8 +79,9 @@ public class MediaDto {
             private String appKey;
             private String appSecret;
             private String url;
-//            private List<MediaCategory> mediaCategory;
+//            private List<Category> category;
             private String mediaFileUrl;
+            private FileInformation.FileType fileType;
             private Integer expInventory;
             private String memo;
             private String adminMemo;
@@ -92,9 +94,11 @@ public class MediaDto {
                     CompanyDto.Response.Default company,
                     String appKey,
                     String appSecret,
+//                    List<Category> category,
                     String url,
 //                    List<MediaCategory> mediaCategory,
                     String mediaFileUrl,
+                    FileInformation.FileType fileType,
                     Integer expInventory,
                     String memo,
                     String adminMemo,
@@ -105,9 +109,10 @@ public class MediaDto {
                 this.company = company;
                 this.appKey = appKey;
                 this.appSecret = appSecret;
+//                this.category = category;
                 this.url = url;
-//                this.mediaCategory = mediaCategory;
                 this.mediaFileUrl = mediaFileUrl;
+                this.fileType = fileType;
                 this.expInventory = expInventory;
                 this.memo = memo;
                 this.adminMemo = adminMemo;
@@ -128,6 +133,7 @@ public class MediaDto {
             private String url;
             private List<Category> category;
             private String mediaFileUrl;
+            private FileInformation.FileType mediaFileType;
             private Integer expInventory;
             private String memo;
             private String adminMemo;
@@ -142,6 +148,7 @@ public class MediaDto {
                     String url,
                     List<Category> category,
                     String mediaFileUrl,
+                    FileInformation.FileType mediaFileType,
                     Integer expInventory,
                     String memo,
                     String adminMemo,
@@ -154,6 +161,7 @@ public class MediaDto {
                 this.url = url;
                 this.category = category;
                 this.mediaFileUrl = mediaFileUrl;
+                this.mediaFileType = mediaFileType;
                 this.expInventory = expInventory;
                 this.memo = memo;
                 this.adminMemo = adminMemo;
