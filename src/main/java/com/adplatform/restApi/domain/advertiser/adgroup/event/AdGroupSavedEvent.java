@@ -4,6 +4,8 @@ import com.adplatform.restApi.domain.advertiser.adgroup.domain.AdGroup;
 import com.adplatform.restApi.domain.advertiser.adgroup.dto.schedule.AdGroupScheduleDto;
 import com.adplatform.restApi.domain.advertiser.adgroup.dto.target.AdGroupDemographicTargetDto;
 import com.adplatform.restApi.domain.advertiser.campaign.domain.Campaign;
+import com.adplatform.restApi.domain.media.domain.MediaCategory;
+import com.adplatform.restApi.domain.media.dto.category.MediaCategoryDto;
 import lombok.Builder;
 import lombok.Getter;
 

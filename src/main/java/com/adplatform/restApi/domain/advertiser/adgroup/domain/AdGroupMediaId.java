@@ -15,9 +15,6 @@ public class AdGroupMediaId implements Serializable {
     @Column(name = "adgroup_info_id")
     private Integer adGroupId;
 
-    @Column(name = "category_info_id")
-    private Integer categoryId;
-
     @Column(name = "media_info_id")
     private Integer mediaId;
 }

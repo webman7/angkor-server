@@ -1,6 +1,7 @@
 package com.adplatform.restApi.domain.advertiser.adgroup.service;
 
 import com.adplatform.restApi.domain.advertiser.adgroup.dao.adgroup.AdGroupRepository;
+import com.adplatform.restApi.domain.advertiser.adgroup.dao.adgroup.mapper.AdGroupQueryMapper;
 import com.adplatform.restApi.domain.advertiser.adgroup.dao.device.DeviceRepository;
 import com.adplatform.restApi.domain.advertiser.adgroup.domain.AdGroup;
 import com.adplatform.restApi.domain.advertiser.adgroup.domain.Device;
@@ -16,6 +17,7 @@ import com.adplatform.restApi.domain.advertiser.campaign.dao.campaign.CampaignRe
 import com.adplatform.restApi.domain.advertiser.campaign.domain.Campaign;
 import com.adplatform.restApi.domain.advertiser.campaign.dto.CampaignDto;
 import com.adplatform.restApi.domain.advertiser.campaign.service.CampaignFindUtils;
+import com.adplatform.restApi.domain.media.dto.category.MediaCategoryDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +42,8 @@ public class AdGroupService {
     private final MediaRepository mediaRepository;
     private final DeviceRepository deviceRepository;
     private final AdGroupMapper adGroupMapper;
+
+    private final AdGroupQueryMapper adGroupQueryMapper;
 
     public void save(AdGroupSavedEvent event) {
         List<Media> media = this.findByMediaName(event.getMedia());

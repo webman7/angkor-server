@@ -22,11 +22,6 @@ public class AdGroupMedia {
     @JoinColumn(name = "adgroup_info_id")
     private AdGroup adGroup;
 
-    @MapsId("categoryId")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_info_id")
-    private Category category;
-
     @MapsId("mediaId")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "media_info_id")

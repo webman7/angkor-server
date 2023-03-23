@@ -25,4 +25,6 @@ public interface AdGroupQueryMapper {
             @Param("request") AdvertiserSearchRequest request,
             @Param("pageable") Pageable pageable
     );
+
+    void insertAdGroupMedia(Integer adGroupId, Integer categoryId, Integer mediaId);
 }

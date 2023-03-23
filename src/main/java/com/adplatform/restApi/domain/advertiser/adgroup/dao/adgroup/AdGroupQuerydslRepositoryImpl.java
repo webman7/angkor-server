@@ -22,6 +22,7 @@ import static com.adplatform.restApi.domain.advertiser.adgroup.domain.QAdGroupSc
 import static com.adplatform.restApi.domain.advertiser.adgroup.domain.QDevice.device;
 import static com.adplatform.restApi.domain.advertiser.campaign.domain.QCampaign.campaign;
 import static com.adplatform.restApi.domain.media.domain.QMedia.media;
+import static com.adplatform.restApi.domain.media.domain.QMediaCategory.mediaCategory;
 import static java.util.Objects.nonNull;
 
 /**

@@ -211,4 +211,9 @@ since 1.0
         <include refid="searchAdGroupSelectQuery"/>
         <include refid="common.sortAndOrder"/>
     </select>
+
+    <insert id="insertAdGroupMedia">
+        INSERT INTO adgroup_media_info (adgroup_info_id, category_info_id, media_info_id)
+             VALUES (#{adGroupId}, #{categoryId}, #{mediaId})
+    </insert>
 </mapper>
