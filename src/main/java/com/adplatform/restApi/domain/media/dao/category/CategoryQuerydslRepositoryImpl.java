@@ -1,7 +1,7 @@
 package com.adplatform.restApi.domain.media.dao.category;
 
 import com.adplatform.restApi.domain.media.dto.category.CategoryDto;
-import com.adplatform.restApi.domain.media.dto.category.QCategoryDto_Response_CategoryInfo;
+import com.adplatform.restApi.domain.media.dto.category.QCategoryDto_Response_Search;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.adplatform.restApi.domain.media.domain.QCategory.category;
+import static com.adplatform.restApi.domain.user.domain.QUser.user;
 
 @RequiredArgsConstructor
 @Repository
@@ -21,15 +22,18 @@ public class CategoryQuerydslRepositoryImpl implements CategoryQuerydslRepositor
     private final JPAQueryFactory query;
 
     @Override
-    public Page<CategoryDto.Response.CategoryInfo> search(Pageable pageable) {
-        List<CategoryDto.Response.CategoryInfo> content = this.query.select(
-                    new QCategoryDto_Response_CategoryInfo(
+    public Page<CategoryDto.Response.Search> search(Pageable pageable) {
+        List<CategoryDto.Response.Search> content = this.query.select(
+                    new QCategoryDto_Response_Search(
                             category.id,
-                            category.name
+                            category.name,
+                            user.loginId,
+                            category.createdAt
                     )
                 )
-                .from(category)
-                .where(category.deleted.eq(false)
+                .from(category, user)
+                .where(category.deleted.eq(false),
+                        category.createdUserNo.eq(user.id)
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

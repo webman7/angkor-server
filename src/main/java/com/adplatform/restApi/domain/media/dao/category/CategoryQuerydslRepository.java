@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface CategoryQuerydslRepository {
 
-    Page<CategoryDto.Response.CategoryInfo> search(Pageable pageable);
+    Page<CategoryDto.Response.Search> search(Pageable pageable);
 }

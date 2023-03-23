@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 
 public class CategoryDto {
     public static abstract class Request {
@@ -50,6 +51,26 @@ public class CategoryDto {
             public CategoryInfo(Integer id, String name) {
                 this.id = id;
                 this.name = name;
+            }
+        }
+
+        @Getter
+        @Setter
+        public static class Search {
+
+            private Integer id;
+            private String name;
+
+            private String regUserId;
+
+            private LocalDateTime createdAt;
+
+            @QueryProjection
+            public Search(Integer id, String name, String regUserId, LocalDateTime createdAt) {
+                this.id = id;
+                this.name = name;
+                this.regUserId = regUserId;
+                this.createdAt = createdAt;
             }
         }
 

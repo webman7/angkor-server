@@ -23,7 +23,7 @@ public class CategoryQueryApi {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("search")
-    public PageDto<CategoryDto.Response.CategoryInfo> search(
+    public PageDto<CategoryDto.Response.Search> search(
             @PageableDefault Pageable pageable) {
         return PageDto.create(this.categoryRepository.search(pageable));
     }
