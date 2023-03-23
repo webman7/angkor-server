@@ -78,6 +78,7 @@ public class MediaDto {
             private String appSecret;
             private String url;
             private String mediaFileUrl;
+            private String mediaFileName;
             private FileInformation.FileType fileType;
             private Integer expInventory;
             private String memo;
@@ -95,6 +96,7 @@ public class MediaDto {
                     String appSecret,
                     String url,
                     String mediaFileUrl,
+                    String mediaFileName,
                     FileInformation.FileType fileType,
                     Integer expInventory,
                     String memo,
@@ -109,6 +111,7 @@ public class MediaDto {
                 this.appSecret = appSecret;
                 this.url = url;
                 this.mediaFileUrl = mediaFileUrl;
+                this.mediaFileName = mediaFileName;
                 this.fileType = fileType;
                 this.expInventory = expInventory;
                 this.memo = memo;

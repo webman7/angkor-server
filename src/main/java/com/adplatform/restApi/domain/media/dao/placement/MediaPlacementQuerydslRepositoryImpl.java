@@ -22,12 +22,8 @@ import java.util.List;
 
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
 import static com.adplatform.restApi.domain.media.domain.QMedia.media;
-import static com.adplatform.restApi.domain.media.domain.QMediaFile.mediaFile;
 import static com.adplatform.restApi.domain.media.domain.QMediaPlacement.mediaPlacement;
-import static com.adplatform.restApi.domain.media.domain.QPlacement.placement;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
-import static com.querydsl.core.types.ExpressionUtils.as;
-import static com.querydsl.jpa.JPAExpressions.select;
 import static java.util.Objects.nonNull;
 
 @RequiredArgsConstructor

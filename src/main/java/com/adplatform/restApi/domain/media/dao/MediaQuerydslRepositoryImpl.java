@@ -49,17 +49,23 @@ public class MediaQuerydslRepositoryImpl implements MediaQuerydslRepository {
                                                 mediaFile.id.eq(select(mediaFile.id.max())
                                                         .from(mediaFile)
                                                         .where(mediaFile.media.id.eq(media.id)
-                                                        )
-                                                        .orderBy(mediaFile.id.desc()))
+                                                        ))
                                         ), "mediaFileUrl"),
+                                as(select(mediaFile.information.originalFileName)
+                                        .from(mediaFile)
+                                        .where(mediaFile.media.id.eq(media.id),
+                                                mediaFile.id.eq(select(mediaFile.id.max())
+                                                        .from(mediaFile)
+                                                        .where(mediaFile.media.id.eq(media.id)
+                                                        ))
+                                        ), "mediaFileName"),
                                 as(select(mediaFile.information.fileType)
                                         .from(mediaFile)
                                         .where(mediaFile.media.id.eq(media.id),
                                                 mediaFile.id.eq(select(mediaFile.id.max())
                                                         .from(mediaFile)
                                                         .where(mediaFile.media.id.eq(media.id)
-                                                        )
-                                                        .orderBy(mediaFile.id.desc()))
+                                                        ))
                                         ), "mediaFileType"),
                                 media.expInventory,
                                 media.memo,
@@ -70,7 +76,11 @@ public class MediaQuerydslRepositoryImpl implements MediaQuerydslRepository {
                 )
                 .from(media, company, user)
                 .leftJoin(mediaFile)
-                .on(media.id.eq(mediaFile.media.id))
+                .on(mediaFile.media.id.eq(media.id),
+                        mediaFile.id.eq(select(mediaFile.id.max())
+                                .from(mediaFile)
+                                .where(mediaFile.media.id.eq(media.id)
+                                )))
                 .where(
                         media.company.id.eq(company.id),
                         media.createdUserNo.eq(user.id),
@@ -85,7 +95,11 @@ public class MediaQuerydslRepositoryImpl implements MediaQuerydslRepository {
         JPAQuery<Long> countQuery = this.query.select(media.count())
                 .from(media, company, user)
                 .leftJoin(mediaFile)
-                .on(media.id.eq(mediaFile.media.id))
+                .on(mediaFile.media.id.eq(media.id),
+                        mediaFile.id.eq(select(mediaFile.id.max())
+                                .from(mediaFile)
+                                .where(mediaFile.media.id.eq(media.id)
+                                )))
                 .where(
                         media.company.id.eq(company.id),
                         media.createdUserNo.eq(user.id),
