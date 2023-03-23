@@ -4,6 +4,7 @@ import com.adplatform.restApi.domain.media.dto.MediaDto;
 import com.adplatform.restApi.domain.advertiser.creative.domain.Creative;
 import com.adplatform.restApi.domain.advertiser.creative.dto.CreativeDto;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
+import com.adplatform.restApi.domain.media.dto.placement.MediaPlacementDto;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -18,6 +19,8 @@ public interface FileService {
     String saveCompany(CompanyDto.Request.Save request, MultipartFile file, String fType);
 
     String saveMedia(MediaDto.Request.Save request, MultipartFile file);
+
+    String saveMediaPlacement(MediaPlacementDto.Request.Save request, MultipartFile file);
 
     byte[] findByName(String filename);
 

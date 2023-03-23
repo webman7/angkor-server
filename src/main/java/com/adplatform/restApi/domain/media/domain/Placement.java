@@ -1,6 +1,8 @@
 package com.adplatform.restApi.domain.media.domain;
 
+import com.adplatform.restApi.domain.media.dto.placement.MediaPlacementDto;
 import com.adplatform.restApi.domain.media.dto.placement.PlacementDto;
+import com.adplatform.restApi.global.config.security.util.SecurityUtils;
 import com.adplatform.restApi.global.entity.BaseUpdatedEntity;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -76,6 +78,12 @@ public class Placement extends BaseUpdatedEntity {
         this.name = request.getName();
         this.memo = request.getMemo();
         this.adminMemo = request.getAdminMemo();
+        return this;
+    }
+
+    public Placement updateAdminApprove() {
+        this.approveUserNo = SecurityUtils.getLoginUserNo();
+        this.approveAt = LocalDateTime.now();
         return this;
     }
 

@@ -35,19 +35,29 @@ public class CompanyQueryApi {
 //    @GetMapping("/{id}")
 //    public CompanyDto.Response.Detail findById(@PathVariable Integer id) {
 //        Company company = this.companyRepository.findById(id).orElseThrow(CompanyNotFoundException::new);
-//        List<CompanyFileDto.Response.Default> companyFile = this.companyRepository.findDetailFilesById(id);
+//        List<CompanyFileDto.Response.Default> companyFile = this.companyRepository.findDetailBusinessFilesById(id);
 //
 //
 //        return this.companyMapper.toDetailResponse(CompanyFindUtils.findByIdOrElseThrow(id, this.companyRepository), this.companyRepository.findDetailFilesById(id));
 //    }
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/list")
+    public List<CompanyDto.Response.Default> list() {
+        return this.companyRepository.list();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/media/list")
+    public List<CompanyDto.Response.MediaByCompany> listMediaByCompany(CompanyDto.Request.MediaByCompany searchRequest) {
+        Company company = this.companyRepository.findById(searchRequest.getCompanyId()).orElseThrow(CompanyNotFoundException::new);
+
+        return this.companyRepository.listMediaByCompany(searchRequest);
+    }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/media/{id}")
     public CompanyDto.Response.MediaDetail findById(@PathVariable Integer id) {
         Company company = this.companyRepository.findById(id).orElseThrow(CompanyNotFoundException::new);
-//        CompanyFileDto.Response.Default businessFile = this.companyRepository.findDetailBusinessFilesById(id);
-//        CompanyFileDto.Response.Default bankFile = this.companyRepository.findDetailBankFilesById(id);
-
 
         return this.companyMapper.toMediaDetailResponse(CompanyFindUtils.findByIdOrElseThrow(id, this.companyRepository),
                 this.companyRepository.findDetailBusinessFilesById(id),
@@ -55,7 +65,7 @@ public class CompanyQueryApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("media/search")
+    @GetMapping("/media/search")
     public PageDto<CompanyDto.Response.CompanyInfo> searchMedia(
             @PageableDefault Pageable pageable,
             CompanyDto.Request.SearchMedia searchRequest) {

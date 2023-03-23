@@ -4,6 +4,7 @@ import com.adplatform.restApi.domain.advertiser.creative.domain.Creative;
 import com.adplatform.restApi.domain.advertiser.creative.dto.CreativeDto;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.media.dto.MediaDto;
+import com.adplatform.restApi.domain.media.dto.placement.MediaPlacementDto;
 import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -28,6 +29,7 @@ public class LocalFileServiceImpl implements FileService {
     private static final String FILE_PROOF_PATH = "./files/proof/";
     private static final String FILE_COMPANY_PATH = "./files/company/";
     private static final String FILE_MEDIA_PATH = "./files/media/";
+    private static final String FILE_MEDIA_PLACEMENT_PATH = "./files/placement/";
 
     @SneakyThrows
     @Override
@@ -94,6 +96,27 @@ public class LocalFileServiceImpl implements FileService {
     @Override
     public String saveMedia(MediaDto.Request.Save request, MultipartFile file) {
         String filePath = FILE_MEDIA_PATH + "images";
+        String ymdPath = UpLoadFileUtils.calcPath(filePath);
+        String uploadPath = filePath + ymdPath + "/";
+        File savedFile = new File(String.format(
+                "%s%s.%s",
+                uploadPath, UUID.randomUUID(),
+                FilenameUtils.getExtension(file.getOriginalFilename())));
+        savedFile.getParentFile().mkdirs();
+
+        System.out.println("savedCompanyFile.toPath() : " + savedFile.toPath());
+        file.transferTo(savedFile.toPath());
+        if (uploadPath.startsWith(".")) {
+            uploadPath = uploadPath.substring(1);
+        }
+        uploadPath = uploadPath.replace("\\", "/");
+        return uploadPath + savedFile.getName();
+    }
+
+    @SneakyThrows
+    @Override
+    public String saveMediaPlacement(MediaPlacementDto.Request.Save request, MultipartFile file) {
+        String filePath = FILE_MEDIA_PLACEMENT_PATH + "images";
         String ymdPath = UpLoadFileUtils.calcPath(filePath);
         String uploadPath = filePath + ymdPath + "/";
         File savedFile = new File(String.format(

@@ -12,5 +12,9 @@ public interface PlacementMapper {
     @Mapping(target = "status", expression = "java(Placement.Status.Y)")
     Placement toEntity(PlacementDto.Request.Save request);
 
+    @Mapping(target = "name", source = "request.name")
+    @Mapping(target = "status", expression = "java(Placement.Status.Y)")
+    Placement toApproveEntity(PlacementDto.Request.Approve request);
+
     PlacementDto.Response.PlacementInfo toResponse(Placement placement);
 }

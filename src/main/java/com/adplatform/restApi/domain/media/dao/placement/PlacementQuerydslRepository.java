@@ -10,5 +10,10 @@ public interface PlacementQuerydslRepository {
 //    Optional<Placement> findDetailById(Integer id);
 
     Page<PlacementDto.Response.Search> search(Pageable pageable);
-    List<PlacementDto.Response.ForSearchAll> searchForAll(Integer adGroupId, Integer mediaId);
+
+    List<PlacementDto.Response.Search> list();
+
+    Integer findByWidthAndHeight(Integer width, Integer height);
+
+//    List<PlacementDto.Response.ForSearchAll> searchForAll(Integer adGroupId, Integer mediaId);
 }

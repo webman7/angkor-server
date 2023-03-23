@@ -40,11 +40,8 @@ public class PlacementQueryApi {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/list")
-    public List<PlacementDto.Response.ForSearchAll> searchForAll(
-            @RequestParam(required = false) Integer adGroupId,
-            @RequestParam(required = false) Integer mediaId
-    ) {
-        return this.placementRepository.searchForAll(adGroupId, mediaId);
+    public List<PlacementDto.Response.Search> list() {
+        return this.placementRepository.list();
     }
 
     @ResponseStatus(HttpStatus.OK)

@@ -1,76 +1,49 @@
 package com.adplatform.restApi.domain.media.dto.placement;
 
+import com.adplatform.restApi.domain.media.domain.MediaPlacement;
 import com.adplatform.restApi.domain.media.domain.Placement;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-public abstract class PlacementDto {
+public class MediaPlacementDto {
     public abstract static class Request {
 
         @Getter
         @Setter
         public static class Save {
+            private Integer mediaId;
+            private Integer placementId;
             private String name;
             private Integer width;
             private Integer height;
             private String widthHeightRate;
+            private String url;
+            private List<MultipartFile> mediaPlacementFiles = new ArrayList<>();
             private String memo;
             private String adminMemo;
         }
 
         @Getter
         @Setter
-        public static class Update {
+        public static class Update extends MediaPlacementDto.Request.Save {
+            @NotNull
             private Integer id;
-            private String name;
-            private String memo;
-            private String adminMemo;
-        }
-
-        @Getter
-        @Setter
-        public static class Approve {
-            private String name;
-            private Integer width;
-            private Integer height;
-            private String widthHeightRate;
-            private String memo;
-            private String adminMemo;
-            private Integer approveUserNo;
-            private LocalDateTime approveAt;
         }
 
         @Getter
         @Setter
         public static class Search {
-            @NotNull
-            private Integer id;
-            private String name;
-            private Integer width;
-            private Integer height;
-            private String widthHeightRate;
-            private String memo;
-            private String adminMemo;
+            private Integer companyId;
+            private Integer mediaId;
+            private String status;
         }
-//
-//        @Getter
-//        @Setter
-//        public static class Insert {
-//            @NotNull
-//            private Integer id;
-//            private String name;
-//            private Integer width;
-//            private Integer height;
-//            private String widthHeightRate;
-//            private String memo;
-//            private String adminMemo;
-//            private Placement.Status status;
-//        }
     }
 
     public abstract static class Response {
@@ -82,43 +55,50 @@ public abstract class PlacementDto {
             @QueryProjection
             public Default(
                     Integer id
-            ) {
+                    ) {
                 this.id = id;
             }
         }
-
         @Getter
         @Setter
         public static class Search {
             @NotNull
             private Integer id;
+            private String companyName;
+            private String mediaName;
             private String name;
             private Integer width;
             private Integer height;
             private String widthHeightRate;
+            private String url;
             private String memo;
             private String adminMemo;
-            private Placement.Status status;
+            private MediaPlacement.Status status;
             private String regUserId;
             private LocalDateTime createdAt;
-
             @QueryProjection
             public Search(
                     Integer id,
+                    String companyName,
+                    String mediaName,
                     String name,
                     Integer width,
                     Integer height,
                     String widthHeightRate,
+                    String url,
                     String memo,
                     String adminMemo,
-                    Placement.Status status,
+                    MediaPlacement.Status status,
                     String regUserId,
                     LocalDateTime createdAt) {
                 this.id = id;
+                this.companyName = companyName;
+                this.mediaName = mediaName;
                 this.name = name;
                 this.width = width;
                 this.height = height;
                 this.widthHeightRate = widthHeightRate;
+                this.url = url;
                 this.memo = memo;
                 this.adminMemo = adminMemo;
                 this.status = status;
@@ -129,47 +109,23 @@ public abstract class PlacementDto {
 
         @Getter
         @Setter
-        public static class ForSearchAll {
+        public static class MediaPlacementInfo {
             @NotNull
             private Integer id;
+            private Integer companyId;
+            private String companyName;
+            private Integer mediaId;
+            private String mediaName;
             private String name;
             private Integer width;
             private Integer height;
             private String widthHeightRate;
+            private String url;
             private String memo;
             private String adminMemo;
-
-            @QueryProjection
-            public ForSearchAll(
-                    Integer id,
-                    String name,
-                    Integer width,
-                    Integer height,
-                    String widthHeightRate,
-                    String memo,
-                    String adminMemo) {
-                this.id = id;
-                this.name = name;
-                this.width = width;
-                this.height = height;
-                this.widthHeightRate = widthHeightRate;
-                this.memo = memo;
-                this.adminMemo = adminMemo;
-            }
-        }
-
-        @Getter
-        @Setter
-        public static class PlacementInfo {
-            @NotNull
-            private Integer id;
-            private String name;
-            private Integer width;
-            private Integer height;
-            private String widthHeightRate;
-            private String memo;
-            private String adminMemo;
-            private Placement.Status status;
+            private MediaPlacement.Status status;
+            private String regUserId;
+            private LocalDateTime createdAt;
         }
     }
 }

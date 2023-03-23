@@ -2,6 +2,7 @@ package com.adplatform.restApi.domain.company.dao;
 
 import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.company.dto.*;
+import com.adplatform.restApi.domain.media.domain.Media;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -17,6 +18,7 @@ import java.util.List;
 import static com.adplatform.restApi.domain.bank.domain.QBank.bank;
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
 import static com.adplatform.restApi.domain.company.domain.QCompanyFile.companyFile;
+import static com.adplatform.restApi.domain.media.domain.QMedia.media;
 import static com.querydsl.core.types.ExpressionUtils.as;
 import static com.querydsl.jpa.JPAExpressions.select;
 import static java.util.Objects.nonNull;
@@ -52,6 +54,32 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
+
+    @Override
+    public List<CompanyDto.Response.Default> list() {
+        return this.query
+                .select(new QCompanyDto_Response_Default(company.id, company.name))
+                .from(company)
+                .where(
+                        company.deleted.eq(false))
+                .fetch();
+    }
+
+    @Override
+    public List<CompanyDto.Response.MediaByCompany> listMediaByCompany(CompanyDto.Request.MediaByCompany searchRequest) {
+        return this.query
+                .select(new QCompanyDto_Response_MediaByCompany(
+                        company.id,
+                        media.id,
+                        media.name))
+                .from(company, media)
+                .where(
+                        media.company.id.eq(company.id),
+                        media.status.in(Media.Status.Y),
+                        company.deleted.eq(false))
+                .fetch();
+    }
+
 
     @Override
     public Page<CompanyDto.Response.CompanyInfo> searchMedia(Pageable pageable, CompanyDto.Request.SearchMedia searchRequest) {

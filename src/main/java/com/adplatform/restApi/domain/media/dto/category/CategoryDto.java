@@ -60,9 +60,7 @@ public class CategoryDto {
 
             private Integer id;
             private String name;
-
             private String regUserId;
-
             private LocalDateTime createdAt;
 
             @QueryProjection

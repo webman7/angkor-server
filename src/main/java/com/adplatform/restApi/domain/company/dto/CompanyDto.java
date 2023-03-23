@@ -49,6 +49,12 @@ public abstract class CompanyDto {
             private String registrationNumber;
         }
 
+        @Getter
+        @Setter
+        public static class MediaByCompany {
+            private Integer companyId;
+        }
+
 
         @Getter
         @Setter
@@ -321,6 +327,23 @@ public abstract class CompanyDto {
                 this.businessCategory = businessCategory;
                 this.businessItem = businessItem;
                 this.taxBillEmail = taxBillEmail;
+            }
+        }
+
+        @Getter
+        @Setter
+        public static class MediaByCompany {
+            private Integer companyId;
+            private Integer id;
+            private String name;
+
+            @QueryProjection
+            public MediaByCompany(Integer companyId,
+                                  Integer id,
+                                   String name) {
+                this.companyId = companyId;
+                this.id = id;
+                this.name = name;
             }
         }
     }

@@ -19,6 +19,11 @@ public interface CompanyQuerydslRepository {
 
     Page<CompanyDto.Response.CompanyInfo> searchMedia(Pageable pageable, CompanyDto.Request.SearchMedia searchRequest);
 
+    List<CompanyDto.Response.Default> list();
+
+    List<CompanyDto.Response.MediaByCompany> listMediaByCompany(CompanyDto.Request.MediaByCompany searchRequest);
+
+
 //    Page<CompanyDto.Response.Default> advertiserRegistrationNumber(Pageable pageable, CompanyDto.Request.SearchKeyword searchRequest);
 //
 //    Page<CompanyDto.Response.Default> agencyRegistrationNumber(Pageable pageable, CompanyDto.Request.SearchKeyword searchRequest);
