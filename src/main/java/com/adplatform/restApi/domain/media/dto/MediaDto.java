@@ -2,10 +2,7 @@ package com.adplatform.restApi.domain.media.dto;
 
 import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
-import com.adplatform.restApi.domain.media.domain.Category;
-import com.adplatform.restApi.domain.media.domain.FileInformation;
-import com.adplatform.restApi.domain.media.domain.Media;
-import com.adplatform.restApi.domain.media.domain.MediaCategory;
+import com.adplatform.restApi.domain.media.domain.*;
 import com.adplatform.restApi.domain.media.dto.category.MediaCategoryDto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
@@ -15,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,7 +77,6 @@ public class MediaDto {
             private String appKey;
             private String appSecret;
             private String url;
-//            private List<Category> category;
             private String mediaFileUrl;
             private FileInformation.FileType fileType;
             private Integer expInventory;
@@ -87,6 +84,8 @@ public class MediaDto {
             private String adminMemo;
             private Media.Status status;
             private String regUserId;
+            private LocalDateTime createdAt;
+
             @QueryProjection
             public Search(
                     Integer id,
@@ -94,22 +93,20 @@ public class MediaDto {
                     CompanyDto.Response.Default company,
                     String appKey,
                     String appSecret,
-//                    List<Category> category,
                     String url,
-//                    List<MediaCategory> mediaCategory,
                     String mediaFileUrl,
                     FileInformation.FileType fileType,
                     Integer expInventory,
                     String memo,
                     String adminMemo,
                     Media.Status status,
-                    String regUserId) {
+                    String regUserId,
+                    LocalDateTime createdAt) {
                 this.id = id;
                 this.name = name;
                 this.company = company;
                 this.appKey = appKey;
                 this.appSecret = appSecret;
-//                this.category = category;
                 this.url = url;
                 this.mediaFileUrl = mediaFileUrl;
                 this.fileType = fileType;
@@ -118,6 +115,7 @@ public class MediaDto {
                 this.adminMemo = adminMemo;
                 this.status = status;
                 this.regUserId = regUserId;
+                this.createdAt = createdAt;
             }
         }
 
@@ -132,8 +130,7 @@ public class MediaDto {
             private String appSecret;
             private String url;
             private List<Category> category;
-            private String mediaFileUrl;
-            private FileInformation.FileType mediaFileType;
+            private MediaFileDto.Response.FileInfo mediaFiles;
             private Integer expInventory;
             private String memo;
             private String adminMemo;
@@ -147,8 +144,7 @@ public class MediaDto {
                     String appSecret,
                     String url,
                     List<Category> category,
-                    String mediaFileUrl,
-                    FileInformation.FileType mediaFileType,
+                    MediaFileDto.Response.FileInfo mediaFiles,
                     Integer expInventory,
                     String memo,
                     String adminMemo,
@@ -160,8 +156,7 @@ public class MediaDto {
                 this.appSecret = appSecret;
                 this.url = url;
                 this.category = category;
-                this.mediaFileUrl = mediaFileUrl;
-                this.mediaFileType = mediaFileType;
+                this.mediaFiles = mediaFiles;
                 this.expInventory = expInventory;
                 this.memo = memo;
                 this.adminMemo = adminMemo;

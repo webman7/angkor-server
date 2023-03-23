@@ -22,9 +22,9 @@ public interface MediaMapper {
     @Mapping(target = "name", source = "media.name")
     @Mapping(target = "company", source = "company")
     @Mapping(target = "category", source = "category")
-    @Mapping(target = "mediaFileUrl", source = "mediaFileUrl")
-    @Mapping(target = "mediaFileType", source = "mediaFileType")
-    MediaDto.Response.MediaInfo toCategoryResponse(Media media, Company company, List<Category> category, String mediaFileUrl, FileInformation.FileType mediaFileType);
+    @Mapping(target = "url", source = "media.url")
+    @Mapping(target = "mediaFiles", source = "mediaFile")
+    MediaDto.Response.MediaInfo toCategoryResponse(Media media, Company company, List<Category> category, MediaFileDto.Response.FileInfo mediaFile);
 
     @Named("mapCategory")
     default List<Integer> mapCategory(Collection<Category> category) {
