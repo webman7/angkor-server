@@ -47,7 +47,7 @@ public class MediaPlacementCommandApi {
         return ResponseEntity.ok().build();
     }
     @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping("/admin/delete")
+    @PatchMapping("/admin/delete")
     public ResponseEntity<Void> updateAdminDelete(@RequestBody @Valid MediaPlacementDto.Request.Update request) {
         this.mediaPlacementSaveService.updateAdminDelete(request);
         return ResponseEntity.ok().build();
