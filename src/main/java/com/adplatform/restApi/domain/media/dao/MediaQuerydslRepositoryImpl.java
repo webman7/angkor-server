@@ -3,13 +3,11 @@ package com.adplatform.restApi.domain.media.dao;
 import com.adplatform.restApi.domain.company.dto.QCompanyDto_Response_Default;
 import com.adplatform.restApi.domain.media.domain.FileInformation;
 import com.adplatform.restApi.domain.media.domain.Media;
-import com.adplatform.restApi.domain.media.domain.MediaCategory;
 import com.adplatform.restApi.domain.media.dto.MediaDto;
+import com.adplatform.restApi.domain.media.dto.MediaFileDto;
 import com.adplatform.restApi.domain.media.dto.QMediaDto_Response_Search;
-import com.adplatform.restApi.domain.media.dto.category.QMediaAndCategoryDto;
-import com.querydsl.core.types.Expression;
+import com.adplatform.restApi.domain.media.dto.QMediaFileDto_Response_FileInfo;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -17,18 +15,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 
 import static com.adplatform.restApi.domain.advertiser.adgroup.domain.QAdGroupMedia.adGroupMedia;
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
-import static com.adplatform.restApi.domain.company.domain.QCompanyFile.companyFile;
 import static com.adplatform.restApi.domain.media.domain.QMedia.media;
-import static com.adplatform.restApi.domain.media.domain.QMediaCategory.mediaCategory;
 import static com.adplatform.restApi.domain.media.domain.QMediaFile.mediaFile;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
-import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.types.ExpressionUtils.*;
 import static com.querydsl.jpa.JPAExpressions.select;
 import static java.util.Objects.nonNull;
@@ -71,7 +65,8 @@ public class MediaQuerydslRepositoryImpl implements MediaQuerydslRepository {
                                 media.memo,
                                 media.adminMemo,
                                 media.status,
-                                user.loginId)
+                                user.loginId,
+                                media.createdAt)
                 )
                 .from(media, company, user)
                 .leftJoin(mediaFile)
@@ -88,8 +83,14 @@ public class MediaQuerydslRepositoryImpl implements MediaQuerydslRepository {
                 .fetch();
 
         JPAQuery<Long> countQuery = this.query.select(media.count())
-                .from(media)
-                .where(media.status.notIn(Media.Status.D),
+                .from(media, company, user)
+                .leftJoin(mediaFile)
+                .on(media.id.eq(mediaFile.media.id))
+                .where(
+                        media.company.id.eq(company.id),
+                        media.createdUserNo.eq(user.id),
+                        media.status.notIn(Media.Status.D),
+                        this.companyEq(searchRequest.getCompanyId()),
                         this.statusEq(searchRequest.getStatus())
                 );
 
@@ -117,6 +118,36 @@ public class MediaQuerydslRepositoryImpl implements MediaQuerydslRepository {
                         )))
                 .fetchOne();
     }
+
+    @Override
+    public Integer findByMediaIdFileId(Integer id) {
+        return this.query.select(mediaFile.id)
+                .from(mediaFile)
+                .where(mediaFile.id.eq(select(mediaFile.id.max())
+                        .from(mediaFile)
+                        .where(mediaFile.media.id.eq(id)
+                        )))
+                .fetchOne();
+    }
+
+    @Override
+    public MediaFileDto.Response.FileInfo findByMediaIdFileInfo(Integer id) {
+        return this.query.select(new QMediaFileDto_Response_FileInfo(
+                mediaFile.information.fileType,
+                mediaFile.information.fileSize,
+                mediaFile.information.filename,
+                mediaFile.information.originalFileName,
+                mediaFile.information.url,
+                mediaFile.information.mimeType
+                ))
+                .from(mediaFile)
+                .where(mediaFile.id.eq(select(mediaFile.id.max())
+                        .from(mediaFile)
+                        .where(mediaFile.media.id.eq(id)
+                        )))
+                .fetchOne();
+    }
+
 
     private BooleanExpression statusEq(String status) {
         if(status.equals("N")) {

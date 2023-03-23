@@ -38,8 +38,8 @@ public class MediaSaveService {
     private final CompanyRepository companyRepository;
     private final CategoryRepository categoryRepository;
     private final MediaCategorySaveQueryMapper mediaCategorySaveQueryMapper;
-
     private final FileService fileService;
+
     public void save(MediaDto.Request.Save request) {
         Company company = CompanyFindUtils.findByIdOrElseThrow(request.getCompanyId(), this.companyRepository);
         Media media = this.mediaMapper.toEntity(request, company);
