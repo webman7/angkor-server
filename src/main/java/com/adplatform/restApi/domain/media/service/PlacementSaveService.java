@@ -31,7 +31,7 @@ public class PlacementSaveService {
         }
     }
 
-    public void delete(Integer id) {
-        PlacementFindUtils.findByIdOrElseThrow(id, this.placementRepository).delete();
+    public void delete(PlacementDto.Request.Update request) {
+        PlacementFindUtils.findByIdOrElseThrow(request.getId(), this.placementRepository).updateAdminMemo(request).delete();
     }
 }

@@ -27,8 +27,8 @@ public class PlacementCommandApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
-        this.placementSaveService.delete(id);
+    @DeleteMapping
+    public void delete(@RequestBody @Valid PlacementDto.Request.Update request) {
+        this.placementSaveService.delete(request);
     }
 }

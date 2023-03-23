@@ -79,6 +79,11 @@ public class Placement extends BaseUpdatedEntity {
         return this;
     }
 
+    public Placement updateAdminMemo(PlacementDto.Request.Update request) {
+        this.adminMemo = request.getAdminMemo();
+        return this;
+    }
+
     public void delete() {
         this.status = Status.D;
     }
