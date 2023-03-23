@@ -136,14 +136,6 @@ public class MediaQuerydslRepositoryImpl implements MediaQuerydslRepository {
         }
     }
 
-
-
-
-
-
-
-
-    // 이전 작업
     @Override
     public void deleteByAdGroupId(Integer adGroupId) {
         this.query.delete(adGroupMedia).where(adGroupMedia.id.adGroupId.eq(adGroupId)).execute();

@@ -10,4 +10,6 @@ public interface CategoryMapper {
 
     @Mapping(target = "name", source = "request.name")
     Category toEntity(CategoryDto.Request.Save request);
+
+    CategoryDto.Response.CategoryInfo toResponse(Category category);
 }

@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 public interface MediaMapper {
     @Mapping(target = "name", source = "request.name")
     @Mapping(target = "company", source = "company")
-//    @Mapping(target = "category", source = "request.category", qualifiedByName = "mapCategory")
     @Mapping(target = "status", expression = "java(Media.Status.N)")
     Media toEntity(MediaDto.Request.Save request, Company company);
 
