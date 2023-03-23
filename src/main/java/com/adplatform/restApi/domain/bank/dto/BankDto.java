@@ -1,5 +1,9 @@
 package com.adplatform.restApi.domain.bank.dto;
 
+import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
+import com.adplatform.restApi.domain.business.domain.BusinessAccount;
+import com.adplatform.restApi.domain.wallet.dto.WalletDto;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -39,6 +43,14 @@ public class BankDto {
             @Size(min = 1, max = 50)
             @NotBlank
             private String name;
+
+            @QueryProjection
+            public BankInfo(
+                    Integer id,
+                    String name) {
+                this.id = id;
+                this.name = name;
+            }
         }
     }
 }
