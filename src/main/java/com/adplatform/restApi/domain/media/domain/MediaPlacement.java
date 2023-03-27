@@ -34,9 +34,12 @@ public class MediaPlacement extends BaseUpdatedEntity {
     @JoinColumn(name = "media_info_id", nullable = false)
     private Media media;
 
-    @ManyToOne
-    @JoinColumn(name = "placement_info_id", nullable = false)
-    private Placement placement;
+//    @ManyToOne
+//    @JoinColumn(name = "placement_info_id", nullable = false)
+//    private Placement placement;
+
+    @Column(name = "placement_info_id")
+    private Integer placementId;
 
     @Column(name = "name", length = 20, nullable = false)
     private String name;
@@ -76,7 +79,7 @@ public class MediaPlacement extends BaseUpdatedEntity {
     @Builder
     public MediaPlacement(
             Media media,
-            Placement placement,
+            Integer placementId,
             String name,
             Integer width,
             Integer height,
@@ -87,7 +90,7 @@ public class MediaPlacement extends BaseUpdatedEntity {
             MediaPlacement.Status status
     ) {
         this.media = media;
-        this.placement = placement;
+        this.placementId = placementId;
         this.name = name;
         this.width = width;
         this.height = height;
@@ -118,7 +121,8 @@ public class MediaPlacement extends BaseUpdatedEntity {
         return this;
     }
 
-    public MediaPlacement updateAdminApprove(MediaPlacementDto.Request.Update request) {
+    public MediaPlacement updateAdminApprove(MediaPlacementDto.Request.Update request, Integer placementId) {
+        this.placementId = placementId;
         this.approveUserNo = SecurityUtils.getLoginUserNo();
         this.approveAt = LocalDateTime.now();
         this.adminMemo = request.getAdminMemo();

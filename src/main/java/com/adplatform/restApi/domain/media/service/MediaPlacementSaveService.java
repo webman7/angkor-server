@@ -70,7 +70,7 @@ public class MediaPlacementSaveService {
     }
 
     public void updateAdminApprove(MediaPlacementDto.Request.Update request) {
-        MediaPlacement mediaPlacement = MediaPlacementFindUtils.findByIdOrElseThrow(request.getId(), this.mediaPlacementRepository).updateAdminApprove(request);
+        MediaPlacement mediaPlacement = MediaPlacementFindUtils.findByIdOrElseThrow(request.getId(), this.mediaPlacementRepository);
 
         Integer count = this.placementRepository.findByWidthAndHeight(mediaPlacement.getWidth(), mediaPlacement.getHeight());
 
@@ -87,7 +87,9 @@ public class MediaPlacementSaveService {
         pData.setAdminMemo(request.getAdminMemo());
 
         Placement placement = this.placementMapper.toEntity(pData);
-        this.placementRepository.save(placement).updateAdminApprove();
+        Integer placementId = this.placementRepository.save(placement).updateAdminApprove().getId();
+
+        MediaPlacementFindUtils.findByIdOrElseThrow(request.getId(), this.mediaPlacementRepository).updateAdminApprove(request, placementId);
     }
 
     public void updateAdminReject(MediaPlacementDto.Request.Update request) {

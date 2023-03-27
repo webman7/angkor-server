@@ -13,7 +13,7 @@ import org.mapstruct.Mapping;
 public interface MediaPlacementMapper {
 
     @Mapping(target = "media", source = "media")
-    @Mapping(target = "placement", source = "placement")
+    @Mapping(target = "placementId", source = "request.placementId")
     @Mapping(target = "name", source = "request.name")
     @Mapping(target = "width", source = "request.width")
     @Mapping(target = "height", source = "request.height")

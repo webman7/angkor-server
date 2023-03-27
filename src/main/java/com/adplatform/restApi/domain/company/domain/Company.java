@@ -32,7 +32,9 @@ public class Company extends BaseUpdatedEntity {
         /** 비즈니스 */
         BUSINESS,
         /** 매체사 */
-        MEDIA
+        MEDIA,
+        /** 어드민 */
+        ADMIN
     }
 
     @Column(name = "name")
