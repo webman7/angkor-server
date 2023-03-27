@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
+import static com.adplatform.restApi.domain.adaccount.domain.QAdAccount.adAccount;
 import static com.adplatform.restApi.domain.bank.domain.QBank.bank;
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
 import static com.adplatform.restApi.domain.company.domain.QCompanyFile.companyFile;
@@ -75,6 +76,7 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                 .from(company, media)
                 .where(
                         media.company.id.eq(company.id),
+                        companyIdEq(searchRequest.getCompanyId()),
                         media.status.in(Media.Status.Y),
                         company.deleted.eq(false))
                 .fetch();
@@ -395,6 +397,10 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                 .from(company)
                 .where(company.deleted.eq(false), company.type.eq(type), this.nameContains(name))
                 .fetch();
+    }
+
+    private BooleanExpression companyIdEq(Integer id) {
+        return id != null ? company.id.eq(id) : null;
     }
 
     private BooleanExpression nameContains(String name) {
