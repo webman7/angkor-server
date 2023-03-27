@@ -27,4 +27,10 @@ public interface AdGroupQueryMapper {
     );
 
     void insertAdGroupMedia(Integer adGroupId, Integer categoryId, Integer mediaId);
+
+    List<AdGroupDto.Response.Placement> adGroupPlacementList(Integer adGroupId);
+
+    List<AdGroupDto.Response.Category> adGroupCategoryList(Integer adGroupId);
+
+    List<AdGroupDto.Response.CategoryMedia> adGroupCategoryMediaList(Integer adGroupId);
 }

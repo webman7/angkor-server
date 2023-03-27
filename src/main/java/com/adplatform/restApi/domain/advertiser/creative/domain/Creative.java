@@ -2,6 +2,7 @@ package com.adplatform.restApi.domain.advertiser.creative.domain;
 
 import com.adplatform.restApi.domain.advertiser.adgroup.domain.AdGroup;
 import com.adplatform.restApi.domain.advertiser.creative.dto.CreativeDto;
+import com.adplatform.restApi.domain.media.domain.MediaCategory;
 import com.adplatform.restApi.domain.media.domain.Placement;
 import com.adplatform.restApi.global.entity.BaseUpdatedEntity;
 import com.adplatform.restApi.infra.file.service.FileService;
@@ -107,6 +108,16 @@ public class Creative extends BaseUpdatedEntity {
             joinColumns = @JoinColumn(name = "creative_info_id"),
             inverseJoinColumns = @JoinColumn(name = "placement_info_id"))
     private final Set<Placement> placements = new HashSet<>();
+
+//    @ManyToMany(cascade = CascadeType.ALL)
+//    @JoinTable(
+//            name = "creative_media_category_info",
+//            joinColumns = @JoinColumn(name = "creative_info_id"),
+//            inverseJoinColumns = {
+//                    @JoinColumn(name = "category_info_id", referencedColumnName = "category_info_id"),
+//                    @JoinColumn(name = "media_info_id", referencedColumnName = "media_info_id")
+//            })
+//    private final Set<MediaCategory> mediaCategory = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
     @Column(name = "action_button", length = 20)

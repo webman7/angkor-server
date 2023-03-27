@@ -176,5 +176,36 @@ public abstract class AdGroupDto {
                 this.budgetAmount = budgetAmount;
             }
         }
+
+        @Getter
+        @AllArgsConstructor
+        public static class Placement {
+            private Integer id;
+            private String name;
+            private Integer width;
+            private Integer height;
+            private String widthHeightRate;
+            private String memo;
+            private String adminMemo;
+
+        }
+
+        @Getter
+        @AllArgsConstructor
+        public static class Category {
+            private Integer categoryId;
+            private String categoryName;
+
+        }
+
+        @Getter
+        @AllArgsConstructor
+        public static class CategoryMedia {
+            private Integer categoryId;
+            private String categoryName;
+            private Integer mediaId;
+            private String mediaName;
+
+        }
     }
 }

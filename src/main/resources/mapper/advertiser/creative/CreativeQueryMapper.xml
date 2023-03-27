@@ -221,4 +221,20 @@ since 1.0
         <include refid="searchCreativeSelectQuery"/>
         <include refid="common.sortAndOrder"/>
     </select>
+
+    <resultMap id="mapCreativeMediaCategory" type="com.adplatform.restApi.domain.advertiser.creative.dto.CreativeDto$Response$Category">
+        <result column="creativeId" property="creativeId"/>
+        <result column="categoryId" property="categoryId"/>
+        <result column="mediaId" property="mediaId"/>
+    </resultMap>
+    <select id="creativeMediaCategoryList" resultMap="mapCreativeMediaCategory">
+        <include refid="creativeMediaCategoryListQuery"/>
+    </select>
+
+    <sql id="creativeMediaCategoryListQuery">
+        SELECT creative_info_id AS creativeId, category_info_id AS categoryId, media_info_id AS categoryId
+          FROM creative_media_category_info
+         WHERE creative_info_id = #{creativeId}
+         ORDER BY category_info_id ASC, media_info_id ASC
+    </sql>
 </mapper>

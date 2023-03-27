@@ -56,6 +56,7 @@ public abstract class CreativeDto {
             private int frequencyType;
             private int frequency;
             private List<Integer> placements;
+            private String mediaCategory;
             private String opinion;
         }
 
@@ -89,6 +90,7 @@ public abstract class CreativeDto {
             private int frequencyType;
             private int frequency;
             private List<Integer> placements;
+            private String mediaCategory;
             private String opinion;
         }
     }
@@ -165,6 +167,25 @@ public abstract class CreativeDto {
                 this.frequency = frequency;
                 this.placements = placements;
                 this.opinion = opinion;
+            }
+        }
+
+        @Getter
+        @Setter
+        public static class Category {
+            private int creativeId;
+            private int categoryId;
+            private int mediaId;
+
+            @QueryProjection
+            public Category(
+                    Integer creativeId,
+                    Integer categoryId,
+                    Integer mediaId
+            ) {
+                this.creativeId = creativeId;
+                this.categoryId = categoryId;
+                this.mediaId = mediaId;
             }
         }
     }

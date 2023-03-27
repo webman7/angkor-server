@@ -216,4 +216,72 @@ since 1.0
         INSERT INTO adgroup_media_info (adgroup_info_id, category_info_id, media_info_id)
              VALUES (#{adGroupId}, #{categoryId}, #{mediaId})
     </insert>
+
+    <resultMap id="mapAdGroupPlacement" type="com.adplatform.restApi.domain.advertiser.adgroup.dto.adgroup.AdGroupDto$Response$Placement">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="width" property="width"/>
+        <result column="height" property="height"/>
+        <result column="widthHeightRate" property="widthHeightRate"/>
+        <result column="memo" property="memo"/>
+        <result column="adminMemo" property="adminMemo"/>
+    </resultMap>
+    <select id="adGroupPlacementList" resultMap="mapAdGroupPlacement">
+        <include refid="adGroupPlacementListQuery"/>
+    </select>
+
+    <sql id="adGroupPlacementListQuery">
+        SELECT d.id, d.name, d.width, d.height, d.width_height_rate as widthHeightRate, d.memo, d.admin_memo as adminMemo
+          FROM adgroup_info a, adgroup_media_info b, media_placement_info c, placement_info d
+         WHERE a.id = b.adgroup_info_id
+           AND b.media_info_id = c.media_info_id
+           AND c.placement_info_id = d.id
+           AND c.`status` = 'Y'
+           AND a.id = #{adGroupId}
+    </sql>
+
+    <resultMap id="mapAdGroupCategory" type="com.adplatform.restApi.domain.advertiser.adgroup.dto.adgroup.AdGroupDto$Response$Category">
+        <result column="categoryId" property="categoryId"/>
+        <result column="categoryName" property="categoryName"/>
+    </resultMap>
+    <select id="adGroupCategoryList" resultMap="mapAdGroupCategory">
+        <include refid="adGroupCategoryListQuery"/>
+    </select>
+
+    <sql id="adGroupCategoryListQuery">
+        SELECT d.id AS categoryId, d.name AS categoryName
+          FROM adgroup_info a, adgroup_media_info b, media_category_info c, category_info d, media_info e
+         WHERE a.id = b.adgroup_info_id
+          AND b.media_info_id = c.media_info_id
+          AND c.category_info_id = d.id
+          AND b.media_info_id = e.id
+          AND c.media_info_id = e.id
+          AND a.id = #{adGroupId}
+        GROUP BY d.id
+        ORDER BY d.id ASC
+    </sql>
+
+    <resultMap id="mapAdGroupCategoryMedia" type="com.adplatform.restApi.domain.advertiser.adgroup.dto.adgroup.AdGroupDto$Response$CategoryMedia">
+        <result column="categoryId" property="categoryId"/>
+        <result column="categoryName" property="categoryName"/>
+        <result column="mediaId" property="mediaId"/>
+        <result column="mediaName" property="mediaName"/>
+    </resultMap>
+    <select id="adGroupCategoryMediaList" resultMap="mapAdGroupCategoryMedia">
+        <include refid="adGroupCategoryMediaListQuery"/>
+    </select>
+
+    <sql id="adGroupCategoryMediaListQuery">
+        SELECT d.id AS categoryId, d.name AS categoryName, e.id AS mediaId, e.name AS mediaName
+        FROM adgroup_info a, adgroup_media_info b, media_category_info c, category_info d, media_info e
+        WHERE a.id = b.adgroup_info_id
+        AND b.media_info_id = c.media_info_id
+        AND c.category_info_id = d.id
+        AND b.media_info_id = e.id
+        AND c.media_info_id = e.id
+        AND a.id = #{adGroupId}
+        GROUP BY d.id, e.id
+        ORDER BY d.id ASC
+    </sql>
+
 </mapper>

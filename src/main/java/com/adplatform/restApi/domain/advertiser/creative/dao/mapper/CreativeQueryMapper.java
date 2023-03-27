@@ -21,4 +21,6 @@ public interface CreativeQueryMapper {
             @Param("request") AdvertiserSearchRequest request,
             @Param("pageable") Pageable pageable
     );
+
+    List<CreativeDto.Response.Category> creativeMediaCategoryList(Integer creativeId);
 }

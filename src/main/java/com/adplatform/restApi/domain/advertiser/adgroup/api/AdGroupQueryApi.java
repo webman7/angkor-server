@@ -75,4 +75,22 @@ public class AdGroupQueryApi {
     public List<AdGroupMediaDto.Response.Default> findAdGroupMediaById(@PathVariable(name = "id") Integer adGroupId) {
         return this.adGroupMediaRepository.toAdGroupMedia(adGroupId);
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}/placement")
+    public List<AdGroupDto.Response.Placement> adGroupPlacementList(@PathVariable(name = "id") Integer adGroupId) {
+        return this.adGroupQueryMapper.adGroupPlacementList(adGroupId);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}/category")
+    public List<AdGroupDto.Response.Category> adGroupCategoryList(@PathVariable(name = "id") Integer adGroupId) {
+        return this.adGroupQueryMapper.adGroupCategoryList(adGroupId);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}/category/media")
+    public List<AdGroupDto.Response.CategoryMedia> adGroupCategoryMediaList(@PathVariable(name = "id") Integer adGroupId) {
+        return this.adGroupQueryMapper.adGroupCategoryMediaList(adGroupId);
+    }
 }

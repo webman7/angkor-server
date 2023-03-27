@@ -1,17 +1,18 @@
 
 package com.adplatform.restApi.domain.advertiser.creative.service;
 
+import com.adplatform.restApi.domain.advertiser.creative.dao.CreativeMediaCategoryRepository;
 import com.adplatform.restApi.domain.advertiser.creative.dao.CreativeRepository;
 import com.adplatform.restApi.domain.advertiser.creative.dao.CreativePlacementRepository;
+import com.adplatform.restApi.domain.advertiser.creative.domain.*;
 import com.adplatform.restApi.domain.advertiser.creative.dto.CreativeDto;
 import com.adplatform.restApi.domain.advertiser.creative.dto.CreativeMapper;
+import com.adplatform.restApi.domain.advertiser.creative.dto.CreativeMediaCategoryMapper;
 import com.adplatform.restApi.domain.advertiser.creative.exception.CreativeUpdateException;
-import com.adplatform.restApi.domain.advertiser.creative.domain.Creative;
-import com.adplatform.restApi.domain.advertiser.creative.domain.CreativeFile;
-import com.adplatform.restApi.domain.advertiser.creative.domain.CreativeOpinionProofFile;
-import com.adplatform.restApi.domain.advertiser.creative.domain.FileInformation;
 import com.adplatform.restApi.domain.media.dao.placement.PlacementRepository;
+import com.adplatform.restApi.domain.media.domain.MediaCategory;
 import com.adplatform.restApi.domain.media.domain.Placement;
+import com.adplatform.restApi.domain.media.domain.QMediaCategory;
 import com.adplatform.restApi.domain.media.exception.PlacementNotFoundException;
 import com.adplatform.restApi.infra.file.util.ImageSizeUtils;
 import com.adplatform.restApi.infra.file.service.FileService;
@@ -36,17 +37,27 @@ import java.util.stream.Collectors;
 public class CreativeCommandService {
     private final CreativeRepository creativeRepository;
     private final PlacementRepository placementRepository;
-
     private final CreativePlacementRepository creativePlacementRepository;
     private final FileService fileService;
     private final CreativeMapper creativeMapper;
+    private final CreativeMediaCategoryMapper creativeMediaCategoryMapper;
+    private final CreativeMediaCategoryRepository creativeMediaCategoryRepository;
 
     public void save(CreativeDto.Request.Save request) {
         List<Placement> placement = this.findByPlacementId(request.getPlacements());
+
         Creative creative = this.creativeMapper.toEntity(request, placement);
         request.getFiles().forEach(file -> creative.addFile(this.saveFile(request, creative, file)));
         request.getOpinionProofFiles().forEach(file -> creative.addOpinionProofFile(this.saveOpinionProofFile(creative, file)));
-        this.creativeRepository.save(creative);
+        Integer creativeId = this.creativeRepository.save(creative).getId();
+
+        // 매체 카테고리 정보 인서트
+        String mediaCategoryTmp = request.getMediaCategory();
+        String [] mediaCategoryItems = mediaCategoryTmp.split(",");
+        for (int i=0; i < mediaCategoryItems.length; i++) {
+            String [] mediaCategorySubTmp = mediaCategoryItems[i].split("_");
+            CreativeMediaCategory creativeMediaCategory = this.creativeMediaCategoryMapper.toEntity(creativeId, Integer.parseInt(mediaCategorySubTmp[0]), Integer.parseInt(mediaCategorySubTmp[1]));
+        }
     }
 
     private List<Placement> findByPlacementId(List<Integer> placementId) {
@@ -67,6 +78,17 @@ public class CreativeCommandService {
                     .update(request, placement)
                     .deleteOpinionProofFiles(request.getAdGroupId(), request.getDeleteOpinionProofFilenames(), this.fileService);
             request.getOpinionProofFiles().forEach(file -> creative.addOpinionProofFile(this.saveOpinionProofFile(creative, file)));
+
+            // 매체 카테고리 정보 삭제
+            this.creativeMediaCategoryRepository.deleteCreativeMediaCategory(request.getCreativeId());
+            // 매체 카테고리 정보 인서트
+            String mediaCategoryTmp = request.getMediaCategory();
+            String [] mediaCategoryItems = mediaCategoryTmp.split(",");
+            for (int i=0; i < mediaCategoryItems.length; i++) {
+                String [] mediaCategorySubTmp = mediaCategoryItems[i].split("_");
+                CreativeMediaCategory creativeMediaCategory = this.creativeMediaCategoryMapper.toEntity(request.getCreativeId(), Integer.parseInt(mediaCategorySubTmp[0]), Integer.parseInt(mediaCategorySubTmp[1]));
+            }
+
         }catch (Exception e){
             throw new CreativeUpdateException();
         }

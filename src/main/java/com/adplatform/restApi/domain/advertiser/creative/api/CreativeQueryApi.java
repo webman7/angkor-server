@@ -5,12 +5,16 @@ import com.adplatform.restApi.domain.advertiser.adgroup.domain.AdGroup;
 import com.adplatform.restApi.domain.advertiser.adgroup.service.AdGroupFindUtils;
 import com.adplatform.restApi.domain.advertiser.campaign.dao.campaign.CampaignRepository;
 import com.adplatform.restApi.domain.advertiser.campaign.dto.AdvertiserSearchRequest;
+import com.adplatform.restApi.domain.advertiser.creative.dao.CreativeMediaCategoryRepository;
 import com.adplatform.restApi.domain.advertiser.creative.dao.CreativeRepository;
 import com.adplatform.restApi.domain.advertiser.creative.dao.mapper.CreativeQueryMapper;
 import com.adplatform.restApi.domain.advertiser.creative.domain.Creative;
+import com.adplatform.restApi.domain.advertiser.creative.domain.CreativeMediaCategory;
 import com.adplatform.restApi.domain.advertiser.creative.dto.CreativeDto;
 import com.adplatform.restApi.domain.advertiser.creative.dto.CreativeMapper;
+import com.adplatform.restApi.domain.advertiser.creative.dto.CreativeMediaCategoryMapper;
 import com.adplatform.restApi.domain.advertiser.creative.exception.CreativeNotFoundException;
+import com.adplatform.restApi.domain.advertiser.creative.service.CreativeMediaCategoryFindUtils;
 import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount;
 import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccountByCreativeId;
 import com.adplatform.restApi.global.dto.PageDto;
@@ -22,6 +26,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+import java.util.List;
+
+import static com.adplatform.restApi.domain.advertiser.adgroup.domain.QAdGroup.adGroup;
 
 /**
  * @author junny
@@ -36,6 +44,8 @@ public class CreativeQueryApi {
     private final CreativeRepository creativeRepository;
     private final CreativeQueryMapper creativeQueryMapper;
     private final CreativeMapper creativeMapper;
+    private final CreativeMediaCategoryMapper creativeMediaCategoryMapper;
+    private final CreativeMediaCategoryRepository creativeMediaCategoryRepository;
 
     @AuthorizedAdAccount
     @ResponseStatus(HttpStatus.OK)
@@ -62,5 +72,14 @@ public class CreativeQueryApi {
                         .orElseThrow(CreativeNotFoundException::new),
                 this.creativeRepository.findDetailFilesById(creativeId),
                 this.creativeRepository.findDetailOpinionProofById(creativeId), adGroup);
+    }
+
+    @AuthorizedAdAccountByCreativeId
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}/category")
+    public List<CreativeDto.Response.Category> creativeCategory(@PathVariable(name = "id") Integer creativeId) {
+        Creative creative = this.creativeRepository.findDetailById(creativeId).orElseThrow(CreativeNotFoundException::new);
+
+        return this.creativeQueryMapper.creativeMediaCategoryList(creativeId);
     }
 }
