@@ -74,22 +74,25 @@ public class MediaPlacementSaveService {
 
         Integer count = this.placementRepository.findByWidthAndHeight(mediaPlacement.getWidth(), mediaPlacement.getHeight());
 
-        if(!count.equals(0)) {
-            throw new PlacementSizeAlreadyExistException();
+        if(count.equals(0)) {
+            PlacementDto.Request.Save pData = new PlacementDto.Request.Save();
+            pData.setName(mediaPlacement.getWidth() + "X" + mediaPlacement.getHeight());
+            pData.setWidth(mediaPlacement.getWidth());
+            pData.setHeight(mediaPlacement.getHeight());
+            pData.setWidthHeightRate(mediaPlacement.getWidthHeightRate());
+            pData.setMemo(mediaPlacement.getMemo());
+            pData.setAdminMemo(request.getAdminMemo());
+
+            Placement placement = this.placementMapper.toEntity(pData);
+            Integer placementId = this.placementRepository.save(placement).updateAdminApprove().getId();
+            MediaPlacementFindUtils.findByIdOrElseThrow(request.getId(), this.mediaPlacementRepository).updateAdminApproveNew(request, placementId);
+        } else {
+            MediaPlacementFindUtils.findByIdOrElseThrow(request.getId(), this.mediaPlacementRepository).updateAdminApprove(request);
         }
 
-        PlacementDto.Request.Save pData = new PlacementDto.Request.Save();
-        pData.setName(mediaPlacement.getWidth() + "X" + mediaPlacement.getHeight());
-        pData.setWidth(mediaPlacement.getWidth());
-        pData.setHeight(mediaPlacement.getHeight());
-        pData.setWidthHeightRate(mediaPlacement.getWidthHeightRate());
-        pData.setMemo(mediaPlacement.getMemo());
-        pData.setAdminMemo(request.getAdminMemo());
 
-        Placement placement = this.placementMapper.toEntity(pData);
-        Integer placementId = this.placementRepository.save(placement).updateAdminApprove().getId();
 
-        MediaPlacementFindUtils.findByIdOrElseThrow(request.getId(), this.mediaPlacementRepository).updateAdminApprove(request, placementId);
+
     }
 
     public void updateAdminReject(MediaPlacementDto.Request.Update request) {

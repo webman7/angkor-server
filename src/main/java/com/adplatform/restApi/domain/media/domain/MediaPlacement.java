@@ -121,8 +121,16 @@ public class MediaPlacement extends BaseUpdatedEntity {
         return this;
     }
 
-    public MediaPlacement updateAdminApprove(MediaPlacementDto.Request.Update request, Integer placementId) {
+    public MediaPlacement updateAdminApproveNew(MediaPlacementDto.Request.Update request, Integer placementId) {
         this.placementId = placementId;
+        this.approveUserNo = SecurityUtils.getLoginUserNo();
+        this.approveAt = LocalDateTime.now();
+        this.adminMemo = request.getAdminMemo();
+        this.status = MediaPlacement.Status.Y;
+        return this;
+    }
+
+    public MediaPlacement updateAdminApprove(MediaPlacementDto.Request.Update request) {
         this.approveUserNo = SecurityUtils.getLoginUserNo();
         this.approveAt = LocalDateTime.now();
         this.adminMemo = request.getAdminMemo();
