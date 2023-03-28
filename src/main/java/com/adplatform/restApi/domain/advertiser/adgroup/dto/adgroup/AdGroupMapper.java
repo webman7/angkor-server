@@ -30,7 +30,7 @@ public interface AdGroupMapper {
     @Mapping(target = "devices", source = "devices")
     @Mapping(target = "config", expression = "java(AdGroup.Config.ON)")
     @Mapping(target = "systemConfig", expression = "java(AdGroup.SystemConfig.ON)")
-    @Mapping(target = "status", expression = "java(AdGroup.Status.READY)")
+    @Mapping(target = "status", expression = "java(AdGroup.Status.LIVE)")
     AdGroup toEntity(AdGroupSavedEvent event, List<Media> media, List<Device> devices);
 
     @Mapping(target = "adGroupId", source = "adGroup.id")
