@@ -1,12 +1,15 @@
 package com.adplatform.restApi.domain.wallet.dto;
 
-import com.adplatform.restApi.domain.wallet.domain.WalletFreeCash;
+import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author junny
@@ -16,14 +19,21 @@ public class WalletDto {
     public static abstract class Request {
         @Getter
         @Setter
-        public static class SaveCash {
+        public static class SaveCredit {
             @NotNull
             private int businessAccountId;
-            private Float inAmount;
-            private Float outAmount;
-            private Long pubAmount;
-            private String summary;
-            private String memo;
+            private Float depositAmount;
+            private String depositor;
+            private Integer depositAt;
+            private List<MultipartFile> walletChargeFiles = new ArrayList<>();
+            private String adminMemo;
+        }
+
+        @Getter
+        @Setter
+        public static class UpdateCredit extends WalletDto.Request.SaveCredit {
+            @NotNull
+            private Integer id;
         }
 
         @Getter
@@ -232,10 +242,11 @@ public class WalletDto {
         public static class RefundSearch {
             private int id;
             private int businessAccountId;
-
+            private String businessAccountName;
             private int bankId;
             private String accountNumber;
             private String accountOwner;
+            private Float availableAmount;
             private Float requestAmount;
             private Float amount;
             private String adminMemo;
@@ -247,12 +258,14 @@ public class WalletDto {
             private String updatedUserId;
             private LocalDateTime updatedAt;
             @QueryProjection
-            public RefundSearch(int id, int businessAccountId, int bankId, String accountNumber, String accountOwner, Float requestAmount, Float amount, String adminMemo, String sendYn, int createdUserNo, String createdUserId, LocalDateTime createdAt, int updatedUserNo, String updatedUserId, LocalDateTime updatedAt) {
+            public RefundSearch(int id, int businessAccountId, String businessAccountName, int bankId, String accountNumber, String accountOwner, Float availableAmount, Float requestAmount, Float amount, String adminMemo, String sendYn, int createdUserNo, String createdUserId, LocalDateTime createdAt, int updatedUserNo, String updatedUserId, LocalDateTime updatedAt) {
                 this.id = id;
                 this.businessAccountId = businessAccountId;
+                this.businessAccountName = businessAccountName;
                 this.bankId = bankId;
                 this.accountNumber = accountNumber;
                 this.accountOwner = accountOwner;
+                this.availableAmount = availableAmount;
                 this.requestAmount = requestAmount;
                 this.amount = amount;
                 this.adminMemo = adminMemo;

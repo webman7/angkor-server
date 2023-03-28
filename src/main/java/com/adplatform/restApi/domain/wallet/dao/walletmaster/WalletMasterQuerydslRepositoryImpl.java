@@ -42,4 +42,14 @@ public class WalletMasterQuerydslRepositoryImpl implements WalletMasterQuerydslR
                 .where(walletMaster.businessAccount.id.eq(businessAccountId))
                 .execute();
     }
+
+    public void updateWalletMasterCharge(Integer businessAccountId, Float availableAmount) {
+        LocalDateTime now = LocalDateTime.now();
+
+        this.query.update(walletMaster)
+                .set(walletMaster.availableAmount, availableAmount)
+                .set(walletMaster.updatedAt, now)
+                .where(walletMaster.businessAccount.id.eq(businessAccountId))
+                .execute();
+    }
 }

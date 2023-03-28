@@ -5,6 +5,7 @@ import com.adplatform.restApi.domain.advertiser.creative.dto.CreativeDto;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.media.dto.MediaDto;
 import com.adplatform.restApi.domain.media.dto.placement.MediaPlacementDto;
+import com.adplatform.restApi.domain.wallet.dto.WalletDto;
 import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -30,6 +31,7 @@ public class LocalFileServiceImpl implements FileService {
     private static final String FILE_COMPANY_PATH = "./files/company/";
     private static final String FILE_MEDIA_PATH = "./files/media/";
     private static final String FILE_MEDIA_PLACEMENT_PATH = "./files/placement/";
+    private static final String FILE_CHARGE_PATH = "./files/charge/";
 
     @SneakyThrows
     @Override
@@ -74,7 +76,7 @@ public class LocalFileServiceImpl implements FileService {
     @SneakyThrows
     @Override
     public String saveCompany(CompanyDto.Request.Save request, MultipartFile file, String fType) {
-        String filePath = FILE_COMPANY_PATH + "/" + fType;
+        String filePath = FILE_COMPANY_PATH + fType;
         String ymdPath = UpLoadFileUtils.calcPath(filePath);
         String uploadPath = filePath + ymdPath + "/";
         File savedFile = new File(String.format(
@@ -84,6 +86,27 @@ public class LocalFileServiceImpl implements FileService {
         savedFile.getParentFile().mkdirs();
 
         System.out.println("savedCompanyFile.toPath() : " + savedFile.toPath());
+        file.transferTo(savedFile.toPath());
+        if (uploadPath.startsWith(".")) {
+            uploadPath = uploadPath.substring(1);
+        }
+        uploadPath = uploadPath.replace("\\", "/");
+        return uploadPath + savedFile.getName();
+    }
+
+    @SneakyThrows
+    @Override
+    public String saveWalletCharge(WalletDto.Request.SaveCredit request, MultipartFile file) {
+        String filePath = FILE_CHARGE_PATH + "images";
+        String ymdPath = UpLoadFileUtils.calcPath(filePath);
+        String uploadPath = filePath + ymdPath + "/";
+        File savedFile = new File(String.format(
+                "%s%s.%s",
+                uploadPath, UUID.randomUUID(),
+                FilenameUtils.getExtension(file.getOriginalFilename())));
+        savedFile.getParentFile().mkdirs();
+
+        System.out.println("saveWalletChargeFile.toPath() : " + savedFile.toPath());
         file.transferTo(savedFile.toPath());
         if (uploadPath.startsWith(".")) {
             uploadPath = uploadPath.substring(1);
@@ -104,7 +127,7 @@ public class LocalFileServiceImpl implements FileService {
                 FilenameUtils.getExtension(file.getOriginalFilename())));
         savedFile.getParentFile().mkdirs();
 
-        System.out.println("savedCompanyFile.toPath() : " + savedFile.toPath());
+        System.out.println("saveMediaFile.toPath() : " + savedFile.toPath());
         file.transferTo(savedFile.toPath());
         if (uploadPath.startsWith(".")) {
             uploadPath = uploadPath.substring(1);
@@ -125,7 +148,7 @@ public class LocalFileServiceImpl implements FileService {
                 FilenameUtils.getExtension(file.getOriginalFilename())));
         savedFile.getParentFile().mkdirs();
 
-        System.out.println("savedCompanyFile.toPath() : " + savedFile.toPath());
+        System.out.println("saveMediaPlacementFile.toPath() : " + savedFile.toPath());
         file.transferTo(savedFile.toPath());
         if (uploadPath.startsWith(".")) {
             uploadPath = uploadPath.substring(1);

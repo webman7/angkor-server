@@ -5,6 +5,8 @@ import com.adplatform.restApi.domain.advertiser.creative.domain.Creative;
 import com.adplatform.restApi.domain.advertiser.creative.dto.CreativeDto;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.media.dto.placement.MediaPlacementDto;
+import com.adplatform.restApi.domain.wallet.domain.WalletReserveLog;
+import com.adplatform.restApi.domain.wallet.dto.WalletDto;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -17,6 +19,8 @@ public interface FileService {
     String saveProofFile(Creative creative, MultipartFile file);
 
     String saveCompany(CompanyDto.Request.Save request, MultipartFile file, String fType);
+
+    String saveWalletCharge(WalletDto.Request.SaveCredit request, MultipartFile file);
 
     String saveMedia(MediaDto.Request.Save request, MultipartFile file);
 

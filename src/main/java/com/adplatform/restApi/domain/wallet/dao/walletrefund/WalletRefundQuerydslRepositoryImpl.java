@@ -27,6 +27,7 @@ import java.util.Objects;
 
 import static com.adplatform.restApi.domain.business.domain.QBusinessAccount.businessAccount;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
+import static com.adplatform.restApi.domain.wallet.domain.QWalletMaster.walletMaster;
 import static com.adplatform.restApi.domain.wallet.domain.QWalletRefund.walletRefund;
 import static com.querydsl.core.types.ExpressionUtils.as;
 import static com.querydsl.jpa.JPAExpressions.select;
@@ -114,9 +115,11 @@ public class WalletRefundQuerydslRepositoryImpl implements WalletRefundQuerydslR
                         new QWalletDto_Response_RefundSearch(
                                 walletRefund.id,
                                 walletRefund.businessAccountId,
+                                businessAccount.name,
                                 walletRefund.bankId,
                                 walletRefund.accountNumber,
                                 walletRefund.accountOwner,
+                                walletMaster.availableAmount,
                                 walletRefund.requestAmount,
                                 walletRefund.amount,
                                 walletRefund.adminMemo,
@@ -135,9 +138,10 @@ public class WalletRefundQuerydslRepositoryImpl implements WalletRefundQuerydslR
                                 walletRefund.updatedAt
                         )
                 )
-                .from(walletRefund, businessAccount)
+                .from(walletRefund, businessAccount, walletMaster)
                 .where(
                         walletRefund.businessAccountId.eq(businessAccount.id),
+                        businessAccount.id.eq(walletMaster.businessAccount.id),
                         this.eqId(request.getBusinessAccountId()),
                         this.eqSendYn(request.getSendYn()),
                         walletRefund.createdAt.between(

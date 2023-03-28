@@ -42,12 +42,12 @@ public class AdAccountDto {
             private String name;
         }
 
-        @Getter
-        @Setter
-        public static class OutOfBalanceUpdate {
-            private Integer id;
-            private Boolean outOfBalance;
-        }
+//        @Getter
+//        @Setter
+//        public static class OutOfBalanceUpdate {
+//            private Integer id;
+//            private Boolean outOfBalance;
+//        }
 
         @Getter
         @Setter

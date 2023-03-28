@@ -449,13 +449,13 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
 //                : query;
 //    }
 
-    @Override
-    public void outOfBalanceUpdate(Integer adAccountId, Boolean oufOfBalance) {
-        this.query.update(adAccount)
-                .set(adAccount.outOfBalance, oufOfBalance)
-                .where(adAccount.id.eq(adAccountId))
-                .execute();
-    }
+//    @Override
+//    public void outOfBalanceUpdate(Integer adAccountId, Boolean oufOfBalance) {
+//        this.query.update(adAccount)
+//                .set(adAccount.outOfBalance, oufOfBalance)
+//                .where(adAccount.id.eq(adAccountId))
+//                .execute();
+//    }
 
     @Override
     public DashboardDto.Response.AdAccountCountByAd adAccountsCountByAd(Integer adAccountId) {

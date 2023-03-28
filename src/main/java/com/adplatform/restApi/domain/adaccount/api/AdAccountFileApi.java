@@ -518,13 +518,13 @@ public class AdAccountFileApi {
                 .body(baos.toByteArray());
     }
 
-    private String getStatus(AdAccount.Config config, boolean adminStop, boolean outOfBalance) {
+    private String getStatus(AdAccount.Config config, boolean adminStop) {
         if (adminStop) return "관리자정지";
         switch (config) {
             case ON:
-                return outOfBalance ? "잔액부족" : "운영중";
+                return "운영중";
             case OFF:
-                return outOfBalance ? "사용자OFF,잔액부족" : "사용자OFF";
+                return "사용자OFF";
             case DEL:
                 return "-";
         }
