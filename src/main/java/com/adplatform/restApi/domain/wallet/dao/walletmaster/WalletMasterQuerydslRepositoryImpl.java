@@ -26,7 +26,8 @@ public class WalletMasterQuerydslRepositoryImpl implements WalletMasterQuerydslR
                         walletMaster.totalReserveAmount
                 ))
                 .from(businessAccount, walletMaster)
-                .where(businessAccount.id.eq(businessAccountId)
+                .where(businessAccount.id.eq(businessAccountId),
+                        businessAccount.id.eq(walletMaster.businessAccount.id)
                 )
                 .fetchOne();
     }
