@@ -32,11 +32,11 @@ public class CampaignBudgetChangeHistory extends BaseEntity {
     @Column(name = "available_chg_amount", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2)")
     private Float availableChgAmount;
 
-    @Column(name = "reserve_amount", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2)")
-    private Float reserveAmount;
+    @Column(name = "total_reserve_amount", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2)")
+    private Float totalReserveAmount;
 
-    @Column(name = "reserve_chg_amount", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2)")
-    private Float reserveChgAmount;
+    @Column(name = "total_reserve_chg_amount", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2)")
+    private Float totalReserveChgAmount;
 
     @CreatedBy
     @Column(name = "reg_user_no")
@@ -50,8 +50,8 @@ public class CampaignBudgetChangeHistory extends BaseEntity {
             Float chgAmount,
             Float availableAmount,
             Float availableChgAmount,
-            Float reserveAmount,
-            Float reserveChgAmount,
+            Float totalReserveAmount,
+            Float totalReserveChgAmount,
             Integer createdUserNo) {
         this.businessAccountId = businessAccountId;
         this.adAccountId = adAccountId;
@@ -59,8 +59,8 @@ public class CampaignBudgetChangeHistory extends BaseEntity {
         this.chgAmount = chgAmount;
         this.availableAmount = availableAmount;
         this.availableChgAmount = availableChgAmount;
-        this.reserveAmount = reserveAmount;
-        this.reserveChgAmount = reserveChgAmount;
+        this.totalReserveAmount = totalReserveAmount;
+        this.totalReserveChgAmount = totalReserveChgAmount;
         this.createdUserNo = createdUserNo;
     }
 }

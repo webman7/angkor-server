@@ -1,7 +1,5 @@
 package com.adplatform.restApi.domain.wallet.dao.walletcashtotal;
 
-import com.adplatform.restApi.domain.wallet.dto.WalletDto;
-import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_WalletCashTotal;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

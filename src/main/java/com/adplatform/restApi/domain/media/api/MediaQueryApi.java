@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,5 +52,10 @@ public class MediaQueryApi {
         MediaFileDto.Response.FileInfo mediaFile = this.mediaRepository.findByMediaIdFileInfo(id);
 
         return this.mediaMapper.toCategoryResponse(MediaFindUtils.findByIdOrElseThrow(id, this.mediaRepository), company, category, mediaFile);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<MediaDto.Response.Default>> findAll() {
+        return ResponseEntity.ok(this.mediaMapper.toDefaultResponse(this.mediaRepository.findAll()));
     }
 }

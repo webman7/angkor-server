@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.adplatform.restApi.domain.adaccount.domain.QAdAccount.adAccount;
 import static com.adplatform.restApi.domain.advertiser.adgroup.domain.QAdGroup.adGroup;
 import static com.adplatform.restApi.domain.advertiser.adgroup.domain.QAdGroupSchedule.adGroupSchedule;
 import static com.adplatform.restApi.domain.advertiser.campaign.domain.QAdGoal.adGoal;
@@ -134,11 +135,22 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
 
     @Override
     public CampaignDto.Response.CampaignByAdAccountId getCampaignByAdAccountId(Integer id) {
-        return this.query.select(new QCampaignDto_Response_CampaignByAdAccountId(campaign.id, campaign.adAccount.id, campaign.budgetAmount))
-                .from(campaign)
-                .where(campaign.id.eq(id))
+        return this.query.select(new QCampaignDto_Response_CampaignByAdAccountId(campaign.id, adAccount.businessAccount.id, campaign.adAccount.id, campaign.budgetAmount))
+                .from(campaign, adAccount)
+                .where(campaign.id.eq(id),
+                campaign.adAccount.id.eq(adAccount.id))
                 .fetchOne();
     }
+
+    @Override
+    public CampaignDto.Response.CampaignByBusinessAccountId getCampaignByBusinessAccountId(Integer id) {
+        return this.query.select(new QCampaignDto_Response_CampaignByBusinessAccountId(adAccount.businessAccount.id, campaign.adAccount.id, campaign.budgetAmount))
+                .from(campaign, adAccount)
+                .where(adAccount.id.eq(id),
+                        campaign.adAccount.id.eq(adAccount.id))
+                .fetchOne();
+    }
+
 
     private BooleanExpression eqAdAccountId(Integer adAccountId) {
         return nonNull(adAccountId) ? campaign.adAccount.id.eq(adAccountId) : null;

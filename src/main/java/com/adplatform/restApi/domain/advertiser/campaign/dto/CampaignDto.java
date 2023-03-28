@@ -25,6 +25,8 @@ public abstract class CampaignDto {
         @Getter
         @Setter
         public static class Save implements AdAccountIdGetter {
+//            @NotNull
+//            private Integer businessAccountId;
             @NotNull
             private Integer adAccountId;
             @NotNull
@@ -223,13 +225,30 @@ public abstract class CampaignDto {
         @NoArgsConstructor(access = AccessLevel.PROTECTED)
         public static class CampaignByAdAccountId {
             private Integer campaignId;
+            private Integer businessAccountId;
             private Integer adAccountId;
-
             private Long budgetAmount;
 
             @QueryProjection
-            public CampaignByAdAccountId(Integer campaignId, Integer adAccountId, Long budgetAmount) {
+            public CampaignByAdAccountId(Integer campaignId, Integer businessAccountId, Integer adAccountId, Long budgetAmount) {
                 this.campaignId = campaignId;
+                this.businessAccountId = businessAccountId;
+                this.adAccountId = adAccountId;
+                this.budgetAmount = budgetAmount;
+            }
+        }
+
+        @Getter
+        @Setter
+        @NoArgsConstructor(access = AccessLevel.PROTECTED)
+        public static class CampaignByBusinessAccountId {
+            private Integer businessAccountId;
+            private Integer adAccountId;
+            private Long budgetAmount;
+
+            @QueryProjection
+            public CampaignByBusinessAccountId(Integer businessAccountId, Integer adAccountId, Long budgetAmount) {
+                this.businessAccountId = businessAccountId;
                 this.adAccountId = adAccountId;
                 this.budgetAmount = budgetAmount;
             }

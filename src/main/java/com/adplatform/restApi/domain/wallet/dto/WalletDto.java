@@ -29,6 +29,19 @@ public class WalletDto {
 
         @Getter
         @Setter
+        public static class SaveWalletReserveLog {
+            @NotNull
+            private int businessAccountId;
+            private int adAccountId;
+            private int campaignId;
+            private String fluctuation;
+            private Float totalReserveAmount;
+            private Float reserveAmount;
+            private Float reserveVatAmount;
+        }
+
+        @Getter
+        @Setter
         public static class SaveWalletLog {
             @NotNull
             private int businessAccountId;
@@ -114,20 +127,33 @@ public class WalletDto {
             }
         }
 
+//        @Getter
+//        @Setter
+//        public static class WalletCashTotal {
+//            private int cashId;
+//            private Float amount;
+//            private Float availableAmount;
+//            private Float reserveAmount;
+//
+//            @QueryProjection
+//            public WalletCashTotal(Integer cashId, Float amount, Float availableAmount, Float reserveAmount) {
+//                this.cashId = cashId;
+//                this.amount = amount;
+//                this.availableAmount = availableAmount;
+//                this.reserveAmount = reserveAmount;
+//            }
+//        }
+
         @Getter
         @Setter
-        public static class WalletCashTotal {
-            private int cashId;
-            private Float amount;
+        public static class WalletMaster {
             private Float availableAmount;
-            private Float reserveAmount;
+            private Float totalReserveAmount;
 
             @QueryProjection
-            public WalletCashTotal(Integer cashId, Float amount, Float availableAmount, Float reserveAmount) {
-                this.cashId = cashId;
-                this.amount = amount;
+            public WalletMaster(Float availableAmount, Float totalReserveAmount) {
                 this.availableAmount = availableAmount;
-                this.reserveAmount = reserveAmount;
+                this.totalReserveAmount = totalReserveAmount;
             }
         }
 

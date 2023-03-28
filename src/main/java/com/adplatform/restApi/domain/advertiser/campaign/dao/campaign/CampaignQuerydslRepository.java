@@ -23,4 +23,6 @@ public interface CampaignQuerydslRepository {
 
     CampaignDto.Response.CampaignByAdAccountId getCampaignByAdAccountId(Integer campaignId);
 
+    CampaignDto.Response.CampaignByBusinessAccountId getCampaignByBusinessAccountId(Integer adAccountId);
+
 }

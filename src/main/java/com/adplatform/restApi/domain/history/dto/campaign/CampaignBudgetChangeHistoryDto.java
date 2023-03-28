@@ -16,8 +16,8 @@ public class CampaignBudgetChangeHistoryDto {
             private Float chgAmount;
             private Float availableAmount;
             private Float availableChgAmount;
-            private Float reserveAmount;
-            private Float reserveChgAmount;
+            private Float totalReserveAmount;
+            private Float totalReserveChgAmount;
         }
     }
 }
