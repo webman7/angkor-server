@@ -3,6 +3,7 @@ package com.adplatform.restApi.domain.advertiser.adgroup.dao.adgroup;
 import com.adplatform.restApi.domain.advertiser.adgroup.domain.AdGroupMedia;
 import com.adplatform.restApi.domain.advertiser.adgroup.dto.adgroup.AdGroupMediaDto;
 import com.adplatform.restApi.domain.advertiser.adgroup.dto.adgroup.QAdGroupMediaDto_Response_Default;
+import com.adplatform.restApi.domain.media.domain.Media;
 import com.adplatform.restApi.global.util.QuerydslOrderSpecifierUtil;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.adplatform.restApi.domain.advertiser.adgroup.domain.QAdGroupMedia.adGroupMedia;
+import static com.adplatform.restApi.domain.media.domain.QMedia.media;
 
 @RequiredArgsConstructor
 @Repository
@@ -33,9 +35,11 @@ public class AdGroupMediaQuerydslRepositoryImpl implements AdGroupMediaQuerydslR
         JPAQuery<AdGroupMediaDto.Response.Default> query = this.query.select(new QAdGroupMediaDto_Response_Default(
                         adGroupMedia.adGroup.id,
                         adGroupMedia.media.id))
-                .from(adGroupMedia)
+                .from(adGroupMedia, media)
                 .where(
-                        this.eqAdGroupId(adGroupId));
+                        this.eqAdGroupId(adGroupId),
+                        media.id.eq(adGroupMedia.media.id),
+                        media.status.eq(Media.Status.Y));
 
         return Objects.nonNull(pageable)
                 ? query.orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(AdGroupMedia.class, "adgroup_media", pageable.getSort()).toArray(OrderSpecifier[]::new))

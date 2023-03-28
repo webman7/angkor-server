@@ -3,10 +3,7 @@ package com.adplatform.restApi.domain.media.dao;
 import com.adplatform.restApi.domain.company.dto.QCompanyDto_Response_Default;
 import com.adplatform.restApi.domain.media.domain.FileInformation;
 import com.adplatform.restApi.domain.media.domain.Media;
-import com.adplatform.restApi.domain.media.dto.MediaDto;
-import com.adplatform.restApi.domain.media.dto.MediaFileDto;
-import com.adplatform.restApi.domain.media.dto.QMediaDto_Response_Search;
-import com.adplatform.restApi.domain.media.dto.QMediaFileDto_Response_FileInfo;
+import com.adplatform.restApi.domain.media.dto.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -160,6 +157,17 @@ public class MediaQuerydslRepositoryImpl implements MediaQuerydslRepository {
                         .where(mediaFile.media.id.eq(id)
                         )))
                 .fetchOne();
+    }
+
+    @Override
+    public List<MediaDto.Response.Default> mediaAll() {
+        return this.query.select(new QMediaDto_Response_Default(
+                        media.id,
+                        media.name
+                ))
+                .from(media)
+                .where(media.status.eq(Media.Status.Y))
+                .fetch();
     }
 
 

@@ -63,8 +63,15 @@ public class MediaDto {
         public static class Default {
             private Integer id;
             private String name;
-            private String appKey;
-            private String appSecret;
+//            private String appKey;
+//            private String appSecret;
+            @QueryProjection
+            public Default(
+                    Integer id,
+                    String name) {
+                this.id = id;
+                this.name = name;
+            }
         }
 
         @Getter

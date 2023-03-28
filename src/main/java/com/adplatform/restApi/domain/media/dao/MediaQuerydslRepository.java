@@ -1,6 +1,7 @@
 package com.adplatform.restApi.domain.media.dao;
 
 import com.adplatform.restApi.domain.media.domain.FileInformation;
+import com.adplatform.restApi.domain.media.domain.Media;
 import com.adplatform.restApi.domain.media.dto.MediaDto;
 import com.adplatform.restApi.domain.media.dto.MediaFileDto;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,7 @@ public interface MediaQuerydslRepository {
 
     MediaFileDto.Response.FileInfo findByMediaIdFileInfo(Integer id);
 
+    List<MediaDto.Response.Default> mediaAll();
 
 
 

@@ -34,4 +34,8 @@ public interface MediaMapper {
     MediaDto.Response.Default toDefaultResponse(Media media);
 
     List<MediaDto.Response.Default> toDefaultResponse(List<Media> medias);
+
+    @Mapping(target = "id", source = "media.id")
+    @Mapping(target = "name", source = "media.name")
+    List<MediaDto.Response.Default> toMediaResponse(List<MediaDto.Response.Default> media);
 }

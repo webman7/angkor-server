@@ -56,6 +56,7 @@ public class MediaQueryApi {
 
     @GetMapping
     public ResponseEntity<List<MediaDto.Response.Default>> findAll() {
-        return ResponseEntity.ok(this.mediaMapper.toDefaultResponse(this.mediaRepository.findAll()));
+        List<MediaDto.Response.Default> media = this.mediaRepository.mediaAll();
+        return ResponseEntity.ok(this.mediaMapper.toMediaResponse(media));
     }
 }

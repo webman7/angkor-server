@@ -236,7 +236,8 @@ since 1.0
          WHERE a.id = b.adgroup_info_id
            AND b.media_info_id = c.media_info_id
            AND c.placement_info_id = d.id
-           AND c.`status` = 'Y'
+           AND c.status = 'Y'
+           AND d.status = 'Y'
            AND a.id = #{adGroupId}
     </sql>
 
@@ -252,13 +253,15 @@ since 1.0
         SELECT d.id AS categoryId, d.name AS categoryName
           FROM adgroup_info a, adgroup_media_info b, media_category_info c, category_info d, media_info e
          WHERE a.id = b.adgroup_info_id
-          AND b.media_info_id = c.media_info_id
-          AND c.category_info_id = d.id
-          AND b.media_info_id = e.id
-          AND c.media_info_id = e.id
-          AND a.id = #{adGroupId}
-        GROUP BY d.id
-        ORDER BY d.id ASC
+           AND b.media_info_id = c.media_info_id
+           AND c.category_info_id = d.id
+           AND b.media_info_id = e.id
+           AND c.media_info_id = e.id
+           AND a.id = #{adGroupId}
+           AND d.del_yn = 'N'
+           AND e.status = 'Y'
+         GROUP BY d.id
+         ORDER BY d.id ASC
     </sql>
 
     <resultMap id="mapAdGroupCategoryMedia" type="com.adplatform.restApi.domain.advertiser.adgroup.dto.adgroup.AdGroupDto$Response$CategoryMedia">
@@ -273,15 +276,17 @@ since 1.0
 
     <sql id="adGroupCategoryMediaListQuery">
         SELECT d.id AS categoryId, d.name AS categoryName, e.id AS mediaId, e.name AS mediaName
-        FROM adgroup_info a, adgroup_media_info b, media_category_info c, category_info d, media_info e
-        WHERE a.id = b.adgroup_info_id
-        AND b.media_info_id = c.media_info_id
-        AND c.category_info_id = d.id
-        AND b.media_info_id = e.id
-        AND c.media_info_id = e.id
-        AND a.id = #{adGroupId}
-        GROUP BY d.id, e.id
-        ORDER BY d.id ASC
+          FROM adgroup_info a, adgroup_media_info b, media_category_info c, category_info d, media_info e
+         WHERE a.id = b.adgroup_info_id
+           AND b.media_info_id = c.media_info_id
+           AND c.category_info_id = d.id
+           AND b.media_info_id = e.id
+           AND c.media_info_id = e.id
+           AND a.id = #{adGroupId}
+           AND d.del_yn = 'N'
+           AND e.status = 'Y'
+         GROUP BY d.id, e.id
+         ORDER BY d.id ASC
     </sql>
 
 </mapper>
