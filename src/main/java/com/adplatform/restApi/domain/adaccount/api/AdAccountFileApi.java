@@ -72,7 +72,7 @@ public class AdAccountFileApi {
                 String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
                         c.getId(),
                         c.getName(),
-                        this.getStatus(c.getConfig(), c.isAdminStop(), c.isOutOfBalance()),
+                        this.getStatus(c.getConfig(), c.isAdminStop()),
 //                        this.getCompanyType(c.getCompanyType()),
 //                        c.isPrePayment() ? "후불" : "선불",
 //                        c.getCreditLimit(),
@@ -133,7 +133,7 @@ public class AdAccountFileApi {
                 cell.setCellStyle(dataStyle);
 
                 cell = row.createCell(columnNum++);
-                cell.setCellValue(this.getStatus(data.getConfig(), data.isAdminStop(), data.isOutOfBalance()));
+                cell.setCellValue(this.getStatus(data.getConfig(), data.isAdminStop()));
                 cell.setCellStyle(dataStyle);
 
                 cell = row.createCell(columnNum++);
@@ -198,7 +198,7 @@ public class AdAccountFileApi {
                 String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
                         c.getId(),
                         c.getName(),
-                        this.getStatus(c.getConfig(), c.isAdminStop(), c.isOutOfBalance()),
+                        this.getStatus(c.getConfig(), c.isAdminStop()),
 //                        this.getCompanyType(c.getCompanyType()),
 //                        c.isPrePayment() ? "후불" : "선불",
 //                        c.getCreditLimit(),
@@ -259,7 +259,7 @@ public class AdAccountFileApi {
                 cell.setCellStyle(dataStyle);
 
                 cell = row.createCell(columnNum++);
-                cell.setCellValue(this.getStatus(data.getConfig(), data.isAdminStop(), data.isOutOfBalance()));
+                cell.setCellValue(this.getStatus(data.getConfig(), data.isAdminStop()));
                 cell.setCellStyle(dataStyle);
 
                 cell = row.createCell(columnNum++);
@@ -324,7 +324,7 @@ public class AdAccountFileApi {
                 String.format("%s,%s,%s,%s,%s\n",
                         c.getId(),
                         c.getName(),
-                        this.getStatus(c.getConfig(), c.isAdminStop(), c.isOutOfBalance()),
+                        this.getStatus(c.getConfig(), c.isAdminStop()),
 //                        c.getWalletBalance().getCash(),
 //                        c.getWalletBalance().getFreeCash()
                         0, 0
@@ -381,7 +381,7 @@ public class AdAccountFileApi {
                 cell.setCellStyle(dataStyle);
 
                 cell = row.createCell(columnNum++);
-                cell.setCellValue(this.getStatus(data.getConfig(), data.isAdminStop(), data.isOutOfBalance()));
+                cell.setCellValue(this.getStatus(data.getConfig(), data.isAdminStop()));
                 cell.setCellStyle(dataStyle);
 
                 cell = row.createCell(columnNum);
@@ -425,7 +425,7 @@ public class AdAccountFileApi {
                 String.format("%s,%s,%s,%s,%s,%s\n",
                         c.getId(),
                         c.getName(),
-                        this.getStatus(c.getConfig(), c.isAdminStop(), c.isOutOfBalance()),
+                        this.getStatus(c.getConfig(), c.isAdminStop()),
                         c.getMarketerName(),
 //                        c.getCreditLimit(),
                         0,
@@ -482,7 +482,7 @@ public class AdAccountFileApi {
                 cell.setCellStyle(dataStyle);
 
                 cell = row.createCell(columnNum++);
-                cell.setCellValue(this.getStatus(data.getConfig(), data.isAdminStop(), data.isOutOfBalance()));
+                cell.setCellValue(this.getStatus(data.getConfig(), data.isAdminStop()));
                 cell.setCellStyle(dataStyle);
 
                 cell = row.createCell(columnNum++);

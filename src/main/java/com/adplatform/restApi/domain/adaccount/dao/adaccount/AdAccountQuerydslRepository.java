@@ -41,7 +41,7 @@ public interface AdAccountQuerydslRepository {
 
 //    List<AdAccountDto.Response.AdAccountCashDetailInfo> adAccountCashDetailInfo(Integer adAccountId);
 
-    void outOfBalanceUpdate(Integer adAccountId, Boolean oufOfBalance);
+//    void outOfBalanceUpdate(Integer adAccountId, Boolean oufOfBalance);
 
     DashboardDto.Response.AdAccountCountByAd adAccountsCountByAd(Integer adAccountId);
 
