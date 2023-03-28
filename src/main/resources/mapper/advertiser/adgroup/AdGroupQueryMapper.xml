@@ -289,4 +289,33 @@ since 1.0
          ORDER BY d.id ASC
     </sql>
 
+    <resultMap id="mapAdGroupPlacementMedia" type="com.adplatform.restApi.domain.advertiser.adgroup.dto.adgroup.AdGroupDto$Response$PlacementMedia">
+        <result column="categoryId" property="categoryId"/>
+        <result column="categoryName" property="categoryName"/>
+        <result column="mediaId" property="mediaId"/>
+        <result column="mediaName" property="mediaName"/>
+    </resultMap>
+    <select id="adGroupPlacementMediaList" resultMap="mapAdGroupPlacementMedia">
+        <include refid="adGroupPlacementMediaListQuery"/>
+    </select>
+
+    <sql id="adGroupPlacementMediaListQuery">
+        SELECT d.id AS categoryId, d.name AS categoryName, e.id AS mediaId, e.name AS mediaName
+          FROM adgroup_info a, adgroup_media_info b, media_category_info c, category_info d, media_info e, media_placement_info f, placement_info g
+         WHERE a.id = b.adgroup_info_id
+           AND b.media_info_id = c.media_info_id
+           AND c.category_info_id = d.id
+           AND b.media_info_id = e.id
+           AND c.media_info_id = e.id
+           AND f.media_info_id = e.id
+           AND f.placement_info_id = g.id
+           AND g.id = #{placementId}
+           AND a.id = #{adGroupId}
+           AND d.del_yn = 'N'
+           AND e.status = 'Y'
+           AND f.status = 'Y'
+         GROUP BY d.id, e.id, g.id
+         ORDER BY d.id ASC, e.id ASC, g.id ASC
+    </sql>
+
 </mapper>

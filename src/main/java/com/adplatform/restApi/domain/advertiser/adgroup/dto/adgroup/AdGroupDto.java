@@ -74,6 +74,12 @@ public abstract class AdGroupDto {
 
         @Getter
         @Setter
+        public static class PlacementMedia {
+            private Integer placementId;
+        }
+
+        @Getter
+        @Setter
         @NoArgsConstructor
         public static class Update extends FirstSave implements AdGroupIdGetter {
             @NotNull
@@ -207,5 +213,16 @@ public abstract class AdGroupDto {
             private String mediaName;
 
         }
+
+        @Getter
+        @AllArgsConstructor
+        public static class PlacementMedia {
+            private Integer categoryId;
+            private String categoryName;
+            private Integer mediaId;
+            private String mediaName;
+
+        }
+
     }
 }

@@ -93,4 +93,11 @@ public class AdGroupQueryApi {
     public List<AdGroupDto.Response.CategoryMedia> adGroupCategoryMediaList(@PathVariable(name = "id") Integer adGroupId) {
         return this.adGroupQueryMapper.adGroupCategoryMediaList(adGroupId);
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}/placement/media")
+    public List<AdGroupDto.Response.PlacementMedia> adGroupPlacementMediaList(@PathVariable(name = "id") Integer adGroupId,
+                @Valid AdGroupDto.Request.PlacementMedia request) {
+        return this.adGroupQueryMapper.adGroupPlacementMediaList(adGroupId, request.getPlacementId());
+    }
 }
