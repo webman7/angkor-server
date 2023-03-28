@@ -16,6 +16,8 @@ public class WalletRefund extends BaseUpdatedEntity {
     public enum SendYN {
         /** 환불요청 */
         N,
+        /** 환불불가 */
+        R,
         /** 환불완료 */
         Y
     }
