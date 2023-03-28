@@ -95,9 +95,16 @@ public class AdGroupQueryApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}/placement/category")
+    public List<AdGroupDto.Response.PlacementCategory> adGroupPlacementCategoryList(@PathVariable(name = "id") Integer adGroupId,
+                                                                              @Valid AdGroupDto.Request.PlacementCategory request) {
+        return this.adGroupQueryMapper.adGroupPlacementCategoryList(adGroupId, request.getPlacementId());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}/placement/media")
     public List<AdGroupDto.Response.PlacementMedia> adGroupPlacementMediaList(@PathVariable(name = "id") Integer adGroupId,
                 @Valid AdGroupDto.Request.PlacementMedia request) {
-        return this.adGroupQueryMapper.adGroupPlacementMediaList(adGroupId, request.getPlacementId());
+        return this.adGroupQueryMapper.adGroupPlacementMediaList(adGroupId, request.getPlacementId(), request.getCategoryId());
     }
 }

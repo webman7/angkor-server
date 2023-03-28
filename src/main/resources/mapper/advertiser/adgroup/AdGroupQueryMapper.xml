@@ -290,6 +290,33 @@ since 1.0
          ORDER BY d.id ASC
     </sql>
 
+    <resultMap id="mapAdGroupPlacementCategory" type="com.adplatform.restApi.domain.advertiser.adgroup.dto.adgroup.AdGroupDto$Response$PlacementCategory">
+        <result column="categoryId" property="categoryId"/>
+        <result column="categoryName" property="categoryName"/>
+    </resultMap>
+    <select id="adGroupPlacementCategoryList" resultMap="mapAdGroupPlacementCategory">
+        <include refid="adGroupPlacementCategoryListQuery"/>
+    </select>
+
+    <sql id="adGroupPlacementCategoryListQuery">
+        SELECT d.id AS categoryId, d.name AS categoryName
+          FROM adgroup_info a, adgroup_media_info b, media_category_info c, category_info d, media_info e, media_placement_info f, placement_info g
+         WHERE a.id = b.adgroup_info_id
+           AND b.media_info_id = c.media_info_id
+           AND c.category_info_id = d.id
+           AND b.media_info_id = e.id
+           AND c.media_info_id = e.id
+           AND f.media_info_id = e.id
+           AND f.placement_info_id = g.id
+           AND g.id = #{placementId}
+           AND a.id = #{adGroupId}
+           AND d.del_yn = 'N'
+           AND e.status = 'Y'
+           AND f.status = 'Y'
+         GROUP BY d.id
+         ORDER BY d.id ASC
+    </sql>
+
     <resultMap id="mapAdGroupPlacementMedia" type="com.adplatform.restApi.domain.advertiser.adgroup.dto.adgroup.AdGroupDto$Response$PlacementMedia">
         <result column="categoryId" property="categoryId"/>
         <result column="categoryName" property="categoryName"/>
@@ -312,6 +339,7 @@ since 1.0
            AND f.placement_info_id = g.id
            AND g.id = #{placementId}
            AND a.id = #{adGroupId}
+           AND d.id = #{categoryId}
            AND d.del_yn = 'N'
            AND e.status = 'Y'
            AND f.status = 'Y'

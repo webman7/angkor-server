@@ -74,8 +74,15 @@ public abstract class AdGroupDto {
 
         @Getter
         @Setter
+        public static class PlacementCategory {
+            private Integer placementId;
+        }
+
+        @Getter
+        @Setter
         public static class PlacementMedia {
             private Integer placementId;
+            private Integer categoryId;
         }
 
         @Getter
@@ -214,6 +221,12 @@ public abstract class AdGroupDto {
 
         }
 
+        @Getter
+        @AllArgsConstructor
+        public static class PlacementCategory {
+            private Integer categoryId;
+            private String categoryName;
+        }
         @Getter
         @AllArgsConstructor
         public static class PlacementMedia {

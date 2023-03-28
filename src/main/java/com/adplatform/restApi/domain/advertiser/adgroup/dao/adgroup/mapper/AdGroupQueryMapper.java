@@ -33,5 +33,6 @@ public interface AdGroupQueryMapper {
     List<AdGroupDto.Response.Category> adGroupCategoryList(Integer adGroupId);
 
     List<AdGroupDto.Response.CategoryMedia> adGroupCategoryMediaList(Integer adGroupId);
-    List<AdGroupDto.Response.PlacementMedia> adGroupPlacementMediaList(Integer adGroupId, Integer placementId);
+    List<AdGroupDto.Response.PlacementCategory> adGroupPlacementCategoryList(Integer adGroupId, Integer placementId);
+    List<AdGroupDto.Response.PlacementMedia> adGroupPlacementMediaList(Integer adGroupId, Integer placementId, Integer categoryId);
 }
