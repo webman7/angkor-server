@@ -86,10 +86,10 @@ public class AdAccount extends BaseUpdatedEntity {
         return this;
     }
 
-    public AdAccount outOfBalanceUpdate(AdAccountDto.Request.OutOfBalanceUpdate request) {
-        this.outOfBalance = request.getOutOfBalance();
-        return this;
-    }
+//    public AdAccount outOfBalanceUpdate(AdAccountDto.Request.OutOfBalanceUpdate request) {
+//        this.outOfBalance = request.getOutOfBalance();
+//        return this;
+//    }
 
     public void changeConfigOn() {
         this.config = AdAccount.Config.ON;
