@@ -239,6 +239,7 @@ since 1.0
            AND c.status = 'Y'
            AND d.status = 'Y'
            AND a.id = #{adGroupId}
+         GROUP BY d.id
     </sql>
 
     <resultMap id="mapAdGroupCategory" type="com.adplatform.restApi.domain.advertiser.adgroup.dto.adgroup.AdGroupDto$Response$Category">
