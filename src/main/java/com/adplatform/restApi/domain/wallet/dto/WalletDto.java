@@ -84,6 +84,15 @@ public class WalletDto {
             private String startDate;
             private String endDate;
         }
+
+        @Getter
+        @Setter
+        public static class RefundSearch {
+            private int businessAccountId;
+            private String sendYn;
+            private String startDate;
+            private String endDate;
+        }
     }
 
     public static abstract class Response {
@@ -215,6 +224,45 @@ public class WalletDto {
                 this.createdUserNo = createdUserNo;
                 this.createdUserId = createdUserId;
                 this.createdAt = createdAt;
+            }
+        }
+
+        @Getter
+        @Setter
+        public static class RefundSearch {
+            private int id;
+            private int businessAccountId;
+
+            private int bankId;
+            private String accountNumber;
+            private String accountOwner;
+            private Float requestAmount;
+            private Float amount;
+            private String adminMemo;
+            private String sendYn;
+            private int createdUserNo;
+            private String createdUserId;
+            private LocalDateTime createdAt;
+            private int updatedUserNo;
+            private String updatedUserId;
+            private LocalDateTime updatedAt;
+            @QueryProjection
+            public RefundSearch(int id, int businessAccountId, int bankId, String accountNumber, String accountOwner, Float requestAmount, Float amount, String adminMemo, String sendYn, int createdUserNo, String createdUserId, LocalDateTime createdAt, int updatedUserNo, String updatedUserId, LocalDateTime updatedAt) {
+                this.id = id;
+                this.businessAccountId = businessAccountId;
+                this.bankId = bankId;
+                this.accountNumber = accountNumber;
+                this.accountOwner = accountOwner;
+                this.requestAmount = requestAmount;
+                this.amount = amount;
+                this.adminMemo = adminMemo;
+                this.sendYn = sendYn;
+                this.createdUserNo = createdUserNo;
+                this.createdUserId = createdUserId;
+                this.createdAt = createdAt;
+                this.updatedUserNo = updatedUserNo;
+                this.updatedUserId = updatedUserId;
+                this.updatedAt = updatedAt;
             }
         }
     }

@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 public abstract class BaseUpdatedEntity extends BaseCreatedEntity {
     @LastModifiedBy
     @Column(name = "upd_user_no")
-    private Integer updatedUserId;
+    private Integer updatedUserNo;
 
     @LastModifiedDate
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")

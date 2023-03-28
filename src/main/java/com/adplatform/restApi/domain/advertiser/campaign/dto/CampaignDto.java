@@ -244,13 +244,10 @@ public abstract class CampaignDto {
         public static class CampaignByBusinessAccountId {
             private Integer businessAccountId;
             private Integer adAccountId;
-            private Long budgetAmount;
-
             @QueryProjection
-            public CampaignByBusinessAccountId(Integer businessAccountId, Integer adAccountId, Long budgetAmount) {
+            public CampaignByBusinessAccountId(Integer businessAccountId, Integer adAccountId) {
                 this.businessAccountId = businessAccountId;
                 this.adAccountId = adAccountId;
-                this.budgetAmount = budgetAmount;
             }
         }
     }

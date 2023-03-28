@@ -24,6 +24,7 @@ import static com.adplatform.restApi.domain.advertiser.campaign.domain.QAdGoal.a
 import static com.adplatform.restApi.domain.advertiser.campaign.domain.QAdType.adType;
 import static com.adplatform.restApi.domain.advertiser.campaign.domain.QAdTypeAndGoal.adTypeAndGoal;
 import static com.adplatform.restApi.domain.advertiser.campaign.domain.QCampaign.campaign;
+import static com.adplatform.restApi.domain.business.domain.QBusinessAccount.businessAccount;
 import static java.util.Objects.nonNull;
 
 /**
@@ -144,10 +145,10 @@ public class CampaignQuerydslRepositoryImpl implements CampaignQuerydslRepositor
 
     @Override
     public CampaignDto.Response.CampaignByBusinessAccountId getCampaignByBusinessAccountId(Integer id) {
-        return this.query.select(new QCampaignDto_Response_CampaignByBusinessAccountId(adAccount.businessAccount.id, campaign.adAccount.id, campaign.budgetAmount))
-                .from(campaign, adAccount)
+        return this.query.select(new QCampaignDto_Response_CampaignByBusinessAccountId(adAccount.businessAccount.id, adAccount.id))
+                .from(adAccount, businessAccount)
                 .where(adAccount.id.eq(id),
-                        campaign.adAccount.id.eq(adAccount.id))
+                        adAccount.businessAccount.id.eq(businessAccount.id))
                 .fetchOne();
     }
 
