@@ -34,7 +34,7 @@ public class BusinessAccount extends BaseUpdatedEntity {
      */
     public enum PaymentType {
         /** 계좌이체 */
-        accounttransfer,
+        prepayment,
         /** 신용카드 */
         creditcard
     }

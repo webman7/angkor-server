@@ -1,7 +1,7 @@
 package com.adplatform.restApi.domain.wallet.dao.walletlog;
 
 import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
-import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_CashSearch;
+import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_CreditSearch;
 import com.adplatform.restApi.domain.wallet.dto.WalletDto;
 import com.adplatform.restApi.global.util.QuerydslOrderSpecifierUtil;
 import com.querydsl.core.types.OrderSpecifier;
@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.adplatform.restApi.domain.adaccount.domain.QAdAccount.adAccount;
+import static com.adplatform.restApi.domain.business.domain.QBusinessAccount.businessAccount;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
 import static com.adplatform.restApi.domain.wallet.domain.QWalletLog.walletLog;
 import static com.querydsl.core.types.ExpressionUtils.as;
@@ -35,8 +36,8 @@ public class WalletLogQuerydslRepositoryImpl implements WalletLogQuerydslReposit
     private final JPAQueryFactory query;
 
     @Override
-    public Page<WalletDto.Response.CashSearch> searchForCash(Pageable pageable, WalletDto.Request.CashSearch request) {
-        List<WalletDto.Response.CashSearch> content = this.getSearchForCashQuery(pageable, request)
+    public Page<WalletDto.Response.CreditSearch> searchForCreditLog(Pageable pageable, WalletDto.Request.CreditSearch request) {
+        List<WalletDto.Response.CreditSearch> content = this.getSearchForCreditLogQuery(pageable, request)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -66,10 +67,10 @@ public class WalletLogQuerydslRepositoryImpl implements WalletLogQuerydslReposit
         LocalDate searchEndDate = LocalDate.parse(endDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         JPAQuery<Long> countQuery = this.query.select(walletLog.count())
-                .from(walletLog, adAccount)
+                .from(walletLog, businessAccount)
                 .where(
-                        walletLog.adAccountId.eq(adAccount.id),
-                        this.eqId(request.getAdAccountId()),
+                        walletLog.businessAccountId.eq(businessAccount.id),
+                        this.eqId(request.getBusinessAccountId()),
                         this.eqSummary(request.getSummary()),
                         walletLog.createdAt.between(
                                 LocalDateTime.of(searchStartDate, LocalTime.MIN),
@@ -80,9 +81,9 @@ public class WalletLogQuerydslRepositoryImpl implements WalletLogQuerydslReposit
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
-    private JPAQuery<WalletDto.Response.CashSearch> getSearchForCashQuery(
+    private JPAQuery<WalletDto.Response.CreditSearch> getSearchForCreditLogQuery(
             Pageable pageable,
-            WalletDto.Request.CashSearch request) {
+            WalletDto.Request.CreditSearch request) {
 
         String startDate = "";
         String endDate = "";
@@ -108,11 +109,10 @@ public class WalletLogQuerydslRepositoryImpl implements WalletLogQuerydslReposit
         LocalDate searchStartDate = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         LocalDate searchEndDate = LocalDate.parse(endDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-        JPAQuery<WalletDto.Response.CashSearch> query = this.query.select(
-                        new QWalletDto_Response_CashSearch(
+        JPAQuery<WalletDto.Response.CreditSearch> query = this.query.select(
+                        new QWalletDto_Response_CreditSearch(
                                 walletLog.id,
                                 walletLog.businessAccountId,
-                                walletLog.adAccountId,
                                 walletLog.summary,
                                 walletLog.inAmount,
                                 walletLog.outAmount,
@@ -125,10 +125,10 @@ public class WalletLogQuerydslRepositoryImpl implements WalletLogQuerydslReposit
                                 walletLog.createdAt
                         )
                 )
-                .from(walletLog, adAccount)
+                .from(walletLog, businessAccount)
                 .where(
-                        walletLog.adAccountId.eq(adAccount.id),
-                        this.eqId(request.getAdAccountId()),
+                        walletLog.businessAccountId.eq(businessAccount.id),
+                        this.eqId(request.getBusinessAccountId()),
                         this.eqSummary(request.getSummary()),
                         walletLog.createdAt.between(
                                 LocalDateTime.of(searchStartDate, LocalTime.MIN),

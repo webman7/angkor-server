@@ -17,11 +17,11 @@ public class WalletQueryApi {
     final private WalletLogRepository walletLogRepository;
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/cash/search")
-    public PageDto<WalletDto.Response.CashSearch> searchForFreeCash(
+    @GetMapping("/credit/log/search")
+    public PageDto<WalletDto.Response.CreditSearch> searchForFreeCash(
             @PageableDefault Pageable pageable,
-            WalletDto.Request.CashSearch request) {
-        return PageDto.create(this.walletLogRepository.searchForCash(pageable, request));
+            WalletDto.Request.CreditSearch request) {
+        return PageDto.create(this.walletLogRepository.searchForCreditLog(pageable, request));
     }
 
 //    @ResponseStatus(HttpStatus.OK)

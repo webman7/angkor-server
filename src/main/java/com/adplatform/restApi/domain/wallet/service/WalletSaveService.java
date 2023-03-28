@@ -28,7 +28,7 @@ public class WalletSaveService {
     }
 
     public void save(WalletDto.Request.SaveCash request, Integer loginUserNo) {
-        this.adAccountRepository.outOfBalanceUpdate(request.getAdAccountId(), false);
+//        this.adAccountRepository.outOfBalanceUpdate(request.getAdAccountId(), false);
 
 //        WalletDto.Response.WalletCashTotal list = walletCashTotalRepository.getCashTotalByCashId(request.getAdAccountId(), request.getCashId());
 //        // 총합캐시

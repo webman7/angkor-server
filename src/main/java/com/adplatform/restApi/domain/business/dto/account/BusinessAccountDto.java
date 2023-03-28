@@ -32,6 +32,13 @@ public class BusinessAccountDto {
 
         @Getter
         @Setter
+        public static class SearchCredit {
+            private Integer id;
+            private String name;
+        }
+
+        @Getter
+        @Setter
         public static class Save {
 
             @Size(min = 1, max = 50)
@@ -250,10 +257,30 @@ public class BusinessAccountDto {
 
         @Getter
         @Setter
+        public static class BusinessAccountCreditInfo {
+            private Float availableAmount;
+            private Float totalReserveAmount;
+            private BusinessAccount.PaymentType type;
+            private BusinessAccount.Config config;
+
+            @QueryProjection
+            public BusinessAccountCreditInfo(
+                    Float availableAmount,
+                    Float totalReserveAmount,
+                    BusinessAccount.PaymentType type,
+                    BusinessAccount.Config config) {
+                this.availableAmount = availableAmount;
+                this.totalReserveAmount = totalReserveAmount;
+                this.type = type;
+                this.config = config;
+            }
+        }
+
+        @Getter
+        @Setter
         public static class BusinessAccountCashInfo {
             private Float availableAmount;
             private Float totalReserveAmount;
-
             @QueryProjection
             public BusinessAccountCashInfo(
                     Float availableAmount,

@@ -29,22 +29,14 @@ public interface BusinessAccountQuerydslRepository {
 
     List<BusinessAccountDto.Response.ForAdvertiserSearch> searchForAdvertiser(
             Integer id, String name, Integer loginUserNo, BusinessAccountUser.Status requestStatus);
-
     Page<BusinessAccountDto.Response.ForCashSearch> searchForCash(Pageable pageable, BusinessAccountDto.Request.ForCashSearch request);
-
     List<BusinessAccountDto.Response.ForCashSearch> searchForCash(BusinessAccountDto.Request.ForCashSearch request);
-
     Optional<BusinessAccountDto.Response.BusinessAccountCount> countStatusYN(Integer loginUserNo);
-
     BusinessAccountDto.Response.BusinessAccountInfo businessAccountInfo(Integer businessAccountId);
     List<BusinessAccountDto.Response.AdAccountInfo> businessAccountByAdAccounts(Integer businessAccountId);
-
     List<BusinessAccountDto.Response.AdAccountMemberInfo> businessAccountByAdAccountsMember(Integer businessAccountId, Integer loginUserNo);
-
-
-    BusinessAccountDto.Response.BusinessAccountCashInfo businessAccountCashInfo(Integer businessAccountId);
-
-//    List<BusinessAccountDto.Response.BusinessAccountCashDetailInfo> businessAccountCashDetailInfo(Integer businessAccountId);
+    Page<BusinessAccountDto.Response.BusinessAccountCreditInfo> searchCredit(Pageable pageable, BusinessAccountDto.Request.SearchCredit searchRequest);
+    BusinessAccountDto.Response.BusinessAccountCreditInfo businessAccountCreditInfo(Integer businessAccountId);
 
 //    DashboardDto.Response.BusinessAccountCountByAd businessAccountsCountByAd(Integer businessAccountId);
 //

@@ -404,16 +404,57 @@ public class BusinessAccountQuerydslRepositoryImpl implements BusinessAccountQue
     }
 
     @Override
-    public BusinessAccountDto.Response.BusinessAccountCashInfo businessAccountCashInfo(Integer businessAccountId) {
-        return this.query.select(new QBusinessAccountDto_Response_BusinessAccountCashInfo(
+    public BusinessAccountDto.Response.BusinessAccountCreditInfo businessAccountCreditInfo(Integer businessAccountId) {
+        return this.query.select(new QBusinessAccountDto_Response_BusinessAccountCreditInfo(
                         walletMaster.availableAmount.sum(),
-                        walletMaster.totalReserveAmount.sum()
+                        walletMaster.totalReserveAmount.sum(),
+                        businessAccount.type,
+                        businessAccount.config
                 ))
                 .from(businessAccount, walletMaster)
                 .where(businessAccount.id.eq(businessAccountId),
-                       businessAccount.id.eq(walletMaster.id)
+                        businessAccount.id.eq(walletMaster.id)
                 ).fetchOne();
     }
+
+    @Override
+    public Page<BusinessAccountDto.Response.BusinessAccountCreditInfo> searchCredit(
+            Pageable pageable, BusinessAccountDto.Request.SearchCredit searchRequest) {
+        List<BusinessAccountDto.Response.BusinessAccountCreditInfo> content = this.getSearchCreditQuery(pageable, searchRequest)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = this.query.select(Wildcard.count)
+                .from(businessAccount, walletMaster)
+                .where(
+                        businessAccount.id.eq(walletMaster.id),
+                        this.eqId(searchRequest.getId()),
+                        this.containsName(searchRequest.getName()));
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    private JPAQuery<BusinessAccountDto.Response.BusinessAccountCreditInfo> getSearchCreditQuery(
+            Pageable pageable,
+            BusinessAccountDto.Request.SearchCredit searchRequest) {
+
+        JPAQuery<BusinessAccountDto.Response.BusinessAccountCreditInfo> query = this.query.select(new QBusinessAccountDto_Response_BusinessAccountCreditInfo(
+                        walletMaster.availableAmount.sum(),
+                        walletMaster.totalReserveAmount.sum(),
+                        businessAccount.type,
+                        businessAccount.config))
+                .from(businessAccount, walletMaster)
+                .where(
+                        businessAccount.id.eq(walletMaster.id),
+                        this.eqId(searchRequest.getId()),
+                        this.containsName(searchRequest.getName()));
+
+        return Objects.nonNull(pageable)
+                ? query.orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(BusinessAccount.class, "businessAccount", pageable.getSort()).toArray(OrderSpecifier[]::new))
+                : query;
+    }
+
 
     @Override
     public List<BusinessAccountDto.Response.AdAccountInfo> businessAccountByAdAccounts(Integer businessAccountId) {

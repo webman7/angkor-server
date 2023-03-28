@@ -51,9 +51,9 @@ public class BusinessAccountQueryApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/account/{id}/cash")
-    public BusinessAccountDto.Response.BusinessAccountCashInfo businessAccountCashInfo(@PathVariable(name = "id") Integer businessAccountId) {
-        return this.businessAccountRepository.businessAccountCashInfo(businessAccountId);
+    @GetMapping("/account/{id}/credit")
+    public BusinessAccountDto.Response.BusinessAccountCreditInfo businessAccountCreditInfo(@PathVariable(name = "id") Integer businessAccountId) {
+        return this.businessAccountRepository.businessAccountCreditInfo(businessAccountId);
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -94,11 +94,13 @@ public class BusinessAccountQueryApi {
         return this.businessAccountRepository.businessAccountByAdAccountsMember(businessAccountId, SecurityUtils.getLoginUserNo());
     }
 
-
-
-
-
-
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/credit/search")
+    public PageDto<BusinessAccountDto.Response.BusinessAccountCreditInfo> searchCredit(
+            @PageableDefault Pageable pageable,
+            BusinessAccountDto.Request.SearchCredit searchRequest) {
+        return PageDto.create(this.businessAccountRepository.searchCredit(pageable, searchRequest));
+    }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/all")

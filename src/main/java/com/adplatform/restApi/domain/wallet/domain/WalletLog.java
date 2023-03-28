@@ -14,9 +14,6 @@ public class WalletLog extends BaseCreatedEntity {
     @Column(name = "business_account_info_id")
     private Integer businessAccountId;
 
-    @Column(name = "adaccount_info_id")
-    private Integer adAccountId;
-
     @Column(name = "summary", length = 40)
     private String summary;
 
@@ -40,9 +37,8 @@ public class WalletLog extends BaseCreatedEntity {
 
 
     @Builder
-    public WalletLog(Integer businessAccountId, Integer adAccountId, String summary, Float outAmount, Float inAmount, String memo, Integer walletChargeLogId, Integer walletAutoChargeLogId, Integer walletRefundId) {
+    public WalletLog(Integer businessAccountId, String summary, Float outAmount, Float inAmount, String memo, Integer walletChargeLogId, Integer walletAutoChargeLogId, Integer walletRefundId) {
         this.businessAccountId = businessAccountId;
-        this.adAccountId = adAccountId;
         this.summary = summary;
         this.outAmount = outAmount;
         this.inAmount = inAmount;

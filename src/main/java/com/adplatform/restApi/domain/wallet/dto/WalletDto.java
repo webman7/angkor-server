@@ -19,7 +19,6 @@ public class WalletDto {
         public static class SaveCash {
             @NotNull
             private int businessAccountId;
-            private int adAccountId;
             private Float inAmount;
             private Float outAmount;
             private Long pubAmount;
@@ -45,7 +44,6 @@ public class WalletDto {
         public static class SaveWalletLog {
             @NotNull
             private int businessAccountId;
-            private int adAccountId;
             private String summary;
             private Float inAmount;
             private Float outAmount;
@@ -80,8 +78,8 @@ public class WalletDto {
 
         @Getter
         @Setter
-        public static class CashSearch {
-            private int adAccountId;
+        public static class CreditSearch {
+            private int businessAccountId;
             private String summary;
             private String startDate;
             private String endDate;
@@ -196,10 +194,9 @@ public class WalletDto {
 
         @Getter
         @Setter
-        public static class CashSearch {
+        public static class CreditSearch {
             private int id;
             private int businessAccountId;
-            private int adAccountId;
             private String summary;
             private Float inAmount;
             private Float outAmount;
@@ -208,10 +205,9 @@ public class WalletDto {
             private String createdUserId;
             private LocalDateTime createdAt;
             @QueryProjection
-            public CashSearch(int id, int businessAccountId, int adAccountId, String summary, Float inAmount, Float outAmount, String memo, int createdUserNo, String createdUserId, LocalDateTime createdAt) {
+            public CreditSearch(int id, int businessAccountId, String summary, Float inAmount, Float outAmount, String memo, int createdUserNo, String createdUserId, LocalDateTime createdAt) {
                 this.id = id;
                 this.businessAccountId = businessAccountId;
-                this.adAccountId = adAccountId;
                 this.summary = summary;
                 this.inAmount = inAmount;
                 this.outAmount = outAmount;

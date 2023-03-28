@@ -5,5 +5,5 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface WalletLogQuerydslRepository {
-    Page<WalletDto.Response.CashSearch> searchForCash(Pageable pageable, WalletDto.Request.CashSearch request);
+    Page<WalletDto.Response.CreditSearch> searchForCreditLog(Pageable pageable, WalletDto.Request.CreditSearch request);
 }
