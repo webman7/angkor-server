@@ -53,9 +53,15 @@ public class CreativeCommandService {
 
         // 매체 카테고리 정보 인서트
         String mediaCategoryTmp = request.getMediaCategory();
+        System.out.println("====================================");
+        System.out.println(request.getMediaCategory());
+        System.out.println("====================================");
         String [] mediaCategoryItems = mediaCategoryTmp.split(",");
+        System.out.println("mediaCategoryItems.length : " + mediaCategoryItems.length);
         for (int i=0; i < mediaCategoryItems.length; i++) {
             String [] mediaCategorySubTmp = mediaCategoryItems[i].split("_");
+            System.out.println("Integer.parseInt(mediaCategorySubTmp[0]) : " + Integer.parseInt(mediaCategorySubTmp[0]));
+            System.out.println("Integer.parseInt(mediaCategorySubTmp[1]) : " + Integer.parseInt(mediaCategorySubTmp[1]));
             CreativeMediaCategory creativeMediaCategory = this.creativeMediaCategoryMapper.toEntity(creativeId, Integer.parseInt(mediaCategorySubTmp[0]), Integer.parseInt(mediaCategorySubTmp[1]));
         }
     }
