@@ -63,6 +63,7 @@ public class CreativeCommandService {
             System.out.println("Integer.parseInt(mediaCategorySubTmp[0]) : " + Integer.parseInt(mediaCategorySubTmp[0]));
             System.out.println("Integer.parseInt(mediaCategorySubTmp[1]) : " + Integer.parseInt(mediaCategorySubTmp[1]));
             CreativeMediaCategory creativeMediaCategory = this.creativeMediaCategoryMapper.toEntity(creativeId, Integer.parseInt(mediaCategorySubTmp[0]), Integer.parseInt(mediaCategorySubTmp[1]));
+            this.creativeMediaCategoryRepository.save(creativeMediaCategory);
         }
     }
 
