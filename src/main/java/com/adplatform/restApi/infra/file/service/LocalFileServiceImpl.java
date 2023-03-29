@@ -32,6 +32,7 @@ public class LocalFileServiceImpl implements FileService {
     private static final String FILE_MEDIA_PATH = "./files/media/";
     private static final String FILE_MEDIA_PLACEMENT_PATH = "./files/placement/";
     private static final String FILE_CHARGE_PATH = "./files/charge/";
+    private static final String FILE_REFUND_PATH = "./files/refund/";
 
     @SneakyThrows
     @Override
@@ -107,6 +108,27 @@ public class LocalFileServiceImpl implements FileService {
         savedFile.getParentFile().mkdirs();
 
         System.out.println("saveWalletChargeFile.toPath() : " + savedFile.toPath());
+        file.transferTo(savedFile.toPath());
+        if (uploadPath.startsWith(".")) {
+            uploadPath = uploadPath.substring(1);
+        }
+        uploadPath = uploadPath.replace("\\", "/");
+        return uploadPath + savedFile.getName();
+    }
+
+    @SneakyThrows
+    @Override
+    public String saveWalletRefund(WalletDto.Request.UpdateRefund request, MultipartFile file) {
+        String filePath = FILE_REFUND_PATH + "images";
+        String ymdPath = UpLoadFileUtils.calcPath(filePath);
+        String uploadPath = filePath + ymdPath + "/";
+        File savedFile = new File(String.format(
+                "%s%s.%s",
+                uploadPath, UUID.randomUUID(),
+                FilenameUtils.getExtension(file.getOriginalFilename())));
+        savedFile.getParentFile().mkdirs();
+
+        System.out.println("saveWalletRefund.toPath() : " + savedFile.toPath());
         file.transferTo(savedFile.toPath());
         if (uploadPath.startsWith(".")) {
             uploadPath = uploadPath.substring(1);

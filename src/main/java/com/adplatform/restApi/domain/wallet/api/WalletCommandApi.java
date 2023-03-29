@@ -22,6 +22,26 @@ public class WalletCommandApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/refund/request")
+    public void save(@RequestBody @Valid WalletDto.Request.SaveRefund request) {
+        this.walletSaveService.saveRefund(request, SecurityUtils.getLoginUserNo());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/refund/approve")
+    public void updateApprove(WalletDto.Request.UpdateRefund request) {
+        this.walletSaveService.updateRefundApprove(request, SecurityUtils.getLoginUserNo());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/refund/reject")
+    public void updateReject(WalletDto.Request.UpdateRefund request) {
+        this.walletSaveService.updateRefundReject(request, SecurityUtils.getLoginUserNo());
+    }
+
+
+
+    @ResponseStatus(HttpStatus.OK)
     @PostMapping("/freecash/add")
     public void saveFreeCash(@RequestBody @Valid WalletDto.Request.SaveFreeCash request) {
         this.walletSaveService.saveFreeCash(request, SecurityUtils.getLoginUserNo());
@@ -32,4 +52,5 @@ public class WalletCommandApi {
     public void updateFreeCashUse(@PathVariable(name = "id") Integer id) {
         this.walletSaveService.updateFreeCashStatus(id, "USED", SecurityUtils.getLoginUserNo());
     }
+
 }

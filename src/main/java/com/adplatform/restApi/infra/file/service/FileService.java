@@ -22,6 +22,8 @@ public interface FileService {
 
     String saveWalletCharge(WalletDto.Request.SaveCredit request, MultipartFile file);
 
+    String saveWalletRefund(WalletDto.Request.UpdateRefund request, MultipartFile file);
+
     String saveMedia(MediaDto.Request.Save request, MultipartFile file);
 
     String saveMediaPlacement(MediaPlacementDto.Request.Save request, MultipartFile file);

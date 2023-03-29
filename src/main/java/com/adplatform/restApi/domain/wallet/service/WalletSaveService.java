@@ -1,12 +1,17 @@
 package com.adplatform.restApi.domain.wallet.service;
 
+import com.adplatform.restApi.domain.wallet.dao.walletlog.WalletLogRepository;
 import com.adplatform.restApi.domain.wallet.dao.walletmaster.WalletMasterRepository;
-import com.adplatform.restApi.domain.wallet.domain.FileInformation;
+import com.adplatform.restApi.domain.wallet.dao.walletrefund.WalletRefundRepository;
+import com.adplatform.restApi.domain.wallet.domain.*;
 import com.adplatform.restApi.domain.wallet.dao.walletchargelog.WalletChargeLogRepository;
-import com.adplatform.restApi.domain.wallet.domain.WalletChargeFile;
-import com.adplatform.restApi.domain.wallet.domain.WalletChargeLog;
 import com.adplatform.restApi.domain.wallet.dto.WalletChargeLogMapper;
 import com.adplatform.restApi.domain.wallet.dto.WalletDto;
+import com.adplatform.restApi.domain.wallet.dto.WalletLogMapper;
+import com.adplatform.restApi.domain.wallet.dto.WalletRefundMapper;
+import com.adplatform.restApi.domain.wallet.exception.WalletRefundAlreadyException;
+import com.adplatform.restApi.domain.wallet.exception.WalletRefundAlreadyRejectException;
+import com.adplatform.restApi.domain.wallet.exception.WalletRefundNotFoundException;
 import com.adplatform.restApi.infra.file.service.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -25,6 +30,10 @@ public class WalletSaveService {
     private final WalletChargeLogRepository walletChargeLogRepository;
     private final FileService fileService;
     private final WalletMasterRepository walletMasterRepository;
+    private final WalletRefundMapper walletRefundMapper;
+    private final WalletRefundRepository walletRefundRepository;
+    private final WalletLogRepository walletLogRepository;
+    private final WalletLogMapper walletLogMapper;
 
 
 //    @Data
@@ -39,11 +48,28 @@ public class WalletSaveService {
         // 충전 로그
         WalletChargeLog walletChargeLog = this.walletChargeLogMapper.toEntity(request, loginUserNo);
         request.getWalletChargeFiles().forEach(file -> walletChargeLog.addWalletChargeFile(this.saveWalletChargeFile(request, walletChargeLog, file, "CHARGE")));
-        this.walletChargeLogRepository.save(walletChargeLog);
+        Integer walletChargeLogId = this.walletChargeLogRepository.save(walletChargeLog).getId();
+
+        // wallet_log 등록
+        WalletDto.Request.SaveWalletLog saveWalletLog = new WalletDto.Request.SaveWalletLog();
+        saveWalletLog.setBusinessAccountId(request.getBusinessAccountId());
+        saveWalletLog.setSummary("charge");
+        saveWalletLog.setInAmount(request.getDepositAmount());
+        saveWalletLog.setOutAmount(0.0F);
+        saveWalletLog.setMemo(request.getAdminMemo());
+        saveWalletLog.setWalletChargeLogId(walletChargeLogId);
+        saveWalletLog.setWalletRefundId(0);
+        saveWalletLog.setWalletAutoChargeLogId(0);
+
+        WalletLog walletLog = this.walletLogMapper.toEntity(saveWalletLog, loginUserNo);
+        this.walletLogRepository.save(walletLog);
 
         // Master 금액 업데이트
         WalletDto.Response.WalletMaster list = this.walletMasterRepository.getWalletMaster(request.getBusinessAccountId());
         this.walletMasterRepository.updateWalletMasterCharge(request.getBusinessAccountId(), (float)(list.getAvailableAmount() + request.getDepositAmount()));
+
+
+
 
 //        this.adAccountRepository.outOfBalanceUpdate(request.getAdAccountId(), false);
 
@@ -94,8 +120,93 @@ public class WalletSaveService {
                 .build();
     }
 
+    public void saveRefund(WalletDto.Request.SaveRefund request, Integer loginUserNo) {
+        WalletRefund walletRefund = this.walletRefundMapper.toEntity(request, loginUserNo);
+        this.walletRefundRepository.save(walletRefund);
+    }
 
+    public void updateRefundApprove(WalletDto.Request.UpdateRefund request, Integer loginUserNo) {
+        WalletRefund walletRefund = WalletRefundFindUtils.findByIdOrElseThrow(request.getId(), this.walletRefundRepository);
 
+        // 이미 승인했는지 체크
+        if(walletRefund.getSendYN().equals(WalletRefund.SendYN.Y)) {
+            throw new WalletRefundAlreadyException();
+        }
+        // 이미 거절했는지 체크
+        if(walletRefund.getSendYN().equals(WalletRefund.SendYN.R)) {
+            throw new WalletRefundAlreadyRejectException();
+        }
+
+        // wallet_log 등록
+        WalletDto.Request.SaveWalletLog saveWalletLog = new WalletDto.Request.SaveWalletLog();
+        saveWalletLog.setBusinessAccountId(request.getBusinessAccountId());
+        saveWalletLog.setSummary("refund");
+        saveWalletLog.setInAmount(request.getAmount());
+        saveWalletLog.setOutAmount(0.0F);
+        saveWalletLog.setMemo(request.getAdminMemo());
+        saveWalletLog.setWalletChargeLogId(0);
+        saveWalletLog.setWalletRefundId(request.getId());
+        saveWalletLog.setWalletAutoChargeLogId(0);
+
+        WalletLog walletLog = this.walletLogMapper.toEntity(saveWalletLog, loginUserNo);
+        this.walletLogRepository.save(walletLog);
+
+        // 계좌에서 돈 빼기
+        WalletDto.Response.WalletMaster list = this.walletMasterRepository.getWalletMaster(request.getBusinessAccountId());
+        this.walletMasterRepository.updateWalletMasterCharge(request.getBusinessAccountId(), (float)(list.getAvailableAmount() - request.getAmount()));
+
+        // 환불 내역 업데이트
+        walletRefund.updateApprove(request, loginUserNo);
+        request.getWalletRefundFiles().forEach(file -> walletRefund.addWalletRefundFile(this.saveWalletRefundFile(request, walletRefund, file, "REFUND")));
+    }
+
+    public void updateRefundReject(WalletDto.Request.UpdateRefund request, Integer loginUserNo) {
+        WalletRefund walletRefund = WalletRefundFindUtils.findByIdOrElseThrow(request.getId(), this.walletRefundRepository);
+
+        // 이미 승인했는지 체크
+        if(walletRefund.getSendYN().equals(WalletRefund.SendYN.Y)) {
+            throw new WalletRefundAlreadyException();
+        }
+        // 이미 거절했는지 체크
+        if(walletRefund.getSendYN().equals(WalletRefund.SendYN.R)) {
+            throw new WalletRefundAlreadyRejectException();
+        }
+
+        // 환불거절
+        walletRefund.updateReject(request, loginUserNo);
+        request.getWalletRefundFiles().forEach(file -> walletRefund.addWalletRefundFile(this.saveWalletRefundFile(request, walletRefund, file, "REFUND")));
+    }
+
+    @SneakyThrows
+    private WalletRefundFile saveWalletRefundFile(WalletDto.Request.UpdateRefund request, WalletRefund walletRefund, MultipartFile file, String fType) {
+        String originalFilename = file.getOriginalFilename();
+        String mimetype = Files.probeContentType(Paths.get(originalFilename));
+        String savedFileUrl = this.fileService.saveWalletRefund(request, file);
+        int index = savedFileUrl.lastIndexOf("/");
+        String savedFilename = savedFileUrl.substring(index+1);
+        return new WalletRefundFile(walletRefund, this.walletRefundFileInformation(file, savedFileUrl, savedFilename, originalFilename, mimetype));
+    }
+
+    @SneakyThrows
+    private FileInformation walletRefundFileInformation(MultipartFile file, String savedFileUrl, String savedFilename, String originalFilename, String mimetype) {
+        FileInformation.FileType fileType;
+        if (mimetype.startsWith("image")) {
+            fileType = FileInformation.FileType.IMAGE;
+        } else if (mimetype.startsWith("application/pdf")) {
+            fileType = FileInformation.FileType.PDF;
+        } else {
+            throw new UnsupportedOperationException();
+        }
+
+        return FileInformation.builder()
+                .url(savedFileUrl)
+                .fileType(fileType)
+                .fileSize(file.getSize())
+                .filename(savedFilename)
+                .originalFileName(originalFilename)
+                .mimeType(mimetype)
+                .build();
+    }
 
 
 

@@ -1,7 +1,9 @@
 package com.adplatform.restApi.domain.wallet.dao.walletrefund;
 
 import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
+import com.adplatform.restApi.domain.advertiser.creative.domain.CreativeFile;
 import com.adplatform.restApi.domain.wallet.domain.WalletRefund;
+import com.adplatform.restApi.domain.wallet.domain.WalletRefundFile;
 import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_CreditSearch;
 import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_RefundSearch;
 import com.adplatform.restApi.domain.wallet.dto.WalletDto;
@@ -26,9 +28,12 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.adplatform.restApi.domain.business.domain.QBusinessAccount.businessAccount;
+import static com.adplatform.restApi.domain.media.domain.QMedia.media;
+import static com.adplatform.restApi.domain.media.domain.QMediaFile.mediaFile;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
 import static com.adplatform.restApi.domain.wallet.domain.QWalletMaster.walletMaster;
 import static com.adplatform.restApi.domain.wallet.domain.QWalletRefund.walletRefund;
+import static com.adplatform.restApi.domain.wallet.domain.QWalletRefundFile.walletRefundFile;
 import static com.querydsl.core.types.ExpressionUtils.as;
 import static com.querydsl.jpa.JPAExpressions.select;
 
@@ -46,7 +51,7 @@ public class WalletRefundQuerydslRepositoryImpl implements WalletRefundQuerydslR
 
         String startDate = "";
         String endDate = "";
-        if(request.getStartDate() != null || request.getStartDate().equals("") || request.getEndDate() == null || request.getEndDate().equals("")) {
+        if(request.getStartDate() == null || request.getStartDate().equals("") || request.getEndDate() == null || request.getEndDate().equals("")) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Calendar c = Calendar.getInstance();
             endDate = sdf.format(c.getTime());
@@ -89,7 +94,7 @@ public class WalletRefundQuerydslRepositoryImpl implements WalletRefundQuerydslR
 
         String startDate = "";
         String endDate = "";
-        if(request.getStartDate() != null || request.getStartDate().equals("") || request.getEndDate() == null || request.getEndDate().equals("")) {
+        if(request.getStartDate() == null || request.getStartDate().equals("") || request.getEndDate() == null || request.getEndDate().equals("")) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Calendar c = Calendar.getInstance();
             endDate = sdf.format(c.getTime());
@@ -123,6 +128,14 @@ public class WalletRefundQuerydslRepositoryImpl implements WalletRefundQuerydslR
                                 walletRefund.requestAmount,
                                 walletRefund.amount,
                                 walletRefund.adminMemo,
+                                as(select(walletRefundFile.information.url)
+                                        .from(walletRefundFile)
+                                        .where(walletRefundFile.walletRefund.id.eq(walletRefund.id),
+                                                walletRefundFile.id.eq(select(walletRefundFile.id.max())
+                                                        .from(walletRefundFile)
+                                                        .where(walletRefundFile.walletRefund.id.eq(walletRefund.id)
+                                                        ))
+                                        ), "fileUrl"),
                                 walletRefund.sendYN.stringValue(),
                                 walletRefund.createdUserNo,
                                 as(select(user.loginId)
@@ -148,12 +161,22 @@ public class WalletRefundQuerydslRepositoryImpl implements WalletRefundQuerydslR
                                 LocalDateTime.of(searchStartDate, LocalTime.MIN),
                                 LocalDateTime.of(searchEndDate, LocalTime.MAX).withNano(0)
                         )
-                );
+                )
+                .orderBy(walletRefund.id.desc());
 
         return Objects.nonNull(pageable)
                 ? query.orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(AdAccount.class, "walletRefund", pageable.getSort()).toArray(OrderSpecifier[]::new))
                 : query;
     }
+
+//    @Override
+//    public WalletRefundFile findDetailFilesById(Integer id) {
+//        return this.query.select(walletRefundFile)
+//                .from(walletRefund, walletRefundFile)
+//                .where(walletRefund.id.eq(id),
+//                        walletRefund.id.eq(walletRefundFile.walletRefund.id))
+//                .fetchOne();
+//    }
 
     private BooleanExpression eqId(Integer id) {
         return id != null ? businessAccount.id.eq(id) : null;

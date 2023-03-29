@@ -44,7 +44,7 @@ public class WalletLogQuerydslRepositoryImpl implements WalletLogQuerydslReposit
 
         String startDate = "";
         String endDate = "";
-        if(request.getStartDate() != null || request.getStartDate().equals("") || request.getEndDate() == null || request.getEndDate().equals("")) {
+        if(request.getStartDate() == null || request.getStartDate().equals("") || request.getEndDate() == null || request.getEndDate().equals("")) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Calendar c = Calendar.getInstance();
             endDate = sdf.format(c.getTime());
@@ -87,7 +87,7 @@ public class WalletLogQuerydslRepositoryImpl implements WalletLogQuerydslReposit
 
         String startDate = "";
         String endDate = "";
-        if(request.getStartDate() != null || request.getStartDate().equals("") || request.getEndDate() == null || request.getEndDate().equals("")) {
+        if(request.getStartDate() == null || request.getStartDate().equals("") || request.getEndDate() == null || request.getEndDate().equals("")) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Calendar c = Calendar.getInstance();
             endDate = sdf.format(c.getTime());
@@ -134,7 +134,7 @@ public class WalletLogQuerydslRepositoryImpl implements WalletLogQuerydslReposit
                                 LocalDateTime.of(searchStartDate, LocalTime.MIN),
                                 LocalDateTime.of(searchEndDate, LocalTime.MAX).withNano(0)
                         )
-                );
+                ).orderBy(walletLog.id.desc());
 
         return Objects.nonNull(pageable)
                 ? query.orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(AdAccount.class, "walletLog", pageable.getSort()).toArray(OrderSpecifier[]::new))
@@ -142,7 +142,7 @@ public class WalletLogQuerydslRepositoryImpl implements WalletLogQuerydslReposit
     }
 
     private BooleanExpression eqId(Integer id) {
-        return id != null ? adAccount.id.eq(id) : null;
+        return id != null ? businessAccount.id.eq(id) : null;
     }
 
     private BooleanExpression eqSummary(String summary) {

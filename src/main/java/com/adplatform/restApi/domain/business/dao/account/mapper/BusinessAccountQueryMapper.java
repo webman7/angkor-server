@@ -15,4 +15,6 @@ public interface BusinessAccountQueryMapper {
     );
 
     long countAccounts(Integer id, String name, Integer loginUserNo);
+
+    void updateRefundAccount(BusinessAccountDto.Request.UpdateRefundAccount request, Integer loginUserNo);
 }

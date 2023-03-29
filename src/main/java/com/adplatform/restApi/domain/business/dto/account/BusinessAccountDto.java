@@ -39,6 +39,15 @@ public class BusinessAccountDto {
 
         @Getter
         @Setter
+        public static class UpdateRefundAccount {
+            private Integer businessAccountId;
+            private Integer bankId;
+            private String accountNumber;
+            private String accountOwner;
+        }
+
+        @Getter
+        @Setter
         public static class Save {
 
             @Size(min = 1, max = 50)

@@ -50,7 +50,7 @@ public class WalletFreeCashQuerydslRepositoryImpl implements WalletFreeCashQuery
 //
 //        String startDate = "";
 //        String endDate = "";
-//        if(request.getStartDate() != null || request.getStartDate().equals("") || request.getEndDate() == null || request.getEndDate().equals("")) {
+//        if(request.getStartDate() == null || request.getStartDate().equals("") || request.getEndDate() == null || request.getEndDate().equals("")) {
 //            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 //            Calendar c = Calendar.getInstance();
 //            endDate = sdf.format(c.getTime());
@@ -93,7 +93,7 @@ public class WalletFreeCashQuerydslRepositoryImpl implements WalletFreeCashQuery
 //
 //        String startDate = "";
 //        String endDate = "";
-//        if(request.getStartDate() != null || request.getStartDate().equals("") || request.getEndDate() == null || request.getEndDate().equals("")) {
+//        if(request.getStartDate() == null || request.getStartDate().equals("") || request.getEndDate() == null || request.getEndDate().equals("")) {
 //            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 //            Calendar c = Calendar.getInstance();
 //            endDate = sdf.format(c.getTime());

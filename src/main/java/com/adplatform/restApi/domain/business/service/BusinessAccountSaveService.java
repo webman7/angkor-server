@@ -8,6 +8,7 @@ import com.adplatform.restApi.domain.adaccount.service.AdAccountUserQueryUtils;
 import com.adplatform.restApi.domain.bank.domain.Bank;
 import com.adplatform.restApi.domain.bank.service.BankFindUtils;
 import com.adplatform.restApi.domain.business.dao.account.BusinessAccountRepository;
+import com.adplatform.restApi.domain.business.dao.account.mapper.BusinessAccountQueryMapper;
 import com.adplatform.restApi.domain.business.dao.user.BusinessAccountUserRepository;
 import com.adplatform.restApi.domain.business.domain.BusinessAccount;
 import com.adplatform.restApi.domain.business.domain.BusinessAccountUser;
@@ -56,7 +57,7 @@ public class BusinessAccountSaveService {
     private final BusinessAccountUserMapper businessAccountUserMapper;
     private final BusinessAccountUserInfoHistoryRepository businessAccountUserInfoHistoryRepository;
     private final BusinessAccountUserInfoHistoryMapper businessAccountUserInfoHistoryMapper;
-
+    private final BusinessAccountQueryMapper businessAccountQueryMapper;
     private final AdAccountUserRepository adAccountUserRepository;
     private final AdAccountUserInfoHistoryRepository adAccountUserInfoHistoryRepository;
     private final AdAccountUserInfoHistoryMapper adAccountUserInfoHistoryMapper;
@@ -322,5 +323,9 @@ public class BusinessAccountSaveService {
         BusinessAccount businessAccount = BusinessAccountFindUtils.findByIdOrElseThrow(id, this.businessAccountRepository);
         if (config == BusinessAccount.Config.ON) businessAccount.changeConfigOn();
         else if (config == BusinessAccount.Config.OFF) businessAccount.changeConfigOff();
+    }
+
+    public void updateRefundAccount(BusinessAccountDto.Request.UpdateRefundAccount request, Integer loginUserNo) {
+        this.businessAccountQueryMapper.updateRefundAccount(request, loginUserNo);
     }
 }

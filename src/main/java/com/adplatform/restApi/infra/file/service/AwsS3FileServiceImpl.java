@@ -31,6 +31,10 @@ public class AwsS3FileServiceImpl implements FileService {
         return null;
     }
     @Override
+    public String saveWalletRefund(WalletDto.Request.UpdateRefund request, MultipartFile file) {
+        return null;
+    }
+    @Override
     public String saveMedia(MediaDto.Request.Save request, MultipartFile file) {
         return null;
     }

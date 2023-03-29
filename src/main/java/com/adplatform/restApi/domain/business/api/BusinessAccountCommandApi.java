@@ -82,4 +82,10 @@ public class BusinessAccountCommandApi {
     public void changeConfigOff(@PathVariable Integer id) {
         this.businessAccountSaveService.changeConfig(id, BusinessAccount.Config.OFF);
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/refund/account")
+    public void update(@RequestBody @Valid BusinessAccountDto.Request.UpdateRefundAccount request) {
+        this.businessAccountSaveService.updateRefundAccount(request, SecurityUtils.getLoginUserNo());
+    }
 }

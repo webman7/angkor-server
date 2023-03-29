@@ -1,5 +1,6 @@
 package com.adplatform.restApi.domain.wallet.api;
 
+import com.adplatform.restApi.domain.wallet.dao.walletchargelog.WalletChargeLogRepository;
 import com.adplatform.restApi.domain.wallet.dao.walletlog.WalletLogRepository;
 import com.adplatform.restApi.domain.wallet.dao.walletrefund.WalletRefundRepository;
 import com.adplatform.restApi.domain.wallet.dto.WalletDto;
@@ -17,6 +18,7 @@ public class WalletQueryApi {
 
     private final WalletLogRepository walletLogRepository;
     private final WalletRefundRepository walletRefundRepository;
+    private final WalletChargeLogRepository walletChargeLogRepository;
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/credit/log/search")
@@ -24,6 +26,14 @@ public class WalletQueryApi {
             @PageableDefault Pageable pageable,
             WalletDto.Request.CreditSearch request) {
         return PageDto.create(this.walletLogRepository.searchForCreditLog(pageable, request));
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/charge/search")
+    public PageDto<WalletDto.Response.ChargeSearch> searchForRefund(
+            @PageableDefault Pageable pageable,
+            WalletDto.Request.ChargeSearch request) {
+        return PageDto.create(this.walletChargeLogRepository.searchForCharge(pageable, request));
     }
 
     @ResponseStatus(HttpStatus.OK)

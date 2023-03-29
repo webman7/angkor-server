@@ -69,4 +69,14 @@
         SELECT COUNT(*)
         FROM (<include refid="accountsSelectQuery"/>) a
     </select>
+
+
+    <insert id="updateRefundAccount">
+        UPDATE business_account_info a, company_info b
+           SET b.bank_info_id = #{request.bankId},
+               b.account_number = #{request.accountNumber},
+               b.account_owner = #{request.accountOwner}
+         WHERE a.company_info_id = b.id
+          AND a.id = #{request.businessAccountId}
+    </insert>
 </mapper>

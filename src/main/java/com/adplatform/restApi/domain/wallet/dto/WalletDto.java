@@ -38,6 +38,29 @@ public class WalletDto {
 
         @Getter
         @Setter
+        public static class SaveRefund {
+            @NotNull
+            private int businessAccountId;
+            private Integer bankId;
+            private String accountNumber;
+            private String accountOwner;
+            private Float requestAmount;
+        }
+
+        @Getter
+        @Setter
+        public static class UpdateRefund {
+            @NotNull
+            private int id;
+            @NotNull
+            private int businessAccountId;
+            private Float amount;
+            private List<MultipartFile> walletRefundFiles = new ArrayList<>();
+            private String adminMemo;
+        }
+
+        @Getter
+        @Setter
         public static class SaveWalletReserveLog {
             @NotNull
             private int businessAccountId;
@@ -89,10 +112,18 @@ public class WalletDto {
         @Getter
         @Setter
         public static class CreditSearch {
-            private int businessAccountId;
+            private Integer businessAccountId;
             private String summary;
             private String startDate;
             private String endDate;
+        }
+
+        @Getter
+        @Setter
+        public static class ChargeSearch {
+            private int businessAccountId;
+            private Integer startDate;
+            private Integer endDate;
         }
 
         @Getter
@@ -239,6 +270,34 @@ public class WalletDto {
 
         @Getter
         @Setter
+        public static class ChargeSearch {
+            private int id;
+            private int businessAccountId;
+            private String businessAccountName;
+            private Float depositAmount;
+            private Integer depositAt;
+            private String adminMemo;
+            private String fileUrl;
+            private int createdUserNo;
+            private String createdUserId;
+            private LocalDateTime createdAt;
+            @QueryProjection
+            public ChargeSearch(int id, int businessAccountId, String businessAccountName, Float depositAmount, Integer depositAt, String adminMemo, String fileUrl, int createdUserNo, String createdUserId, LocalDateTime createdAt) {
+                this.id = id;
+                this.businessAccountId = businessAccountId;
+                this.businessAccountName = businessAccountName;
+                this.depositAmount = depositAmount;
+                this.depositAt = depositAt;
+                this.adminMemo = adminMemo;
+                this.fileUrl = fileUrl;
+                this.createdUserNo = createdUserNo;
+                this.createdUserId = createdUserId;
+                this.createdAt = createdAt;
+            }
+        }
+
+        @Getter
+        @Setter
         public static class RefundSearch {
             private int id;
             private int businessAccountId;
@@ -250,6 +309,7 @@ public class WalletDto {
             private Float requestAmount;
             private Float amount;
             private String adminMemo;
+            private String fileUrl;
             private String sendYn;
             private int createdUserNo;
             private String createdUserId;
@@ -258,7 +318,7 @@ public class WalletDto {
             private String updatedUserId;
             private LocalDateTime updatedAt;
             @QueryProjection
-            public RefundSearch(int id, int businessAccountId, String businessAccountName, int bankId, String accountNumber, String accountOwner, Float availableAmount, Float requestAmount, Float amount, String adminMemo, String sendYn, int createdUserNo, String createdUserId, LocalDateTime createdAt, int updatedUserNo, String updatedUserId, LocalDateTime updatedAt) {
+            public RefundSearch(int id, int businessAccountId, String businessAccountName, int bankId, String accountNumber, String accountOwner, Float availableAmount, Float requestAmount, Float amount, String adminMemo, String fileUrl, String sendYn, int createdUserNo, String createdUserId, LocalDateTime createdAt, int updatedUserNo, String updatedUserId, LocalDateTime updatedAt) {
                 this.id = id;
                 this.businessAccountId = businessAccountId;
                 this.businessAccountName = businessAccountName;
@@ -269,6 +329,7 @@ public class WalletDto {
                 this.requestAmount = requestAmount;
                 this.amount = amount;
                 this.adminMemo = adminMemo;
+                this.fileUrl = fileUrl;
                 this.sendYn = sendYn;
                 this.createdUserNo = createdUserNo;
                 this.createdUserId = createdUserId;
