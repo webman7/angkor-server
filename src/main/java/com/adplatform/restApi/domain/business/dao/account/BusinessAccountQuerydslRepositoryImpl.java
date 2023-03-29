@@ -406,6 +406,8 @@ public class BusinessAccountQuerydslRepositoryImpl implements BusinessAccountQue
     @Override
     public BusinessAccountDto.Response.BusinessAccountCreditInfo businessAccountCreditInfo(Integer businessAccountId) {
         return this.query.select(new QBusinessAccountDto_Response_BusinessAccountCreditInfo(
+                        businessAccount.id,
+                        businessAccount.name,
                         walletMaster.availableAmount.sum(),
                         walletMaster.totalReserveAmount.sum(),
                         businessAccount.type,
@@ -440,6 +442,8 @@ public class BusinessAccountQuerydslRepositoryImpl implements BusinessAccountQue
             BusinessAccountDto.Request.SearchCredit searchRequest) {
 
         JPAQuery<BusinessAccountDto.Response.BusinessAccountCreditInfo> query = this.query.select(new QBusinessAccountDto_Response_BusinessAccountCreditInfo(
+                        businessAccount.id,
+                        businessAccount.name,
                         walletMaster.availableAmount.sum(),
                         walletMaster.totalReserveAmount.sum(),
                         businessAccount.type,

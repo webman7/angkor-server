@@ -267,6 +267,9 @@ public class BusinessAccountDto {
         @Getter
         @Setter
         public static class BusinessAccountCreditInfo {
+
+            private Integer id;
+            private String name;
             private Float availableAmount;
             private Float totalReserveAmount;
             private BusinessAccount.PaymentType type;
@@ -274,10 +277,14 @@ public class BusinessAccountDto {
 
             @QueryProjection
             public BusinessAccountCreditInfo(
+                    Integer id,
+                    String name,
                     Float availableAmount,
                     Float totalReserveAmount,
                     BusinessAccount.PaymentType type,
                     BusinessAccount.Config config) {
+                this.id = id;
+                this.name = name;
                 this.availableAmount = availableAmount;
                 this.totalReserveAmount = totalReserveAmount;
                 this.type = type;
