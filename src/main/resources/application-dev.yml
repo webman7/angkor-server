@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://ec2-13-209-158-233.ap-northeast-2.compute.amazonaws.com:3306/developdb?characterEncoding=UTF-8&serverTimezone=UTC
+    url: jdbc:mariadb://dev-angkor.cluster-cevsd4jikew6.ap-northeast-2.rds.amazonaws.com:3306/developdb?characterEncoding=UTF-8&serverTimezone=UTC
     username: umuser
     password: "#@!umuser"
 
