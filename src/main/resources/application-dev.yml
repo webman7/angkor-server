@@ -2,8 +2,8 @@ spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://dev-angkor.cluster-cevsd4jikew6.ap-northeast-2.rds.amazonaws.com:3306/developdb?characterEncoding=UTF-8&serverTimezone=UTC
-    username: umuser
-    password: "#@!umuser"
+    username: admin
+    password: "!dbsldhsahqkdlf!2023"
 
   jpa:
     properties:
