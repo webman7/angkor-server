@@ -232,9 +232,14 @@ since 1.0
     </select>
 
     <sql id="creativeMediaCategoryListQuery">
-        SELECT creative_info_id AS creativeId, category_info_id AS categoryId, media_info_id AS categoryId
+        SELECT creative_info_id AS creativeId, category_info_id AS categoryId, media_info_id AS mediaId
           FROM creative_media_category_info
          WHERE creative_info_id = #{creativeId}
          ORDER BY category_info_id ASC, media_info_id ASC
     </sql>
+
+    <insert id="insertCreativeMediaCategory">
+        INSERT INTO creative_media_category_info (creative_info_id, category_info_id, media_info_id)
+           VALUES (#{creativeId}, #{categoryId}, #{mediaId})
+    </insert>
 </mapper>

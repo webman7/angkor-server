@@ -23,4 +23,6 @@ public interface CreativeQueryMapper {
     );
 
     List<CreativeDto.Response.Category> creativeMediaCategoryList(Integer creativeId);
+
+    void insertCreativeMediaCategory(Integer creativeId, Integer categoryId, Integer mediaId);
 }

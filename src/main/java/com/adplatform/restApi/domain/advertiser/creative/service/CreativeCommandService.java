@@ -4,6 +4,7 @@ package com.adplatform.restApi.domain.advertiser.creative.service;
 import com.adplatform.restApi.domain.advertiser.creative.dao.CreativeMediaCategoryRepository;
 import com.adplatform.restApi.domain.advertiser.creative.dao.CreativeRepository;
 import com.adplatform.restApi.domain.advertiser.creative.dao.CreativePlacementRepository;
+import com.adplatform.restApi.domain.advertiser.creative.dao.mapper.CreativeQueryMapper;
 import com.adplatform.restApi.domain.advertiser.creative.domain.*;
 import com.adplatform.restApi.domain.advertiser.creative.dto.CreativeDto;
 import com.adplatform.restApi.domain.advertiser.creative.dto.CreativeMapper;
@@ -40,6 +41,7 @@ public class CreativeCommandService {
     private final CreativePlacementRepository creativePlacementRepository;
     private final FileService fileService;
     private final CreativeMapper creativeMapper;
+    private final CreativeQueryMapper creativeQueryMapper;
     private final CreativeMediaCategoryMapper creativeMediaCategoryMapper;
     private final CreativeMediaCategoryRepository creativeMediaCategoryRepository;
 
@@ -62,8 +64,9 @@ public class CreativeCommandService {
             String [] mediaCategorySubTmp = mediaCategoryItems[i].split("_");
             System.out.println("Integer.parseInt(mediaCategorySubTmp[0]) : " + Integer.parseInt(mediaCategorySubTmp[0]));
             System.out.println("Integer.parseInt(mediaCategorySubTmp[1]) : " + Integer.parseInt(mediaCategorySubTmp[1]));
-            CreativeMediaCategory creativeMediaCategory = this.creativeMediaCategoryMapper.toEntity(creativeId, Integer.parseInt(mediaCategorySubTmp[0]), Integer.parseInt(mediaCategorySubTmp[1]));
-            this.creativeMediaCategoryRepository.save(creativeMediaCategory);
+            this.creativeQueryMapper.insertCreativeMediaCategory(creativeId, Integer.parseInt(mediaCategorySubTmp[0]), Integer.parseInt(mediaCategorySubTmp[1]));
+//            CreativeMediaCategory creativeMediaCategory = this.creativeMediaCategoryMapper.toEntity(creativeId, Integer.parseInt(mediaCategorySubTmp[0]), Integer.parseInt(mediaCategorySubTmp[1]));
+//            this.creativeMediaCategoryRepository.save(creativeMediaCategory);
         }
     }
 
