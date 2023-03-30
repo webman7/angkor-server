@@ -17,7 +17,7 @@ public class WalletCommandApi {
     private final WalletSaveService walletSaveService;
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/credit/add")
-    public void save(@RequestBody @Valid WalletDto.Request.SaveCredit request) {
+    public void save(@Valid WalletDto.Request.SaveCredit request) {
         this.walletSaveService.save(request, SecurityUtils.getLoginUserNo());
     }
 
