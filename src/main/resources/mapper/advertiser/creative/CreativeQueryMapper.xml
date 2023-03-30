@@ -242,4 +242,96 @@ since 1.0
         INSERT INTO creative_media_category_info (creative_info_id, category_info_id, media_info_id)
            VALUES (#{creativeId}, #{categoryId}, #{mediaId})
     </insert>
+
+
+
+    <resultMap id="mapReviewSearch" type="com.adplatform.restApi.domain.advertiser.creative.dto.CreativeDto$Response$ReviewSearch">
+        <id column="creativeId" property="creativeId"/>
+        <result column="businessName" property="businessName"/>
+        <result column="adAccountName" property="adAccountName"/>
+        <result column="campaignName" property="campaignName"/>
+        <result column="adGroupName" property="adGroupName"/>
+        <result column="creativeName" property="creativeName"/>
+        <result column="reviewStatus" property="reviewStatus"/>
+        <result column="creativeStatus" property="creativeStatus"/>
+        <result column="approveUserId" property="approveUserId"/>
+        <result column="approveAt" property="approveAt"/>
+    </resultMap>
+
+    <sql id="reviewSearchCondition">
+        <if test="request.searchType.equals('id')">
+            <if test="!request.searchKeyword.equals('')">
+                AND a.id = #{request.searchKeyword}
+            </if>
+        </if>
+        <if test="request.searchType.equals('name')">
+            <if test="!request.searchKeyword.equals('')">
+                AND a.name LIKE CONCAT('%', #{request.searchKeyword}, '%')
+            </if>
+        </if>
+        <if test="request.searchType.equals('adAccountId')">
+            <if test="!request.searchKeyword.equals('')">
+                AND b.id = #{request.searchKeyword}
+            </if>
+        </if>
+        <if test="request.searchType.equals('adAccountName')">
+            <if test="!request.searchKeyword.equals('')">
+                AND b.name LIKE CONCAT('%', #{request.searchKeyword}, '%')
+            </if>
+        </if>
+        <if test="request.searchType.equals('campaignName')">
+            <if test="!request.searchKeyword.equals('')">
+                AND c.name LIKE CONCAT('%', #{request.searchKeyword}, '%')
+            </if>
+        </if>
+        <if test="request.searchType.equals('adGroupName')">
+            <if test="!request.searchKeyword.equals('')">
+                AND d.name LIKE CONCAT('%', #{request.searchKeyword}, '%')
+            </if>
+        </if>
+        <if test="request.searchType.equals('creativeName')">
+            <if test="!request.searchKeyword.equals('')">
+                AND e.name LIKE CONCAT('%', #{request.searchKeyword}, '%')
+            </if>
+        </if>
+        <if test="request.reviewStatus.equals('APPROVED')">
+            AND e.review_status = 'APPROVED'
+        </if>
+        <if test="request.reviewStatus.equals('WAITING')">
+            AND e.review_status = 'WAITING'
+        </if>
+        <if test="request.reviewStatus.equals('REJECTED')">
+            AND e.review_status = 'REJECTED'
+        </if>
+    </sql>
+
+    <sql id="reviewSearchSelectQuery">
+        SELECT a.name AS businessName, b.name AS adAccountName, c.name AS campaignName, d.name AS adGroupName, e.id AS creativeId, e.name AS creativeName, e.review_status AS reviewStatus, e.creative_status AS creativeStatus,
+               (SELECT user_id FROM user_info WHERE e.approve_user_no = user_no) AS approveUserId, e.approve_date AS approveAt
+          FROM business_account_info a, adaccount_info b, campaign_info c, adgroup_info d, creative_info e
+         WHERE a.id = b.business_account_info_id
+           AND b.id = c.adaccount_info_id
+           AND c.id = d.campaign_info_id
+           AND d.id = e.adgroup_info_id
+           <include refid="reviewSearchCondition"/>
+           AND e.upd_date BETWEEN DATE_FORMAT(#{request.startDate}, '%Y%m%d') AND DATE_FORMAT(#{request.endDate}, '%Y%m%d')
+           AND a.config IN ('ON', 'OFF')
+           AND b.config IN ('ON', 'OFF')
+           AND c.config IN ('ON', 'OFF')
+           AND d.config IN ('ON', 'OFF')
+           AND e.config IN ('ON', 'OFF')
+         ORDER BY e.upd_date DESC
+    </sql>
+
+    <select id="reviewSearch" resultMap="mapReviewSearch">
+        <include refid="reviewSearchSelectQuery"/>
+<!--        <include refid="common.sortAndOrder"/>-->
+        <include refid="common.limitAndOffset"/>
+    </select>
+
+    <select id="countReviewSearch" resultType="long">
+        SELECT COUNT(*)
+        FROM (<include refid="reviewSearchSelectQuery"/>) a
+    </select>
+
 </mapper>

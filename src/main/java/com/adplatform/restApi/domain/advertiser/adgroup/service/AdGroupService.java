@@ -5,6 +5,10 @@ import com.adplatform.restApi.domain.advertiser.adgroup.dao.adgroup.mapper.AdGro
 import com.adplatform.restApi.domain.advertiser.adgroup.dao.device.DeviceRepository;
 import com.adplatform.restApi.domain.advertiser.adgroup.domain.AdGroup;
 import com.adplatform.restApi.domain.advertiser.adgroup.domain.Device;
+import com.adplatform.restApi.domain.history.dao.AdminStopHistoryRepository;
+import com.adplatform.restApi.domain.history.domain.AdminStopHistory;
+import com.adplatform.restApi.domain.history.dto.AdminStopHistoryDto;
+import com.adplatform.restApi.domain.history.dto.AdminStopHistoryMapper;
 import com.adplatform.restApi.domain.media.dao.MediaRepository;
 import com.adplatform.restApi.domain.media.domain.Media;
 import com.adplatform.restApi.domain.advertiser.adgroup.dto.adgroup.AdGroupDto;
@@ -17,7 +21,7 @@ import com.adplatform.restApi.domain.advertiser.campaign.dao.campaign.CampaignRe
 import com.adplatform.restApi.domain.advertiser.campaign.domain.Campaign;
 import com.adplatform.restApi.domain.advertiser.campaign.dto.CampaignDto;
 import com.adplatform.restApi.domain.advertiser.campaign.service.CampaignFindUtils;
-import com.adplatform.restApi.domain.media.dto.category.MediaCategoryDto;
+import com.adplatform.restApi.global.config.security.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,8 +46,9 @@ public class AdGroupService {
     private final MediaRepository mediaRepository;
     private final DeviceRepository deviceRepository;
     private final AdGroupMapper adGroupMapper;
-
     private final AdGroupQueryMapper adGroupQueryMapper;
+    private final AdminStopHistoryMapper adminStopHistoryMapper;
+    private final AdminStopHistoryRepository adminStopHistoryRepository;
 
     public void save(AdGroupSavedEvent event) {
         List<Media> media = this.findByMediaName(event.getMedia());
@@ -138,6 +143,25 @@ public class AdGroupService {
         else if (config == AdGroup.Config.OFF) {
             adGroup.changeConfigOff();
             adGroup.changeStatusOff();
+        }
+    }
+
+    public void changeAdminStop(Integer id, AdGroupDto.Request.AdminStop request, Boolean adminStop) {
+        AdGroup adGroup = AdGroupFindUtils.findByIdOrElseThrow(id, this.adGroupRepository);
+        if (adminStop) {
+            // 히스토리 저장
+            AdminStopHistoryDto.Request.Save history = new AdminStopHistoryDto.Request.Save();
+            history.setType(request.getType());
+            history.setStopId(id);
+            history.setReason(request.getReason());
+            AdminStopHistory adminStopHistory = this.adminStopHistoryMapper.toEntity(history, SecurityUtils.getLoginUserNo());
+            this.adminStopHistoryRepository.save(adminStopHistory);
+
+            // 관리자 정지
+            adGroup.changeAdminStopOn();
+        }
+        else {
+            adGroup.changeAdminStopOff();
         }
     }
 }

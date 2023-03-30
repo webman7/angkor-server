@@ -94,8 +94,15 @@ public class AdAccount extends BaseUpdatedEntity {
     public void changeConfigOn() {
         this.config = AdAccount.Config.ON;
     }
-
     public void changeConfigOff() {
         this.config = AdAccount.Config.OFF;
+    }
+
+    public void changeAdminStopOn() {
+        this.adminStop = true;
+        this.config = AdAccount.Config.OFF;
+    }
+    public void changeAdminStopOff() {
+        this.adminStop = false;
     }
 }

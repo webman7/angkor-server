@@ -71,6 +71,67 @@
     </select>
 
 
+
+
+
+
+    <resultMap id="mapBusinessAdAccount" type="com.adplatform.restApi.domain.business.dto.account.BusinessAccountDto$Response$BusinessAdAccount">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="adAccountId" property="adAccountId"/>
+        <result column="adAccountName" property="adAccountName"/>
+        <result column="adminStop" property="adminStop"/>
+    </resultMap>
+
+    <sql id="businessAdAccountCondition">
+        <if test="searchType.equals('id')">
+            <if test="!searchKeyword.equals('')">
+                AND a.id = #{searchKeyword}
+            </if>
+        </if>
+        <if test="searchType.equals('name')">
+            <if test="!searchKeyword.equals('')">
+                AND a.name LIKE CONCAT('%', #{searchKeyword}, '%')
+            </if>
+        </if>
+        <if test="searchType.equals('adAccountId')">
+            <if test="!searchKeyword.equals('')">
+                AND b.id = #{searchKeyword}
+            </if>
+        </if>
+        <if test="searchType.equals('adAccountName')">
+            <if test="!searchKeyword.equals('')">
+                AND b.name LIKE CONCAT('%', #{searchKeyword}, '%')
+            </if>
+        </if>
+    </sql>
+
+    <sql id="businessAdAccountSelectQuery">
+        SELECT a.id AS id, a.name AS name, b.id AS adAccountId, b.name AS adAccountName, b.admin_stop_yn AS adminStop
+         FROM business_account_info a, adaccount_info b
+        WHERE a.id = b.business_account_info_id
+          <include refid="businessAdAccountCondition"/>
+          AND a.config IN ('ON', 'OFF')
+          AND b.config IN ('ON', 'OFF')
+    </sql>
+
+    <select id="businessAdAccount" resultMap="mapBusinessAdAccount">
+        <include refid="businessAdAccountSelectQuery"/>
+        <include refid="common.sortAndOrder"/>
+        <include refid="common.limitAndOffset"/>
+    </select>
+
+    <select id="countBusinessAdAccount" resultType="long">
+        SELECT COUNT(*)
+        FROM (<include refid="businessAdAccountSelectQuery"/>) a
+    </select>
+
+
+
+
+
+
+
     <insert id="updateRefundAccount">
         UPDATE business_account_info a, company_info b
            SET b.bank_info_id = #{request.bankId},

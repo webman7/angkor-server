@@ -32,6 +32,13 @@ public class BusinessAccountDto {
 
         @Getter
         @Setter
+        public static class BusinessAdAccount {
+            private String searchType;
+            private String searchKeyword;
+        }
+
+        @Getter
+        @Setter
         public static class SearchCredit {
             private Integer id;
             private String name;
@@ -180,6 +187,17 @@ public class BusinessAccountDto {
             private String memberType;
             private Integer adAccountId;
         }
+
+        @Getter
+        @Setter
+        public static class BusinessAdAccount {
+            private Integer id;
+            private String name;
+            private Integer adAccountId;
+            private String adAccountName;
+            private boolean adminStop;
+        }
+
 
         @Getter
         @Setter

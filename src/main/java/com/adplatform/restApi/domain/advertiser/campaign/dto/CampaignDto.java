@@ -3,6 +3,7 @@ package com.adplatform.restApi.domain.advertiser.campaign.dto;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountIdGetter;
 import com.adplatform.restApi.domain.advertiser.adgroup.dto.adgroup.AdGroupDto;
 import com.adplatform.restApi.domain.advertiser.campaign.domain.Campaign;
+import com.adplatform.restApi.domain.history.domain.AdminStopHistory;
 import com.adplatform.restApi.domain.statistics.dto.ReportDto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.AccessLevel;
@@ -76,6 +77,13 @@ public abstract class CampaignDto {
             private Integer campaignId;
             private Integer startDate;
             private Integer endDate;
+        }
+
+        @Getter
+        @Setter
+        public static class AdminStop {
+            private AdminStopHistory.Type type;
+            private String reason;
         }
 
 //        @Getter

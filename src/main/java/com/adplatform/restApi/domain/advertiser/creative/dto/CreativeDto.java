@@ -7,6 +7,7 @@ import com.adplatform.restApi.domain.advertiser.creative.domain.Creative;
 import com.adplatform.restApi.domain.advertiser.creative.domain.CreativeFile;
 import com.adplatform.restApi.domain.advertiser.creative.domain.CreativeLanding;
 import com.adplatform.restApi.domain.advertiser.creative.domain.FileInformation;
+import com.adplatform.restApi.domain.history.domain.AdminStopHistory;
 import com.adplatform.restApi.domain.statistics.dto.ReportDto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,6 +95,31 @@ public abstract class CreativeDto {
             private String mediaCategory;
             private String opinion;
         }
+
+        @Getter
+        @Setter
+        public static class AdminStop {
+            private AdminStopHistory.Type type;
+            private String reason;
+        }
+
+        @Getter
+        @Setter
+        public static class ReviewSearch {
+            private String searchType;
+            private String searchKeyword;
+            private String reviewStatus;
+            private String startDate;
+            private String endDate;
+        }
+
+        @Getter
+        @Setter
+        public static class ReviewApprove {
+            private Creative.ReviewStatus reviewStatus;
+            private String adminMemo;
+        }
+
     }
 
     public abstract static class Response {
@@ -187,6 +214,23 @@ public abstract class CreativeDto {
                 this.categoryId = categoryId;
                 this.mediaId = mediaId;
             }
+        }
+
+        @Getter
+        @Setter
+        public static class ReviewSearch {
+            private String businessName;
+            private String adAccountName;
+            private String campaignName;
+            private String adGroupName;
+            private String creativeId;
+            private String creativeName;
+            private String reviewStatus;
+            private String creativeStatus;
+
+            private String approveUserId;
+
+            private LocalDateTime approveAt;
         }
     }
 }

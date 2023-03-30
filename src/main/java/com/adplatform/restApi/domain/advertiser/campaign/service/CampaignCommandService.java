@@ -17,8 +17,12 @@ import com.adplatform.restApi.domain.advertiser.campaign.exception.CampaignCashE
 import com.adplatform.restApi.domain.business.dao.account.BusinessAccountRepository;
 import com.adplatform.restApi.domain.business.domain.BusinessAccount;
 import com.adplatform.restApi.domain.business.service.BusinessAccountFindUtils;
+import com.adplatform.restApi.domain.history.dao.AdminStopHistoryRepository;
 import com.adplatform.restApi.domain.history.dao.campaign.CampaignBudgetChangeHistoryRepository;
+import com.adplatform.restApi.domain.history.domain.AdminStopHistory;
 import com.adplatform.restApi.domain.history.domain.CampaignBudgetChangeHistory;
+import com.adplatform.restApi.domain.history.dto.AdminStopHistoryDto;
+import com.adplatform.restApi.domain.history.dto.AdminStopHistoryMapper;
 import com.adplatform.restApi.domain.history.dto.campaign.CampaignBudgetChangeHistoryDto;
 import com.adplatform.restApi.domain.history.dto.campaign.CampaignBudgetChangeHistoryMapper;
 import com.adplatform.restApi.domain.wallet.dao.walletmaster.WalletMasterRepository;
@@ -60,6 +64,9 @@ public class CampaignCommandService {
     private final WalletMasterRepository walletMasterRepository;
     private final WalletReserveLogRepository walletReserveLogRepository;
     private final WalletReserveLogMapper walletReserveLogMapper;
+
+    private final AdminStopHistoryMapper adminStopHistoryMapper;
+    private final AdminStopHistoryRepository adminStopHistoryRepository;
 
     public void save(CampaignDto.Request.Save request) {
         CampaignDto.Response.CampaignByBusinessAccountId campaignInfo = this.campaignRepository.getCampaignByBusinessAccountId(request.getAdAccountId());
@@ -370,6 +377,25 @@ public class CampaignCommandService {
         } else if (config == Campaign.Config.OFF) {
             campaign.changeConfigOff();
             campaign.changeStatusOff();
+        }
+    }
+
+    public void changeAdminStop(Integer id, CampaignDto.Request.AdminStop request, Boolean adminStop) {
+        Campaign campaign = CampaignFindUtils.findByIdOrElseThrow(id, this.campaignRepository);
+        if (adminStop) {
+            // 히스토리 저장
+            AdminStopHistoryDto.Request.Save history = new AdminStopHistoryDto.Request.Save();
+            history.setType(request.getType());
+            history.setStopId(id);
+            history.setReason(request.getReason());
+            AdminStopHistory adminStopHistory = this.adminStopHistoryMapper.toEntity(history, SecurityUtils.getLoginUserNo());
+            this.adminStopHistoryRepository.save(adminStopHistory);
+
+            // 관리자 정지
+            campaign.changeAdminStopOn();
+        }
+        else {
+            campaign.changeAdminStopOff();
         }
     }
 }

@@ -63,4 +63,17 @@ public class CampaignCommandApi {
     public void changeConfigOff(@PathVariable Integer id) {
         this.campaignCommandService.changeConfig(id, Campaign.Config.OFF);
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{id}/stop/on")
+    public void changeAdminStopOn(@PathVariable Integer id, @RequestBody @Valid CampaignDto.Request.AdminStop request) {
+        this.campaignCommandService.changeAdminStop(id, request, true);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{id}/stop/off")
+    public void changeAdminStopOff(@PathVariable Integer id, @RequestBody @Valid CampaignDto.Request.AdminStop request) {
+        this.campaignCommandService.changeAdminStop(id, request, false);
+    }
+
 }

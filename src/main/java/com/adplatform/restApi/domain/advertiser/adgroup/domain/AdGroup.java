@@ -345,4 +345,9 @@ public class AdGroup extends BaseUpdatedEntity {
     public void changeStatusFinished() {
         this.status = Status.FINISHED;
     }
+    public void changeAdminStopOn() {
+        this.systemConfig = SystemConfig.ADMIN_STOP;
+        this.config = Config.OFF;
+    }
+    public void changeAdminStopOff() { this.systemConfig = SystemConfig.ON; }
 }

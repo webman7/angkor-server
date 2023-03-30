@@ -55,4 +55,22 @@ public class CreativeCommandApi {
     public void changeConfigOff(@PathVariable Integer id) {
         this.creativeCommandService.changeConfig(id, Creative.Config.OFF);
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{id}/stop/on")
+    public void changeAdminStopOn(@PathVariable Integer id, @RequestBody @Valid CreativeDto.Request.AdminStop request) {
+        this.creativeCommandService.changeAdminStop(id, request, true);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{id}/stop/off")
+    public void changeAdminStopOff(@PathVariable Integer id, @RequestBody @Valid CreativeDto.Request.AdminStop request) {
+        this.creativeCommandService.changeAdminStop(id, request, false);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{id}/review")
+    public void changeReviewApprove(@PathVariable Integer id, @RequestBody @Valid CreativeDto.Request.ReviewApprove request) {
+        this.creativeCommandService.changeReviewApprove(id, request);
+    }
 }

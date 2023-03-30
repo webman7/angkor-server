@@ -6,6 +6,7 @@ import com.adplatform.restApi.domain.advertiser.adgroup.dto.schedule.AdGroupSche
 import com.adplatform.restApi.domain.advertiser.adgroup.dto.target.AdGroupDemographicTargetDto;
 import com.adplatform.restApi.domain.advertiser.campaign.dto.CampaignDto;
 import com.adplatform.restApi.domain.advertiser.campaign.dto.CampaignIdGetter;
+import com.adplatform.restApi.domain.history.domain.AdminStopHistory;
 import com.adplatform.restApi.domain.statistics.dto.ReportDto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
@@ -104,6 +105,13 @@ public abstract class AdGroupDto {
             private boolean changeStartEndDate;
             private Integer startDate;
             private Integer endDate;
+        }
+
+        @Getter
+        @Setter
+        public static class AdminStop {
+            private AdminStopHistory.Type type;
+            private String reason;
         }
     }
 

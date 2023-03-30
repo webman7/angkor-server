@@ -2,6 +2,7 @@ package com.adplatform.restApi.domain.advertiser.creative.dao.mapper;
 
 import com.adplatform.restApi.domain.advertiser.campaign.dto.AdvertiserSearchRequest;
 import com.adplatform.restApi.domain.advertiser.creative.dto.CreativeDto;
+import com.adplatform.restApi.domain.business.dto.account.BusinessAccountDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,12 @@ public interface CreativeQueryMapper {
             @Param("request") AdvertiserSearchRequest request,
             @Param("pageable") Pageable pageable
     );
+
+    List<CreativeDto.Response.ReviewSearch> reviewSearch(
+            @Param("pageable") Pageable pageable, CreativeDto.Request.ReviewSearch request, Integer loginUserNo
+    );
+    long countReviewSearch(CreativeDto.Request.ReviewSearch request, Integer loginUserNo);
+
 
     List<CreativeDto.Response.Category> creativeMediaCategoryList(Integer creativeId);
 

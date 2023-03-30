@@ -4,6 +4,7 @@ import com.adplatform.restApi.domain.adaccount.domain.AdAccount;
 import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
 import com.adplatform.restApi.domain.business.domain.BusinessAccount;
 import com.adplatform.restApi.domain.company.domain.Company;
+import com.adplatform.restApi.domain.history.domain.AdminStopHistory;
 import com.adplatform.restApi.domain.wallet.dto.WalletDto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
@@ -42,6 +43,12 @@ public class AdAccountDto {
             private String name;
         }
 
+        @Getter
+        @Setter
+        public static class AdminStop {
+            private AdminStopHistory.Type type;
+            private String reason;
+        }
 //        @Getter
 //        @Setter
 //        public static class OutOfBalanceUpdate {

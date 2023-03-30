@@ -8,9 +8,11 @@ import com.adplatform.restApi.global.entity.BaseUpdatedEntity;
 import com.adplatform.restApi.infra.file.service.FileService;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -151,6 +153,16 @@ public class Creative extends BaseUpdatedEntity {
     @Column(name = "creative_status", length = 50)
     private Status status;
 
+    @Column(name = "admin_memo", length = 1000)
+    private String adminMemo;
+
+    @Column(name = "approve_user_no")
+    private Integer approveUserNo;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Column(name = "approve_date")
+    private LocalDateTime approveAt;
+
     public Creative(
             int representativeId,
             AdGroup adGroup,
@@ -257,6 +269,7 @@ public class Creative extends BaseUpdatedEntity {
 
     public void changeConfigOff() {
         this.config = Config.OFF;
+        this.changeStatusOff();
     }
 
     public void changeStatusOff() {
@@ -269,6 +282,23 @@ public class Creative extends BaseUpdatedEntity {
 
     public void changeStatusUnApproved() {
         this.status = Status.UNAPPROVED;
+    }
+
+    public void changeAdminStopOn() {
+        this.systemConfig = SystemConfig.ADMIN_STOP;
+        this.config = Config.OFF;
+        this.status = Status.ADMIN_STOP;
+    }
+    public void changeAdminStopOff() { this.systemConfig = SystemConfig.ON; }
+
+    public void changeReviewApprove(CreativeDto.Request.ReviewApprove reviewApprove, Integer loginUserNo) {
+        this.reviewStatus = reviewApprove.getReviewStatus();
+        if(reviewApprove.getReviewStatus().equals(ReviewStatus.APPROVED)) {
+            this.status = Status.OPERATING;
+        }
+        this.adminMemo = reviewApprove.getAdminMemo();
+        this.approveUserNo = loginUserNo;
+        this.approveAt = LocalDateTime.now();
     }
 
     @Getter

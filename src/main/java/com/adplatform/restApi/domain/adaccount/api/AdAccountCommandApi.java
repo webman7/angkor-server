@@ -75,6 +75,18 @@ public class AdAccountCommandApi {
         this.adAccountSaveService.changeConfig(id, AdAccount.Config.OFF);
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{id}/stop/on")
+    public void changeAdminStopOn(@PathVariable Integer id, @RequestBody @Valid AdAccountDto.Request.AdminStop request) {
+        this.adAccountSaveService.changeAdminStop(id, request, true);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{id}/stop/off")
+    public void changeAdminStopOff(@PathVariable Integer id, @RequestBody @Valid AdAccountDto.Request.AdminStop request) {
+        this.adAccountSaveService.changeAdminStop(id, request, false);
+    }
+
 //    @AuthorizedAdAccount
 //    @ResponseStatus(HttpStatus.OK)
 //    @PostMapping("/credit-limit")

@@ -15,8 +15,10 @@ import com.adplatform.restApi.domain.advertiser.creative.dto.CreativeMapper;
 import com.adplatform.restApi.domain.advertiser.creative.dto.CreativeMediaCategoryMapper;
 import com.adplatform.restApi.domain.advertiser.creative.exception.CreativeNotFoundException;
 import com.adplatform.restApi.domain.advertiser.creative.service.CreativeMediaCategoryFindUtils;
+import com.adplatform.restApi.domain.business.dto.account.BusinessAccountDto;
 import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount;
 import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccountByCreativeId;
+import com.adplatform.restApi.global.config.security.util.SecurityUtils;
 import com.adplatform.restApi.global.dto.PageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
@@ -81,5 +83,17 @@ public class CreativeQueryApi {
         Creative creative = this.creativeRepository.findDetailById(creativeId).orElseThrow(CreativeNotFoundException::new);
 
         return this.creativeQueryMapper.creativeMediaCategoryList(creativeId);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/review/search")
+    public PageDto<CreativeDto.Response.ReviewSearch> reviewSearch(
+            @PageableDefault Pageable pageable,
+            @RequestBody @Valid CreativeDto.Request.ReviewSearch request) {
+
+        return PageDto.create(new PageImpl<>(
+                this.creativeQueryMapper.reviewSearch(pageable, request, SecurityUtils.getLoginUserNo()),
+                pageable,
+                this.creativeQueryMapper.countReviewSearch(request, SecurityUtils.getLoginUserNo())));
     }
 }

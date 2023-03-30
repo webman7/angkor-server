@@ -9,12 +9,17 @@ import com.adplatform.restApi.domain.advertiser.creative.domain.*;
 import com.adplatform.restApi.domain.advertiser.creative.dto.CreativeDto;
 import com.adplatform.restApi.domain.advertiser.creative.dto.CreativeMapper;
 import com.adplatform.restApi.domain.advertiser.creative.dto.CreativeMediaCategoryMapper;
+import com.adplatform.restApi.domain.advertiser.creative.exception.CreativeReviewAlreadyApproveException;
+import com.adplatform.restApi.domain.advertiser.creative.exception.CreativeReviewAlreadyRejectException;
 import com.adplatform.restApi.domain.advertiser.creative.exception.CreativeUpdateException;
+import com.adplatform.restApi.domain.history.dao.AdminStopHistoryRepository;
+import com.adplatform.restApi.domain.history.domain.AdminStopHistory;
+import com.adplatform.restApi.domain.history.dto.AdminStopHistoryDto;
+import com.adplatform.restApi.domain.history.dto.AdminStopHistoryMapper;
 import com.adplatform.restApi.domain.media.dao.placement.PlacementRepository;
-import com.adplatform.restApi.domain.media.domain.MediaCategory;
 import com.adplatform.restApi.domain.media.domain.Placement;
-import com.adplatform.restApi.domain.media.domain.QMediaCategory;
 import com.adplatform.restApi.domain.media.exception.PlacementNotFoundException;
+import com.adplatform.restApi.global.config.security.util.SecurityUtils;
 import com.adplatform.restApi.infra.file.util.ImageSizeUtils;
 import com.adplatform.restApi.infra.file.service.FileService;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +49,8 @@ public class CreativeCommandService {
     private final CreativeQueryMapper creativeQueryMapper;
     private final CreativeMediaCategoryMapper creativeMediaCategoryMapper;
     private final CreativeMediaCategoryRepository creativeMediaCategoryRepository;
+    private final AdminStopHistoryMapper adminStopHistoryMapper;
+    private final AdminStopHistoryRepository adminStopHistoryRepository;
 
     public void save(CreativeDto.Request.Save request) {
         List<Placement> placement = this.findByPlacementId(request.getPlacements());
@@ -170,6 +177,37 @@ public class CreativeCommandService {
         else if (config == Creative.Config.OFF) {
             creative.changeConfigOff();
             creative.changeStatusOff();
+        }
+    }
+
+    public void changeAdminStop(Integer id, CreativeDto.Request.AdminStop request, Boolean adminStop) {
+        Creative creative = CreativeFindUtils.findByIdOrElseThrow(id, this.creativeRepository);
+        if (adminStop) {
+            // 히스토리 저장
+            AdminStopHistoryDto.Request.Save history = new AdminStopHistoryDto.Request.Save();
+            history.setType(request.getType());
+            history.setStopId(id);
+            history.setReason(request.getReason());
+            AdminStopHistory adminStopHistory = this.adminStopHistoryMapper.toEntity(history, SecurityUtils.getLoginUserNo());
+            this.adminStopHistoryRepository.save(adminStopHistory);
+
+            // 관리자 정지
+            creative.changeAdminStopOn();
+        }
+        else {
+            creative.changeAdminStopOff();
+        }
+    }
+
+    public void changeReviewApprove(Integer id, CreativeDto.Request.ReviewApprove request) {
+        Creative creative = CreativeFindUtils.findByIdOrElseThrow(id, this.creativeRepository);
+
+        if(creative.getReviewStatus().equals(Creative.ReviewStatus.WAITING)) {
+            creative.changeReviewApprove(request, SecurityUtils.getLoginUserNo());
+        } else if (creative.getReviewStatus().equals(Creative.ReviewStatus.REJECTED)) {
+            throw new CreativeReviewAlreadyRejectException();
+        } else if (creative.getReviewStatus().equals(Creative.ReviewStatus.APPROVED)) {
+            throw new CreativeReviewAlreadyApproveException();
         }
     }
 }

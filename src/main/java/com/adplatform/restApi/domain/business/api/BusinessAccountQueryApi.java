@@ -51,6 +51,19 @@ public class BusinessAccountQueryApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/adAccount/search")
+    public PageDto<BusinessAccountDto.Response.BusinessAdAccount> accounts(
+            @PageableDefault Pageable pageable,
+            @RequestParam(required = false) String searchType,
+            @RequestParam(required = false) String searchKeyword) {
+
+        return PageDto.create(new PageImpl<>(
+                this.businessAccountQueryMapper.businessAdAccount(pageable, searchType, searchKeyword, SecurityUtils.getLoginUserNo()),
+                pageable,
+                this.businessAccountQueryMapper.countBusinessAdAccount(searchType, searchKeyword, SecurityUtils.getLoginUserNo())));
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/account/{id}/credit")
     public BusinessAccountDto.Response.BusinessAccountCreditInfo businessAccountCreditInfo(@PathVariable(name = "id") Integer businessAccountId) {
         return this.businessAccountRepository.businessAccountCreditInfo(businessAccountId);

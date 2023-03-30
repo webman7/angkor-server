@@ -13,8 +13,12 @@ import com.adplatform.restApi.domain.business.domain.BusinessAccount;
 import com.adplatform.restApi.domain.business.exception.*;
 import com.adplatform.restApi.domain.business.service.BusinessAccountQueryService;
 import com.adplatform.restApi.domain.company.service.CompanyService;
+import com.adplatform.restApi.domain.history.dao.AdminStopHistoryRepository;
 import com.adplatform.restApi.domain.history.dao.adaccount.user.AdAccountUserInfoHistoryRepository;
+import com.adplatform.restApi.domain.history.domain.AdminStopHistory;
 import com.adplatform.restApi.domain.history.domain.adaccount.user.AdAccountUserInfoHistory;
+import com.adplatform.restApi.domain.history.dto.AdminStopHistoryDto;
+import com.adplatform.restApi.domain.history.dto.AdminStopHistoryMapper;
 import com.adplatform.restApi.domain.history.dto.adaccount.user.AdAccountUserInfoHistoryDto;
 import com.adplatform.restApi.domain.history.dto.adaccount.user.AdAccountUserInfoHistoryMapper;
 import com.adplatform.restApi.domain.user.dto.user.UserDto;
@@ -42,6 +46,8 @@ public class AdAccountSaveService {
     private final BusinessAccountQueryService businessAccountQueryService;
     private final AdAccountUserMapper adAccountUserMapper;
     private final AdAccountUserInfoHistoryMapper adAccountUserInfoHistoryMapper;
+    private final AdminStopHistoryMapper adminStopHistoryMapper;
+    private final AdminStopHistoryRepository adminStopHistoryRepository;
 
     public void save(AdAccountDto.Request.Save request, Integer loginUserNo) {
         User user = this.userQueryService.findByIdOrElseThrow(loginUserNo);
@@ -195,4 +201,24 @@ public class AdAccountSaveService {
         if (config == AdAccount.Config.ON) adAccount.changeConfigOn();
         else if (config == AdAccount.Config.OFF) adAccount.changeConfigOff();
     }
+
+    public void changeAdminStop(Integer id, AdAccountDto.Request.AdminStop request, Boolean adminStop) {
+        AdAccount adAccount = AdAccountFindUtils.findByIdOrElseThrow(id, this.adAccountRepository);
+        if (adminStop) {
+            // 히스토리 저장
+            AdminStopHistoryDto.Request.Save history = new AdminStopHistoryDto.Request.Save();
+            history.setType(request.getType());
+            history.setStopId(id);
+            history.setReason(request.getReason());
+            AdminStopHistory adminStopHistory = this.adminStopHistoryMapper.toEntity(history, SecurityUtils.getLoginUserNo());
+            this.adminStopHistoryRepository.save(adminStopHistory);
+
+            // 관리자 정지
+            adAccount.changeAdminStopOn();
+        }
+        else {
+            adAccount.changeAdminStopOff();
+        }
+    }
+
 }
