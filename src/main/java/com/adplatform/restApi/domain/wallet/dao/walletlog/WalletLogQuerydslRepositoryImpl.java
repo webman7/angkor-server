@@ -146,6 +146,6 @@ public class WalletLogQuerydslRepositoryImpl implements WalletLogQuerydslReposit
     }
 
     private BooleanExpression eqSummary(String summary) {
-        return summary != null ? walletLog.summary.eq(summary) : null;
+        return (summary != null && !summary.equals("")) ? walletLog.summary.eq(summary) : null;
     }
 }
