@@ -38,7 +38,7 @@ public class BusinessAccountQueryApi {
             @RequestParam(required = false) String name) {
 
         return PageDto.create(new PageImpl<>(
-                this.businessAccountQueryMapper.accounts(pageable, id, name, SecurityUtils.getLoginUserNo()),
+                this.businessAccountQueryMapper.accounts(id, name, SecurityUtils.getLoginUserNo(), pageable),
                 pageable,
                 this.businessAccountQueryMapper.countAccounts(id, name, SecurityUtils.getLoginUserNo())));
     }
@@ -58,7 +58,7 @@ public class BusinessAccountQueryApi {
             @RequestParam(required = false) String searchKeyword) {
 
         return PageDto.create(new PageImpl<>(
-                this.businessAccountQueryMapper.businessAdAccount(pageable, searchType, searchKeyword, SecurityUtils.getLoginUserNo()),
+                this.businessAccountQueryMapper.businessAdAccount(searchType, searchKeyword, SecurityUtils.getLoginUserNo(), pageable),
                 pageable,
                 this.businessAccountQueryMapper.countBusinessAdAccount(searchType, searchKeyword, SecurityUtils.getLoginUserNo())));
     }

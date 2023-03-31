@@ -14,6 +14,7 @@ import com.adplatform.restApi.domain.media.dto.category.MediaCategoryDto;
 import com.adplatform.restApi.domain.media.dto.category.MediaCategoryMapper;
 import com.adplatform.restApi.domain.media.exception.MediaUpdateException;
 import com.adplatform.restApi.domain.media.exception.CategoryNotFoundException;
+import com.adplatform.restApi.infra.file.service.AwsFileService;
 import com.adplatform.restApi.infra.file.service.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -39,6 +40,7 @@ public class MediaSaveService {
     private final CategoryRepository categoryRepository;
     private final MediaCategorySaveQueryMapper mediaCategorySaveQueryMapper;
     private final FileService fileService;
+    private final AwsFileService awsFileService;
 
     public void save(MediaDto.Request.Save request) {
         Company company = CompanyFindUtils.findByIdOrElseThrow(request.getCompanyId(), this.companyRepository);
@@ -151,7 +153,8 @@ public class MediaSaveService {
     private MediaFile saveMediaFile(MediaDto.Request.Save request, Media media, MultipartFile file) {
         String originalFilename = file.getOriginalFilename();
         String mimetype = Files.probeContentType(Paths.get(originalFilename));
-        String savedFileUrl = this.fileService.saveMedia(request, file);
+//        String savedFileUrl = this.fileService.saveMedia(request, file);
+        String savedFileUrl = this.awsFileService.saveMedia(request, file);
         int index = savedFileUrl.lastIndexOf("/");
         String savedFilename = savedFileUrl.substring(index+1);
         return new MediaFile(media, this.mediaFileInformation(file, savedFileUrl, savedFilename, originalFilename, mimetype));

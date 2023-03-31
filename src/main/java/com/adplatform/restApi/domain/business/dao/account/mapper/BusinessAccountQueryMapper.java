@@ -11,16 +11,16 @@ import java.util.List;
 public interface BusinessAccountQueryMapper {
 
     List<BusinessAccountDto.Response.Accounts> accounts(
-            @Param("pageable") Pageable pageable, Integer id, String name, Integer loginUserNo
+            @Param("id") Integer id, @Param("name") String name, @Param("loginUserNo") Integer loginUserNo, @Param("pageable") Pageable pageable
     );
-    long countAccounts(Integer id, String name, Integer loginUserNo);
+    long countAccounts(@Param("id") Integer id, @Param("name") String name, @Param("loginUserNo") Integer loginUserNo);
 
     List<BusinessAccountDto.Response.BusinessAdAccount> businessAdAccount(
-            @Param("pageable") Pageable pageable, String searchType, String searchKeyword, Integer loginUserNo
+            String searchType, String searchKeyword, Integer loginUserNo, @Param("pageable") Pageable pageable
     );
-    long countBusinessAdAccount(String searchType, String searchKeyword, Integer loginUserNo);
+    long countBusinessAdAccount(@Param("searchType") String searchType, @Param("searchKeyword") String searchKeyword, @Param("loginUserNo") Integer loginUserNo);
 
 
 
-    void updateRefundAccount(BusinessAccountDto.Request.UpdateRefundAccount request, Integer loginUserNo);
+    void updateRefundAccount(BusinessAccountDto.Request.UpdateRefundAccount request, @Param("loginUserNo") Integer loginUserNo);
 }

@@ -12,6 +12,7 @@ import com.adplatform.restApi.domain.wallet.dto.WalletRefundMapper;
 import com.adplatform.restApi.domain.wallet.exception.WalletRefundAlreadyException;
 import com.adplatform.restApi.domain.wallet.exception.WalletRefundAlreadyRejectException;
 import com.adplatform.restApi.domain.wallet.exception.WalletRefundNotFoundException;
+import com.adplatform.restApi.infra.file.service.AwsFileService;
 import com.adplatform.restApi.infra.file.service.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -34,6 +35,7 @@ public class WalletSaveService {
     private final WalletRefundRepository walletRefundRepository;
     private final WalletLogRepository walletLogRepository;
     private final WalletLogMapper walletLogMapper;
+    private final AwsFileService awsFileService;
 
 
 //    @Data
@@ -93,7 +95,8 @@ public class WalletSaveService {
     private WalletChargeFile saveWalletChargeFile(WalletDto.Request.SaveCredit request, WalletChargeLog walletChargeLog, MultipartFile file, String fType) {
         String originalFilename = file.getOriginalFilename();
         String mimetype = Files.probeContentType(Paths.get(originalFilename));
-        String savedFileUrl = this.fileService.saveWalletCharge(request, file);
+//        String savedFileUrl = this.fileService.saveWalletCharge(request, file);
+        String savedFileUrl = this.awsFileService.saveWalletCharge(request, file);
         int index = savedFileUrl.lastIndexOf("/");
         String savedFilename = savedFileUrl.substring(index+1);
         return new WalletChargeFile(walletChargeLog, this.walletChargeFileInformation(file, savedFileUrl, savedFilename, originalFilename, mimetype));
@@ -181,7 +184,8 @@ public class WalletSaveService {
     private WalletRefundFile saveWalletRefundFile(WalletDto.Request.UpdateRefund request, WalletRefund walletRefund, MultipartFile file, String fType) {
         String originalFilename = file.getOriginalFilename();
         String mimetype = Files.probeContentType(Paths.get(originalFilename));
-        String savedFileUrl = this.fileService.saveWalletRefund(request, file);
+//        String savedFileUrl = this.fileService.saveWalletRefund(request, file);
+        String savedFileUrl = this.awsFileService.saveWalletRefund(request, file);
         int index = savedFileUrl.lastIndexOf("/");
         String savedFilename = savedFileUrl.substring(index+1);
         return new WalletRefundFile(walletRefund, this.walletRefundFileInformation(file, savedFileUrl, savedFilename, originalFilename, mimetype));

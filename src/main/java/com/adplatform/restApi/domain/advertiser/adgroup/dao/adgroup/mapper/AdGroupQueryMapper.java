@@ -26,13 +26,13 @@ public interface AdGroupQueryMapper {
             @Param("pageable") Pageable pageable
     );
 
-    void insertAdGroupMedia(Integer adGroupId, Integer categoryId, Integer mediaId);
+    void insertAdGroupMedia(@Param("adGroupId") Integer adGroupId, @Param("categoryId") Integer categoryId, @Param("mediaId") Integer mediaId);
 
-    List<AdGroupDto.Response.Placement> adGroupPlacementList(Integer adGroupId);
+    List<AdGroupDto.Response.Placement> adGroupPlacementList(@Param("adGroupId") Integer adGroupId);
 
-    List<AdGroupDto.Response.Category> adGroupCategoryList(Integer adGroupId);
+    List<AdGroupDto.Response.Category> adGroupCategoryList(@Param("adGroupId") Integer adGroupId);
 
-    List<AdGroupDto.Response.CategoryMedia> adGroupCategoryMediaList(Integer adGroupId);
-    List<AdGroupDto.Response.PlacementCategory> adGroupPlacementCategoryList(Integer adGroupId, Integer placementId);
-    List<AdGroupDto.Response.PlacementMedia> adGroupPlacementMediaList(Integer adGroupId, Integer placementId, Integer categoryId);
+    List<AdGroupDto.Response.CategoryMedia> adGroupCategoryMediaList(@Param("adGroupId") Integer adGroupId);
+    List<AdGroupDto.Response.PlacementCategory> adGroupPlacementCategoryList(@Param("adGroupId") Integer adGroupId, @Param("placementId") Integer placementId);
+    List<AdGroupDto.Response.PlacementMedia> adGroupPlacementMediaList(@Param("adGroupId") Integer adGroupId, @Param("placementId") Integer placementId, @Param("categoryId") Integer categoryId);
 }

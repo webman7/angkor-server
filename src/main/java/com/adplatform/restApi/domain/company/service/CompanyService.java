@@ -23,6 +23,7 @@ import com.adplatform.restApi.domain.user.dto.user.UserDto;
 import com.adplatform.restApi.domain.user.exception.UserNotFoundException;
 import com.adplatform.restApi.domain.user.service.UserQueryService;
 import com.adplatform.restApi.global.config.security.util.SecurityUtils;
+import com.adplatform.restApi.infra.file.service.AwsFileService;
 import com.adplatform.restApi.infra.file.service.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -50,6 +51,7 @@ public class CompanyService {
     private final MediaCompanyUserMapper mediaCompanyUserMapper;
     private final MediaCompanyUserInfoHistoryMapper mediaCompanyUserInfoHistoryMapper;
     private final MediaCompanyUserInfoHistoryRepository mediaCompanyUserInfoHistoryRepository;
+    private final AwsFileService awsFileService;
 
     public Company findByIdOrElseThrow(Integer id) {
         return this.companyRepository.findById(id)
@@ -99,7 +101,8 @@ public class CompanyService {
     private CompanyFile saveCompanyFile(CompanyDto.Request.Save request, Company company, MultipartFile file, String fType) {
         String originalFilename = file.getOriginalFilename();
         String mimetype = Files.probeContentType(Paths.get(originalFilename));
-        String savedFileUrl = this.fileService.saveCompany(request, file, fType);
+//        String savedFileUrl = this.fileService.saveCompany(request, file, fType);
+        String savedFileUrl = this.awsFileService.saveCompany(request, file, fType);
         int index = savedFileUrl.lastIndexOf("/");
         String savedFilename = savedFileUrl.substring(index+1);
         return new CompanyFile(company, fType, this.companyFileInformation(file, savedFileUrl, savedFilename, originalFilename, mimetype));

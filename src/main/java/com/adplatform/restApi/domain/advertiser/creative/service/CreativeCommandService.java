@@ -20,6 +20,7 @@ import com.adplatform.restApi.domain.media.dao.placement.PlacementRepository;
 import com.adplatform.restApi.domain.media.domain.Placement;
 import com.adplatform.restApi.domain.media.exception.PlacementNotFoundException;
 import com.adplatform.restApi.global.config.security.util.SecurityUtils;
+import com.adplatform.restApi.infra.file.service.AwsFileService;
 import com.adplatform.restApi.infra.file.util.ImageSizeUtils;
 import com.adplatform.restApi.infra.file.service.FileService;
 import lombok.RequiredArgsConstructor;
@@ -51,6 +52,7 @@ public class CreativeCommandService {
     private final CreativeMediaCategoryRepository creativeMediaCategoryRepository;
     private final AdminStopHistoryMapper adminStopHistoryMapper;
     private final AdminStopHistoryRepository adminStopHistoryRepository;
+    private final AwsFileService awsFileService;
 
     public void save(CreativeDto.Request.Save request) {
         List<Placement> placement = this.findByPlacementId(request.getPlacements());
@@ -107,7 +109,9 @@ public class CreativeCommandService {
     private CreativeFile saveFile(CreativeDto.Request.Save request, Creative creative, MultipartFile file) {
         String originalFilename = file.getOriginalFilename();
         String mimetype = Files.probeContentType(Paths.get(originalFilename));
-        String savedFileUrl = this.fileService.save(request, file);
+//        String savedFileUrl = this.fileService.save(request, file);
+        String savedFileUrl = this.awsFileService.save(request, file);
+
         int index = savedFileUrl.lastIndexOf("/");
         String savedFilename = savedFileUrl.substring(index+1);
         return new CreativeFile(creative, request.getType(), this.createFileInformation(file, savedFileUrl, savedFilename, originalFilename, mimetype));
@@ -117,7 +121,8 @@ public class CreativeCommandService {
     private CreativeOpinionProofFile saveOpinionProofFile(Creative creative, MultipartFile file) {
         String originalFilename = file.getOriginalFilename();
         String mimetype = Files.probeContentType(Paths.get(originalFilename));
-        String savedFileUrl = this.fileService.saveProofFile(creative, file);
+//        String savedFileUrl = this.fileService.saveProofFile(creative, file);
+        String savedFileUrl = this.awsFileService.saveProofFile(creative, file);
         int index = savedFileUrl.lastIndexOf("/");
         String savedFilename = savedFileUrl.substring(index+1);
         return new CreativeOpinionProofFile(creative, this.createFileInformation(file, savedFileUrl, savedFilename, originalFilename, mimetype));

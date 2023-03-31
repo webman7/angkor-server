@@ -25,5 +25,5 @@ public interface CampaignQueryMapper {
             @Param("request") AdvertiserSearchRequest request,
             @Param("pageable") Pageable pageable);
 
-    CampaignDto.Response.Detail searchByCampaignId(Integer campaignId);
+    CampaignDto.Response.Detail searchByCampaignId(@Param("campaignId") Integer campaignId);
 }

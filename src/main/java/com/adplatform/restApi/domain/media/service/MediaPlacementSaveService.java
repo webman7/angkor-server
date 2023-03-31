@@ -12,6 +12,7 @@ import com.adplatform.restApi.domain.media.dto.placement.PlacementMapper;
 import com.adplatform.restApi.domain.media.exception.PlacementSizeAlreadyExistException;
 import com.adplatform.restApi.domain.media.exception.PlacementUpdateException;
 import com.adplatform.restApi.global.config.security.util.SecurityUtils;
+import com.adplatform.restApi.infra.file.service.AwsFileService;
 import com.adplatform.restApi.infra.file.service.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -33,6 +34,7 @@ public class MediaPlacementSaveService {
     private final MediaPlacementMapper mediaPlacementMapper;
     private final PlacementMapper placementMapper;
     private final FileService fileService;
+    private final AwsFileService awsFileService;
 
     public void save(MediaPlacementDto.Request.Save request) {
         Media media = MediaFindUtils.findByIdOrElseThrow(request.getMediaId(), this.mediaRepository);
@@ -109,7 +111,8 @@ public class MediaPlacementSaveService {
     private MediaPlacementFile saveMediaPlacementFile(MediaPlacementDto.Request.Save request, MediaPlacement mediaPlacement, MultipartFile file) {
         String originalFilename = file.getOriginalFilename();
         String mimetype = Files.probeContentType(Paths.get(originalFilename));
-        String savedFileUrl = this.fileService.saveMediaPlacement(request, file);
+//        String savedFileUrl = this.fileService.saveMediaPlacement(request, file);
+        String savedFileUrl = this.awsFileService.saveMediaPlacement(request, file);
         int index = savedFileUrl.lastIndexOf("/");
         String savedFilename = savedFileUrl.substring(index+1);
         return new MediaPlacementFile(mediaPlacement, this.mediaPlacementFileInformation(file, savedFileUrl, savedFilename, originalFilename, mimetype));

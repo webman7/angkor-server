@@ -24,12 +24,12 @@ public interface CreativeQueryMapper {
     );
 
     List<CreativeDto.Response.ReviewSearch> reviewSearch(
-            @Param("pageable") Pageable pageable, CreativeDto.Request.ReviewSearch request, Integer loginUserNo
+            @Param("pageable") Pageable pageable, @Param("request") CreativeDto.Request.ReviewSearch request, @Param("loginUserNo") Integer loginUserNo
     );
-    long countReviewSearch(CreativeDto.Request.ReviewSearch request, Integer loginUserNo);
+    long countReviewSearch(@Param("request") CreativeDto.Request.ReviewSearch request, @Param("loginUserNo") Integer loginUserNo);
 
 
-    List<CreativeDto.Response.Category> creativeMediaCategoryList(Integer creativeId);
+    List<CreativeDto.Response.Category> creativeMediaCategoryList(@Param("creativeId") Integer creativeId);
 
-    void insertCreativeMediaCategory(Integer creativeId, Integer categoryId, Integer mediaId);
+    void insertCreativeMediaCategory(@Param("creativeId") Integer creativeId, @Param("categoryId") Integer categoryId, @Param("mediaId") Integer mediaId);
 }

@@ -18,17 +18,17 @@ public interface DashboardQueryMapper {
             @Param("request") DashboardDto.Request.TotalDashboardChart request);
 
     List<DashboardDto.Response.DashboardChart> byIdDashboardChart(
-            @Param("request") DashboardDto.Request.DashboardChart request, Integer campaignId, Integer adGroupId, Integer creativeId);
+            @Param("request") DashboardDto.Request.DashboardChart request, @Param("campaignId") Integer campaignId, @Param("adGroupId") Integer adGroupId, @Param("creativeId") Integer creativeId);
 
     List<DashboardDto.Response.DashboardChart> adGroupsDashboardChart(
             @Param("request") DashboardDto.Request.TotalDashboardChart request);
 
     List<DashboardDto.Response.DashboardChart> adGroupByIdDashboardChart(
-            @Param("request") DashboardDto.Request.DashboardChart request, Integer adGroupId);
+            @Param("request") DashboardDto.Request.DashboardChart request, @Param("adGroupId") Integer adGroupId);
 
     List<DashboardDto.Response.DashboardChart> creativesDashboardChart(
             @Param("request") DashboardDto.Request.TotalDashboardChart request);
 
     List<DashboardDto.Response.DashboardChart> creativeByIdDashboardChart(
-            @Param("request") DashboardDto.Request.DashboardChart request, Integer creativeId);
+            @Param("request") DashboardDto.Request.DashboardChart request, @Param("creativeId") Integer creativeId);
 }
