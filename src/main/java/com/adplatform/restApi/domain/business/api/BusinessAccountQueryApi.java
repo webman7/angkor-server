@@ -52,7 +52,7 @@ public class BusinessAccountQueryApi {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/adAccount/search")
-    public PageDto<BusinessAccountDto.Response.BusinessAdAccount> accounts(
+    public PageDto<BusinessAccountDto.Response.BusinessAdAccount> businessAdAccount(
             @PageableDefault Pageable pageable,
             @RequestParam(required = false) String searchType,
             @RequestParam(required = false) String searchKeyword) {
