@@ -20,9 +20,27 @@ public class BatchCommandApi {
     private final BatchSecondSaveService batchSecondSaveService;
     private final BatchMonthSaveService batchMonthSaveService;
 
+//    @ResponseStatus(HttpStatus.OK)
+//    @GetMapping("/daily")
+//    public void batchDaily(@RequestParam(value="exeDate", defaultValue="0") Integer exeDate) {
+//        this.batchFirstSaveService.batchJob(exeDate);
+//        try {
+//            Thread.sleep(30000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        this.batchSecondSaveService.batchJob(exeDate);
+//        try {
+//            Thread.sleep(30000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        this.batchMonthSaveService.batchJob(exeDate);
+//    }
+
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/daily")
-    public void batchDaily(@RequestParam(value="exeDate", defaultValue="0") Integer exeDate) {
+    @GetMapping("/settlement")
+    public void businessAccountSettlement(@RequestParam(value="exeDate", defaultValue="0") Integer exeDate) {
         this.batchFirstSaveService.batchJob(exeDate);
         try {
             Thread.sleep(30000);
@@ -30,11 +48,7 @@ public class BatchCommandApi {
             e.printStackTrace();
         }
         this.batchSecondSaveService.batchJob(exeDate);
-        try {
-            Thread.sleep(30000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        this.batchMonthSaveService.batchJob(exeDate);
     }
+
+
 }

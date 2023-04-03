@@ -48,6 +48,12 @@ public class BatchStatusDto {
 
         @Getter
         @Setter
+        public static class TaxNo {
+            private String maxTaxNo;
+        }
+
+        @Getter
+        @Setter
         public static class WalletCashTotal {
             private Integer adAccountId;
             private Integer cashId;

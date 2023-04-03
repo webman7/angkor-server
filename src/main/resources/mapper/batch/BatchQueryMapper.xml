@@ -59,6 +59,21 @@ since 1.0
         FROM (<include refid="getBatchStatusYNQuery"/>) a;
     </select>
 
+    <resultMap id="getMaxTaxMap" type="com.adplatform.restApi.batch.dto.BatchStatusDto$Response$TaxNo">
+        <id column="maxTaxNo" property="maxTaxNo"/>
+    </resultMap>
+
+    <select id="getBusinessAccountTaxBillMaxTaxNo" resultMap="getMaxTaxMap">
+        <include refid="getBusinessAccountTaxBillMaxTaxNoQuery"/>
+    </select>
+
+    <sql id="getBusinessAccountTaxBillMaxTaxNoQuery">
+        SELECT right(concat('00000', IFNULL(max(right(tax_no,5)),0) + 1), 5) as maxTaxNo
+          FROM business_account_tax_bill
+         WHERE left(tax_no, 8) = 'A-#{endDate}'
+    </sql>
+
+
 
     <resultMap id="walletCashTotalMap" type="com.adplatform.restApi.batch.dto.BatchStatusDto$Response$ReportAdGroupCost">
         <id column="adAccountId" property="adAccountId"/>

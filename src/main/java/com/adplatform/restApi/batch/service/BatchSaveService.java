@@ -3,6 +3,8 @@ package com.adplatform.restApi.batch.service;
 import com.adplatform.restApi.batch.dao.BatchStatusRepository;
 import com.adplatform.restApi.batch.dao.mapper.BatchQueryMapper;
 import com.adplatform.restApi.batch.dao.mapper.BatchSaveQueryMapper;
+import com.adplatform.restApi.batch.domain.BatchStatus;
+import com.adplatform.restApi.batch.dto.BatchStatusDto;
 import com.adplatform.restApi.batch.dto.BatchStatusMapper;
 import com.adplatform.restApi.global.util.CommonUtils;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -40,6 +43,26 @@ public class BatchSaveService {
             } else {
                 exeDate = Integer.parseInt(CommonUtils.getBeforeYearMonthDayByYMD(String.valueOf(reportDate), 1));
             }
+
+            // 6일날 전월 데이터를 정산한다.
+//            if (String.valueOf(exeDate).endsWith("06")) {
+                this.businessAccountSettlementMonthly(exeDate);
+                try {
+                    System.out.println("Sleep 3s: "  + LocalDateTime.now());
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                this.businessAccountTaxBillMonthly(exeDate);
+                try {
+                    System.out.println("Sleep 3s: "  + LocalDateTime.now());
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+//            }
+
+
 
 //            this.saleAmountDaily(exeDate);
 //            try {
@@ -104,6 +127,97 @@ public class BatchSaveService {
         }
 
     }
+
+    public void businessAccountSettlementMonthly(Integer exeDate) {
+        ////////////////////////////////////////////////////////////
+        // Batch Code
+        ////////////////////////////////////////////////////////////
+        String batchType = "M";
+        String batchName = "business_account_settlement_daily";
+
+        ////////////////////////////////////////////////////////////
+        // 진행 여부 확인
+        ////////////////////////////////////////////////////////////
+        // Batch Y Count
+        int cnt = this.batchQueryMapper.getBatchStatusYNCount(batchType, exeDate, batchName);
+        if (cnt > 0) {
+            return;
+        }
+
+        String beforeMonthFirstDate = CommonUtils.getBeforeYearMonthByYMD(String.valueOf(exeDate), 1);
+        String beforeMonthLastDate = CommonUtils.getLastDayOfMonthByYMD(beforeMonthFirstDate);
+
+        beforeMonthFirstDate = beforeMonthFirstDate.substring(0, 6) + "01";
+        ////////////////////////////////////////////////////////////
+        // 일별 정산
+        ////////////////////////////////////////////////////////////
+        this.batchSaveQueryMapper.insertBusinessAccountSettlementMonthly(Integer.parseInt(beforeMonthFirstDate), Integer.parseInt(beforeMonthLastDate));
+
+        ////////////////////////////////////////////////////////////
+        // 진행 완료
+        ////////////////////////////////////////////////////////////
+        // Batch Execution
+        BatchStatusDto.Request.Save saveList = new BatchStatusDto.Request.Save();
+        saveList.setType(batchType);
+        saveList.setExeDate(exeDate);
+        saveList.setName(batchName);
+        saveList.setExeYn(true);
+        BatchStatus batchStatus = this.batchStatusMapper.toEntity(saveList);
+        this.batchStatusRepository.save(batchStatus);
+
+    }
+
+    public void businessAccountTaxBillMonthly(Integer exeDate) {
+        ////////////////////////////////////////////////////////////
+        // Batch Code
+        ////////////////////////////////////////////////////////////
+        String batchType = "M";
+        String batchName = "business_account_tax_bill";
+
+        ////////////////////////////////////////////////////////////
+        // 선행 작업 체크
+        ////////////////////////////////////////////////////////////
+        // Batch Y Count
+        int repCnt = this.batchQueryMapper.getBatchStatusYNCount(batchType, exeDate, "business_account_settlement_daily");
+        if (repCnt == 0) {
+            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            return;
+        }
+
+        ////////////////////////////////////////////////////////////
+        // 진행 여부 확인
+        ////////////////////////////////////////////////////////////
+        // Batch Y Count
+        int cnt = this.batchQueryMapper.getBatchStatusYNCount(batchType, exeDate, batchName);
+        if (cnt > 0) {
+            System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+            return;
+        }
+
+        String beforeMonthFirstDate = CommonUtils.getBeforeYearMonthByYMD(String.valueOf(exeDate), 1);
+        String beforeMonthLastDate = CommonUtils.getLastDayOfMonthByYMD(beforeMonthFirstDate);
+
+        beforeMonthFirstDate = beforeMonthFirstDate.substring(0, 6) + "01";
+
+        ////////////////////////////////////////////////////////////
+        // 월별 세금계산서
+        ////////////////////////////////////////////////////////////
+        this.batchSaveQueryMapper.insertBusinessAccountTaxBillMonthly(Integer.parseInt(beforeMonthFirstDate), Integer.parseInt(beforeMonthLastDate));
+
+        ////////////////////////////////////////////////////////////
+        // 진행 완료
+        ////////////////////////////////////////////////////////////
+        // Batch Execution
+        BatchStatusDto.Request.Save saveList = new BatchStatusDto.Request.Save();
+        saveList.setType(batchType);
+        saveList.setExeDate(exeDate);
+        saveList.setName(batchName);
+        saveList.setExeYn(true);
+        BatchStatus batchStatus = this.batchStatusMapper.toEntity(saveList);
+        this.batchStatusRepository.save(batchStatus);
+
+    }
+
 
     public void saleAmountDaily(Integer exeDate) {
 

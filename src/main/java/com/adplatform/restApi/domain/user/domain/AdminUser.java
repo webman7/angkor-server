@@ -1,7 +1,6 @@
-package com.adplatform.restApi.domain.company.domain;
+package com.adplatform.restApi.domain.user.domain;
 
-import com.adplatform.restApi.domain.user.domain.User;
-import lombok.AccessLevel;
+import com.adplatform.restApi.domain.company.domain.Company;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,19 +17,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "media_company_user_info")
-public class MediaCompanyUser {
+@Table(name = "admin_user_info")
+public class AdminUser {
     public enum MemberType {
         MASTER,
         OPERATOR,
         MEMBER
-    }
-
-    public enum AccountingYN {
-        /** 회계권한 (비즈니스계정당 한명만 가능) */
-        Y,
-        /** 권한없음 */
-        N
     }
 
     public enum Status {
@@ -47,7 +39,7 @@ public class MediaCompanyUser {
     }
 
     @EmbeddedId
-    private final MediaCompanyUserId id = new MediaCompanyUserId();
+    private final AdminUserId id = new AdminUserId();
 
     @MapsId("companyId")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -62,10 +54,6 @@ public class MediaCompanyUser {
     @Enumerated(EnumType.STRING)
     @Column(name = "member_type", length = 10)
     private MemberType memberType;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "accounting_yn", nullable = false, columnDefinition = "CHAR(1)")
-    private AccountingYN accountingYN;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", columnDefinition = "CHAR")
@@ -90,34 +78,12 @@ public class MediaCompanyUser {
     private LocalDateTime updatedAt;
 
     @Builder
-    public MediaCompanyUser(Company company, User user, MemberType memberType, AccountingYN accountingYN, MediaCompanyUser.Status status) {
+    public AdminUser(Company company, User user, AdminUser.MemberType memberType, AdminUser.Status status) {
         this.company = company;
         this.user = user;
         this.memberType = memberType;
-        this.accountingYN = accountingYN;
         this.status = status;
         this.id.setCompanyId(company.getId());
         this.id.setUserId(user.getId());
-    }
-
-
-    public void changeStatusY() {
-        this.status = Status.Y;
-    }
-    public void changeStatusR() {
-        this.status = Status.R;
-    }
-    public void changeStatusC() {
-        this.status = Status.C;
-    }
-
-    public void changeMemberTypeMaster() {
-        this.memberType = MemberType.MASTER;
-    }
-    public void changeMemberTypeOperator() {
-        this.memberType = MemberType.OPERATOR;
-    }
-    public void changeMemberTypeMember() {
-        this.memberType = MemberType.MEMBER;
     }
 }

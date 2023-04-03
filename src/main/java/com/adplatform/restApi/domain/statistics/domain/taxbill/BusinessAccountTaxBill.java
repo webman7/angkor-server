@@ -17,19 +17,10 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "media_tax_bill")
-public class MediaTaxBill extends BaseEntity {
+@Table(name = "business_account_tax_bill")
+public class BusinessAccountTaxBill extends BaseEntity {
     @Column(name = "business_account_info_id")
     private int businessAccountId;
-
-    @Column(name = "adaccount_info_id")
-    private int adAccountId;
-
-    @Column(name = "media_info_id")
-    private int mediaId;
-
-    @Column(name = "company_info_id")
-    private int companyId;
 
     @Column(name = "stat_date")
     private int statDate;
@@ -43,9 +34,6 @@ public class MediaTaxBill extends BaseEntity {
     @Column(name = "total_amount", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2)")
     private Float totalAmount;
 
-    @Column(name = "memo", length = 2000)
-    private String memo;
-
     @Convert(converter = BooleanToStringYOrNConverter.class)
     @Column(name = "issue_status", nullable = false, columnDefinition = "CHAR(1)")
     private boolean issueStatus;
@@ -57,32 +45,15 @@ public class MediaTaxBill extends BaseEntity {
     @Column(name = "issue_date")
     private LocalDateTime issueAt;
 
-    @Convert(converter = BooleanToStringYOrNConverter.class)
-    @Column(name = "payment_status", nullable = false, columnDefinition = "CHAR(1)")
-    private boolean paymentStatus;
-
-    @Column(name = "payment_user_no")
-    private int paymentUserNo;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    @Column(name = "payment_date")
-    private LocalDateTime paymentAt;
-
     @Builder
-    public MediaTaxBill(
+    public BusinessAccountTaxBill(
             Integer businessAccountId,
-            Integer adAccountId,
-            Integer mediaId,
-            Integer companyId,
             Integer statDate,
             Float supplyAmount,
             Float vatAmount,
             Float totalAmount,
             boolean issueStatus) {
         this.businessAccountId = businessAccountId;
-        this.adAccountId = adAccountId;
-        this.mediaId = mediaId;
-        this.companyId = companyId;
         this.statDate = statDate;
         this.supplyAmount = supplyAmount;
         this.vatAmount = vatAmount;
