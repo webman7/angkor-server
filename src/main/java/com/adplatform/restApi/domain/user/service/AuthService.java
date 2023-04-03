@@ -4,6 +4,8 @@ import com.adplatform.restApi.domain.history.dto.user.UserLoginHistoryDto;
 import com.adplatform.restApi.domain.history.dto.user.UserLoginHistoryMapper;
 import com.adplatform.restApi.domain.history.dto.user.UserPasswordChangeHistoryDto;
 import com.adplatform.restApi.domain.history.dto.user.UserPasswordChangeHistoryMapper;
+import com.adplatform.restApi.domain.user.dao.mapper.UserQueryMapper;
+import com.adplatform.restApi.domain.user.domain.AdminUser;
 import com.adplatform.restApi.domain.user.domain.Role;
 import com.adplatform.restApi.domain.user.domain.User;
 import com.adplatform.restApi.domain.user.domain.UserRole;
@@ -28,6 +30,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -49,6 +52,7 @@ public class AuthService {
     private final UserLoginHistoryRepository userLoginHistoryRepository;
     private final UserPasswordChangeHistoryMapper userPasswordChangeHistoryMapper;
     private final UserPasswordChangeHistoryRepository userPasswordChangeHistoryRepository;
+    private final UserQueryMapper userQueryMapper;
 
     @Transactional(noRollbackFor = {UserLoginFailedException.class, PasswordWrongCountExceededException.class})
     public TokenDto login(AuthDto.Request.Login request) {
@@ -76,13 +80,32 @@ public class AuthService {
             this.userLoginHistoryRepository.save(userLoginHistory);
             throw new PasswordWrongCountExceededException();
         }
+
+        // 사이트별 로그인 확인
+        if(request.getUserSite() == null || request.getUserSite().equals("advertiser")) {
+            request.setUserSite("advertiser");
+        } else if(request.getUserSite().equals("admin")) {
+            int count = this.userQueryMapper.getAdminUserCount(user.getId());
+            if(count == 0) {
+                throw new UserNotFoundException();
+            }
+        } else if(request.getUserSite().equals("media")) {
+            int count = this.userQueryMapper.getMediaCompanyUserCount(user.getId());
+            if(count == 0) {
+                throw new UserNotFoundException();
+            }
+        } else {
+            request.setUserSite("advertiser");
+        }
+
+
         UserLoginHistoryDto.Request.Save history = new UserLoginHistoryDto.Request.Save();
         history.setLoginType(0);
         history.setUserId(request.getId());
         history.setRegIp(HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
         UserLoginHistory userLoginHistory = this.userLoginHistoryMapper.toEntity(history);
         this.userLoginHistoryRepository.save(userLoginHistory);
-        return this.jwtProvider.createTokenDto(user);
+        return this.jwtProvider.createTokenDto(user, request.getUserSite());
     }
 
     private void validateUserActive(User.Active active, String userId) {

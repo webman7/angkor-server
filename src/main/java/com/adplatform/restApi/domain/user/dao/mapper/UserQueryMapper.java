@@ -15,4 +15,8 @@ public interface UserQueryMapper {
     );
 
     long countSearch(@Param("request") UserDto.Request.Search request);
+
+    int getAdminUserCount(@Param("loginUserNo") Integer loginUserNo);
+
+    int getMediaCompanyUserCount(@Param("loginUserNo") Integer loginUserNo);
 }

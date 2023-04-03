@@ -52,4 +52,41 @@ since 1.0
         SELECT COUNT(*)
         FROM (<include refid="searchUserSelectQuery"/>) a;
     </select>
+
+
+    <resultMap id="getAdminUserCountMap" type="com.adplatform.restApi.domain.user.dto.user.UserDto$Response$Count">
+        <id column="id" property="id"/>
+    </resultMap>
+
+    <sql id="getAdminUserCountQuery">
+        SELECT a.user_no AS id
+          FROM user_info a, admin_user_info b
+         WHERE a.user_no = b.user_no
+           AND b.user_no = #{loginUserNo}
+           AND a.active = 'Y'
+           AND b.status = 'Y'
+    </sql>
+
+    <select id="getAdminUserCount" resultType="int">
+        SELECT COUNT(*)
+        FROM (<include refid="getAdminUserCountQuery"/>) a;
+    </select>
+
+    <resultMap id="getMediaCompanyUserCountMap" type="com.adplatform.restApi.domain.user.dto.user.UserDto$Response$Count">
+        <id column="id" property="id"/>
+    </resultMap>
+
+    <sql id="getMediaCompanyUserCountQuery">
+        SELECT a.user_no AS id
+          FROM user_info a, media_company_user_info b
+         WHERE a.user_no = b.user_no
+           AND b.user_no = #{loginUserNo}
+           AND a.active = 'Y'
+           AND b.status = 'Y'
+    </sql>
+
+    <select id="getMediaCompanyUserCount" resultType="int">
+        SELECT COUNT(*)
+        FROM (<include refid="getMediaCompanyUserCountQuery"/>) a;
+    </select>
 </mapper>

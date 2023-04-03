@@ -71,6 +71,12 @@ public abstract class UserDto {
 
         @Getter
         @Setter
+        public static class Count {
+            private Integer id;
+        }
+
+        @Getter
+        @Setter
         public static class BaseInfo {
             private Integer id;
             private String loginId;

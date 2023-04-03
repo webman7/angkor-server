@@ -54,8 +54,8 @@ public class JwtProvider {
                 .compact());
     }
 
-    public TokenDto createTokenDto(User user) {
-        return TokenDto.create(this.aes256Service, user, this.createToken(user.getLoginId()), null);
+    public TokenDto createTokenDto(User user, String userSite) {
+        return TokenDto.create(this.aes256Service, user, userSite, this.createToken(user.getLoginId()), null);
     }
 
     public Authentication getAuthentication(String token) {

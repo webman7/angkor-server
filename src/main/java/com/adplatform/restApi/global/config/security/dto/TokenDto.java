@@ -17,15 +17,17 @@ public class TokenDto {
     private Integer userNo;
     private String userId;
     private String userName;
+    private String userSite;
     private String accessToken;
     private String refreshToken;
 
     @SneakyThrows
-    public static TokenDto create(Aes256Service aes256Service, User user, String accessToken, String refreshToken) {
+    public static TokenDto create(Aes256Service aes256Service, User user, String userSite, String accessToken, String refreshToken) {
         return TokenDto.builder()
                 .userNo(user.getId())
                 .userId(aes256Service.encrypt(user.getLoginId()))
                 .userName(aes256Service.encrypt(user.getName()))
+                .userSite(aes256Service.encrypt(userSite))
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();

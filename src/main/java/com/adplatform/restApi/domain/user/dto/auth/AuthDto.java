@@ -21,6 +21,7 @@ public abstract class AuthDto {
             private String id;
             @NotBlank
             private String password;
+            private String userSite;
         }
 
         @Getter
