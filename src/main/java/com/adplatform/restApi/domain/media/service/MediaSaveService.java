@@ -14,10 +14,13 @@ import com.adplatform.restApi.domain.media.dto.category.MediaCategoryDto;
 import com.adplatform.restApi.domain.media.dto.category.MediaCategoryMapper;
 import com.adplatform.restApi.domain.media.exception.MediaUpdateException;
 import com.adplatform.restApi.domain.media.exception.CategoryNotFoundException;
+import com.adplatform.restApi.global.config.security.service.Sha256Service;
+import com.adplatform.restApi.global.util.RandomCodeGenerator;
 import com.adplatform.restApi.infra.file.service.AwsFileService;
 import com.adplatform.restApi.infra.file.service.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.apache.commons.codec.digest.Md5Crypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -104,6 +107,12 @@ public class MediaSaveService {
     public void updateAdminApprove(MediaDto.Request.Confirm request) {
         try{
             Media media = MediaFindUtils.findByIdOrElseThrow(request.getId(), this.mediaRepository).updateAdminApprove(request);
+
+            String appKey = new RandomCodeGenerator().generate(20);
+            String appSecretTmp = new RandomCodeGenerator().generate(10);
+            // appSecret = 임의 숫자 10개 + id + company_info_id + reg_date
+            String appSecret = Sha256Service.SHA256(appSecretTmp + String.valueOf(media.getId()) + String.valueOf(media.getCompany().getId()) + String.valueOf(media.getCreatedAt()));
+            MediaFindUtils.findByIdOrElseThrow(media.getId(), this.mediaRepository).updateAdminAppKey(appKey, appSecret);
 
             // 매체 카테고리 삭제
             this.mediaCategorySaveQueryMapper.deleteMediaCategory(request.getId());

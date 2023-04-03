@@ -134,6 +134,12 @@ public class Media extends BaseUpdatedEntity {
         return this;
     }
 
+    public Media updateAdminAppKey(String appKey, String appSecret) {
+        this.appKey = appKey;
+        this.appSecret = appSecret;
+        return this;
+    }
+
     public void changeStatusR() {
         this.status = Status.R;
     }
