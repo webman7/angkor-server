@@ -8,6 +8,8 @@
         <result column="name" property="name"/>
         <result column="memberType" property="memberType"/>
         <result column="adAccountId" property="adAccountId"/>
+        <result column="config" property="config"/>
+        <result column="outOfBalance" property="outOfBalance"/>
     </resultMap>
 
     <sql id="accountsCondition1">
@@ -33,7 +35,7 @@
                                                                            FROM adaccount_info ai
                                                                           WHERE ai.business_account_info_id = a.id
                                                                           ORDER BY ai.id ASC
-                                                                          LIMIT 0,1)  AS adAccountId
+                                                                          LIMIT 0,1)  AS adAccountId, a.config, a.out_of_balance_yn AS outOfBalance
           FROM business_account_info a, business_account_user_info b
          WHERE a.id = b.business_account_info_id
            AND b.user_no = #{loginUserNo}
@@ -41,7 +43,7 @@
            AND a.config IN ('ON', 'OFF')
            AND b.`status` = 'Y'
         UNION
-        SELECT c.business_account_info_id AS id, e.name AS name, d.member_type AS memberType, c.id AS adAccountId
+        SELECT c.business_account_info_id AS id, e.name AS name, d.member_type AS memberType, c.id AS adAccountId, e.config, e.out_of_balance_yn AS outOfBalance
           FROM adaccount_info c, adaccount_user_info d, business_account_info e
          WHERE c.id = d.adaccount_info_id
            AND c.business_account_info_id = e.id
@@ -62,7 +64,7 @@
     <select id="accounts" resultMap="mapAccounts">
         <include refid="accountsSelectQuery"/>
         <include refid="common.sortAndOrder"/>
-<!--        <include refid="common.limitAndOffset"/>-->
+        <include refid="common.limitAndOffset"/>
     </select>
 
     <select id="countAccounts" resultType="long">

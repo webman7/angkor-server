@@ -187,6 +187,8 @@ public class BusinessAccountDto {
             private String name;
             private String memberType;
             private Integer adAccountId;
+            private String config;
+            private String outOfBalance;
         }
 
         @Getter
