@@ -36,6 +36,7 @@ public class SecurityConfig {
         this.securityConfig(http);
         this.userAntMatchers(http);
         this.companyAntMatchers(http);
+        this.businessAccountsAntMatchers(http);
         this.adAccountsAntMatchers(http);
         this.campaignAntMatchers(http);
         this.adGroupAntMatchers(http);
@@ -77,6 +78,11 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET, "/companies/registration/number").permitAll()
                 .antMatchers(HttpMethod.POST, "/companies/agencies").hasAnyAuthority(ROLE_ADMIN.name())
                 .antMatchers("/companies/**").hasAnyAuthority(ROLE_ADMIN.name(), ROLE_OPERATOR.name(), ROLE_COMPANY_ADMINISTRATOR.name(), ROLE_COMPANY_GENERAL.name());
+    }
+
+    private void businessAccountsAntMatchers(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers("/business/**").authenticated();
     }
 
     private void adAccountsAntMatchers(HttpSecurity http) throws Exception {
