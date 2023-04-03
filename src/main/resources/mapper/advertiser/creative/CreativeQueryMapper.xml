@@ -314,7 +314,7 @@ since 1.0
            AND c.id = d.campaign_info_id
            AND d.id = e.adgroup_info_id
            <include refid="reviewSearchCondition"/>
-           AND e.upd_date BETWEEN DATE_FORMAT(#{request.startDate} + ' 00:00:00', '%Y-%m-%d') AND DATE_FORMAT(#{request.endDate} + ' 23:59:59', '%Y-%m-%d')
+           AND e.upd_date BETWEEN DATE_FORMAT(#{request.startDate} + ' 00:00:00', '%Y-%m-%d %H:%i:%s') AND DATE_FORMAT(#{request.endDate} + ' 23:59:59', '%Y-%m-%d %H:%i:%s')
            AND a.config IN ('ON', 'OFF')
            AND b.config IN ('ON', 'OFF')
            AND c.config IN ('ON', 'OFF')
