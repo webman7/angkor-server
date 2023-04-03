@@ -275,6 +275,7 @@ public class WalletDto {
             private int businessAccountId;
             private String businessAccountName;
             private Float depositAmount;
+            private String depositor;
             private Integer depositAt;
             private String adminMemo;
             private String fileUrl;
@@ -282,11 +283,12 @@ public class WalletDto {
             private String createdUserId;
             private LocalDateTime createdAt;
             @QueryProjection
-            public ChargeSearch(int id, int businessAccountId, String businessAccountName, Float depositAmount, Integer depositAt, String adminMemo, String fileUrl, int createdUserNo, String createdUserId, LocalDateTime createdAt) {
+            public ChargeSearch(int id, int businessAccountId, String businessAccountName, Float depositAmount, String depositor, Integer depositAt, String adminMemo, String fileUrl, int createdUserNo, String createdUserId, LocalDateTime createdAt) {
                 this.id = id;
                 this.businessAccountId = businessAccountId;
                 this.businessAccountName = businessAccountName;
                 this.depositAmount = depositAmount;
+                this.depositor = depositor;
                 this.depositAt = depositAt;
                 this.adminMemo = adminMemo;
                 this.fileUrl = fileUrl;

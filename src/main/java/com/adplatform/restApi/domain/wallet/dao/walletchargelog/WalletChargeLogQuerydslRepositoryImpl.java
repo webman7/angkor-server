@@ -70,6 +70,7 @@ public class WalletChargeLogQuerydslRepositoryImpl implements WalletChargeLogQue
                                 walletChargeLog.businessAccountId,
                                 businessAccount.name,
                                 walletChargeLog.depositAmount,
+                                walletChargeLog.depositor,
                                 walletChargeLog.depositAt,
                                 walletChargeLog.adminMemo,
                                 as(select(walletChargeFile.information.url)
