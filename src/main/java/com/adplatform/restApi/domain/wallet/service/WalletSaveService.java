@@ -72,7 +72,7 @@ public class WalletSaveService {
         WalletDto.Response.WalletMaster list = this.walletMasterRepository.getWalletMaster(request.getBusinessAccountId());
         this.walletMasterRepository.updateWalletMasterCharge(request.getBusinessAccountId(), (float)(list.getAvailableAmount() + request.getDepositAmount()));
 
-        this.businessAccountRepository.outOfBalanceUpdate(request.getBusinessAccountId(), false);
+//        this.businessAccountRepository.outOfBalanceUpdate(request.getBusinessAccountId(), false);
 
 
 
