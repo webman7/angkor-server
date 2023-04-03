@@ -7,13 +7,16 @@ import com.adplatform.restApi.domain.adaccount.dto.user.AdAccountUserDto;
 import com.adplatform.restApi.domain.adaccount.service.AdAccountUserQueryUtils;
 import com.adplatform.restApi.domain.bank.domain.Bank;
 import com.adplatform.restApi.domain.bank.service.BankFindUtils;
+import com.adplatform.restApi.domain.business.dao.account.BusinessAccountPreDeferredPaymentRepository;
 import com.adplatform.restApi.domain.business.dao.account.BusinessAccountRepository;
 import com.adplatform.restApi.domain.business.dao.account.mapper.BusinessAccountQueryMapper;
 import com.adplatform.restApi.domain.business.dao.user.BusinessAccountUserRepository;
 import com.adplatform.restApi.domain.business.domain.BusinessAccount;
+import com.adplatform.restApi.domain.business.domain.BusinessAccountPreDeferredPayment;
 import com.adplatform.restApi.domain.business.domain.BusinessAccountUser;
 import com.adplatform.restApi.domain.business.dto.account.BusinessAccountDto;
 import com.adplatform.restApi.domain.business.dto.account.BusinessAccountMapper;
+import com.adplatform.restApi.domain.business.dto.account.BusinessAccountPreDeferredPaymentMapper;
 import com.adplatform.restApi.domain.business.dto.user.BusinessAccountUserDto;
 import com.adplatform.restApi.domain.business.dto.user.BusinessAccountUserMapper;
 import com.adplatform.restApi.domain.business.exception.*;
@@ -41,6 +44,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -66,6 +73,8 @@ public class BusinessAccountSaveService {
     private final CompanyMapper companyMapper;
 
     private final CompanyRepository companyRepository;
+    private final BusinessAccountPreDeferredPaymentMapper businessAccountPreDeferredPaymentMapper;
+    private final BusinessAccountPreDeferredPaymentRepository businessAccountPreDeferredPaymentRepository;
 
     public void save(BusinessAccountDto.Request.Save request, Integer loginUserNo) {
 
@@ -89,11 +98,14 @@ public class BusinessAccountSaveService {
         BusinessAccount businessAccount = this.businessAccountMapper.toEntity(request, company)
                 .addBusinessAccountUser(user, BusinessAccountUser.MemberType.MASTER, BusinessAccountUser.AccountingYN.Y, BusinessAccountUser.Status.Y)
                 .changeWalletMaster(WalletMaster.create());
-        this.businessAccountRepository.save(businessAccount);
+        Integer businessAccountId = this.businessAccountRepository.save(businessAccount).getId();
 
-//        System.out.println("==========================================================");
-//        this.walletMasterRepository.openDateUpdate(1, Integer.getInteger(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"))));
-//        System.out.println(WalletFindUtils.findByIdOrElseThrow(1, this.walletMasterRepository));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        Calendar c1 = Calendar.getInstance();
+        String startDate = sdf.format(c1.getTime());
+
+        // 선불 시작일 세팅
+        this.businessAccountPreDeferredPaymentRepository.save(this.businessAccountPreDeferredPaymentMapper.toEntity(businessAccountId, Integer.parseInt(startDate)));
     }
 
     public void update(BusinessAccountDto.Request.Update request, Integer loginUserNo) {
