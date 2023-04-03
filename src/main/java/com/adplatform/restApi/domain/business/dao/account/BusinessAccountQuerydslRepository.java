@@ -38,6 +38,8 @@ public interface BusinessAccountQuerydslRepository {
     Page<BusinessAccountDto.Response.BusinessAccountCreditInfo> searchCredit(Pageable pageable, BusinessAccountDto.Request.SearchCredit searchRequest);
     BusinessAccountDto.Response.BusinessAccountCreditInfo businessAccountCreditInfo(Integer businessAccountId);
 
+    void outOfBalanceUpdate(Integer businessAccountId, Boolean oufOfBalance);
+
 //    DashboardDto.Response.BusinessAccountCountByAd businessAccountsCountByAd(Integer businessAccountId);
 //
 

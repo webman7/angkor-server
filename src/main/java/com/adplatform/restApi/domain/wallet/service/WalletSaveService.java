@@ -1,5 +1,6 @@
 package com.adplatform.restApi.domain.wallet.service;
 
+import com.adplatform.restApi.domain.business.dao.account.BusinessAccountRepository;
 import com.adplatform.restApi.domain.wallet.dao.walletlog.WalletLogRepository;
 import com.adplatform.restApi.domain.wallet.dao.walletmaster.WalletMasterRepository;
 import com.adplatform.restApi.domain.wallet.dao.walletrefund.WalletRefundRepository;
@@ -36,6 +37,7 @@ public class WalletSaveService {
     private final WalletLogRepository walletLogRepository;
     private final WalletLogMapper walletLogMapper;
     private final AwsFileService awsFileService;
+    private final BusinessAccountRepository businessAccountRepository;
 
 
 //    @Data
@@ -70,6 +72,7 @@ public class WalletSaveService {
         WalletDto.Response.WalletMaster list = this.walletMasterRepository.getWalletMaster(request.getBusinessAccountId());
         this.walletMasterRepository.updateWalletMasterCharge(request.getBusinessAccountId(), (float)(list.getAvailableAmount() + request.getDepositAmount()));
 
+        this.businessAccountRepository.outOfBalanceUpdate(request.getBusinessAccountId(), false);
 
 
 

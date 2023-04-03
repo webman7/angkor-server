@@ -68,6 +68,10 @@ public class BusinessAccount extends BaseUpdatedEntity {
     @Column(name = "config", nullable = false, columnDefinition = "CHAR(5)")
     private Config config;
 
+    @Convert(converter = BooleanToStringYOrNConverter.class)
+    @Column(name = "out_of_balance_yn", nullable = false, columnDefinition = "CHAR(1)")
+    private boolean outOfBalance;
+
     @Builder
     public BusinessAccount(
             Company company,
@@ -75,13 +79,15 @@ public class BusinessAccount extends BaseUpdatedEntity {
             String name,
             Integer creditLimit,
             boolean prePayment,
-            Config config) {
+            Config config,
+            boolean outOfBalance) {
         this.company = company;
         this.type = type;
         this.name = name;
         this.creditLimit = creditLimit;
         this.prePayment = prePayment;
         this.config = config;
+        this.outOfBalance = outOfBalance;
     }
 
     public BusinessAccount update(BusinessAccountDto.Request.Update request) {

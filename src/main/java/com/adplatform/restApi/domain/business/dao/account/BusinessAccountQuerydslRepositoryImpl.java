@@ -493,6 +493,15 @@ public class BusinessAccountQuerydslRepositoryImpl implements BusinessAccountQue
                 .fetch();
     }
 
+    @Override
+    public void outOfBalanceUpdate(Integer businessAccountId, Boolean oufOfBalance) {
+        this.query.update(businessAccount)
+                .set(businessAccount.outOfBalance, oufOfBalance)
+                .where(businessAccount.id.eq(businessAccountId))
+                .execute();
+    }
+
+
     private BooleanExpression eqId(Integer id) {
         return id != null ? businessAccount.id.eq(id) : null;
     }

@@ -17,5 +17,6 @@ public interface BusinessAccountMapper {
     @Mapping(target = "prePayment", expression = "java(true)")
     @Mapping(target = "type", expression = "java(BusinessAccount.PaymentType.prepayment)")
     @Mapping(target = "config", expression = "java(BusinessAccount.Config.ON)")
+    @Mapping(target = "outOfBalance", expression = "java(true)")
     BusinessAccount toEntity(BusinessAccountDto.Request.Save request, Company company);
 }

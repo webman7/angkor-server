@@ -136,11 +136,12 @@ public class BusinessAccountDto {
 
 
 
-
-
-
-
-
+        @Getter
+        @Setter
+        public static class OutOfBalanceUpdate {
+            private Integer id;
+            private Boolean outOfBalance;
+        }
 
         @Getter
         @Setter
