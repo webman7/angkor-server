@@ -3,6 +3,8 @@ package com.adplatform.restApi.domain.media.api;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.media.dto.MediaDto;
 import com.adplatform.restApi.domain.media.service.MediaSaveService;
+import com.adplatform.restApi.domain.statistics.dto.TaxBillDto;
+import com.adplatform.restApi.domain.statistics.service.MediaTaxBillSaveService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import javax.validation.Valid;
 public class MediaCommandApi {
 
     private final MediaSaveService mediaSaveService;
+    private final MediaTaxBillSaveService mediaTaxBillSaveService;
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping
@@ -61,5 +64,17 @@ public class MediaCommandApi {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Integer id) {
         this.mediaSaveService.delete(id);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/admin/tax")
+    public void saveAdminTax(@Valid TaxBillDto.Request.Save request) {
+        this.mediaTaxBillSaveService.saveAdminTax(request);
+    }
+
+    @PatchMapping("/admin/tax")
+    public ResponseEntity<Void> updateAdminTax(@Valid TaxBillDto.Request.Update request) {
+        this.mediaTaxBillSaveService.updateAdminTax(request);
+        return ResponseEntity.ok().build();
     }
 }

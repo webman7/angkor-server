@@ -5,6 +5,7 @@ import com.adplatform.restApi.domain.advertiser.creative.dto.CreativeDto;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.media.dto.MediaDto;
 import com.adplatform.restApi.domain.media.dto.placement.MediaPlacementDto;
+import com.adplatform.restApi.domain.statistics.dto.TaxBillDto;
 import com.adplatform.restApi.domain.wallet.dto.WalletDto;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
@@ -41,6 +42,7 @@ public class AwsFileService {
     private static final String FILE_PROOF_PATH = "proof/";
     private static final String FILE_COMPANY_PATH = "company/";
     private static final String FILE_MEDIA_PATH = "media/";
+    private static final String FILE_TAX_PATH = "tax/";
     private static final String FILE_MEDIA_PLACEMENT_PATH = "placement/";
     private static final String FILE_CHARGE_PATH = "charge/";
     private static final String FILE_REFUND_PATH = "refund/";
@@ -94,6 +96,13 @@ public class AwsFileService {
         String filePath = FILE_MEDIA_PLACEMENT_PATH + "images";
         return this.upload(file, filePath);
     }
+
+    @SneakyThrows
+    public String saveMediaTaxBill(TaxBillDto.Request.Save request, MultipartFile file) {
+        String filePath = FILE_TAX_PATH + "images";
+        return this.upload(file, filePath);
+    }
+
 
     ///////////////////////////////////////////////////////////////////////////////////
     // AWS

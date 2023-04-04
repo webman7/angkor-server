@@ -39,7 +39,7 @@ public class BusinessAccountTaxBill extends BaseEntity {
     private boolean issueStatus;
 
     @Column(name = "issue_user_no")
-    private int issueUserNo;
+    private Integer issueUserNo;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @Column(name = "issue_date")

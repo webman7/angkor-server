@@ -1,6 +1,8 @@
 package com.adplatform.restApi.domain.statistics.domain.taxbill;
 
+import com.adplatform.restApi.domain.media.domain.MediaFile;
 import com.adplatform.restApi.global.converter.BooleanToStringYOrNConverter;
+import com.adplatform.restApi.global.entity.BaseCreatedEntity;
 import com.adplatform.restApi.global.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -8,23 +10,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "media_tax_bill")
-public class MediaTaxBill extends BaseEntity {
-    @Column(name = "business_account_info_id")
-    private int businessAccountId;
-
-    @Column(name = "adaccount_info_id")
-    private int adAccountId;
-
+public class MediaTaxBill extends BaseCreatedEntity {
     @Column(name = "media_info_id")
     private int mediaId;
 
@@ -46,12 +41,15 @@ public class MediaTaxBill extends BaseEntity {
     @Column(name = "memo", length = 2000)
     private String memo;
 
+    @OneToMany(mappedBy = "mediaTaxBill", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<MediaTaxBillFile> mediaTaxBillFiles = new ArrayList<>();
+
     @Convert(converter = BooleanToStringYOrNConverter.class)
     @Column(name = "issue_status", nullable = false, columnDefinition = "CHAR(1)")
     private boolean issueStatus;
 
     @Column(name = "issue_user_no")
-    private int issueUserNo;
+    private Integer issueUserNo;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @Column(name = "issue_date")
@@ -62,7 +60,7 @@ public class MediaTaxBill extends BaseEntity {
     private boolean paymentStatus;
 
     @Column(name = "payment_user_no")
-    private int paymentUserNo;
+    private Integer paymentUserNo;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @Column(name = "payment_date")
@@ -70,8 +68,6 @@ public class MediaTaxBill extends BaseEntity {
 
     @Builder
     public MediaTaxBill(
-            Integer businessAccountId,
-            Integer adAccountId,
             Integer mediaId,
             Integer companyId,
             Integer statDate,
@@ -79,8 +75,6 @@ public class MediaTaxBill extends BaseEntity {
             Float vatAmount,
             Float totalAmount,
             boolean issueStatus) {
-        this.businessAccountId = businessAccountId;
-        this.adAccountId = adAccountId;
         this.mediaId = mediaId;
         this.companyId = companyId;
         this.statDate = statDate;
@@ -88,5 +82,9 @@ public class MediaTaxBill extends BaseEntity {
         this.vatAmount = vatAmount;
         this.totalAmount = totalAmount;
         this.issueStatus = issueStatus;
+    }
+
+    public void addMediaTaxBillFile(MediaTaxBillFile file) {
+        this.mediaTaxBillFiles.add(file);
     }
 }
