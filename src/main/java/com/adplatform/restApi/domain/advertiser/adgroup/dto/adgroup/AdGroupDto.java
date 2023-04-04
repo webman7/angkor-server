@@ -35,7 +35,7 @@ public abstract class AdGroupDto {
             private AdGroupScheduleDto.Request.FirstSave adGroupSchedule;
             @NotNull
             @Size(min = 1)
-            private List<String> media;
+            private List<Integer> media;
             @NotNull
             @Size(min = 1)
             private List<String> devices;

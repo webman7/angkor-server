@@ -89,7 +89,7 @@ public class AdGroupService {
         this.mediaRepository.deleteByAdGroupId(request.getAdGroupId());
         this.deviceRepository.deleteByAdGroupId(request.getAdGroupId());
 
-        List<Media> media = this.findByMediaName(request.getMedia());
+        List<Media> media = this.findByMediaId(request.getMedia());
         List<Device> devices = this.findByDeviceName(request.getDevices());
         AdGroupFindUtils.findByIdOrElseThrow(request.getAdGroupId(), this.adGroupRepository).update(request, media, devices);
 
