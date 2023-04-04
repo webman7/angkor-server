@@ -41,8 +41,8 @@ public interface AdGroupMapper {
     AdGroupDto.Response.Detail toDetailResponse(AdGroup adGroup);
 
     @Named("mapMedia")
-    default List<String> mapMedia(Collection<Media> media) {
-        return media.stream().map(Media::getName).collect(Collectors.toList());
+    default List<Integer> mapMedia(Collection<Media> media) {
+        return media.stream().map(Media::getId).collect(Collectors.toList());
     }
 
     @Named("mapDevices")

@@ -166,7 +166,7 @@ public abstract class AdGroupDto {
             private CampaignDto.Response.Detail campaign;
             private AdGroupDemographicTargetDto.Response.Default demographicTarget;
             private AdGroupScheduleDto.Response.Default adGroupSchedule;
-            private List<String> media;
+            private List<Integer> media;
             private List<String> devices;
             private String name;
             private AdGroup.Pacing pacing;

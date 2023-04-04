@@ -51,12 +51,16 @@ public class AdGroupService {
     private final AdminStopHistoryRepository adminStopHistoryRepository;
 
     public void save(AdGroupSavedEvent event) {
-        List<Media> media = this.findByMediaName(event.getMedia());
+        List<Media> media = this.findByMediaId(event.getMedia());
         List<Device> devices = this.findByDeviceName(event.getDevices());
         this.adGroupRepository.save(this.adGroupMapper.toEntity(event, media, devices));
 
         CampaignDto.Response.ForDateSave campaign = this.campaignRepository.dateForSave(event.getCampaign().getId());
         CampaignFindUtils.findByIdOrElseThrow(campaign.getCampaignId(), this.campaignRepository).saveStartEndDate(campaign);
+    }
+
+    private List<Media> findByMediaId(List<Integer> mediaId) {
+        return mediaId.stream().map(this::findMediaByIdOrElseThrow).collect(Collectors.toList());
     }
 
     private List<Media> findByMediaName(List<String> mediaNames) {
@@ -67,6 +71,10 @@ public class AdGroupService {
         return deviceNames.stream().map(this::findDeviceByNameOrElseThrow).collect(Collectors.toList());
     }
 
+    private Media findMediaByIdOrElseThrow(Integer id) {
+        return this.mediaRepository.findById(id)
+                .orElseThrow(MediaNotFoundException::new);
+    }
     private Media findMediaByNameOrElseThrow(String name) {
         return this.mediaRepository.findByName(name)
                 .orElseThrow(MediaNotFoundException::new);

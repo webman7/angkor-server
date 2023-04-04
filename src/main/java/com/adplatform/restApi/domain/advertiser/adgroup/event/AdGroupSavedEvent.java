@@ -20,7 +20,7 @@ public class AdGroupSavedEvent {
     private final Campaign campaign;
     private final AdGroupDemographicTargetDto.Request.FirstSave demographicTarget;
     private final AdGroupScheduleDto.Request.FirstSave adGroupSchedule;
-    private final List<String> media;
+    private final List<Integer> media;
     private final List<String> devices;
     private final String name;
     private final AdGroup.Pacing pacing;
@@ -39,7 +39,7 @@ public class AdGroupSavedEvent {
             Campaign campaign,
             AdGroupDemographicTargetDto.Request.FirstSave demographicTarget,
             AdGroupScheduleDto.Request.FirstSave adGroupSchedule,
-            List<String> media,
+            List<Integer> media,
             List<String> devices,
             String name,
             AdGroup.Pacing pacing,
