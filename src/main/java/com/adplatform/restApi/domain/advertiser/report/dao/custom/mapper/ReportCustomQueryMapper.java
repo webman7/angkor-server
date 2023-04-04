@@ -81,4 +81,20 @@ public interface ReportCustomQueryMapper {
             @Param("request") ReportCustomDto.Request.Report request,
             @Param("pageable") Pageable pageable
     );
+
+    List<ReportCustomDto.Response.MediaPage> mediaDailyTotal(
+            @Param("request") ReportCustomDto.Request.MediaReport request,
+            @Param("pageable") Pageable pageable
+    );
+
+    long countMediaDailyTotal(@Param("request") ReportCustomDto.Request.MediaReport request);
+
+    List<ReportCustomDto.Response.MediaPage> mediaDaily(
+            @Param("request") ReportCustomDto.Request.MediaReport request,
+            @Param("pageable") Pageable pageable
+    );
+
+    long countMediaDaily(@Param("request") ReportCustomDto.Request.MediaReport request);
+
+
 }

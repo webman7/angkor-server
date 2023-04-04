@@ -50,4 +50,12 @@ public abstract class ReportDto {
         private float reachRate;
         private float videoPlayRate;
     }
+
+    @Getter
+    @Setter
+    public static class MediaResponse {
+        private int impression;
+        private int click;
+        private float ctr;
+    }
 }

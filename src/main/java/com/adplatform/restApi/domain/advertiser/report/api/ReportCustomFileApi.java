@@ -258,4 +258,69 @@ public class ReportCustomFileApi {
                 .contentType(new MediaType("text", "csv"))
                 .body(baos.toByteArray());
     }
+
+    @SneakyThrows
+    @PostMapping("/custom/media/csv")
+    public ResponseEntity<byte[]> downloadMediaCsv(@RequestBody @Valid ReportCustomDto.Request.MediaReport request, @PageableDefault Pageable pageable) {
+
+        List<ReportDashboardDto.Response.IndicatorColumn> indicatorContent = this.reportDashboardQueryMapper.indicatorColumn();
+        List<String> indicators = request.getIndicators();
+
+        List<String> HEADER_ITEMS = new ArrayList<>();
+
+        StringBuilder sb = new StringBuilder();
+
+        String fileName = request.getStartDate()+"_"+ request.getEndDate();
+
+        //////////////////////////////////////////////////
+        // Header
+        //////////////////////////////////////////////////
+        HEADER_ITEMS.add("StartDate");
+        HEADER_ITEMS.add("EndDate");
+        // Indicator Add
+        for(String indicator : indicators) {
+            for (ReportDashboardDto.Response.IndicatorColumn str : indicatorContent) {
+                if (str.getColumnIndex().equals(indicator)) {
+                    HEADER_ITEMS.add(str.getColumnName());
+                }
+            }
+        }
+
+        //////////////////////////////////////////////////
+        // Contents
+        //////////////////////////////////////////////////
+        List<ReportCustomDto.Response.MediaPage> content = this.reportCustomQueryMapper.mediaDaily(request, pageable);
+
+        sb.append(String.join(",", HEADER_ITEMS)).append("\n");
+        content.forEach(c -> {
+            sb.append(c.getStartDate()).append(",");
+            sb.append(c.getEndDate()).append(",");
+            for(String indicator : indicators) {
+                switch (indicator) {
+                    case "impression": sb.append(c.getReport().getImpression()).append(",");
+                        break;
+                    case "click": sb.append(c.getReport().getClick()).append(",");
+                        break;
+                    case "ctr": sb.append(c.getReport().getCtr()).append(",");
+                        break;
+                }
+            }
+
+            if(sb.length() > 0) {
+                sb.deleteCharAt(sb.length() - 1);
+            }
+            sb.append("\n");
+        });
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        baos.write(0xEF);
+        baos.write(0xBB);
+        baos.write(0xBF);
+        baos.write(sb.toString().getBytes(StandardCharsets.UTF_8));
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+fileName+".csv")
+                .contentType(new MediaType("text", "csv"))
+                .body(baos.toByteArray());
+    }
 }

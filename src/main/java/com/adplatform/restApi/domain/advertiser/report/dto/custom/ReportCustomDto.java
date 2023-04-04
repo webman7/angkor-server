@@ -67,6 +67,16 @@ public abstract class ReportCustomDto {
             private Integer startDate;
             private Integer endDate;
         }
+
+        @Getter
+        @Setter
+        public static class MediaReport {
+            private Integer id;
+            private Integer mediaId;
+            private List<String> indicators;
+            private Integer startDate;
+            private Integer endDate;
+        }
     }
 
     public static abstract class Response {
@@ -119,6 +129,18 @@ public abstract class ReportCustomDto {
             private ReportDto.Response report;
         }
 
+        @Getter
+        @Setter
+        public static class MediaPage {
+            private Integer id;
+            private Integer companyId;
+            private String companyName;
+            private Integer mediaId;
+            private String mediaName;
+            private Integer startDate;
+            private Integer endDate;
+            private ReportDto.MediaResponse report;
+        }
 
     }
 }

@@ -123,4 +123,26 @@ public class ReportQueryApi {
                 this.reportCustomQueryMapper.countCreativesDaily(request)));
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/custom/media")
+    public PageDto<ReportCustomDto.Response.MediaPage> mediaDailyTotal(
+            @RequestBody @Valid ReportCustomDto.Request.MediaReport request,
+            @PageableDefault Pageable pageable) {
+        return PageDto.create(new PageImpl<>(
+                this.reportCustomQueryMapper.mediaDailyTotal(request, pageable),
+                pageable,
+                this.reportCustomQueryMapper.countMediaDailyTotal(request)));
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/custom/media/daily")
+    public PageDto<ReportCustomDto.Response.MediaPage> mediaDaily(
+            @RequestBody @Valid ReportCustomDto.Request.MediaReport request,
+            @PageableDefault Pageable pageable) {
+        return PageDto.create(new PageImpl<>(
+                this.reportCustomQueryMapper.mediaDaily(request, pageable),
+                pageable,
+                this.reportCustomQueryMapper.countMediaDaily(request)));
+    }
+
 }

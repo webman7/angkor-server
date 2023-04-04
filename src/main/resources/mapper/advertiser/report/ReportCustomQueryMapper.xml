@@ -794,4 +794,158 @@ since 1.0
         <include refid="adAccountCreativesDailyQuery"/>
         <include refid="common.sortAndOrder"/>
     </select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <resultMap id="mapMediaSearchTotal" type="com.adplatform.restApi.domain.advertiser.report.dto.custom.ReportCustomDto$Response$MediaPage">
+        <id column="id" property="id"/>
+        <result column="companyId" property="companyId"/>
+        <result column="companyName" property="companyName"/>
+        <result column="mediaId" property="mediaId"/>
+        <result column="mediaName" property="mediaName"/>
+        <result column="startDate" property="startDate"/>
+        <result column="endDate" property="endDate"/>
+        <association property="report" javaType="com.adplatform.restApi.domain.statistics.dto.ReportDto$MediaResponse">
+            <result column="impression" property="impression"/>
+            <result column="click" property="click"/>
+            <result column="ctr" property="ctr"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="mapMediaSearch" type="com.adplatform.restApi.domain.advertiser.report.dto.custom.ReportCustomDto$Response$MediaPage">
+        <id column="id" property="id"/>
+        <id column="startDate" property="startDate"/>
+        <id column="endDate" property="endDate"/>
+        <result column="companyId" property="companyId"/>
+        <result column="companyName" property="companyName"/>
+        <result column="mediaId" property="mediaId"/>
+        <result column="mediaName" property="mediaName"/>
+        <result column="startDate" property="startDate"/>
+        <result column="endDate" property="endDate"/>
+        <association property="report" javaType="com.adplatform.restApi.domain.statistics.dto.ReportDto$MediaResponse">
+            <result column="impression" property="impression"/>
+            <result column="click" property="click"/>
+            <result column="ctr" property="ctr"/>
+        </association>
+    </resultMap>
+
+
+
+
+
+
+
+
+    <!-- media -->
+    <sql id="mediaDailyTotalQuery">
+        SELECT mi.id                                AS id,
+        ci.name                              AS companyName,
+        ci.id                                AS companyId,
+        mi.name                              AS mediaName,
+        mi.id                                AS mediaId,
+        #{request.startDate}                 AS startDate,
+        #{request.endDate}                   AS endDate,
+        <include refid="ReportCommonMapper.searchReportColumns"/>
+        FROM company_info ci, media_info mi, (
+        SELECT inner_report.media_info_id,
+        <include refid="ReportCommonMapper.reportUnionColumns"/>
+        FROM (
+        SELECT rad.media_info_id,
+        <include refid="ReportCommonMapper.reportColumns"/>
+        FROM report_adgroup_daily rad
+        WHERE rad.media_info_id = #{request.mediaId}
+        AND rad.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+        GROUP BY rad.media_info_id
+        UNION
+        SELECT rac.media_info_id,
+        <include refid="ReportCommonMapper.reportConversionColumns"/>
+        FROM report_adgroup_conversion_daily rac
+        WHERE rac.media_info_id = #{request.mediaId}
+        AND rac.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+        GROUP BY rac.media_info_id
+        ) inner_report
+        GROUP BY inner_report.media_info_id
+        ) reportData
+        WHERE ci.id = mi.company_info_id
+        AND mi.id = reportData.media_info_id
+        AND reportData.media_info_id = #{request.mediaId}
+        GROUP BY mi.id
+    </sql>
+
+    <select id="mediaDailyTotal" resultMap="mapMediaSearchTotal">
+        <include refid="mediaDailyTotalQuery"/>
+        <include refid="common.sortAndOrder"/>
+        <include refid="common.limitAndOffset"/>
+    </select>
+
+    <select id="countMediaDailyTotal" resultType="long">
+        SELECT COUNT(*)
+        FROM (<include refid="mediaDailyTotalQuery"/>) a
+    </select>
+
+    <sql id="mediaDailyQuery">
+        SELECT mi.id                                AS id,
+        ci.name                              AS companyName,
+        ci.id                                AS companyId,
+        mi.name                              AS mediaName,
+        mi.id                                AS mediaId,
+        reportData.report_date               AS startDate,
+        reportData.report_date               AS endDate,
+        <include refid="ReportCommonMapper.searchReportColumns"/>
+        FROM company_info ci , media_info mi , (
+        SELECT inner_report.media_info_id,
+        inner_report.report_date,
+        <include refid="ReportCommonMapper.reportUnionColumns"/>
+        FROM (
+        SELECT rad.media_info_id,
+        rad.report_date,
+        <include refid="ReportCommonMapper.reportColumns"/>
+        FROM report_adgroup_daily rad
+        WHERE rad.media_info_id = #{request.mediaId}
+        AND rad.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+        GROUP BY rad.media_info_id, rad.report_date
+        UNION
+        SELECT rac.media_info_id,
+        rac.report_date,
+        <include refid="ReportCommonMapper.reportConversionColumns"/>
+        FROM report_adgroup_conversion_daily rac
+        WHERE rac.media_info_id = #{request.mediaId}
+        AND rac.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+        GROUP BY rac.media_info_id, rac.report_date
+        ) inner_report
+        GROUP BY inner_report.media_info_id, inner_report.report_date
+        ) reportData
+        WHERE ci.id = mi.company_info_id
+        AND mi.id = reportData.media_info_id
+        AND reportData.media_info_id = #{request.mediaId}
+        GROUP BY mi.id, reportData.report_date
+    </sql>
+
+    <select id="mediaDaily" resultMap="mapMediaSearch">
+        <include refid="mediaDailyQuery"/>
+        <include refid="common.sortAndOrder"/>
+    </select>
+
+    <select id="countMediaDaily" resultType="long">
+        SELECT COUNT(*)
+        FROM (<include refid="mediaDailyQuery"/>) a
+    </select>
+
+
+
 </mapper>
