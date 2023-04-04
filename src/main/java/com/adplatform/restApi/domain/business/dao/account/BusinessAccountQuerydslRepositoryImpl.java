@@ -432,9 +432,10 @@ public class BusinessAccountQuerydslRepositoryImpl implements BusinessAccountQue
                 .where(
                         businessAccount.id.eq(walletMaster.id),
                         this.eqId(searchRequest.getId()),
-                        this.containsName(searchRequest.getName()));
+                        this.containsName(searchRequest.getName()))
+                .groupBy(businessAccount.id);
 
-        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+        return PageableExecutionUtils.getPage(content, pageable, () -> countQuery.fetch().size());
     }
 
     private JPAQuery<BusinessAccountDto.Response.BusinessAccountCreditInfo> getSearchCreditQuery(
@@ -452,7 +453,8 @@ public class BusinessAccountQuerydslRepositoryImpl implements BusinessAccountQue
                 .where(
                         businessAccount.id.eq(walletMaster.id),
                         this.eqId(searchRequest.getId()),
-                        this.containsName(searchRequest.getName()));
+                        this.containsName(searchRequest.getName()))
+                .groupBy(businessAccount.id);
 
         return Objects.nonNull(pageable)
                 ? query.orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(BusinessAccount.class, "businessAccount", pageable.getSort()).toArray(OrderSpecifier[]::new))
