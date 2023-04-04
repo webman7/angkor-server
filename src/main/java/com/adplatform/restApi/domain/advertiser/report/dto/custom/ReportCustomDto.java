@@ -72,6 +72,7 @@ public abstract class ReportCustomDto {
         @Setter
         public static class MediaReport {
             private Integer id;
+            private Integer companyId;
             private Integer mediaId;
             private List<String> indicators;
             private Integer startDate;

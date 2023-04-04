@@ -845,9 +845,24 @@ since 1.0
     </resultMap>
 
 
+    <sql id="mediaCondition1">
+        <if test="request.mediaId!=null and !request.mediaId.equals('')">
+            AND rad.media_info_id = #{request.mediaId}
+        </if>
+    </sql>
+
+    <sql id="mediaCondition2">
+        <if test="request.mediaId!=null and !request.mediaId.equals('')">
+            AND rac.media_info_id = #{request.mediaId}
+        </if>
+    </sql>
 
 
-
+    <sql id="mediaCondition3">
+        <if test="request.mediaId!=null and !request.mediaId.equals('')">
+            AND reportData.media_info_id = #{request.mediaId}
+        </if>
+    </sql>
 
 
 
@@ -867,15 +882,21 @@ since 1.0
         FROM (
         SELECT rad.media_info_id,
         <include refid="ReportCommonMapper.reportColumns"/>
-        FROM report_adgroup_daily rad
-        WHERE rad.media_info_id = #{request.mediaId}
+        FROM report_adgroup_daily rad, company_info c, media_info m
+        WHERE rad.media_info_id = m.id
+        AND c.id = m.company_info_id
+        AND c.id = #{request.companyId}
+        <include refid="mediaCondition1"/>
         AND rad.report_date BETWEEN #{request.startDate} AND #{request.endDate}
         GROUP BY rad.media_info_id
         UNION
         SELECT rac.media_info_id,
         <include refid="ReportCommonMapper.reportConversionColumns"/>
-        FROM report_adgroup_conversion_daily rac
-        WHERE rac.media_info_id = #{request.mediaId}
+        FROM report_adgroup_conversion_daily rac, company_info c, media_info m
+        WHERE rac.media_info_id = m.id
+        AND c.id = m.company_info_id
+        AND c.id = #{request.companyId}
+        <include refid="mediaCondition2"/>
         AND rac.report_date BETWEEN #{request.startDate} AND #{request.endDate}
         GROUP BY rac.media_info_id
         ) inner_report
@@ -883,7 +904,7 @@ since 1.0
         ) reportData
         WHERE ci.id = mi.company_info_id
         AND mi.id = reportData.media_info_id
-        AND reportData.media_info_id = #{request.mediaId}
+        <include refid="mediaCondition3"/>
         GROUP BY mi.id
     </sql>
 
@@ -915,16 +936,22 @@ since 1.0
         SELECT rad.media_info_id,
         rad.report_date,
         <include refid="ReportCommonMapper.reportColumns"/>
-        FROM report_adgroup_daily rad
-        WHERE rad.media_info_id = #{request.mediaId}
+        FROM report_adgroup_daily rad, company_info c, media_info m
+        WHERE rad.media_info_id = m.id
+        AND c.id = m.company_info_id
+        AND c.id = #{request.companyId}
+        <include refid="mediaCondition1"/>
         AND rad.report_date BETWEEN #{request.startDate} AND #{request.endDate}
         GROUP BY rad.media_info_id, rad.report_date
         UNION
         SELECT rac.media_info_id,
         rac.report_date,
         <include refid="ReportCommonMapper.reportConversionColumns"/>
-        FROM report_adgroup_conversion_daily rac
-        WHERE rac.media_info_id = #{request.mediaId}
+        FROM report_adgroup_conversion_daily rac, company_info c, media_info m
+        WHERE rac.media_info_id = m.id
+        AND c.id = m.company_info_id
+        AND c.id = #{request.companyId}
+        <include refid="mediaCondition2"/>
         AND rac.report_date BETWEEN #{request.startDate} AND #{request.endDate}
         GROUP BY rac.media_info_id, rac.report_date
         ) inner_report
@@ -932,7 +959,7 @@ since 1.0
         ) reportData
         WHERE ci.id = mi.company_info_id
         AND mi.id = reportData.media_info_id
-        AND reportData.media_info_id = #{request.mediaId}
+        <include refid="mediaCondition3"/>
         GROUP BY mi.id, reportData.report_date
     </sql>
 

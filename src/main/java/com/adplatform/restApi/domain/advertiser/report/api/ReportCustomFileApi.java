@@ -275,6 +275,7 @@ public class ReportCustomFileApi {
         //////////////////////////////////////////////////
         // Header
         //////////////////////////////////////////////////
+        HEADER_ITEMS.add("Media");
         HEADER_ITEMS.add("StartDate");
         HEADER_ITEMS.add("EndDate");
         // Indicator Add
@@ -293,6 +294,7 @@ public class ReportCustomFileApi {
 
         sb.append(String.join(",", HEADER_ITEMS)).append("\n");
         content.forEach(c -> {
+            sb.append(c.getMediaName()).append(",");
             sb.append(c.getStartDate()).append(",");
             sb.append(c.getEndDate()).append(",");
             for(String indicator : indicators) {
