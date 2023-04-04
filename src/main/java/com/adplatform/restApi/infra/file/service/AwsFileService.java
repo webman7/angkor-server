@@ -6,6 +6,9 @@ import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.media.dto.MediaDto;
 import com.adplatform.restApi.domain.media.dto.placement.MediaPlacementDto;
 import com.adplatform.restApi.domain.wallet.dto.WalletDto;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
+import com.amazonaws.util.IOUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
@@ -136,5 +139,18 @@ public class AwsFileService {
             return Optional.of(convertFile);
         }
         return Optional.empty();
+    }
+
+    public byte[] download(String fileKey) throws IOException {
+        byte[] content = null;
+        final S3Object s3Object = amazonS3Client.getObject(bucket, fileKey);
+        final S3ObjectInputStream stream = s3Object.getObjectContent();
+        try {
+            content = IOUtils.toByteArray(stream);
+            s3Object.close();
+        } catch(final IOException ex) {
+            throw new IOException("IO Error Message= " + ex.getMessage());
+        }
+        return content;
     }
 }
