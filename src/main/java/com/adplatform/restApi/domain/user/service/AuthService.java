@@ -5,10 +5,7 @@ import com.adplatform.restApi.domain.history.dto.user.UserLoginHistoryMapper;
 import com.adplatform.restApi.domain.history.dto.user.UserPasswordChangeHistoryDto;
 import com.adplatform.restApi.domain.history.dto.user.UserPasswordChangeHistoryMapper;
 import com.adplatform.restApi.domain.user.dao.mapper.UserQueryMapper;
-import com.adplatform.restApi.domain.user.domain.AdminUser;
-import com.adplatform.restApi.domain.user.domain.Role;
 import com.adplatform.restApi.domain.user.domain.User;
-import com.adplatform.restApi.domain.user.domain.UserRole;
 import com.adplatform.restApi.domain.user.dto.user.UserDto;
 import com.adplatform.restApi.domain.user.exception.*;
 import com.adplatform.restApi.global.util.HttpReqRespUtils;
@@ -30,9 +27,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-
-import java.util.List;
 
 /**
  * @author junny
