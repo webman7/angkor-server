@@ -1,4 +1,4 @@
-package com.adplatform.restApi.domain.user.domain;
+package com.adplatform.restApi.domain.company.domain;
 
 import lombok.*;
 

@@ -1,6 +1,6 @@
-package com.adplatform.restApi.domain.user.domain;
+package com.adplatform.restApi.domain.company.domain;
 
-import com.adplatform.restApi.domain.company.domain.Company;
+import com.adplatform.restApi.domain.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +23,13 @@ public class AdminUser {
         MASTER,
         OPERATOR,
         MEMBER
+    }
+
+    public enum AccountingYN {
+        /** 회계권한 (비즈니스계정당 한명만 가능) */
+        Y,
+        /** 권한없음 */
+        N
     }
 
     public enum Status {
@@ -78,12 +85,33 @@ public class AdminUser {
     private LocalDateTime updatedAt;
 
     @Builder
-    public AdminUser(Company company, User user, AdminUser.MemberType memberType, AdminUser.Status status) {
+    public AdminUser(Company company, User user, MemberType memberType, Status status) {
         this.company = company;
         this.user = user;
         this.memberType = memberType;
         this.status = status;
         this.id.setCompanyId(company.getId());
         this.id.setUserId(user.getId());
+    }
+
+
+    public void changeStatusY() {
+        this.status = Status.Y;
+    }
+    public void changeStatusR() {
+        this.status = Status.R;
+    }
+    public void changeStatusC() {
+        this.status = Status.C;
+    }
+
+    public void changeMemberTypeMaster() {
+        this.memberType = MemberType.MASTER;
+    }
+    public void changeMemberTypeOperator() {
+        this.memberType = MemberType.OPERATOR;
+    }
+    public void changeMemberTypeMember() {
+        this.memberType = MemberType.MEMBER;
     }
 }
