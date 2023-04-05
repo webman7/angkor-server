@@ -106,6 +106,11 @@ public class CompanyQueryApi {
         return this.mediaCompanyUserRepository.mediaCompanyUserInfo(companyId, userNo);
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/user/{id}")
+    public MediaCompanyUserDto.Response.MediaCompanyUserInfo mediaCompanyUserCompanyInfo(@PathVariable(name = "id") Integer userNo) {
+        return this.mediaCompanyUserRepository.mediaCompanyUserCompanyInfo(userNo);
+    }
 
 
 

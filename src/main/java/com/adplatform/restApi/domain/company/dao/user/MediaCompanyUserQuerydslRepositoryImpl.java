@@ -192,6 +192,29 @@ public class MediaCompanyUserQuerydslRepositoryImpl implements MediaCompanyUserQ
     }
 
     @Override
+    public MediaCompanyUserDto.Response.MediaCompanyUserInfo mediaCompanyUserCompanyInfo(Integer userNo) {
+        return this.query.select(new QMediaCompanyUserDto_Response_MediaCompanyUserInfo(
+                        company.id,
+                        new QUserDto_Response_BaseInfo(
+                                user.id,
+                                user.loginId,
+                                user.name,
+                                user.phone
+                        ),
+                        mediaCompanyUser.memberType,
+                        mediaCompanyUser.accountingYN,
+                        mediaCompanyUser.status
+                ))
+                .from(company, mediaCompanyUser, user)
+                .where( user.id.eq(userNo),
+                        mediaCompanyUser.company.id.eq(company.id),
+                        mediaCompanyUser.user.id.eq(user.id),
+                        user.active.in(User.Active.Y, User.Active.L)
+                )
+                .fetchOne();
+    }
+
+    @Override
     public void deleteByCompanyIdAndUserIdCount(Integer companyId, Integer userId) {
         this.query.delete(mediaCompanyUser)
                 .where(mediaCompanyUser.id.companyId.eq(companyId), mediaCompanyUser.id.userId.eq(userId))

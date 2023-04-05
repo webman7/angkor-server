@@ -20,6 +20,8 @@ public interface MediaCompanyUserQuerydslRepository {
     List<MediaCompanyUserDto.Response.MediaCompanyUserInfo> mediaCompanyMasterUserInfo(Integer companyId);
 
     MediaCompanyUserDto.Response.MediaCompanyUserInfo mediaCompanyUserInfo(Integer companyId, Integer userNo);
+
+    MediaCompanyUserDto.Response.MediaCompanyUserInfo mediaCompanyUserCompanyInfo(Integer userNo);
     void deleteByCompanyIdAndUserIdCount(Integer companyId, Integer userId);
 
     void updateAccounting(Integer companyId, Integer userId, MediaCompanyUser.AccountingYN accountingYN);
