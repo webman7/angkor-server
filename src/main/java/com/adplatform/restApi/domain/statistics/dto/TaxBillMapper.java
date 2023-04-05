@@ -17,17 +17,23 @@ public abstract class TaxBillMapper {
 //    public abstract AdAccountTaxBill toEntityTaxBill(TaxBillDto.Request.Save SaveDto);
 
 
+    @Mapping(target = "memo", source = "SaveDto.memo")
     @Mapping(target = "issueStatus", expression = "java(false)")
     public abstract MediaTaxBill toEntityMediaTaxBill(TaxBillDto.Request.Save SaveDto);
 
 
     @Mapping(target = "id", source = "mediaTaxBill.id")
+    @Mapping(target = "companyName", source = "company.name")
     @Mapping(target = "mediaName", source = "media.name")
     @Mapping(target = "issueUserNo", source = "mediaTaxBill.issueUserNo")
     @Mapping(target = "paymentUserNo", source = "mediaTaxBill.paymentUserNo")
     @Mapping(target = "memo", source = "mediaTaxBill.memo")
     @Mapping(target = "mediaTaxBillFiles", source = "mediaTaxBillFile")
-    public abstract TaxBillDto.Response.TaxBillInfo toResponse(MediaTaxBill mediaTaxBill, Media media, Company company, MediaTaxBillFileDto.Response.FileInfo mediaTaxBillFile);
+    @Mapping(target = "mediaTaxBillPaymentFiles", source = "mediaTaxBillPaymentFile")
+    @Mapping(target = "bank", source = "company.bank")
+    @Mapping(target = "accountNumber", source = "company.accountNumber")
+    @Mapping(target = "accountOwner", source = "company.accountOwner")
+    public abstract TaxBillDto.Response.TaxBillInfo toResponse(MediaTaxBill mediaTaxBill, Media media, Company company, MediaTaxBillFileDto.Response.FileInfo mediaTaxBillFile, MediaTaxBillPaymentFileDto.Response.FileInfo mediaTaxBillPaymentFile);
 
 
 }

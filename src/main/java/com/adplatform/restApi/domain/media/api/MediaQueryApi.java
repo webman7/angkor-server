@@ -1,5 +1,7 @@
 package com.adplatform.restApi.domain.media.api;
 
+import com.adplatform.restApi.domain.bank.domain.Bank;
+import com.adplatform.restApi.domain.bank.service.BankFindUtils;
 import com.adplatform.restApi.domain.company.dao.CompanyRepository;
 import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.media.dao.MediaFileRepository;
@@ -15,6 +17,7 @@ import com.adplatform.restApi.domain.media.service.MediaFindUtils;
 import com.adplatform.restApi.domain.statistics.dao.taxbill.MediaTaxBillRepository;
 import com.adplatform.restApi.domain.statistics.domain.taxbill.MediaTaxBill;
 import com.adplatform.restApi.domain.statistics.dto.MediaTaxBillFileDto;
+import com.adplatform.restApi.domain.statistics.dto.MediaTaxBillPaymentFileDto;
 import com.adplatform.restApi.domain.statistics.dto.TaxBillDto;
 import com.adplatform.restApi.domain.statistics.dto.TaxBillMapper;
 import com.adplatform.restApi.domain.statistics.service.MediaTaxBillFindUtils;
@@ -69,10 +72,18 @@ public class MediaQueryApi {
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/tax/search")
-    public PageDto<TaxBillDto.Response.TaxBill> search(
+    public PageDto<TaxBillDto.Response.TaxBill> searchTax(
             @PageableDefault Pageable pageable,
             @RequestBody @Valid TaxBillDto.Request.SearchTax searchRequest) {
         return PageDto.create(this.mediaTaxBillRepository.searchTax(pageable, searchRequest));
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/settlement/search")
+    public PageDto<TaxBillDto.Response.TaxBill> searchSettlement(
+            @PageableDefault Pageable pageable,
+            @RequestBody @Valid TaxBillDto.Request.SearchTax searchRequest) {
+        return PageDto.create(this.mediaTaxBillRepository.searchSettlement(pageable, searchRequest));
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -84,7 +95,8 @@ public class MediaQueryApi {
         Company company = CompanyFindUtils.findByIdOrElseThrow(media.getCompany().getId(), this.companyRepository);
 
         MediaTaxBillFileDto.Response.FileInfo mediaTaxBillFile = this.mediaTaxBillRepository.findByMediaIdFileInfo(id);
+        MediaTaxBillPaymentFileDto.Response.FileInfo mediaTaxBillPaymentFile = this.mediaTaxBillRepository.findByMediaIdPaymentFileInfo(id);
 
-        return this.taxBillMapper.toResponse(MediaTaxBillFindUtils.findByIdOrElseThrow(id, this.mediaTaxBillRepository), media, company, mediaTaxBillFile);
+        return this.taxBillMapper.toResponse(MediaTaxBillFindUtils.findByIdOrElseThrow(id, this.mediaTaxBillRepository), media, company, mediaTaxBillFile, mediaTaxBillPaymentFile);
     }
 }

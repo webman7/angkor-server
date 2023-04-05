@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -106,21 +107,27 @@ public class MediaSaveService {
 
     public void updateAdminApprove(MediaDto.Request.Confirm request) {
         try{
-            Media media = MediaFindUtils.findByIdOrElseThrow(request.getId(), this.mediaRepository).updateAdminApprove(request);
+            Media media = MediaFindUtils.findByIdOrElseThrow(request.getId(), this.mediaRepository);
+            
+            // 미승인인 경우 업데이트
+            if(media.getStatus().equals(Media.Status.N)) {
+                media.updateAdminApprove(request);
 
-            String appKey = new RandomCodeGenerator().generate(20);
-            String appSecretTmp = new RandomCodeGenerator().generate(10);
-            // appSecret = 임의 숫자 10개 + id + company_info_id + reg_date
-            String appSecret = Sha256Service.SHA256(appSecretTmp + String.valueOf(media.getId()) + String.valueOf(media.getCompany().getId()) + String.valueOf(media.getCreatedAt()));
-            MediaFindUtils.findByIdOrElseThrow(media.getId(), this.mediaRepository).updateAdminAppKey(appKey, appSecret);
+                String appKey = UUID.randomUUID().toString().replaceAll("-", "");
+                // appKey UUID 에 - 제거
+                String appSecretTmp = new RandomCodeGenerator().generate(10);
+                // appSecret = 임의 숫자 10개 + id + company_info_id + reg_date
+                String appSecret = Sha256Service.SHA256(appSecretTmp + String.valueOf(media.getId()) + String.valueOf(media.getCompany().getId()) + String.valueOf(media.getCreatedAt()));
+                MediaFindUtils.findByIdOrElseThrow(media.getId(), this.mediaRepository).updateAdminAppKey(appKey, appSecret);
 
-            // 매체 카테고리 삭제
-            this.mediaCategorySaveQueryMapper.deleteMediaCategory(request.getId());
+                // 매체 카테고리 삭제
+                this.mediaCategorySaveQueryMapper.deleteMediaCategory(request.getId());
 
-            // 루프 돌면서 인서트
-            List<Category> category = this.findByCategoryId(request.getCategory());
-            for (Category ca: category) {
-                this.mediaCategorySaveQueryMapper.insertMediaCategory(media.getId(), ca.getId());
+                // 루프 돌면서 인서트
+                List<Category> category = this.findByCategoryId(request.getCategory());
+                for (Category ca: category) {
+                    this.mediaCategorySaveQueryMapper.insertMediaCategory(media.getId(), ca.getId());
+                }
             }
         }catch (Exception e){
             throw new MediaUpdateException();

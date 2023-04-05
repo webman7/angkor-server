@@ -103,6 +103,12 @@ public class AwsFileService {
         return this.upload(file, filePath);
     }
 
+    @SneakyThrows
+    public String saveMediaTaxBillPayment(TaxBillDto.Request.Payment request, MultipartFile file) {
+        String filePath = FILE_TAX_PATH + "images";
+        return this.upload(file, filePath);
+    }
+
 
     ///////////////////////////////////////////////////////////////////////////////////
     // AWS

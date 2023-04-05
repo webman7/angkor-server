@@ -67,14 +67,25 @@ public class MediaCommandApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/admin/tax")
-    public void saveAdminTax(@Valid TaxBillDto.Request.Save request) {
-        this.mediaTaxBillSaveService.saveAdminTax(request);
+    @PostMapping("/tax/bill")
+    public void saveMediaTaxBill(@Valid TaxBillDto.Request.Save request) {
+        this.mediaTaxBillSaveService.saveMediaTaxBill(request);
     }
 
-    @PatchMapping("/admin/tax")
-    public ResponseEntity<Void> updateAdminTax(@Valid TaxBillDto.Request.Update request) {
-        this.mediaTaxBillSaveService.updateAdminTax(request);
+    @PatchMapping("/tax/bill")
+    public ResponseEntity<Void> updateMediaTaxBill(@Valid TaxBillDto.Request.Update request) {
+        this.mediaTaxBillSaveService.updateMediaTaxBill(request);
+        return ResponseEntity.ok().build();
+    }
+    @PatchMapping("/tax/bill/issue")
+    public ResponseEntity<Void> updateMediaTaxBillIssue(@RequestBody @Valid TaxBillDto.Request.Confirm request) {
+        this.mediaTaxBillSaveService.updateMediaTaxBillIssue(request);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/tax/bill/payment")
+    public ResponseEntity<Void> updateMediaTaxBillPayment(@Valid TaxBillDto.Request.Payment request) {
+        this.mediaTaxBillSaveService.updateMediaTaxBillPayment(request);
         return ResponseEntity.ok().build();
     }
 }
