@@ -4,6 +4,7 @@ import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
 import com.adplatform.restApi.domain.business.domain.BusinessAccount;
 import com.adplatform.restApi.domain.business.domain.BusinessAccountUser;
 import com.adplatform.restApi.domain.company.domain.Company;
+import com.adplatform.restApi.domain.statistics.domain.taxbill.BusinessAccountTaxBill;
 import com.adplatform.restApi.domain.wallet.dto.WalletDto;
 import com.adplatform.restApi.global.value.Address;
 import com.querydsl.core.annotations.QueryProjection;
@@ -14,6 +15,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 
 /**
  * @author junny
@@ -42,6 +44,21 @@ public class BusinessAccountDto {
         public static class SearchCredit {
             private Integer id;
             private String name;
+        }
+
+        @Getter
+        @Setter
+        public static class UpdateIssue {
+            private Integer id;
+        }
+
+        @Getter
+        @Setter
+        public static class SearchTax {
+            private String searchType;
+            private String searchKeyword;
+            private Integer startDate;
+            private Integer endDate;
         }
 
         @Getter
@@ -310,6 +327,49 @@ public class BusinessAccountDto {
                 this.totalReserveAmount = totalReserveAmount;
                 this.type = type;
                 this.config = config;
+            }
+        }
+
+        @Getter
+        @Setter
+        public static class BusinessAccountTaxInfo {
+
+            private Integer id;
+            private Integer businessAccountId;
+            private String businessAccountName;
+            private Integer statDate;
+            private Float supplyAmount;
+            private Float vatAmount;
+            private Float totalAmount;
+            private boolean issueStatus;
+            private Integer issueUserNo;
+            private String issueUserId;
+            private LocalDateTime issueDate;
+
+            @QueryProjection
+            public BusinessAccountTaxInfo(
+                    Integer id,
+                    Integer businessAccountId,
+                    String businessAccountName,
+                    Integer statDate,
+                    Float supplyAmount,
+                    Float vatAmount,
+                    Float totalAmount,
+                    boolean issueStatus,
+                    Integer issueUserNo,
+                    String issueUserId,
+                    LocalDateTime issueDate) {
+                this.id = id;
+                this.businessAccountId = businessAccountId;
+                this.businessAccountName = businessAccountName;
+                this.statDate = statDate;
+                this.supplyAmount = supplyAmount;
+                this.vatAmount = vatAmount;
+                this.totalAmount = totalAmount;
+                this.issueStatus = issueStatus;
+                this.issueUserNo = issueUserNo;
+                this.issueUserId = issueUserId;
+                this.issueDate = issueDate;
             }
         }
 

@@ -88,4 +88,10 @@ public class BusinessAccountCommandApi {
     public void update(@RequestBody @Valid BusinessAccountDto.Request.UpdateRefundAccount request) {
         this.businessAccountSaveService.updateRefundAccount(request, SecurityUtils.getLoginUserNo());
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/tax/issue")
+    public void updateTaxIssue(@RequestBody @Valid BusinessAccountDto.Request.UpdateIssue request) {
+        this.businessAccountSaveService.updateTaxIssue(request, SecurityUtils.getLoginUserNo());
+    }
 }

@@ -6,6 +6,7 @@ import com.adplatform.restApi.domain.business.domain.BusinessAccountUser;
 import com.adplatform.restApi.domain.business.domain.BusinessAccount;
 import com.adplatform.restApi.domain.business.dto.account.*;
 import com.adplatform.restApi.domain.business.dto.account.BusinessAccountDto;
+import com.adplatform.restApi.domain.statistics.domain.taxbill.QBusinessAccountTaxBill;
 import com.adplatform.restApi.global.util.QuerydslOrderSpecifierUtil;
 import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_WalletBalance;
 import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_WalletSpend;
@@ -38,6 +39,7 @@ import static com.adplatform.restApi.domain.business.dto.account.BusinessAccount
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
 import static com.adplatform.restApi.domain.statistics.domain.report.QReportAdGroupDaily.reportAdGroupDaily;
 import static com.adplatform.restApi.domain.statistics.domain.sale.QSaleAdAccountDaily.saleAdAccountDaily;
+import static com.adplatform.restApi.domain.statistics.domain.taxbill.QBusinessAccountTaxBill.businessAccountTaxBill;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
 import static com.adplatform.restApi.domain.wallet.domain.QWalletMaster.walletMaster;
 import static com.querydsl.core.types.ExpressionUtils.as;
@@ -462,6 +464,74 @@ public class BusinessAccountQuerydslRepositoryImpl implements BusinessAccountQue
     }
 
 
+
+
+
+
+
+    @Override
+    public Page<BusinessAccountDto.Response.BusinessAccountTaxInfo> searchTax(
+            Pageable pageable, BusinessAccountDto.Request.SearchTax searchRequest) {
+        List<BusinessAccountDto.Response.BusinessAccountTaxInfo> content = this.getSearchTaxQuery(pageable, searchRequest)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = this.query.select(Wildcard.count)
+                .from(businessAccount, businessAccountTaxBill, company)
+                .where(
+                        businessAccount.id.eq(businessAccountTaxBill.businessAccountId),
+                        businessAccount.company.id.eq(company.id),
+                        businessAccountTaxBill.statDate.between(
+                                searchRequest.getStartDate(),
+                                searchRequest.getEndDate()
+                        ),
+                        this.containsKeyword(searchRequest.getSearchType(), searchRequest.getSearchKeyword()));
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    private JPAQuery<BusinessAccountDto.Response.BusinessAccountTaxInfo> getSearchTaxQuery(
+            Pageable pageable,
+            BusinessAccountDto.Request.SearchTax searchRequest) {
+
+        JPAQuery<BusinessAccountDto.Response.BusinessAccountTaxInfo> query = this.query.select(new QBusinessAccountDto_Response_BusinessAccountTaxInfo(
+                        businessAccountTaxBill.id,
+                        businessAccount.id,
+                        businessAccount.name,
+                        businessAccountTaxBill.statDate,
+                        businessAccountTaxBill.supplyAmount,
+                        businessAccountTaxBill.vatAmount,
+                        businessAccountTaxBill.totalAmount,
+                        businessAccountTaxBill.issueStatus,
+                        businessAccountTaxBill.issueUserNo,
+                        as(select(user.loginId)
+                            .from(user)
+                            .where(user.id.eq(businessAccountTaxBill.issueUserNo)),
+                                "issueUserId"),
+                        businessAccountTaxBill.issueAt))
+                .from(businessAccount, businessAccountTaxBill, company)
+                .where(
+                        businessAccount.id.eq(businessAccountTaxBill.businessAccountId),
+                        businessAccount.company.id.eq(company.id),
+                        businessAccountTaxBill.statDate.between(
+                                searchRequest.getStartDate(),
+                                searchRequest.getEndDate()
+                        ),
+                        this.containsKeyword(searchRequest.getSearchType(), searchRequest.getSearchKeyword()));
+
+        return Objects.nonNull(pageable)
+                ? query.orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(BusinessAccount.class, "businessAccount", pageable.getSort()).toArray(OrderSpecifier[]::new))
+                : query;
+    }
+
+
+
+
+
+
+
+
     @Override
     public List<BusinessAccountDto.Response.AdAccountInfo> businessAccountByAdAccounts(Integer businessAccountId) {
         return this.query.select(new QBusinessAccountDto_Response_AdAccountInfo(
@@ -514,5 +584,17 @@ public class BusinessAccountQuerydslRepositoryImpl implements BusinessAccountQue
 
     private BooleanExpression containsName(String name) {
         return StringUtils.hasText(name) ? businessAccount.name.contains(name) : null;
+    }
+
+    private BooleanExpression containsKeyword(String searchType, String searchKeyword) {
+        if(searchType.equals("id")) {
+            return searchKeyword != null && !searchKeyword.equals("") ? businessAccount.id.eq(Integer.parseInt(searchKeyword)) : null;
+        } else if(searchType.equals("name")) {
+            return StringUtils.hasText(searchKeyword) ? businessAccount.name.contains(searchKeyword) : null;
+        } else if(searchType.equals("registrationNumber")) {
+            return StringUtils.hasText(searchKeyword) ? company.registrationNumber.contains(searchKeyword) : null;
+        } else {
+            return null;
+        }
     }
 }

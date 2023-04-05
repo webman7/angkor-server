@@ -142,4 +142,13 @@
          WHERE a.company_info_id = b.id
           AND a.id = #{request.businessAccountId}
     </insert>
+
+    <insert id="updateTaxIssue">
+        UPDATE business_account_tax_bill
+           SET issue_status = 'Y',
+               issue_user_no = #{loginUserNo},
+               issue_date = NOW()
+        WHERE id = #{request.id}
+          AND issue_status = 'N'
+    </insert>
 </mapper>

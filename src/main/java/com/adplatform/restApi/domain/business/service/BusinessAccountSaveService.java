@@ -35,6 +35,9 @@ import com.adplatform.restApi.domain.history.dto.adaccount.user.AdAccountUserInf
 import com.adplatform.restApi.domain.history.dto.adaccount.user.AdAccountUserInfoHistoryMapper;
 import com.adplatform.restApi.domain.history.dto.business.user.BusinessAccountUserInfoHistoryDto;
 import com.adplatform.restApi.domain.history.dto.business.user.BusinessAccountUserInfoHistoryMapper;
+import com.adplatform.restApi.domain.statistics.dao.taxbill.BusinessAccountTaxBillRepository;
+import com.adplatform.restApi.domain.statistics.domain.taxbill.BusinessAccountTaxBill;
+import com.adplatform.restApi.domain.statistics.service.BusinessAccountTaxBillFindUtils;
 import com.adplatform.restApi.domain.user.dto.user.UserDto;
 import com.adplatform.restApi.domain.user.service.UserQueryService;
 import com.adplatform.restApi.domain.user.domain.User;
@@ -71,6 +74,7 @@ public class BusinessAccountSaveService {
     private final UserQueryService userQueryService;
     private final CompanyService companyService;
     private final CompanyMapper companyMapper;
+    private final BusinessAccountTaxBillRepository businessAccountTaxBillRepository;
 
     private final CompanyRepository companyRepository;
     private final BusinessAccountPreDeferredPaymentMapper businessAccountPreDeferredPaymentMapper;
@@ -340,4 +344,13 @@ public class BusinessAccountSaveService {
     public void updateRefundAccount(BusinessAccountDto.Request.UpdateRefundAccount request, Integer loginUserNo) {
         this.businessAccountQueryMapper.updateRefundAccount(request, loginUserNo);
     }
+
+    public void updateTaxIssue(BusinessAccountDto.Request.UpdateIssue request, Integer loginUserNo) {
+        BusinessAccountTaxBill businessAccountTaxBill = BusinessAccountTaxBillFindUtils.findByIdOrElseThrow(request.getId(), this.businessAccountTaxBillRepository);
+        if(!businessAccountTaxBill.isIssueStatus()) {
+            this.businessAccountQueryMapper.updateTaxIssue(request, loginUserNo);
+        }
+
+    }
+
 }

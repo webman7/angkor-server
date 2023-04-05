@@ -16,11 +16,13 @@ public interface BusinessAccountQueryMapper {
     long countAccounts(@Param("id") Integer id, @Param("name") String name, @Param("loginUserNo") Integer loginUserNo);
 
     List<BusinessAccountDto.Response.BusinessAdAccount> businessAdAccount(
-            String searchType, String searchKeyword, Integer loginUserNo, @Param("pageable") Pageable pageable
+            @Param("searchType") String searchType, @Param("searchKeyword") String searchKeyword, @Param("loginUserNo") Integer loginUserNo, @Param("pageable") Pageable pageable
     );
     long countBusinessAdAccount(@Param("searchType") String searchType, @Param("searchKeyword") String searchKeyword, @Param("loginUserNo") Integer loginUserNo);
 
 
 
-    void updateRefundAccount(BusinessAccountDto.Request.UpdateRefundAccount request, @Param("loginUserNo") Integer loginUserNo);
+    void updateRefundAccount(@Param("request") BusinessAccountDto.Request.UpdateRefundAccount request, @Param("loginUserNo") Integer loginUserNo);
+
+    void updateTaxIssue(@Param("request") BusinessAccountDto.Request.UpdateIssue request, @Param("loginUserNo") Integer loginUserNo);
 }

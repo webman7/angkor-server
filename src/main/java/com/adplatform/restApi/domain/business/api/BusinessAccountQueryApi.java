@@ -116,6 +116,24 @@ public class BusinessAccountQueryApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/tax/bill/search")
+    public PageDto<BusinessAccountDto.Response.BusinessAccountTaxInfo> searchTax(
+            @PageableDefault Pageable pageable,
+            BusinessAccountDto.Request.SearchTax searchRequest) {
+        return PageDto.create(this.businessAccountRepository.searchTax(pageable, searchRequest));
+    }
+
+
+
+
+
+
+
+
+
+
+
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/all")
     public List<BusinessAccountDto.Response.ForAdvertiserSearch> searchForAdvertiser(
             @RequestParam(required = false) Integer id,
