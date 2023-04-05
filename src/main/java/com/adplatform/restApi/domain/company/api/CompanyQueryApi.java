@@ -1,7 +1,9 @@
 package com.adplatform.restApi.domain.company.api;
 
+import com.adplatform.restApi.domain.company.dao.user.AdminUserRepository;
 import com.adplatform.restApi.domain.company.domain.CompanyFile;
 import com.adplatform.restApi.domain.company.dto.CompanyFileDto;
+import com.adplatform.restApi.domain.company.dto.user.AdminUserDto;
 import com.adplatform.restApi.domain.company.exception.CompanyNotFoundException;
 import com.adplatform.restApi.domain.company.dao.CompanyRepository;
 import com.adplatform.restApi.domain.company.dao.user.MediaCompanyUserRepository;
@@ -31,6 +33,7 @@ public class CompanyQueryApi {
     private final CompanyRepository companyRepository;
     private final CompanyMapper companyMapper;
     private final MediaCompanyUserRepository mediaCompanyUserRepository;
+    private final AdminUserRepository adminUserRepository;
 
 //    @ResponseStatus(HttpStatus.OK)
 //    @GetMapping("/{id}")
@@ -112,6 +115,11 @@ public class CompanyQueryApi {
         return this.mediaCompanyUserRepository.mediaCompanyUserCompanyInfo(userNo);
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/user/{id}/admin")
+    public AdminUserDto.Response.AdminUserInfo adminUserInfo(@PathVariable(name = "id") Integer userNo) {
+        return this.adminUserRepository.adminUserInfo(userNo);
+    }
 
 
 
