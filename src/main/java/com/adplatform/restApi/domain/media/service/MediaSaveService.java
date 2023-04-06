@@ -10,7 +10,6 @@ import com.adplatform.restApi.domain.media.domain.*;
 import com.adplatform.restApi.domain.media.dao.MediaRepository;
 import com.adplatform.restApi.domain.media.dto.MediaDto;
 import com.adplatform.restApi.domain.media.dto.MediaMapper;
-import com.adplatform.restApi.domain.media.dto.category.MediaCategoryDto;
 import com.adplatform.restApi.domain.media.dto.category.MediaCategoryMapper;
 import com.adplatform.restApi.domain.media.exception.MediaUpdateException;
 import com.adplatform.restApi.domain.media.exception.CategoryNotFoundException;
@@ -64,6 +63,11 @@ public class MediaSaveService {
         }catch (Exception e){
             throw new MediaUpdateException();
         }
+    }
+
+    public void updateReRegister(MediaDto.Request.Update request) {
+        update(request);
+        MediaFindUtils.findByIdOrElseThrow(request.getId(), this.mediaRepository).changeStatusN();
     }
 
     public void saveAdmin(MediaDto.Request.Save request) {

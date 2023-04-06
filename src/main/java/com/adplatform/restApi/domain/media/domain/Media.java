@@ -146,6 +146,7 @@ public class Media extends BaseUpdatedEntity {
     public void changeStatusD() {
         this.status = Status.D;
     }
+    public void changeStatusN() { this.status = Status.N; }
 
     public void delete() {
         this.status = Media.Status.D;

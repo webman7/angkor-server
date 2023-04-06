@@ -1,6 +1,5 @@
 package com.adplatform.restApi.domain.media.api;
 
-import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.media.dto.MediaDto;
 import com.adplatform.restApi.domain.media.service.MediaSaveService;
 import com.adplatform.restApi.domain.statistics.dto.TaxBillDto;
@@ -31,6 +30,13 @@ public class MediaCommandApi {
         this.mediaSaveService.update(request);
         return ResponseEntity.ok().build();
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/reregister")
+    public void updateReRegister(@Valid MediaDto.Request.Update request) {
+        this.mediaSaveService.updateReRegister(request);
+    }
+
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/admin")
