@@ -16,4 +16,10 @@ public interface BatchSaveQueryMapper {
     void insertMediaSettlementMonthly(@Param("startDate") Integer startDate, @Param("endDate") Integer endDate);
     void insertMediaTaxBillMonthly(@Param("startDate") Integer startDate, @Param("endDate") Integer endDate);
 
+
+    void updateCampaignLive(@Param("statDate") Integer statDate);
+    void updateCampaignFinished(@Param("statDate") Integer statDate);
+    void updateAdGroupLive(@Param("statDate") Integer statDate);
+    void updateAdGroupFinished(@Param("statDate") Integer statDate);
+
 }

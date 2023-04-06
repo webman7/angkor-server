@@ -30,6 +30,56 @@ since 1.0
 
     </insert>
 
+    <insert id="insertMediaSettlementMonthly">
+    </insert>
+
+    <insert id="insertMediaTaxBillMonthly">
+        INSERT INTO media_tax_bill_monthly (adaccount_info_id, media_info_id, stat_date, supply_amount, vat_amount, total_amount)
+        SELECT t1.adaccount_info_id, t1.media_info_id, t1.stat_date, t1.supply_amount,
+        (t1.supply_amount * 0.1) AS vat_amount,
+        (t1.supply_amount + (t1.supply_amount * 0.1)) AS total_amount
+        FROM (
+        SELECT #{endDate} AS stat_date, a.adaccount_info_id, a.media_info_id, SUM(a.supply_amount) AS supply_amount
+        FROM media_settlement_daily a
+        WHERE stat_date BETWEEN #{startDate} AND #{endDate}
+        GROUP BY a.adaccount_info_id, a.media_info_id
+        ) t1
+        GROUP BY t1.adaccount_info_id, t1.media_info_id
+    </insert>
+
+    <update id="updateCampaignLive">
+        UPDATE campaign_info
+        SET status = 'LIVE'
+        WHERE start_date <![CDATA[<=]]> #{statDate}
+        AND end_date <![CDATA[>=]]> #{statDate}
+        AND status IN ('READY')
+    </update>
+
+    <update id="updateCampaignFinished">
+        UPDATE campaign_info
+        SET status = 'FINISHED'
+        WHERE end_date <![CDATA[<]]> #{statDate}
+        AND status IN ('LIVE')
+    </update>
+
+    <update id="updateAdGroupLive">
+        UPDATE adgroup_info a, adgroup_schedule b
+        SET a.status = 'LIVE'
+        WHERE a.id = b.adgroup_info_id
+        AND b.start_date <![CDATA[<=]]> #{statDate}
+        AND b.end_date <![CDATA[>=]]> #{statDate}
+        AND a.status IN ('READY')
+    </update>
+
+    <update id="updateAdGroupFinished">
+        UPDATE adgroup_info a, adgroup_schedule b
+        SET a.status = 'FINISHED'
+        WHERE a.id = b.adgroup_info_id
+        AND b.end_date <![CDATA[<]]> #{statDate}
+        AND a.status IN ('LIVE')
+    </update>
+
+
 
 
 
@@ -92,26 +142,7 @@ since 1.0
                     GROUP BY a.adaccount_info_id, a.owner_company_info_id, a.company_info_id
                    ) t1
              GROUP BY t1.adaccount_info_id, t1.owner_company_info_id, t1.company_info_id
-
     </insert>
-
-    <insert id="insertMediaSettlementMonthly">
-    </insert>
-
-    <insert id="insertMediaTaxBillMonthly">
-        INSERT INTO media_tax_bill_monthly (adaccount_info_id, media_info_id, stat_date, supply_amount, vat_amount, total_amount)
-             SELECT t1.adaccount_info_id, t1.media_info_id, t1.stat_date, t1.supply_amount,
-                    (t1.supply_amount * 0.1) AS vat_amount,
-                    (t1.supply_amount + (t1.supply_amount * 0.1)) AS total_amount
-               FROM (
-                    SELECT #{endDate} AS stat_date, a.adaccount_info_id, a.media_info_id, SUM(a.supply_amount) AS supply_amount
-                      FROM media_settlement_daily a
-                     WHERE stat_date BETWEEN #{startDate} AND #{endDate}
-                     GROUP BY a.adaccount_info_id, a.media_info_id
-                    ) t1
-              GROUP BY t1.adaccount_info_id, t1.media_info_id
-    </insert>
-
 
 
 </mapper>
