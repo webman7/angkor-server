@@ -27,15 +27,11 @@ public class MediaReportDaily {
 
     @Builder
     public MediaReportDaily(
-            Integer businessAccountId,
-            Integer adAccountId,
             Integer mediaId,
             Integer reportDate,
             Integer companyId,
             Integer impression,
             Integer click) {
-        this.id.setBusinessAccountId(businessAccountId);
-        this.id.setAdAccountId(adAccountId);
         this.id.setMediaId(mediaId);
         this.id.setReportDate(reportDate);
         this.companyId = companyId;
