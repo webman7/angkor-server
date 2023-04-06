@@ -2,6 +2,7 @@ package com.adplatform.restApi.domain.media.dto.placement;
 
 import com.adplatform.restApi.domain.media.domain.MediaPlacement;
 import com.adplatform.restApi.domain.media.domain.Placement;
+import com.adplatform.restApi.domain.statistics.dto.MediaTaxBillPaymentFileDto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
@@ -116,11 +117,13 @@ public class MediaPlacementDto {
             private String companyName;
             private Integer mediaId;
             private String mediaName;
+            private Integer placementId;
             private String name;
             private Integer width;
             private Integer height;
             private String widthHeightRate;
             private String url;
+            private MediaPlacementFileDto.Response.FileInfo mediaPlacementFiles;
             private String memo;
             private String adminMemo;
             private MediaPlacement.Status status;

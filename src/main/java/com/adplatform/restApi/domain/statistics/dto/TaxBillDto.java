@@ -37,6 +37,15 @@ public class TaxBillDto {
 
         @Getter
         @Setter
+        public static class BusinessTaxBillUpdate {
+            @NotNull
+            private Integer id;
+            private List<MultipartFile> businessAccountTaxBillFiles = new ArrayList<>();
+            private String adminMemo;
+        }
+
+        @Getter
+        @Setter
         public static class Confirm {
             @NotNull
             private Integer id;

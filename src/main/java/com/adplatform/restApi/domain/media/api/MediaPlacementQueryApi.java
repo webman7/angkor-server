@@ -8,10 +8,12 @@ import com.adplatform.restApi.domain.media.dao.placement.MediaPlacementRepositor
 import com.adplatform.restApi.domain.media.domain.Media;
 import com.adplatform.restApi.domain.media.domain.MediaPlacement;
 import com.adplatform.restApi.domain.media.dto.placement.MediaPlacementDto;
+import com.adplatform.restApi.domain.media.dto.placement.MediaPlacementFileDto;
 import com.adplatform.restApi.domain.media.dto.placement.MediaPlacementMapper;
 import com.adplatform.restApi.domain.media.exception.MediaNotFoundException;
 import com.adplatform.restApi.domain.media.exception.PlacementNotFoundException;
 import com.adplatform.restApi.domain.media.service.MediaPlacementFindUtils;
+import com.adplatform.restApi.domain.statistics.dto.MediaTaxBillFileDto;
 import com.adplatform.restApi.domain.user.dao.UserRepository;
 import com.adplatform.restApi.domain.user.domain.User;
 import com.adplatform.restApi.domain.user.service.UserFindUtils;
@@ -47,7 +49,8 @@ public class MediaPlacementQueryApi {
         Media media = this.mediaRepository.findById(mediaPlacement.getMedia().getId()).orElseThrow(MediaNotFoundException::new);
         Company company = CompanyFindUtils.findByIdOrElseThrow(media.getCompany().getId(), this.companyRepository);
         User user = UserFindUtils.findByIdOrElseThrow(mediaPlacement.getCreatedUserNo(), this.userRepository);
+        MediaPlacementFileDto.Response.FileInfo mediaPlacementFile = this.mediaPlacementRepository.findByMediaPlacementIdFileInfo(id);
 
-        return this.mediaPlacementMapper.toResponse(MediaPlacementFindUtils.findByIdOrElseThrow(id, this.mediaPlacementRepository), media, company, user);
+        return this.mediaPlacementMapper.toResponse(MediaPlacementFindUtils.findByIdOrElseThrow(id, this.mediaPlacementRepository), media, company, user, mediaPlacementFile);
     }
 }

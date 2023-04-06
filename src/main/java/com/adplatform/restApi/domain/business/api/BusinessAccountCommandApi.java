@@ -4,6 +4,7 @@ import com.adplatform.restApi.domain.business.domain.BusinessAccount;
 import com.adplatform.restApi.domain.business.dto.user.BusinessAccountUserDto;
 import com.adplatform.restApi.domain.business.service.BusinessAccountSaveService;
 import com.adplatform.restApi.domain.business.dto.account.BusinessAccountDto;
+import com.adplatform.restApi.domain.statistics.dto.TaxBillDto;
 import com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount;
 import com.adplatform.restApi.global.config.security.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
@@ -90,8 +91,8 @@ public class BusinessAccountCommandApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("/tax/issue")
-    public void updateTaxIssue(@RequestBody @Valid BusinessAccountDto.Request.UpdateIssue request) {
+    @PatchMapping("/tax/bill/issue")
+    public void updateTaxIssue(@Valid TaxBillDto.Request.BusinessTaxBillUpdate request) {
         this.businessAccountSaveService.updateTaxIssue(request, SecurityUtils.getLoginUserNo());
     }
 }

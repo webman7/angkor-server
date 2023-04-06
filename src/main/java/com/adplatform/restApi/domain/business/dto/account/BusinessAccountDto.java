@@ -337,6 +337,8 @@ public class BusinessAccountDto {
             private Integer id;
             private Integer businessAccountId;
             private String businessAccountName;
+            private Integer companyId;
+            private String companyName;
             private Integer statDate;
             private Float supplyAmount;
             private Float vatAmount;
@@ -351,6 +353,8 @@ public class BusinessAccountDto {
                     Integer id,
                     Integer businessAccountId,
                     String businessAccountName,
+                    Integer companyId,
+                    String companyName,
                     Integer statDate,
                     Float supplyAmount,
                     Float vatAmount,
@@ -362,6 +366,8 @@ public class BusinessAccountDto {
                 this.id = id;
                 this.businessAccountId = businessAccountId;
                 this.businessAccountName = businessAccountName;
+                this.companyId = companyId;
+                this.companyName = companyName;
                 this.statDate = statDate;
                 this.supplyAmount = supplyAmount;
                 this.vatAmount = vatAmount;

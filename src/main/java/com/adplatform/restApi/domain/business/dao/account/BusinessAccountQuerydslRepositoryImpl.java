@@ -499,6 +499,8 @@ public class BusinessAccountQuerydslRepositoryImpl implements BusinessAccountQue
                         businessAccountTaxBill.id,
                         businessAccount.id,
                         businessAccount.name,
+                        company.id,
+                        company.name,
                         businessAccountTaxBill.statDate,
                         businessAccountTaxBill.supplyAmount,
                         businessAccountTaxBill.vatAmount,

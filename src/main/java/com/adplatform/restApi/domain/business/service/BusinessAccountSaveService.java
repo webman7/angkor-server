@@ -36,17 +36,23 @@ import com.adplatform.restApi.domain.history.dto.adaccount.user.AdAccountUserInf
 import com.adplatform.restApi.domain.history.dto.business.user.BusinessAccountUserInfoHistoryDto;
 import com.adplatform.restApi.domain.history.dto.business.user.BusinessAccountUserInfoHistoryMapper;
 import com.adplatform.restApi.domain.statistics.dao.taxbill.BusinessAccountTaxBillRepository;
-import com.adplatform.restApi.domain.statistics.domain.taxbill.BusinessAccountTaxBill;
+import com.adplatform.restApi.domain.statistics.domain.taxbill.*;
+import com.adplatform.restApi.domain.statistics.dto.TaxBillDto;
 import com.adplatform.restApi.domain.statistics.service.BusinessAccountTaxBillFindUtils;
 import com.adplatform.restApi.domain.user.dto.user.UserDto;
 import com.adplatform.restApi.domain.user.service.UserQueryService;
 import com.adplatform.restApi.domain.user.domain.User;
 import com.adplatform.restApi.domain.wallet.domain.WalletMaster;
 import com.adplatform.restApi.global.config.security.util.SecurityUtils;
+import com.adplatform.restApi.infra.file.service.AwsFileService;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -79,6 +85,7 @@ public class BusinessAccountSaveService {
     private final CompanyRepository companyRepository;
     private final BusinessAccountPreDeferredPaymentMapper businessAccountPreDeferredPaymentMapper;
     private final BusinessAccountPreDeferredPaymentRepository businessAccountPreDeferredPaymentRepository;
+    private final AwsFileService awsFileService;
 
     public void save(BusinessAccountDto.Request.Save request, Integer loginUserNo) {
 
@@ -345,12 +352,47 @@ public class BusinessAccountSaveService {
         this.businessAccountQueryMapper.updateRefundAccount(request, loginUserNo);
     }
 
-    public void updateTaxIssue(BusinessAccountDto.Request.UpdateIssue request, Integer loginUserNo) {
+    public void updateTaxIssue(TaxBillDto.Request.BusinessTaxBillUpdate request, Integer loginUserNo) {
         BusinessAccountTaxBill businessAccountTaxBill = BusinessAccountTaxBillFindUtils.findByIdOrElseThrow(request.getId(), this.businessAccountTaxBillRepository);
         if(!businessAccountTaxBill.isIssueStatus()) {
-            this.businessAccountQueryMapper.updateTaxIssue(request, loginUserNo);
+            businessAccountTaxBill.update(request);
+            if(request.getBusinessAccountTaxBillFiles().size() > 0) {
+                request.getBusinessAccountTaxBillFiles().forEach(file -> businessAccountTaxBill.addBusinessAccountTaxBillFile(this.saveBusinessAccountTaxBillFile(request, businessAccountTaxBill, file)));
+            }
+//            this.businessAccountQueryMapper.updateTaxIssue(request, loginUserNo);
         }
 
+    }
+
+    @SneakyThrows
+    private BusinessAccountTaxBillFile saveBusinessAccountTaxBillFile(TaxBillDto.Request.BusinessTaxBillUpdate request, BusinessAccountTaxBill businessAccountTaxBill, MultipartFile file) {
+        String originalFilename = file.getOriginalFilename();
+        String mimetype = Files.probeContentType(Paths.get(originalFilename));
+        String savedFileUrl = this.awsFileService.saveBusinessAccountTaxBillFile(request, file);
+        int index = savedFileUrl.lastIndexOf("/");
+        String savedFilename = savedFileUrl.substring(index+1);
+        return new BusinessAccountTaxBillFile(businessAccountTaxBill, this.mediaTaxBillFileInformation(file, savedFileUrl, savedFilename, originalFilename, mimetype));
+    }
+
+    @SneakyThrows
+    private FileInformation mediaTaxBillFileInformation(MultipartFile file, String savedFileUrl, String savedFilename, String originalFilename, String mimetype) {
+        FileInformation.FileType fileType;
+        if (mimetype.startsWith("image")) {
+            fileType = FileInformation.FileType.IMAGE;
+        } else if (mimetype.startsWith("application/pdf")) {
+            fileType = FileInformation.FileType.PDF;
+        } else {
+            throw new UnsupportedOperationException();
+        }
+
+        return FileInformation.builder()
+                .url(savedFileUrl)
+                .fileType(fileType)
+                .fileSize(file.getSize())
+                .filename(savedFilename)
+                .originalFileName(originalFilename)
+                .mimeType(mimetype)
+                .build();
     }
 
 }

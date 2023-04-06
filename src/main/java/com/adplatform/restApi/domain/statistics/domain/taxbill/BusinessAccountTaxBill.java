@@ -1,5 +1,7 @@
 package com.adplatform.restApi.domain.statistics.domain.taxbill;
 
+import com.adplatform.restApi.domain.statistics.dto.TaxBillDto;
+import com.adplatform.restApi.global.config.security.util.SecurityUtils;
 import com.adplatform.restApi.global.converter.BooleanToStringYOrNConverter;
 import com.adplatform.restApi.global.entity.BaseEntity;
 import lombok.AccessLevel;
@@ -8,11 +10,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -33,6 +34,12 @@ public class BusinessAccountTaxBill extends BaseEntity {
 
     @Column(name = "total_amount", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2)")
     private Float totalAmount;
+
+    @Column(name = "admin_memo", length = 1000)
+    private String adminMemo;
+
+    @OneToMany(mappedBy = "businessAccountTaxBill", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<BusinessAccountTaxBillFile> businessAccountTaxBillFiles = new ArrayList<>();
 
     @Convert(converter = BooleanToStringYOrNConverter.class)
     @Column(name = "issue_status", nullable = false, columnDefinition = "CHAR(1)")
@@ -59,5 +66,17 @@ public class BusinessAccountTaxBill extends BaseEntity {
         this.vatAmount = vatAmount;
         this.totalAmount = totalAmount;
         this.issueStatus = issueStatus;
+    }
+
+    public BusinessAccountTaxBill update(TaxBillDto.Request.BusinessTaxBillUpdate request) {
+        this.adminMemo = request.getAdminMemo();
+        this.issueUserNo = SecurityUtils.getLoginUserNo();
+        this.issueAt = LocalDateTime.now();
+        this.issueStatus = true;
+        return this;
+    }
+
+    public void addBusinessAccountTaxBillFile(BusinessAccountTaxBillFile file) {
+        this.businessAccountTaxBillFiles.add(file);
     }
 }

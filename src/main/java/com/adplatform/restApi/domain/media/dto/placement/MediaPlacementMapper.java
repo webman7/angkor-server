@@ -4,6 +4,7 @@ import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.media.domain.Media;
 import com.adplatform.restApi.domain.media.domain.MediaPlacement;
 import com.adplatform.restApi.domain.media.domain.Placement;
+import com.adplatform.restApi.domain.statistics.dto.MediaTaxBillFileDto;
 import com.adplatform.restApi.domain.user.domain.User;
 import com.adplatform.restApi.global.dto.BaseMapperConfig;
 import org.mapstruct.Mapper;
@@ -29,12 +30,14 @@ public interface MediaPlacementMapper {
     @Mapping(target = "companyName", source = "company.name")
     @Mapping(target = "mediaId", source = "media.id")
     @Mapping(target = "mediaName", source = "media.name")
+    @Mapping(target = "placementId", source = "mediaPlacement.placementId")
     @Mapping(target = "name", source = "mediaPlacement.name")
     @Mapping(target = "url", source = "mediaPlacement.url")
+    @Mapping(target = "mediaPlacementFiles", source = "mediaPlacementFile")
     @Mapping(target = "memo", source = "mediaPlacement.memo")
     @Mapping(target = "adminMemo", source = "mediaPlacement.adminMemo")
     @Mapping(target = "status", source = "mediaPlacement.status")
     @Mapping(target = "regUserId", source = "user.loginId")
     @Mapping(target = "createdAt", source = "mediaPlacement.createdAt")
-    MediaPlacementDto.Response.MediaPlacementInfo toResponse(MediaPlacement mediaPlacement, Media media, Company company, User user);
+    MediaPlacementDto.Response.MediaPlacementInfo toResponse(MediaPlacement mediaPlacement, Media media, Company company, User user, MediaPlacementFileDto.Response.FileInfo mediaPlacementFile);
 }

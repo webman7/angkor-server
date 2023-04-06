@@ -6,9 +6,9 @@ import com.adplatform.restApi.domain.media.domain.Media;
 import com.adplatform.restApi.domain.media.domain.MediaPlacement;
 import com.adplatform.restApi.domain.media.dto.MediaDto;
 import com.adplatform.restApi.domain.media.dto.QMediaDto_Response_Search;
-import com.adplatform.restApi.domain.media.dto.placement.MediaPlacementDto;
-import com.adplatform.restApi.domain.media.dto.placement.QMediaPlacementDto_Response_Default;
-import com.adplatform.restApi.domain.media.dto.placement.QMediaPlacementDto_Response_Search;
+import com.adplatform.restApi.domain.media.dto.placement.*;
+import com.adplatform.restApi.domain.statistics.dto.MediaTaxBillFileDto;
+import com.adplatform.restApi.domain.statistics.dto.QMediaTaxBillFileDto_Response_FileInfo;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -23,7 +23,10 @@ import java.util.List;
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
 import static com.adplatform.restApi.domain.media.domain.QMedia.media;
 import static com.adplatform.restApi.domain.media.domain.QMediaPlacement.mediaPlacement;
+import static com.adplatform.restApi.domain.media.domain.QMediaPlacementFile.mediaPlacementFile;
+import static com.adplatform.restApi.domain.statistics.domain.taxbill.QMediaTaxBillFile.mediaTaxBillFile;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
+import static com.querydsl.jpa.JPAExpressions.select;
 import static java.util.Objects.nonNull;
 
 @RequiredArgsConstructor
@@ -94,6 +97,24 @@ public class MediaPlacementQuerydslRepositoryImpl implements MediaPlacementQuery
                 .fetch();
 
         return content.size();
+    }
+
+    @Override
+    public MediaPlacementFileDto.Response.FileInfo findByMediaPlacementIdFileInfo(Integer id) {
+        return this.query.select(new QMediaPlacementFileDto_Response_FileInfo(
+                        mediaPlacementFile.information.fileType,
+                        mediaPlacementFile.information.fileSize,
+                        mediaPlacementFile.information.filename,
+                        mediaPlacementFile.information.originalFileName,
+                        mediaPlacementFile.information.url,
+                        mediaPlacementFile.information.mimeType
+                ))
+                .from(mediaPlacementFile)
+                .where(mediaPlacementFile.id.eq(select(mediaPlacementFile.id.max())
+                        .from(mediaPlacementFile)
+                        .where(mediaPlacementFile.mediaPlacement.id.eq(id)
+                        )))
+                .fetchOne();
     }
 
     private BooleanExpression statusEq(String status) {
