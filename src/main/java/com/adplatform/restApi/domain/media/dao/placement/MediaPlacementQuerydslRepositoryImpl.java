@@ -24,6 +24,7 @@ import static com.adplatform.restApi.domain.company.domain.QCompany.company;
 import static com.adplatform.restApi.domain.media.domain.QMedia.media;
 import static com.adplatform.restApi.domain.media.domain.QMediaPlacement.mediaPlacement;
 import static com.adplatform.restApi.domain.media.domain.QMediaPlacementFile.mediaPlacementFile;
+import static com.adplatform.restApi.domain.media.domain.QPlacement.placement;
 import static com.adplatform.restApi.domain.statistics.domain.taxbill.QMediaTaxBillFile.mediaTaxBillFile;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
 import static com.querydsl.jpa.JPAExpressions.select;
@@ -42,6 +43,7 @@ public class MediaPlacementQuerydslRepositoryImpl implements MediaPlacementQuery
                                 mediaPlacement.id,
                                 company.name,
                                 media.name,
+                                placement.name,
                                 mediaPlacement.name,
                                 mediaPlacement.width,
                                 mediaPlacement.height,
@@ -53,9 +55,10 @@ public class MediaPlacementQuerydslRepositoryImpl implements MediaPlacementQuery
                                 user.loginId,
                                 mediaPlacement.createdAt)
                 )
-                .from(media, company, user, mediaPlacement)
+                .from(media, company, user, mediaPlacement, placement)
                 .where(
                         media.company.id.eq(company.id),
+                        placement.id.eq(mediaPlacement.placementId),
                         mediaPlacement.createdUserNo.eq(user.id),
                         mediaPlacement.media.id.eq(media.id),
                         mediaPlacement.status.notIn(MediaPlacement.Status.D),
@@ -69,9 +72,10 @@ public class MediaPlacementQuerydslRepositoryImpl implements MediaPlacementQuery
                 .fetch();
 
         JPAQuery<Long> countQuery = this.query.select(media.count())
-                .from(media, company, user, mediaPlacement)
+                .from(media, company, user, mediaPlacement, placement)
                 .where(
                         media.company.id.eq(company.id),
+                        placement.id.eq(mediaPlacement.placementId),
                         mediaPlacement.createdUserNo.eq(user.id),
                         mediaPlacement.media.id.eq(media.id),
                         mediaPlacement.status.notIn(MediaPlacement.Status.D),

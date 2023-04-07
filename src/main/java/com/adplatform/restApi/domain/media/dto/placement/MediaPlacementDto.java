@@ -67,6 +67,7 @@ public class MediaPlacementDto {
             private Integer id;
             private String companyName;
             private String mediaName;
+            private String placementName;
             private String name;
             private Integer width;
             private Integer height;
@@ -82,6 +83,7 @@ public class MediaPlacementDto {
                     Integer id,
                     String companyName,
                     String mediaName,
+                    String placementName,
                     String name,
                     Integer width,
                     Integer height,
@@ -95,6 +97,7 @@ public class MediaPlacementDto {
                 this.id = id;
                 this.companyName = companyName;
                 this.mediaName = mediaName;
+                this.placementName = placementName;
                 this.name = name;
                 this.width = width;
                 this.height = height;
