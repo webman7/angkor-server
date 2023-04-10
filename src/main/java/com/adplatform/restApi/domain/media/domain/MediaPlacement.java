@@ -102,6 +102,9 @@ public class MediaPlacement extends BaseUpdatedEntity {
     }
 
     public MediaPlacement update(MediaPlacementDto.Request.Update request) {
+        if(!request.getPlacementId().equals(0)) {
+            this.placementId = request.getPlacementId();
+        }
         this.name = request.getName();
         this.width = request.getWidth();
         this.height = request.getHeight();

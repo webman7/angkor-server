@@ -50,8 +50,9 @@ public class MediaPlacementSaveService {
     public void update(MediaPlacementDto.Request.Update request) {
         try{
             Media media = MediaFindUtils.findByIdOrElseThrow(request.getMediaId(), this.mediaRepository);
-            Placement placement = PlacementFindUtils.findByIdOrElseThrow((request.getPlacementId()), this.placementRepository);
-
+            if(!request.getPlacementId().equals(0)) {
+                Placement placement = PlacementFindUtils.findByIdOrElseThrow((request.getPlacementId()), this.placementRepository);
+            }
             MediaPlacement mediaPlacement = MediaPlacementFindUtils.findByIdOrElseThrow(request.getId(), this.mediaPlacementRepository).update(request);
             if(request.getMediaPlacementFiles().size() > 0) {
                 request.getMediaPlacementFiles().forEach(file -> mediaPlacement.addMediaPlacementFile(this.saveMediaPlacementFile(request, mediaPlacement, file)));
