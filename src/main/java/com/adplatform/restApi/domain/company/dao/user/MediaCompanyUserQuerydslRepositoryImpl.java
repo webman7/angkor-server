@@ -113,7 +113,7 @@ public class MediaCompanyUserQuerydslRepositoryImpl implements MediaCompanyUserQ
                 ))
                 .from(company, mediaCompanyUser, user)
                 .where(company.id.eq(companyId),
-                        this.loginIdContains(searchRequest.getId()),
+                        this.loginIdContains(searchRequest.getUserId()),
                         this.nameContains(searchRequest.getName()),
                         mediaCompanyUser.company.id.eq(company.id),
                         mediaCompanyUser.user.id.eq(user.id),
@@ -127,7 +127,7 @@ public class MediaCompanyUserQuerydslRepositoryImpl implements MediaCompanyUserQ
         JPAQuery<Long> countQuery = this.query.select(mediaCompanyUser.count())
                 .from(company, mediaCompanyUser, user)
                 .where(company.id.eq(companyId),
-                        this.loginIdContains(searchRequest.getId()),
+                        this.loginIdContains(searchRequest.getUserId()),
                         this.nameContains(searchRequest.getName()),
                         mediaCompanyUser.company.id.eq(company.id),
                         mediaCompanyUser.user.id.eq(user.id),
