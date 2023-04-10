@@ -2,6 +2,7 @@ package com.adplatform.restApi.domain.company.dao.user;
 
 
 import com.adplatform.restApi.domain.company.domain.MediaCompanyUser;
+import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.company.dto.user.MediaCompanyUserDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,7 @@ public interface MediaCompanyUserQuerydslRepository {
     Integer findByCompanyIdCount(Integer companyId);
 //    List<MediaCompanyUserDto.Response.MediaCompanyUserInfo> mediaCompanyUserInfo(Integer companyId);
     Page<MediaCompanyUserDto.Response.MediaCompanyUserInfo> mediaCompanyUserInfo(Pageable pageable, Integer companyId);
+    Page<MediaCompanyUserDto.Response.MediaCompanyUserInfo> mediaCompanyUserSearch(Pageable pageable, Integer companyId, CompanyDto.Request.SearchCompanyUser searchRequest);
     List<MediaCompanyUserDto.Response.MediaCompanyUserInfo> mediaCompanyRequestUserInfo(Integer companyId);
     List<MediaCompanyUserDto.Response.MediaCompanyUserInfo> mediaCompanyMasterUserInfo(Integer companyId);
 

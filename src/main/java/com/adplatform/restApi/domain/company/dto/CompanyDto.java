@@ -55,6 +55,13 @@ public abstract class CompanyDto {
             private Integer companyId;
         }
 
+        @Getter
+        @Setter
+        public static class SearchCompanyUser {
+            private String id;
+            private String name;
+        }
+
 
         @Getter
         @Setter

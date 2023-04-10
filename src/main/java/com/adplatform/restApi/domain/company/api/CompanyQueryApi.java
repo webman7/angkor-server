@@ -84,6 +84,15 @@ public class CompanyQueryApi {
         return PageDto.create(this.mediaCompanyUserRepository.mediaCompanyUserInfo(pageable, companyId));
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}/users/search")
+    public PageDto<MediaCompanyUserDto.Response.MediaCompanyUserInfo> mediaCompanyUserSearch(
+            @PageableDefault Pageable pageable,
+            CompanyDto.Request.SearchCompanyUser searchRequest,
+            @PathVariable(name = "id") Integer companyId) {
+        return PageDto.create(this.mediaCompanyUserRepository.mediaCompanyUserSearch(pageable, companyId, searchRequest));
+    }
+
 //    @ResponseStatus(HttpStatus.OK)
 //    @GetMapping("/{id}/users")
 //    public List<MediaCompanyUserDto.Response.MediaCompanyUserInfo> mediaCompanyUserInfo(@PathVariable(name = "id") Integer companyId) {
