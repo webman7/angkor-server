@@ -84,6 +84,15 @@ public class BusinessAccountQueryApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/account/{id}/users/search")
+    public PageDto<BusinessAccountUserDto.Response.BusinessAccountUserInfo> businessAccountUserSearch(
+            @PathVariable(name = "id") Integer businessAccountId,
+            BusinessAccountDto.Request.SearchUser searchRequest,
+            @PageableDefault Pageable pageable) {
+        return PageDto.create(this.businessAccountUserRepository.businessAccountUserSearch(businessAccountId, searchRequest, pageable));
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/account/{id}/users/request")
     public List<BusinessAccountUserDto.Response.BusinessAccountUserInfo> businessAccountRequestUserInfo(@PathVariable(name = "id") Integer businessAccountId) {
         return this.businessAccountUserRepository.businessAccountRequestUserInfo(businessAccountId);
@@ -124,7 +133,13 @@ public class BusinessAccountQueryApi {
     }
 
 
-
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/search")
+    public PageDto<BusinessAccountDto.Response.BusinessAccountSearch> searchBusiness(
+            @PageableDefault Pageable pageable,
+            BusinessAccountDto.Request.SearchBusiness searchRequest) {
+        return PageDto.create(this.businessAccountRepository.searchBusiness(pageable, searchRequest));
+    }
 
 
 

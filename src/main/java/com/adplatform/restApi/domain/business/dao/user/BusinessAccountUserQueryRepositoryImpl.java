@@ -7,12 +7,14 @@ import com.adplatform.restApi.domain.advertiser.adgroup.dao.adgroup.AdGroupCondi
 import com.adplatform.restApi.domain.advertiser.adgroup.domain.AdGroup;
 import com.adplatform.restApi.domain.advertiser.adgroup.dto.adgroup.AdGroupDto;
 import com.adplatform.restApi.domain.business.domain.BusinessAccountUser;
+import com.adplatform.restApi.domain.business.dto.account.BusinessAccountDto;
 import com.adplatform.restApi.domain.business.dto.user.BusinessAccountUserDto;
 import com.adplatform.restApi.domain.business.dto.user.QBusinessAccountUserDto_Response_BusinessAccountUserInfo;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.user.domain.User;
 import com.adplatform.restApi.domain.user.dto.user.QUserDto_Response_BaseInfo;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -91,6 +94,45 @@ public class BusinessAccountUserQueryRepositoryImpl implements BusinessAccountUs
                         businessAccountUser.businessAccount.id.eq(businessAccount.id),
                         businessAccountUser.user.id.eq(user.id),
                         businessAccountUser.status.in(BusinessAccountUser.Status.Y),
+                        user.active.in(User.Active.Y, User.Active.L)
+                );
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public Page<BusinessAccountUserDto.Response.BusinessAccountUserInfo> businessAccountUserSearch(Integer businessAccountId, BusinessAccountDto.Request.SearchUser searchRequest, Pageable pageable) {
+        List<BusinessAccountUserDto.Response.BusinessAccountUserInfo> content = this.query.select(new QBusinessAccountUserDto_Response_BusinessAccountUserInfo(
+                        businessAccount.id,
+                        new QUserDto_Response_BaseInfo(
+                                user.id,
+                                user.loginId,
+                                user.name,
+                                user.phone
+                        ),
+                        businessAccountUser.memberType,
+                        businessAccountUser.accountingYN,
+                        businessAccountUser.status
+                ))
+                .from(businessAccount, businessAccountUser, user)
+                .where(businessAccount.id.eq(businessAccountId),
+                        this.loginIdContains(searchRequest.getUserId()),
+                        this.nameContains(searchRequest.getName()),
+                        businessAccountUser.businessAccount.id.eq(businessAccount.id),
+                        businessAccountUser.user.id.eq(user.id),
+                        businessAccountUser.status.notIn(BusinessAccountUser.Status.D),
+                        user.active.in(User.Active.Y, User.Active.L)
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = this.query.select(businessAccountUser.count())
+                .from(businessAccount, businessAccountUser, user)
+                .where(businessAccount.id.eq(businessAccountId),
+                        businessAccountUser.businessAccount.id.eq(businessAccount.id),
+                        businessAccountUser.user.id.eq(user.id),
+                        businessAccountUser.status.notIn(BusinessAccountUser.Status.D),
                         user.active.in(User.Active.Y, User.Active.L)
                 );
 
@@ -182,4 +224,11 @@ public class BusinessAccountUserQueryRepositoryImpl implements BusinessAccountUs
                 ).fetch();
     }
 
+    private BooleanExpression nameContains(String name) {
+        return StringUtils.hasText(name) ? user.name.contains(name) : null;
+    }
+
+    private BooleanExpression loginIdContains(String loginId) {
+        return StringUtils.hasText(loginId) ? user.loginId.contains(loginId) : null;
+    }
 }

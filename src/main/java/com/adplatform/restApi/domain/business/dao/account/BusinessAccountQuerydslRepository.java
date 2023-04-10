@@ -36,6 +36,8 @@ public interface BusinessAccountQuerydslRepository {
     List<BusinessAccountDto.Response.AdAccountInfo> businessAccountByAdAccounts(Integer businessAccountId);
     List<BusinessAccountDto.Response.AdAccountMemberInfo> businessAccountByAdAccountsMember(Integer businessAccountId, Integer loginUserNo);
     Page<BusinessAccountDto.Response.BusinessAccountCreditInfo> searchCredit(Pageable pageable, BusinessAccountDto.Request.SearchCredit searchRequest);
+    Page<BusinessAccountDto.Response.BusinessAccountSearch> searchBusiness(Pageable pageable, BusinessAccountDto.Request.SearchBusiness searchRequest);
+
     BusinessAccountDto.Response.BusinessAccountCreditInfo businessAccountCreditInfo(Integer businessAccountId);
     Page<BusinessAccountDto.Response.BusinessAccountTaxInfo> searchTax(Pageable pageable, BusinessAccountDto.Request.SearchTax searchRequest);
     void outOfBalanceUpdate(Integer businessAccountId, Boolean oufOfBalance);

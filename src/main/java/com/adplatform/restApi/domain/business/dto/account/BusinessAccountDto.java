@@ -1,6 +1,7 @@
 package com.adplatform.restApi.domain.business.dto.account;
 
 import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
+import com.adplatform.restApi.domain.bank.domain.Bank;
 import com.adplatform.restApi.domain.business.domain.BusinessAccount;
 import com.adplatform.restApi.domain.business.domain.BusinessAccountUser;
 import com.adplatform.restApi.domain.company.domain.Company;
@@ -41,8 +42,22 @@ public class BusinessAccountDto {
 
         @Getter
         @Setter
+        public static class SearchBusiness {
+            private Integer id;
+            private String name;
+        }
+
+        @Getter
+        @Setter
         public static class SearchCredit {
             private Integer id;
+            private String name;
+        }
+
+        @Getter
+        @Setter
+        public static class SearchUser {
+            private String userId;
             private String name;
         }
 
@@ -104,6 +119,9 @@ public class BusinessAccountDto {
             @NotNull
             @Email
             private String taxBillEmail;
+            private Integer bankId;
+            private String accountNumber;
+            private String accountOwner;
         }
 
         @Getter
@@ -142,6 +160,9 @@ public class BusinessAccountDto {
             @NotNull
             @Email
             private String taxBillEmail;
+            private Integer bankId;
+            private String accountNumber;
+            private String accountOwner;
         }
 
 
@@ -231,6 +252,7 @@ public class BusinessAccountDto {
                 this.statusNCount = statusNCount;
             }
         }
+
         @Getter
         @Setter
         public static class BusinessAccountInfo {
@@ -299,6 +321,30 @@ public class BusinessAccountDto {
                 this.id = id;
                 this.name = name;
                 this.memberType = memberType;
+            }
+        }
+
+        @Getter
+        @Setter
+        public static class BusinessAccountSearch {
+            private Integer id;
+            private String name;
+            private Company company;
+            private BusinessAccount.PaymentType type;
+            private BusinessAccount.Config config;
+
+            @QueryProjection
+            public BusinessAccountSearch(
+                    Integer id,
+                    String name,
+                    Company company,
+                    BusinessAccount.PaymentType type,
+                    BusinessAccount.Config config) {
+                this.id = id;
+                this.name = name;
+                this.company = company;
+                this.type = type;
+                this.config = config;
             }
         }
 
@@ -406,6 +452,9 @@ public class BusinessAccountDto {
             private String zipCode;
             private String businessCategory;
             private String businessItem;
+            private Bank bank;
+            private String accountNumber;
+            private String accountOwner;
             private com.adplatform.restApi.global.value.Email taxBillEmail;
             @QueryProjection
             public CompanyInfo(Integer id,
@@ -418,6 +467,9 @@ public class BusinessAccountDto {
                                String zipCode,
                                String businessCategory,
                                String businessItem,
+                               Bank bank,
+                               String accountNumber,
+                               String accountOwner,
                                com.adplatform.restApi.global.value.Email taxBillEmail) {
                 this.id = id;
                 this.name = name;
@@ -429,6 +481,9 @@ public class BusinessAccountDto {
                 this.zipCode = zipCode;
                 this.businessCategory = businessCategory;
                 this.businessItem = businessItem;
+                this.bank = bank;
+                this.accountNumber = accountNumber;
+                this.accountOwner = accountOwner;
                 this.taxBillEmail = taxBillEmail;
             }
         }

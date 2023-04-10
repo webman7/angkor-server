@@ -5,6 +5,7 @@ import com.adplatform.restApi.domain.adaccount.dao.user.AdAccountUserRepository;
 import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
 import com.adplatform.restApi.domain.adaccount.dto.user.AdAccountUserDto;
 import com.adplatform.restApi.domain.adaccount.service.AdAccountUserQueryUtils;
+import com.adplatform.restApi.domain.bank.dao.BankRepository;
 import com.adplatform.restApi.domain.bank.domain.Bank;
 import com.adplatform.restApi.domain.bank.service.BankFindUtils;
 import com.adplatform.restApi.domain.business.dao.account.BusinessAccountPreDeferredPaymentRepository;
@@ -81,7 +82,7 @@ public class BusinessAccountSaveService {
     private final CompanyService companyService;
     private final CompanyMapper companyMapper;
     private final BusinessAccountTaxBillRepository businessAccountTaxBillRepository;
-
+    private final BankRepository bankRepository;
     private final CompanyRepository companyRepository;
     private final BusinessAccountPreDeferredPaymentMapper businessAccountPreDeferredPaymentMapper;
     private final BusinessAccountPreDeferredPaymentRepository businessAccountPreDeferredPaymentRepository;
@@ -133,6 +134,78 @@ public class BusinessAccountSaveService {
         requestCompany.setRepresentationName(request.getRepresentationName());
         requestCompany.setTaxBillEmail(request.getTaxBillEmail());
         this.companyRepository.save(CompanyFindUtils.findByIdOrElseThrow(request.getCompanyId(), this.companyRepository).update(requestCompany, null));
+    }
+
+    public void saveAdmin(BusinessAccountDto.Request.Save request, Integer loginUserNo) {
+
+        // 회사 중복 체크
+        CompanyDto.Request.SearchKeyword searchRequest = new CompanyDto.Request.SearchKeyword();
+        searchRequest.setSearchKeyword(request.getRegistrationNumber());
+
+        Integer companyCount = this.companyRepository.registrationNumberCount(searchRequest);
+
+        if(!companyCount.equals(0)) {
+            throw new CompanyAlreadyExistException();
+        }
+
+        if(request.getBankId().equals(0)) {
+            // 회사 정보 인서트
+            Company company = this.companyRepository.save(this.companyMapper.toBusinessEntity(request));
+            // 인서트한 아이디를 가져온다.
+            request.setCompanyId(company.getId());
+
+            BusinessAccount businessAccount = this.businessAccountMapper.toEntity(request, company)
+                    .changeWalletMaster(WalletMaster.create());
+            Integer businessAccountId = this.businessAccountRepository.save(businessAccount).getId();
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            Calendar c1 = Calendar.getInstance();
+            String startDate = sdf.format(c1.getTime());
+
+            // 선불 시작일 세팅
+            this.businessAccountPreDeferredPaymentRepository.save(this.businessAccountPreDeferredPaymentMapper.toEntity(businessAccountId, Integer.parseInt(startDate)));
+        } else {
+            Bank bank = BankFindUtils.findByIdOrElseThrow(request.getBankId(), this.bankRepository);
+
+            // 회사 정보 인서트
+            Company company = this.companyRepository.save(this.companyMapper.toBusinessAdminEntity(request, bank));
+            // 인서트한 아이디를 가져온다.
+            request.setCompanyId(company.getId());
+
+            BusinessAccount businessAccount = this.businessAccountMapper.toEntity(request, company)
+                    .changeWalletMaster(WalletMaster.create());
+            Integer businessAccountId = this.businessAccountRepository.save(businessAccount).getId();
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            Calendar c1 = Calendar.getInstance();
+            String startDate = sdf.format(c1.getTime());
+
+            // 선불 시작일 세팅
+            this.businessAccountPreDeferredPaymentRepository.save(this.businessAccountPreDeferredPaymentMapper.toEntity(businessAccountId, Integer.parseInt(startDate)));
+        }
+    }
+
+    public void updateAdmin(BusinessAccountDto.Request.Update request, Integer loginUserNo) {
+
+        this.businessAccountRepository.save(BusinessAccountFindUtils.findByIdOrElseThrow(request.getId(), this.businessAccountRepository).update(request));
+        CompanyDto.Request.Update requestCompany = new CompanyDto.Request.Update();
+        requestCompany.setName(request.getCompanyName());
+        requestCompany.setBaseAddress(request.getBaseAddress());
+        requestCompany.setDetailAddress(request.getDetailAddress());
+        requestCompany.setZipCode(request.getZipCode());
+        requestCompany.setRegistrationNumber(request.getRegistrationNumber());
+        requestCompany.setBusinessItem(request.getBusinessItem());
+        requestCompany.setBusinessCategory(request.getBusinessCategory());
+        requestCompany.setRepresentationName(request.getRepresentationName());
+        requestCompany.setTaxBillEmail(request.getTaxBillEmail());
+        requestCompany.setAccountNumber(request.getAccountNumber());
+        requestCompany.setAccountOwner(request.getAccountOwner());
+        Bank bank = null;
+        if(!request.getBankId().equals(0)) {
+            bank = BankFindUtils.findByIdOrElseThrow(request.getBankId(), this.bankRepository);
+        }
+
+        this.companyRepository.save(CompanyFindUtils.findByIdOrElseThrow(request.getCompanyId(), this.companyRepository).update(requestCompany, bank));
     }
 
     public void saveUserInvite(BusinessAccountUserDto.Request.SaveUser request, Integer loginUserNo) {

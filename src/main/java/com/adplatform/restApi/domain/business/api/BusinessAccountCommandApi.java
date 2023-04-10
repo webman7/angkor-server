@@ -37,6 +37,18 @@ public class BusinessAccountCommandApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @PostMapping("admin")
+    public void saveAdmin(@RequestBody @Valid BusinessAccountDto.Request.Save request) {
+        this.businessAccountSaveService.saveAdmin(request, SecurityUtils.getLoginUserNo());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("admin")
+    public void updateAdmin(@RequestBody @Valid BusinessAccountDto.Request.Update request) {
+        this.businessAccountSaveService.updateAdmin(request, SecurityUtils.getLoginUserNo());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @PostMapping("user/invite")
     public void saveUserInvite(@RequestBody @Valid BusinessAccountUserDto.Request.SaveUser request) {
         this.businessAccountSaveService.saveUserInvite(request, SecurityUtils.getLoginUserNo());

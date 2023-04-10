@@ -32,6 +32,7 @@ import java.util.Optional;
 
 import static com.adplatform.restApi.domain.adaccount.domain.QAdAccount.adAccount;
 import static com.adplatform.restApi.domain.adaccount.domain.QAdAccountUser.adAccountUser;
+import static com.adplatform.restApi.domain.bank.domain.QBank.bank;
 import static com.adplatform.restApi.domain.business.domain.QBusinessAccount.businessAccount;
 import static com.adplatform.restApi.domain.business.domain.QBusinessAccountUser.businessAccountUser;
 import static com.adplatform.restApi.domain.business.dto.account.BusinessAccountDto.Request;
@@ -395,6 +396,9 @@ public class BusinessAccountQuerydslRepositoryImpl implements BusinessAccountQue
                             company.zipCode,
                             company.businessCategory,
                             company.businessItem,
+                            company.bank,
+                            company.accountNumber,
+                            company.accountOwner,
                             company.taxBillEmail
                         )
                 ))
@@ -419,6 +423,46 @@ public class BusinessAccountQuerydslRepositoryImpl implements BusinessAccountQue
                 .where(businessAccount.id.eq(businessAccountId),
                         businessAccount.id.eq(walletMaster.id)
                 ).fetchOne();
+    }
+
+
+    @Override
+    public Page<BusinessAccountDto.Response.BusinessAccountSearch> searchBusiness(
+            Pageable pageable, BusinessAccountDto.Request.SearchBusiness searchRequest) {
+        List<BusinessAccountDto.Response.BusinessAccountSearch> content = this.getSearchBusinessQuery(pageable, searchRequest)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = this.query.select(Wildcard.count)
+                .from(businessAccount, company)
+                .where(
+                        businessAccount.company.id.eq(company.id),
+                        this.eqId(searchRequest.getId()),
+                        this.containsName(searchRequest.getName()));
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    private JPAQuery<BusinessAccountDto.Response.BusinessAccountSearch> getSearchBusinessQuery(
+            Pageable pageable,
+            BusinessAccountDto.Request.SearchBusiness searchRequest) {
+
+        JPAQuery<BusinessAccountDto.Response.BusinessAccountSearch> query = this.query.select(new QBusinessAccountDto_Response_BusinessAccountSearch(
+                        businessAccount.id,
+                        businessAccount.name,
+                        company,
+                        businessAccount.type,
+                        businessAccount.config))
+                .from(businessAccount, company)
+                .where(
+                        businessAccount.company.id.eq(company.id),
+                        this.eqId(searchRequest.getId()),
+                        this.containsName(searchRequest.getName()));
+
+        return Objects.nonNull(pageable)
+                ? query.orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(BusinessAccount.class, "businessAccount", pageable.getSort()).toArray(OrderSpecifier[]::new))
+                : query;
     }
 
     @Override

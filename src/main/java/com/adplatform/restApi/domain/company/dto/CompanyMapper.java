@@ -30,6 +30,17 @@ public abstract class CompanyMapper {
     @Mapping(target = "accountOwner", ignore = true)
     public abstract Company toBusinessEntity(BusinessAccountDto.Request.Save request);
 
+    @Mapping(target = "name", source = "request.companyName")
+    @Mapping(target = "type", expression = "java(Company.Type.BUSINESS)")
+    @Mapping(target = "baseAddress", source = "request.baseAddress")
+    @Mapping(target = "detailAddress", source = "request.detailAddress")
+    @Mapping(target = "zipCode", source = "request.zipCode")
+    @Mapping(target = "taxBillEmail", qualifiedByName = "createEmail")
+    @Mapping(target = "bank", source = "bank")
+    @Mapping(target = "accountNumber", source = "request.accountNumber")
+    @Mapping(target = "accountOwner", source = "request.accountOwner")
+    public abstract Company toBusinessAdminEntity(BusinessAccountDto.Request.Save request, Bank bank);
+
     @Mapping(target = "name", source = "request.name")
     @Mapping(target = "type", expression = "java(Company.Type.MEDIA)")
     @Mapping(target = "baseAddress", source = "request.baseAddress")
