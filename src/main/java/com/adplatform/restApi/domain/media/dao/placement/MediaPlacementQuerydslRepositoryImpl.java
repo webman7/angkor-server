@@ -55,10 +55,11 @@ public class MediaPlacementQuerydslRepositoryImpl implements MediaPlacementQuery
                                 user.loginId,
                                 mediaPlacement.createdAt)
                 )
-                .from(media, company, user, mediaPlacement, placement)
+                .from(media, company, user, mediaPlacement)
+                .leftJoin(placement)
+                .on(placement.id.eq(mediaPlacement.placementId))
                 .where(
                         media.company.id.eq(company.id),
-                        placement.id.eq(mediaPlacement.placementId),
                         mediaPlacement.createdUserNo.eq(user.id),
                         mediaPlacement.media.id.eq(media.id),
                         mediaPlacement.status.notIn(MediaPlacement.Status.D),
@@ -72,10 +73,11 @@ public class MediaPlacementQuerydslRepositoryImpl implements MediaPlacementQuery
                 .fetch();
 
         JPAQuery<Long> countQuery = this.query.select(media.count())
-                .from(media, company, user, mediaPlacement, placement)
+                .from(media, company, user, mediaPlacement)
+                .leftJoin(placement)
+                .on(placement.id.eq(mediaPlacement.placementId))
                 .where(
                         media.company.id.eq(company.id),
-                        placement.id.eq(mediaPlacement.placementId),
                         mediaPlacement.createdUserNo.eq(user.id),
                         mediaPlacement.media.id.eq(media.id),
                         mediaPlacement.status.notIn(MediaPlacement.Status.D),
