@@ -1,5 +1,6 @@
 package com.adplatform.restApi.domain.media.dto.placement;
 
+import com.adplatform.restApi.domain.media.domain.FileInformation;
 import com.adplatform.restApi.domain.media.domain.MediaPlacement;
 import com.adplatform.restApi.domain.media.domain.Placement;
 import com.adplatform.restApi.domain.statistics.dto.MediaTaxBillPaymentFileDto;
@@ -75,6 +76,9 @@ public class MediaPlacementDto {
             private String url;
             private String memo;
             private String adminMemo;
+            private String mediaPlacementFileUrl;
+            private String mediaPlacementFileName;
+            private FileInformation.FileType fileType;
             private MediaPlacement.Status status;
             private String regUserId;
             private LocalDateTime createdAt;
@@ -91,6 +95,9 @@ public class MediaPlacementDto {
                     String url,
                     String memo,
                     String adminMemo,
+                    String mediaPlacementFileUrl,
+                    String mediaPlacementFileName,
+                    FileInformation.FileType fileType,
                     MediaPlacement.Status status,
                     String regUserId,
                     LocalDateTime createdAt) {
@@ -105,6 +112,9 @@ public class MediaPlacementDto {
                 this.url = url;
                 this.memo = memo;
                 this.adminMemo = adminMemo;
+                this.mediaPlacementFileUrl = mediaPlacementFileUrl;
+                this.mediaPlacementFileName = mediaPlacementFileName;
+                this.fileType = fileType;
                 this.status = status;
                 this.regUserId = regUserId;
                 this.createdAt = createdAt;

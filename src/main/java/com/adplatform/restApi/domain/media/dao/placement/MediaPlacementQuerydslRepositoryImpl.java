@@ -22,11 +22,13 @@ import java.util.List;
 
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
 import static com.adplatform.restApi.domain.media.domain.QMedia.media;
+import static com.adplatform.restApi.domain.media.domain.QMediaFile.mediaFile;
 import static com.adplatform.restApi.domain.media.domain.QMediaPlacement.mediaPlacement;
 import static com.adplatform.restApi.domain.media.domain.QMediaPlacementFile.mediaPlacementFile;
 import static com.adplatform.restApi.domain.media.domain.QPlacement.placement;
 import static com.adplatform.restApi.domain.statistics.domain.taxbill.QMediaTaxBillFile.mediaTaxBillFile;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
+import static com.querydsl.core.types.ExpressionUtils.as;
 import static com.querydsl.jpa.JPAExpressions.select;
 import static java.util.Objects.nonNull;
 
@@ -51,11 +53,41 @@ public class MediaPlacementQuerydslRepositoryImpl implements MediaPlacementQuery
                                 mediaPlacement.url,
                                 mediaPlacement.memo,
                                 mediaPlacement.adminMemo,
+                                as(select(mediaPlacementFile.information.url)
+                                        .from(mediaPlacementFile)
+                                        .where(mediaPlacementFile.mediaPlacement.id.eq(mediaPlacement.id),
+                                                mediaPlacementFile.id.eq(select(mediaPlacementFile.id.max())
+                                                        .from(mediaPlacementFile)
+                                                        .where(mediaPlacementFile.mediaPlacement.id.eq(mediaPlacement.id)
+                                                        ))
+                                        ), "mediaPlacementFileUrl"),
+                                as(select(mediaPlacementFile.information.originalFileName)
+                                        .from(mediaPlacementFile)
+                                        .where(mediaPlacementFile.mediaPlacement.id.eq(mediaPlacement.id),
+                                                mediaPlacementFile.id.eq(select(mediaPlacementFile.id.max())
+                                                        .from(mediaPlacementFile)
+                                                        .where(mediaPlacementFile.mediaPlacement.id.eq(mediaPlacement.id)
+                                                        ))
+                                        ), "mediaPlacementFileName"),
+                                as(select(mediaPlacementFile.information.fileType)
+                                        .from(mediaPlacementFile)
+                                        .where(mediaPlacementFile.mediaPlacement.id.eq(mediaPlacement.id),
+                                                mediaPlacementFile.id.eq(select(mediaPlacementFile.id.max())
+                                                        .from(mediaPlacementFile)
+                                                        .where(mediaPlacementFile.mediaPlacement.id.eq(mediaPlacement.id)
+                                                        ))
+                                        ), "mediaPlacementFileType"),
                                 mediaPlacement.status,
                                 user.loginId,
                                 mediaPlacement.createdAt)
                 )
                 .from(media, company, user, mediaPlacement)
+                .leftJoin(mediaPlacementFile)
+                .on(mediaPlacementFile.mediaPlacement.id.eq(mediaPlacement.id),
+                        mediaPlacementFile.id.eq(select(mediaPlacementFile.id.max())
+                                .from(mediaPlacementFile)
+                                .where(mediaPlacementFile.mediaPlacement.id.eq(mediaPlacement.id)
+                                )))
                 .leftJoin(placement)
                 .on(placement.id.eq(mediaPlacement.placementId))
                 .where(
