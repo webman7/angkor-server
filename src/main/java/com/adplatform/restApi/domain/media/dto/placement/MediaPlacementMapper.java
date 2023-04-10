@@ -23,7 +23,7 @@ public interface MediaPlacementMapper {
     @Mapping(target = "memo", source = "request.memo")
     @Mapping(target = "adminMemo", source = "request.adminMemo")
     @Mapping(target = "status", expression = "java(MediaPlacement.Status.N)")
-    MediaPlacement toEntity(MediaPlacementDto.Request.Save request, Media media, Placement placement);
+    MediaPlacement toEntity(MediaPlacementDto.Request.Save request, Media media);
 
     @Mapping(target = "id", source = "mediaPlacement.id")
     @Mapping(target = "companyId", source = "company.id")
