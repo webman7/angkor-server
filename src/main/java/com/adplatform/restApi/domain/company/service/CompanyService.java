@@ -257,7 +257,7 @@ public class CompanyService {
         }
     }
 
-    public void updateUserAccounting(MediaCompanyUserDto.Request.UserUpdate request, Integer loginUserNo) {
+    public void updateUserAccounting(MediaCompanyUserDto.Request.UserUpdate request, Integer loginUserNo, String adminYN) {
 
         // MASTER 권한 체크
         MediaCompanyUserDto.Response.MediaCompanyUserInfo mediaCompanyUserInfo = this.mediaCompanyUserRepository.mediaCompanyUserInfo(request.getCompanyId(), loginUserNo);
@@ -269,11 +269,14 @@ public class CompanyService {
             throw new MediaCompanyUserMasterException();
         }
 
-        // 등록자가 회계권한이 있는지 체크
-        MediaCompanyUser mediaCompanyUser = MediaCompanyUserQueryUtils.findByCompanyIdAndUserIdOrElseThrow(request.getCompanyId(), loginUserNo, this.mediaCompanyUserRepository);
+        MediaCompanyUser mediaCompanyUser = null;
+        if(adminYN.equals("N")) {
+            // 등록자가 회계권한이 있는지 체크
+            mediaCompanyUser = MediaCompanyUserQueryUtils.findByCompanyIdAndUserIdOrElseThrow(request.getCompanyId(), loginUserNo, this.mediaCompanyUserRepository);
 
-        if(mediaCompanyUser.getAccountingYN() != MediaCompanyUser.AccountingYN.Y) {
-            throw new MediaCompanyUserAccountingExistException();
+            if(mediaCompanyUser.getAccountingYN() != MediaCompanyUser.AccountingYN.Y) {
+                throw new MediaCompanyUserAccountingExistException();
+            }
         }
 
         // 히스토리 저장

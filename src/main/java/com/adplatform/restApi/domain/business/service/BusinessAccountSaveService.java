@@ -299,7 +299,7 @@ public class BusinessAccountSaveService {
         }
     }
 
-    public void updateUserAccounting(BusinessAccountUserDto.Request.UserUpdate request, Integer loginUserNo) {
+    public void updateUserAccounting(BusinessAccountUserDto.Request.UserUpdate request, Integer loginUserNo, String adminYN) {
 
         // MASTER 권한 체크
         BusinessAccountUserDto.Response.BusinessAccountUserInfo businessAccountUserInfo = this.businessAccountUserRepository.businessAccountUserInfo(request.getBusinessAccountId(), loginUserNo);
@@ -311,11 +311,14 @@ public class BusinessAccountSaveService {
             throw new BusinessAccountUserMasterException();
         }
 
-        // 등록자가 회계권한이 있는지 체크
-        BusinessAccountUser businessAccountUser = BusinessAccountUserQueryUtils.findByBusinessAccountIdAndUserIdOrElseThrow(request.getBusinessAccountId(), loginUserNo, this.businessAccountUserRepository);
+        BusinessAccountUser businessAccountUser = null;
+        if(adminYN.equals("N")) {
+            // 등록자가 회계권한이 있는지 체크
+            businessAccountUser = BusinessAccountUserQueryUtils.findByBusinessAccountIdAndUserIdOrElseThrow(request.getBusinessAccountId(), loginUserNo, this.businessAccountUserRepository);
 
-        if(businessAccountUser.getAccountingYN() != BusinessAccountUser.AccountingYN.Y) {
-            throw new BusinessAccountUserAccountingExistException();
+            if(businessAccountUser.getAccountingYN() != BusinessAccountUser.AccountingYN.Y) {
+                throw new BusinessAccountUserAccountingExistException();
+            }
         }
 
         // 히스토리 저장

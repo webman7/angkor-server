@@ -69,7 +69,13 @@ public class BusinessAccountCommandApi {
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("user/accounting")
     public void updateUserAccounting(@RequestBody @Valid BusinessAccountUserDto.Request.UserUpdate request) {
-        this.businessAccountSaveService.updateUserAccounting(request, SecurityUtils.getLoginUserNo());
+        this.businessAccountSaveService.updateUserAccounting(request, SecurityUtils.getLoginUserNo(), "N");
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("user/admin/accounting")
+    public void updateUserAdminAccounting(@RequestBody @Valid BusinessAccountUserDto.Request.UserUpdate request) {
+        this.businessAccountSaveService.updateUserAccounting(request, SecurityUtils.getLoginUserNo(), "Y");
     }
 
     @ResponseStatus(HttpStatus.OK)
