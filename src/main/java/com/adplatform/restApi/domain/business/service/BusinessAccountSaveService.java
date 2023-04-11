@@ -12,17 +12,21 @@ import com.adplatform.restApi.domain.business.dao.account.BusinessAccountPreDefe
 import com.adplatform.restApi.domain.business.dao.account.BusinessAccountRepository;
 import com.adplatform.restApi.domain.business.dao.account.mapper.BusinessAccountQueryMapper;
 import com.adplatform.restApi.domain.business.dao.user.BusinessAccountUserRepository;
+import com.adplatform.restApi.domain.business.dao.user.BusinessAccountUserTransferRepository;
 import com.adplatform.restApi.domain.business.domain.BusinessAccount;
 import com.adplatform.restApi.domain.business.domain.BusinessAccountPreDeferredPayment;
 import com.adplatform.restApi.domain.business.domain.BusinessAccountUser;
+import com.adplatform.restApi.domain.business.domain.BusinessAccountUserTransfer;
 import com.adplatform.restApi.domain.business.dto.account.BusinessAccountDto;
 import com.adplatform.restApi.domain.business.dto.account.BusinessAccountMapper;
 import com.adplatform.restApi.domain.business.dto.account.BusinessAccountPreDeferredPaymentMapper;
 import com.adplatform.restApi.domain.business.dto.user.BusinessAccountUserDto;
 import com.adplatform.restApi.domain.business.dto.user.BusinessAccountUserMapper;
+import com.adplatform.restApi.domain.business.dto.user.BusinessAccountUserTransferMapper;
 import com.adplatform.restApi.domain.business.exception.*;
 import com.adplatform.restApi.domain.company.dao.CompanyRepository;
 import com.adplatform.restApi.domain.company.domain.Company;
+import com.adplatform.restApi.domain.company.domain.MediaCompanyUserTransfer;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.company.dto.CompanyMapper;
 import com.adplatform.restApi.domain.company.exception.CompanyAlreadyExistException;
@@ -78,6 +82,8 @@ public class BusinessAccountSaveService {
     private final AdAccountUserRepository adAccountUserRepository;
     private final AdAccountUserInfoHistoryRepository adAccountUserInfoHistoryRepository;
     private final AdAccountUserInfoHistoryMapper adAccountUserInfoHistoryMapper;
+    private final BusinessAccountUserTransferMapper businessAccountUserTransferMapper;
+    private final BusinessAccountUserTransferRepository businessAccountUserTransferRepository;
     private final UserQueryService userQueryService;
     private final CompanyService companyService;
     private final CompanyMapper companyMapper;
@@ -351,6 +357,10 @@ public class BusinessAccountSaveService {
 
         // 권한 변경
         this.businessAccountUserRepository.updateAccounting(businessAccountUser2.getBusinessAccount().getId(), request.getId(), BusinessAccountUser.AccountingYN.Y);
+
+        // 이양 로그
+        BusinessAccountUserTransfer businessAccountUserTransfer = this.businessAccountUserTransferMapper.toEntity(request.getBusinessAccountId(), loginUserNo, request.getId());
+        this.businessAccountUserTransferRepository.save(businessAccountUserTransfer);
     }
 
     public void updateUserAdminAccounting(BusinessAccountUserDto.Request.UserUpdate request, Integer loginUserNo) {
@@ -405,6 +415,10 @@ public class BusinessAccountSaveService {
 
         // 권한 변경
         this.businessAccountUserRepository.updateAccounting(businessAccountUser2.getBusinessAccount().getId(), request.getId(), BusinessAccountUser.AccountingYN.Y);
+
+        // 이양 로그
+        BusinessAccountUserTransfer businessAccountUserTransfer = this.businessAccountUserTransferMapper.toEntity(request.getBusinessAccountId(), request.getPrevId(), request.getId());
+        this.businessAccountUserTransferRepository.save(businessAccountUserTransfer);
     }
 
     public void deleteUser(BusinessAccountUserDto.Request.UserUpdate request, Integer loginUserNo) {

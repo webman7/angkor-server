@@ -4,15 +4,13 @@ import com.adplatform.restApi.domain.bank.dao.BankRepository;
 import com.adplatform.restApi.domain.bank.domain.Bank;
 import com.adplatform.restApi.domain.bank.service.BankFindUtils;
 import com.adplatform.restApi.domain.company.dao.user.AdminUserRepository;
+import com.adplatform.restApi.domain.company.dao.user.MediaCompanyUserTransferRepository;
 import com.adplatform.restApi.domain.company.domain.*;
 import com.adplatform.restApi.domain.company.dao.CompanyRepository;
 import com.adplatform.restApi.domain.company.dao.user.MediaCompanyUserRepository;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.company.dto.CompanyMapper;
-import com.adplatform.restApi.domain.company.dto.user.AdminUserDto;
-import com.adplatform.restApi.domain.company.dto.user.AdminUserMapper;
-import com.adplatform.restApi.domain.company.dto.user.MediaCompanyUserDto;
-import com.adplatform.restApi.domain.company.dto.user.MediaCompanyUserMapper;
+import com.adplatform.restApi.domain.company.dto.user.*;
 import com.adplatform.restApi.domain.company.exception.*;
 import com.adplatform.restApi.domain.history.dao.admin.user.AdminUserInfoHistoryRepository;
 import com.adplatform.restApi.domain.history.dao.mediaCompany.user.MediaCompanyUserInfoHistoryRepository;
@@ -55,6 +53,8 @@ public class CompanyService {
     private final MediaCompanyUserMapper mediaCompanyUserMapper;
     private final MediaCompanyUserInfoHistoryMapper mediaCompanyUserInfoHistoryMapper;
     private final MediaCompanyUserInfoHistoryRepository mediaCompanyUserInfoHistoryRepository;
+    private final MediaCompanyUserTransferMapper mediaCompanyUserTransferMapper;
+    private final MediaCompanyUserTransferRepository mediaCompanyUserTransferRepository;
     private final AdminUserRepository adminUserRepository;
     private final AdminUserMapper adminUserMapper;
     private final AdminUserInfoHistoryMapper adminUserInfoHistoryMapper;
@@ -309,6 +309,10 @@ public class CompanyService {
 
         // 권한 변경
         this.mediaCompanyUserRepository.updateAccounting(businessAccountUser2.getCompany().getId(), request.getId(), MediaCompanyUser.AccountingYN.Y);
+
+        // 이양 로그
+        MediaCompanyUserTransfer mediaCompanyUserTransfer = this.mediaCompanyUserTransferMapper.toEntity(request.getCompanyId(), loginUserNo, request.getId());
+        this.mediaCompanyUserTransferRepository.save(mediaCompanyUserTransfer);
     }
 
     public void updateUserAdminAccounting(MediaCompanyUserDto.Request.UserUpdate request, Integer loginUserNo) {
@@ -363,6 +367,10 @@ public class CompanyService {
 
         // 권한 변경
         this.mediaCompanyUserRepository.updateAccounting(businessAccountUser2.getCompany().getId(), request.getId(), MediaCompanyUser.AccountingYN.Y);
+
+        // 이양 로그
+        MediaCompanyUserTransfer mediaCompanyUserTransfer = this.mediaCompanyUserTransferMapper.toEntity(request.getCompanyId(), request.getPrevId(), request.getId());
+        this.mediaCompanyUserTransferRepository.save(mediaCompanyUserTransfer);
     }
 
     public void deleteUser(MediaCompanyUserDto.Request.UserUpdate request, Integer loginUserNo) {
