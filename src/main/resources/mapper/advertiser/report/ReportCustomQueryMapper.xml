@@ -846,20 +846,20 @@ since 1.0
 
 
     <sql id="mediaCondition1">
-        <if test="request.mediaId!=null and !request.mediaId.equals('')">
+        <if test="request.mediaId!=null and !request.mediaId.equals(0)">
             AND rad.media_info_id = #{request.mediaId}
         </if>
     </sql>
 
     <sql id="mediaCondition2">
-        <if test="request.mediaId!=null and !request.mediaId.equals('')">
+        <if test="request.mediaId!=null and !request.mediaId.equals(0)">
             AND rac.media_info_id = #{request.mediaId}
         </if>
     </sql>
 
 
     <sql id="mediaCondition3">
-        <if test="request.mediaId!=null and !request.mediaId.equals('')">
+        <if test="request.mediaId!=null and !request.mediaId.equals(0)">
             AND reportData.media_info_id = #{request.mediaId}
         </if>
     </sql>
