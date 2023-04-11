@@ -269,11 +269,9 @@ public class CompanyService {
             throw new MediaCompanyUserMasterException();
         }
 
-        MediaCompanyUser mediaCompanyUser = null;
+        // 등록자가 회계권한이 있는지 체크
+        MediaCompanyUser mediaCompanyUser = MediaCompanyUserQueryUtils.findByCompanyIdAndUserIdOrElseThrow(request.getCompanyId(), loginUserNo, this.mediaCompanyUserRepository);
         if(adminYN.equals("N")) {
-            // 등록자가 회계권한이 있는지 체크
-            mediaCompanyUser = MediaCompanyUserQueryUtils.findByCompanyIdAndUserIdOrElseThrow(request.getCompanyId(), loginUserNo, this.mediaCompanyUserRepository);
-
             if(mediaCompanyUser.getAccountingYN() != MediaCompanyUser.AccountingYN.Y) {
                 throw new MediaCompanyUserAccountingExistException();
             }

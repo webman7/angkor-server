@@ -311,11 +311,9 @@ public class BusinessAccountSaveService {
             throw new BusinessAccountUserMasterException();
         }
 
-        BusinessAccountUser businessAccountUser = null;
+        // 등록자가 회계권한이 있는지 체크
+        BusinessAccountUser businessAccountUser = BusinessAccountUserQueryUtils.findByBusinessAccountIdAndUserIdOrElseThrow(request.getBusinessAccountId(), loginUserNo, this.businessAccountUserRepository);
         if(adminYN.equals("N")) {
-            // 등록자가 회계권한이 있는지 체크
-            businessAccountUser = BusinessAccountUserQueryUtils.findByBusinessAccountIdAndUserIdOrElseThrow(request.getBusinessAccountId(), loginUserNo, this.businessAccountUserRepository);
-
             if(businessAccountUser.getAccountingYN() != BusinessAccountUser.AccountingYN.Y) {
                 throw new BusinessAccountUserAccountingExistException();
             }
