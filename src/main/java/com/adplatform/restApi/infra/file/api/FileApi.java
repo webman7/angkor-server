@@ -32,10 +32,10 @@ public class FileApi {
     }
 
     @GetMapping(path = "/downloadFile")
-    public ResponseEntity<ByteArrayResource> downloadFile(@RequestParam String fileName) {
+    public ResponseEntity<ByteArrayResource> downloadFile(@RequestParam String fileUrl, @RequestParam String fileName) {
 
         try{
-            byte[] data = awsFileService.download(fileName);
+            byte[] data = awsFileService.download(fileUrl);
             ByteArrayResource resource = new ByteArrayResource(data);
             return ResponseEntity
                     .ok()

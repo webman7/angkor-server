@@ -252,8 +252,10 @@ public abstract class CompanyDto {
             private String accountNumber;
             private String accountOwner;
             private String businessFileUrl;
+            private String businessFileName;
             private FileInformation.FileType businessFileType;
             private String bankFileUrl;
+            private String bankFileName;
             private FileInformation.FileType bankFileType;
 
             @QueryProjection
@@ -272,8 +274,10 @@ public abstract class CompanyDto {
                                String accountNumber,
                                String accountOwner,
                                String businessFileUrl,
+                               String businessFileName,
                                FileInformation.FileType businessFileType,
                                String bankFileUrl,
+                               String bankFileName,
                                FileInformation.FileType bankFileType) {
                 this.id = id;
                 this.name = name;
@@ -290,8 +294,10 @@ public abstract class CompanyDto {
                 this.accountNumber = accountNumber;
                 this.accountOwner = accountOwner;
                 this.businessFileUrl = businessFileUrl;
+                this.businessFileName = businessFileName;
                 this.businessFileType = businessFileType;
                 this.bankFileUrl = bankFileUrl;
+                this.bankFileName = bankFileName;
                 this.bankFileType = bankFileType;
             }
         }

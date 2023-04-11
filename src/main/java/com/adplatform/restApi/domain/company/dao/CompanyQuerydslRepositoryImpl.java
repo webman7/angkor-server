@@ -112,6 +112,17 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                                                         )
                                                         .orderBy(companyFile.id.desc()))
                                         ), "businessFileUrl"),
+                        as(select(companyFile.information.originalFileName)
+                                .from(companyFile)
+                                .where(companyFile.company.id.eq(company.id),
+                                        companyFile.type.eq("BUSINESS"),
+                                        companyFile.id.eq(select(companyFile.id.max())
+                                                .from(companyFile)
+                                                .where(companyFile.company.id.eq(company.id),
+                                                        companyFile.type.eq("BUSINESS")
+                                                )
+                                                .orderBy(companyFile.id.desc()))
+                                ), "businessFileName"),
                         as(select(companyFile.information.fileType)
                                 .from(companyFile)
                                 .where(companyFile.company.id.eq(company.id),
@@ -134,6 +145,17 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                                                         )
                                                         .orderBy(companyFile.id.desc()))
                                 ), "bankFileUrl"),
+                        as(select(companyFile.information.originalFileName)
+                                .from(companyFile)
+                                .where(companyFile.company.id.eq(company.id),
+                                        companyFile.type.eq("BANK"),
+                                        companyFile.id.eq(select(companyFile.id.max())
+                                                .from(companyFile)
+                                                .where(companyFile.company.id.eq(company.id),
+                                                        companyFile.type.eq("BANK")
+                                                )
+                                                .orderBy(companyFile.id.desc()))
+                                ), "bankFileName"),
                         as(select(companyFile.information.fileType)
                                 .from(companyFile)
                                 .where(companyFile.company.id.eq(company.id),
@@ -224,6 +246,13 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                                 )
                                 .orderBy(companyFile.id.desc())
                                 .limit(1), "businessFileUrl"),
+                        as(select(companyFile.information.originalFileName)
+                                .from(companyFile)
+                                .where(companyFile.company.id.eq(company.id),
+                                        companyFile.type.eq("BUSINESS")
+                                )
+                                .orderBy(companyFile.id.desc())
+                                .limit(1), "businessFileName"),
                         as(select(companyFile.information.fileType)
                                 .from(companyFile)
                                 .where(companyFile.company.id.eq(company.id),
@@ -238,6 +267,13 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                                 )
                                 .orderBy(companyFile.id.desc())
                                 .limit(1), "bankFileUrl"),
+                        as(select(companyFile.information.originalFileName)
+                                .from(companyFile)
+                                .where(companyFile.company.id.eq(company.id),
+                                        companyFile.type.eq("BANK")
+                                )
+                                .orderBy(companyFile.id.desc())
+                                .limit(1), "bankFileName"),
                         as(select(companyFile.information.fileType)
                                 .from(companyFile)
                                 .where(companyFile.company.id.eq(company.id),
@@ -281,6 +317,13 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                                 )
                                 .orderBy(companyFile.id.desc())
                                 .limit(1), "businessFileUrl"),
+                        as(select(companyFile.information.originalFileName)
+                                .from(companyFile)
+                                .where(companyFile.company.id.eq(company.id),
+                                        companyFile.type.eq("BUSINESS")
+                                )
+                                .orderBy(companyFile.id.desc())
+                                .limit(1), "businessFileName"),
                         as(select(companyFile.information.fileType)
                                 .from(companyFile)
                                 .where(companyFile.company.id.eq(company.id),
@@ -295,6 +338,13 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                                 )
                                 .orderBy(companyFile.id.desc())
                                 .limit(1), "bankFileUrl"),
+                        as(select(companyFile.information.originalFileName)
+                                .from(companyFile)
+                                .where(companyFile.company.id.eq(company.id),
+                                        companyFile.type.eq("BANK")
+                                )
+                                .orderBy(companyFile.id.desc())
+                                .limit(1), "bankFileName"),
                         as(select(companyFile.information.fileType)
                                 .from(companyFile)
                                 .where(companyFile.company.id.eq(company.id),
