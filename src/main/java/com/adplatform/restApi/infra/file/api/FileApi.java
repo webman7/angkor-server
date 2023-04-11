@@ -5,6 +5,8 @@ import com.adplatform.restApi.infra.file.service.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,12 +42,12 @@ public class FileApi {
             return ResponseEntity
                     .ok()
                     .contentLength(data.length)
-                    .header("Content-type", "application/octet-stream")
-                    .header("Content-disposition", "attachment; filename=\"" + URLEncoder.encode(fileName, "utf-8") + "\"")
+                    .header("Content-type", "application/pdf")
+                    .header("Content-disposition", "inline; filename=\"" + URLEncoder.encode(fileUrl, "UTF-8").replaceAll("\\+", "%20") + "\"")
                     .body(resource);
         }catch (IOException ex){
             return ResponseEntity.badRequest().contentLength(0).body(null);
         }
-
     }
+
 }
