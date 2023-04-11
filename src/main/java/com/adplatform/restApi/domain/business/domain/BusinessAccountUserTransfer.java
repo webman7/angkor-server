@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "business_user_transfer_info")
+@Table(name = "business_account_user_transfer_info")
 public class BusinessAccountUserTransfer extends BaseCreatedEntity {
     @Column(name = "business_account_info_id")
     private Integer businessAccountId;
