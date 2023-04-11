@@ -79,13 +79,13 @@ public class CompanyCommandApi {
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("user/accounting")
     public void updateUserAccounting(@RequestBody @Valid MediaCompanyUserDto.Request.UserUpdate request) {
-        this.companyService.updateUserAccounting(request, SecurityUtils.getLoginUserNo(),  "N");
+        this.companyService.updateUserAccounting(request, SecurityUtils.getLoginUserNo());
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("user/admin/accounting")
     public void updateUserAdminAccounting(@RequestBody @Valid MediaCompanyUserDto.Request.UserUpdate request) {
-        this.companyService.updateUserAccounting(request, SecurityUtils.getLoginUserNo(), "Y");
+        this.companyService.updateUserAdminAccounting(request, SecurityUtils.getLoginUserNo());
     }
 
     @ResponseStatus(HttpStatus.OK)

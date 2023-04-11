@@ -257,7 +257,7 @@ public class CompanyService {
         }
     }
 
-    public void updateUserAccounting(MediaCompanyUserDto.Request.UserUpdate request, Integer loginUserNo, String adminYN) {
+    public void updateUserAccounting(MediaCompanyUserDto.Request.UserUpdate request, Integer loginUserNo) {
 
         // MASTER 권한 체크
         MediaCompanyUserDto.Response.MediaCompanyUserInfo mediaCompanyUserInfo = this.mediaCompanyUserRepository.mediaCompanyUserInfo(request.getCompanyId(), loginUserNo);
@@ -271,10 +271,9 @@ public class CompanyService {
 
         // 등록자가 회계권한이 있는지 체크
         MediaCompanyUser mediaCompanyUser = MediaCompanyUserQueryUtils.findByCompanyIdAndUserIdOrElseThrow(request.getCompanyId(), loginUserNo, this.mediaCompanyUserRepository);
-        if(adminYN.equals("N")) {
-            if(mediaCompanyUser.getAccountingYN() != MediaCompanyUser.AccountingYN.Y) {
-                throw new MediaCompanyUserAccountingExistException();
-            }
+
+        if(mediaCompanyUser.getAccountingYN() != MediaCompanyUser.AccountingYN.Y) {
+            throw new MediaCompanyUserAccountingExistException();
         }
 
         // 히스토리 저장
@@ -293,6 +292,60 @@ public class CompanyService {
 
         // 권한 변경
         this.mediaCompanyUserRepository.updateAccounting(mediaCompanyUser.getCompany().getId(), loginUserNo, MediaCompanyUser.AccountingYN.N);
+
+        // 히스토리 저장
+        MediaCompanyUserInfoHistoryDto.Request.Save history2 = new MediaCompanyUserInfoHistoryDto.Request.Save();
+        history2.setCompanyId(businessAccountUser2.getCompany().getId());
+        history2.setUserNo(request.getId());
+        history2.setMemberType(businessAccountUser2.getMemberType());
+        history2.setAccountingYN(MediaCompanyUser.AccountingYN.Y);
+        history2.setStatus(businessAccountUser2.getStatus());
+        history2.setRegUserNo(businessAccountUser2.getCreatedUserNo());
+        history2.setCreatedAt(businessAccountUser2.getCreatedAt());
+        history2.setUpdUserNo(businessAccountUser2.getUpdatedUserNo());
+        history2.setUpdatedAt(businessAccountUser2.getUpdatedAt());
+        MediaCompanyUserInfoHistory mediaCompanyUserInfoHistory2 = this.mediaCompanyUserInfoHistoryMapper.toEntity(history2, SecurityUtils.getLoginUserNo());
+        this.mediaCompanyUserInfoHistoryRepository.save(mediaCompanyUserInfoHistory2);
+
+        // 권한 변경
+        this.mediaCompanyUserRepository.updateAccounting(businessAccountUser2.getCompany().getId(), request.getId(), MediaCompanyUser.AccountingYN.Y);
+    }
+
+    public void updateUserAdminAccounting(MediaCompanyUserDto.Request.UserUpdate request, Integer loginUserNo) {
+
+        // MASTER 권한 체크
+        MediaCompanyUserDto.Response.MediaCompanyUserInfo mediaCompanyUserInfo = this.mediaCompanyUserRepository.mediaCompanyUserInfo(request.getCompanyId(), loginUserNo);
+        if(mediaCompanyUserInfo.getMemberType() != MediaCompanyUser.MemberType.MASTER) {
+            throw new MediaCompanyUserAuthorizationException();
+        }
+        MediaCompanyUser businessAccountUser2 = MediaCompanyUserQueryUtils.findByCompanyIdAndUserIdOrElseThrow(request.getCompanyId(), request.getId(), this.mediaCompanyUserRepository);
+        if(businessAccountUser2.getMemberType() != MediaCompanyUser.MemberType.MASTER) {
+            throw new MediaCompanyUserMasterException();
+        }
+
+        // 등록자가 회계권한이 있는지 체크
+        MediaCompanyUser mediaCompanyUser = MediaCompanyUserQueryUtils.findByCompanyIdAndUserIdOrElseThrow(request.getCompanyId(), request.getPrevId(), this.mediaCompanyUserRepository);
+
+        if(mediaCompanyUser.getAccountingYN() != MediaCompanyUser.AccountingYN.Y) {
+            throw new MediaCompanyUserAccountingExistException();
+        }
+
+        // 히스토리 저장
+        MediaCompanyUserInfoHistoryDto.Request.Save history = new MediaCompanyUserInfoHistoryDto.Request.Save();
+        history.setCompanyId(mediaCompanyUser.getCompany().getId());
+        history.setUserNo(request.getPrevId());
+        history.setMemberType(mediaCompanyUser.getMemberType());
+        history.setAccountingYN(MediaCompanyUser.AccountingYN.N);
+        history.setStatus(mediaCompanyUser.getStatus());
+        history.setRegUserNo(mediaCompanyUser.getCreatedUserNo());
+        history.setCreatedAt(mediaCompanyUser.getCreatedAt());
+        history.setUpdUserNo(mediaCompanyUser.getUpdatedUserNo());
+        history.setUpdatedAt(mediaCompanyUser.getUpdatedAt());
+        MediaCompanyUserInfoHistory mediaCompanyUserInfoHistory = this.mediaCompanyUserInfoHistoryMapper.toEntity(history, SecurityUtils.getLoginUserNo());
+        this.mediaCompanyUserInfoHistoryRepository.save(mediaCompanyUserInfoHistory);
+
+        // 권한 변경
+        this.mediaCompanyUserRepository.updateAccounting(mediaCompanyUser.getCompany().getId(), request.getPrevId(), MediaCompanyUser.AccountingYN.N);
 
         // 히스토리 저장
         MediaCompanyUserInfoHistoryDto.Request.Save history2 = new MediaCompanyUserInfoHistoryDto.Request.Save();

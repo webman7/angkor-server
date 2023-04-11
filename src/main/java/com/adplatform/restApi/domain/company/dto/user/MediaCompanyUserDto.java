@@ -36,6 +36,7 @@ public class MediaCompanyUserDto {
         @Setter
         public static class UserUpdate {
             private Integer companyId;
+            private Integer prevId;
             private Integer id;
         }
     }

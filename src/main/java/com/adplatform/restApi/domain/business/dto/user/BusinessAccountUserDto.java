@@ -37,6 +37,7 @@ public class BusinessAccountUserDto {
         @Setter
         public static class UserUpdate {
             private Integer businessAccountId;
+            private Integer prevId;
             private Integer id;
         }
     }
