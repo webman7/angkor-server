@@ -35,6 +35,8 @@ public interface AdAccountQuerydslRepository {
 
     Optional<AdAccountDto.Response.AdAccountCount> countStatusYN(Integer loginUserNo);
 
+    Page<AdAccountDto.Response.AdAccountSearch> searchAdAccount(Pageable pageable, AdAccountDto.Request.SearchAdAccount request);
+
     AdAccountDto.Response.AdAccountInfo adAccountInfo(Integer adAccountId);
 
 //    AdAccountDto.Response.AdAccountCashInfo adAccountCashInfo(Integer adAccountId);

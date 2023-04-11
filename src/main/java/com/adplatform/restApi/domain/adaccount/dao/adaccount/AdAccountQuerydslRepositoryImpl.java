@@ -41,6 +41,7 @@ import static com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto
 import static com.adplatform.restApi.domain.advertiser.adgroup.domain.QAdGroup.adGroup;
 import static com.adplatform.restApi.domain.advertiser.campaign.domain.QCampaign.campaign;
 import static com.adplatform.restApi.domain.advertiser.creative.domain.QCreative.creative;
+import static com.adplatform.restApi.domain.business.domain.QBusinessAccount.businessAccount;
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
 import static com.adplatform.restApi.domain.statistics.domain.report.QReportAdGroupDaily.reportAdGroupDaily;
 import static com.adplatform.restApi.domain.statistics.domain.sale.QSaleAdAccountDaily.saleAdAccountDaily;
@@ -58,6 +59,51 @@ import static com.querydsl.jpa.JPAExpressions.select;
 @Repository
 public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslRepository {
     private final JPAQueryFactory query;
+
+    @Override
+    public Page<Response.AdAccountSearch> searchAdAccount(Pageable pageable, Request.SearchAdAccount request) {
+        List<Response.AdAccountSearch> content = this.getSearchAdAccountQuery(pageable, request)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = this.query.select(adAccount.count())
+                .from(adAccount, businessAccount)
+                .where(
+                        adAccount.businessAccount.id.eq(businessAccount.id),
+                        this.eqId(request.getId()),
+                        this.containsName(request.getName())
+                );
+        // group by 일 경우 () -> countQuery.fetch().size()
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    private JPAQuery<Response.AdAccountSearch> getSearchAdAccountQuery(
+            Pageable pageable,
+            Request.SearchAdAccount request) {
+        LocalDate now = LocalDate.now();
+        DateTimeFormatter yyyyMMdd = DateTimeFormatter.ofPattern("yyyyMMdd");
+        JPAQuery<Response.AdAccountSearch> query = this.query.select(
+                        new QAdAccountDto_Response_AdAccountSearch(
+                                adAccount.id,
+                                adAccount.name,
+                                businessAccount.id,
+                                businessAccount.name,
+                                adAccount.config,
+                                adAccount.adminStop
+                        )
+                )
+                .from(adAccount, businessAccount)
+                .where(
+                        adAccount.businessAccount.id.eq(businessAccount.id),
+                        this.eqId(request.getId()),
+                        this.containsName(request.getName())
+                );
+
+        return Objects.nonNull(pageable)
+                ? query.orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(AdAccount.class, "adAccount", pageable.getSort()).toArray(OrderSpecifier[]::new))
+                : query;
+    }
 
     @Override
     public Page<Response.ForAdminSearch> searchForAdmin(Pageable pageable, Request.ForAdminSearch request) {

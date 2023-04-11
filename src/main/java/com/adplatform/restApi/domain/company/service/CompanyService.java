@@ -3,19 +3,23 @@ package com.adplatform.restApi.domain.company.service;
 import com.adplatform.restApi.domain.bank.dao.BankRepository;
 import com.adplatform.restApi.domain.bank.domain.Bank;
 import com.adplatform.restApi.domain.bank.service.BankFindUtils;
-import com.adplatform.restApi.domain.company.domain.FileInformation;
+import com.adplatform.restApi.domain.company.dao.user.AdminUserRepository;
+import com.adplatform.restApi.domain.company.domain.*;
 import com.adplatform.restApi.domain.company.dao.CompanyRepository;
 import com.adplatform.restApi.domain.company.dao.user.MediaCompanyUserRepository;
-import com.adplatform.restApi.domain.company.domain.Company;
-import com.adplatform.restApi.domain.company.domain.CompanyFile;
-import com.adplatform.restApi.domain.company.domain.MediaCompanyUser;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.company.dto.CompanyMapper;
+import com.adplatform.restApi.domain.company.dto.user.AdminUserDto;
+import com.adplatform.restApi.domain.company.dto.user.AdminUserMapper;
 import com.adplatform.restApi.domain.company.dto.user.MediaCompanyUserDto;
 import com.adplatform.restApi.domain.company.dto.user.MediaCompanyUserMapper;
 import com.adplatform.restApi.domain.company.exception.*;
+import com.adplatform.restApi.domain.history.dao.admin.user.AdminUserInfoHistoryRepository;
 import com.adplatform.restApi.domain.history.dao.mediaCompany.user.MediaCompanyUserInfoHistoryRepository;
+import com.adplatform.restApi.domain.history.domain.admin.user.AdminUserInfoHistory;
 import com.adplatform.restApi.domain.history.domain.mediaCompany.user.MediaCompanyUserInfoHistory;
+import com.adplatform.restApi.domain.history.dto.admin.user.AdminUserInfoHistoryDto;
+import com.adplatform.restApi.domain.history.dto.admin.user.AdminUserInfoHistoryMapper;
 import com.adplatform.restApi.domain.history.dto.mediaCompany.user.MediaCompanyUserInfoHistoryDto;
 import com.adplatform.restApi.domain.history.dto.mediaCompany.user.MediaCompanyUserInfoHistoryMapper;
 import com.adplatform.restApi.domain.user.domain.User;
@@ -51,6 +55,10 @@ public class CompanyService {
     private final MediaCompanyUserMapper mediaCompanyUserMapper;
     private final MediaCompanyUserInfoHistoryMapper mediaCompanyUserInfoHistoryMapper;
     private final MediaCompanyUserInfoHistoryRepository mediaCompanyUserInfoHistoryRepository;
+    private final AdminUserRepository adminUserRepository;
+    private final AdminUserMapper adminUserMapper;
+    private final AdminUserInfoHistoryMapper adminUserInfoHistoryMapper;
+    private final AdminUserInfoHistoryRepository adminUserInfoHistoryRepository;
     private final AwsFileService awsFileService;
 
     public Company findByIdOrElseThrow(Integer id) {
@@ -346,4 +354,147 @@ public class CompanyService {
 //    public void saveAgency(CompanyDto.Request.Save request) {
 //        this.companyRepository.save(this.companyMapper.toAgencyEntity(request));
 //    }
+
+
+    public void saveUserAdmin(AdminUserDto.Request.SaveUser request, Integer loginUserNo) {
+
+        // 회원 중복 체크
+        UserDto.Response.BaseInfo userInfo = this.userQueryService.findUserByLoginId(request.getUserId());
+        Integer count = this.adminUserRepository.findByCompanyIdAndUserIdCount(request.getCompanyId(), userInfo.getId());
+
+        if(!count.equals(0)) {
+            throw new MediaCompanyUserAlreadyExistException();
+        }
+
+        Integer count1 = this.adminUserRepository.findByCompanyIdCount(request.getCompanyId());
+        // 인서트
+        User user = this.userQueryService.findByIdOrElseThrow(userInfo.getId());
+        Company company = CompanyFindUtils.findByIdOrElseThrow(request.getCompanyId(), this.companyRepository);
+        if(count1.equals(0)) {
+            AdminUser adminUser = this.adminUserMapper.toEntity(request, company, user);
+            this.adminUserRepository.save(adminUser);
+        } else {
+            AdminUser adminUser = this.adminUserMapper.toEntityInvite(request, company, user);
+            this.adminUserRepository.save(adminUser);
+        }
+    }
+
+    public void saveUserAdminInvite(AdminUserDto.Request.SaveUser request, Integer loginUserNo) {
+
+        // MASTER 권한 체크
+        AdminUserDto.Response.AdminUserInfo adminUserInfo = this.adminUserRepository.adminUserInfo(request.getCompanyId(), loginUserNo);
+        if(adminUserInfo.getMemberType() != AdminUser.MemberType.MASTER)  {
+            throw new AdminUserAuthorizationException();
+        }
+
+        // 회원 중복 체크
+        UserDto.Response.BaseInfo userInfo = this.userQueryService.findUserByLoginId(request.getUserId());
+        Integer count = this.adminUserRepository.findByCompanyIdAndUserIdCount(request.getCompanyId(), userInfo.getId());
+
+        if(!count.equals(0)) {
+            throw new AdminUserAlreadyExistException();
+        }
+
+        // 인서트
+        User user = this.userQueryService.findByIdOrElseThrow(userInfo.getId());
+        Company company = CompanyFindUtils.findByIdOrElseThrow(request.getCompanyId(), this.companyRepository);
+        AdminUser adminUser = this.adminUserMapper.toEntityInvite(request, company, user);
+        this.adminUserRepository.save(adminUser);
+    }
+
+    public void updateUserAdminMember(AdminUserDto.Request.UserMemberUpdate request, Integer loginUserNo) {
+
+        // MASTER 권한 체크
+        AdminUserDto.Response.AdminUserInfo adminUserInfo = this.adminUserRepository.adminUserInfo(request.getCompanyId(), loginUserNo);
+        if(adminUserInfo.getMemberType() != AdminUser.MemberType.MASTER) {
+            throw new AdminUserAuthorizationException();
+        }
+
+        AdminUser adminUser = AdminUserQueryUtils.findByCompanyIdAndUserIdOrElseThrow(request.getCompanyId(), request.getId(), this.adminUserRepository);
+
+        // 히스토리 저장
+        AdminUserInfoHistoryDto.Request.Save history = new AdminUserInfoHistoryDto.Request.Save();
+        history.setCompanyId(adminUser.getCompany().getId());
+        history.setUserNo(adminUser.getUser().getId());
+        history.setMemberType(adminUser.getMemberType());
+        history.setStatus(adminUser.getStatus());
+        history.setRegUserNo(adminUser.getCreatedUserNo());
+        history.setCreatedAt(adminUser.getCreatedAt());
+        history.setUpdUserNo(adminUser.getUpdatedUserNo());
+        history.setUpdatedAt(adminUser.getUpdatedAt());
+        AdminUserInfoHistory adminUserInfoHistory = this.adminUserInfoHistoryMapper.toEntity(history, SecurityUtils.getLoginUserNo());
+        this.adminUserInfoHistoryRepository.save(adminUserInfoHistory);
+
+        // 관리자 회원 상태 업데이트
+        if(request.getMemberType() == AdminUser.MemberType.MASTER) {
+            adminUser.changeMemberTypeMaster();
+        } else if(request.getMemberType() == AdminUser.MemberType.OPERATOR) {
+            adminUser.changeMemberTypeOperator();
+        } else if(request.getMemberType() == AdminUser.MemberType.MEMBER) {
+            adminUser.changeMemberTypeMember();
+        }
+    }
+
+    public void updateUserAdminStatus(AdminUserDto.Request.UserStatusUpdate request, Integer loginUserNo) {
+
+        // MASTER 권한 체크
+        AdminUserDto.Response.AdminUserInfo adminUserInfo = this.adminUserRepository.adminUserInfo(request.getCompanyId(), loginUserNo);
+        if(adminUserInfo.getMemberType() != AdminUser.MemberType.MASTER) {
+            throw new AdminUserAuthorizationException();
+        }
+
+        AdminUser adminUser = AdminUserQueryUtils.findByCompanyIdAndUserIdOrElseThrow(request.getCompanyId(), request.getId(), this.adminUserRepository);
+
+        // 히스토리 저장
+        AdminUserInfoHistoryDto.Request.Save history = new AdminUserInfoHistoryDto.Request.Save();
+        history.setCompanyId(adminUser.getCompany().getId());
+        history.setUserNo(adminUser.getUser().getId());
+        history.setMemberType(adminUser.getMemberType());
+        history.setStatus(adminUser.getStatus());
+        history.setRegUserNo(adminUser.getCreatedUserNo());
+        history.setCreatedAt(adminUser.getCreatedAt());
+        history.setUpdUserNo(adminUser.getUpdatedUserNo());
+        history.setUpdatedAt(adminUser.getUpdatedAt());
+        AdminUserInfoHistory adminUserInfoHistory = this.adminUserInfoHistoryMapper.toEntity(history, SecurityUtils.getLoginUserNo());
+        this.adminUserInfoHistoryRepository.save(adminUserInfoHistory);
+
+        // 관리자 회원 상태 업데이트
+        if(request.getStatus() == AdminUser.Status.Y) {
+            adminUser.changeStatusY();
+        } else if(request.getStatus() == AdminUser.Status.R) {
+            adminUser.changeStatusR();
+        } else if(request.getStatus() == AdminUser.Status.C) {
+            adminUser.changeStatusC();
+        }
+    }
+
+    public void deleteUserAdmin(AdminUserDto.Request.UserUpdate request, Integer loginUserNo) {
+        // 권한 체크
+        AdminUserDto.Response.AdminUserInfo adminUserInfo = this.adminUserRepository.adminUserInfo(request.getCompanyId(), loginUserNo);
+        // 본인 여부 체크
+        if(!adminUserInfo.getUser().getId().equals(request.getId())) {
+            // MASTER 권한 체크
+            if(adminUserInfo.getMemberType() != AdminUser.MemberType.MASTER) {
+                throw new AdminUserAuthorizationException();
+            }
+        }
+
+        AdminUser adminUser = AdminUserQueryUtils.findByCompanyIdAndUserIdOrElseThrow(request.getCompanyId(), request.getId(), this.adminUserRepository);
+
+        // 히스토리 저장
+        AdminUserInfoHistoryDto.Request.Save history = new AdminUserInfoHistoryDto.Request.Save();
+        history.setCompanyId(adminUser.getCompany().getId());
+        history.setUserNo(adminUser.getUser().getId());
+        history.setMemberType(adminUser.getMemberType());
+        history.setStatus(AdminUser.Status.D);
+        history.setRegUserNo(adminUser.getCreatedUserNo());
+        history.setCreatedAt(adminUser.getCreatedAt());
+        history.setUpdUserNo(adminUser.getUpdatedUserNo());
+        history.setUpdatedAt(adminUser.getUpdatedAt());
+        AdminUserInfoHistory adminUserInfoHistory = this.adminUserInfoHistoryMapper.toEntity(history, SecurityUtils.getLoginUserNo());
+        this.adminUserInfoHistoryRepository.save(adminUserInfoHistory);
+
+        // 삭제
+        this.adminUserRepository.deleteByCompanyIdAndUserIdCount(adminUser.getCompany().getId(), adminUser.getUser().getId());
+    }
 }

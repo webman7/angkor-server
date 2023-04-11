@@ -125,10 +125,26 @@ public class CompanyQueryApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}/users/admin/search")
+    public PageDto<AdminUserDto.Response.AdminUserInfo> adminUserSearch(
+            @PageableDefault Pageable pageable,
+            AdminUserDto.Request.SearchAdminUser searchRequest,
+            @PathVariable(name = "id") Integer companyId) {
+        return PageDto.create(this.adminUserRepository.adminUserSearch(pageable, companyId, searchRequest));
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/user/{id}/admin")
     public AdminUserDto.Response.AdminUserInfo adminUserInfo(@PathVariable(name = "id") Integer userNo) {
         return this.adminUserRepository.adminUserInfo(userNo);
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}/user/admin/{userNo}")
+    public AdminUserDto.Response.AdminUserInfo adminUserInfo(@PathVariable(name = "id") Integer companyId, @PathVariable(name = "userNo") Integer userNo) {
+        return this.adminUserRepository.adminUserInfo(companyId, userNo);
+    }
+
 
 
 

@@ -1,6 +1,7 @@
 package com.adplatform.restApi.domain.company.api;
 
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
+import com.adplatform.restApi.domain.company.dto.user.AdminUserDto;
 import com.adplatform.restApi.domain.company.dto.user.MediaCompanyUserDto;
 import com.adplatform.restApi.domain.company.service.CompanyService;
 import com.adplatform.restApi.global.config.security.util.SecurityUtils;
@@ -85,5 +86,35 @@ public class CompanyCommandApi {
     @DeleteMapping("user")
     public void deleteUser(@RequestBody @Valid MediaCompanyUserDto.Request.UserUpdate request) {
         this.companyService.deleteUser(request, SecurityUtils.getLoginUserNo());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("user/admin")
+    public void saveUserAdmin(@RequestBody @Valid AdminUserDto.Request.SaveUser request) {
+        this.companyService.saveUserAdmin(request, SecurityUtils.getLoginUserNo());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("user/admin/invite")
+    public void saveUserAdminInvite(@RequestBody @Valid AdminUserDto.Request.SaveUser request) {
+        this.companyService.saveUserAdminInvite(request, SecurityUtils.getLoginUserNo());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("user/admin/member")
+    public void updateUserAdminMember(@RequestBody @Valid AdminUserDto.Request.UserMemberUpdate request) {
+        this.companyService.updateUserAdminMember(request, SecurityUtils.getLoginUserNo());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("user/admin/status")
+    public void updateUserAdminStatus(@RequestBody @Valid AdminUserDto.Request.UserStatusUpdate request) {
+        this.companyService.updateUserAdminStatus(request, SecurityUtils.getLoginUserNo());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("user/admin")
+    public void deleteUserAdmin(@RequestBody @Valid AdminUserDto.Request.UserUpdate request) {
+        this.companyService.deleteUserAdmin(request, SecurityUtils.getLoginUserNo());
     }
 }

@@ -38,6 +38,13 @@ public class AdminUserDto {
             private Integer companyId;
             private Integer id;
         }
+
+        @Getter
+        @Setter
+        public static class SearchAdminUser {
+            private String userId;
+            private String name;
+        }
     }
 
     public static abstract class Response {

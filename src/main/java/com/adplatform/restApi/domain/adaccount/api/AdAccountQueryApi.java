@@ -5,6 +5,7 @@ import com.adplatform.restApi.domain.adaccount.dao.user.AdAccountUserRepository;
 import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto;
 import com.adplatform.restApi.domain.adaccount.dto.user.AdAccountUserDto;
+import com.adplatform.restApi.domain.business.dto.account.BusinessAccountDto;
 import com.adplatform.restApi.domain.business.dto.user.BusinessAccountUserDto;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.global.config.security.util.SecurityUtils;
@@ -44,6 +45,15 @@ public class AdAccountQueryApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}/users/search")
+    public PageDto<AdAccountUserDto.Response.AdAccountUserInfo> adAccountUserSearch(
+            @PathVariable(name = "id") Integer adAccountId,
+            AdAccountDto.Request.SearchUser searchRequest,
+            @PageableDefault Pageable pageable) {
+        return PageDto.create(this.adAccountUserRepository.adAccountUserSearch(adAccountId, searchRequest, pageable));
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}/users/request")
     public List<AdAccountUserDto.Response.AdAccountUserInfo> adAccountRequestUserInfo(@PathVariable(name = "id") Integer adAccountId) {
         return this.adAccountUserRepository.adAccountRequestUserInfo(adAccountId);
@@ -55,6 +65,13 @@ public class AdAccountQueryApi {
         return this.adAccountUserRepository.adAccountUserInfo(adAccountId, userNo);
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/search")
+    public PageDto<AdAccountDto.Response.AdAccountSearch> searchAdAccount(
+            @PageableDefault Pageable pageable,
+            AdAccountDto.Request.SearchAdAccount searchRequest) {
+        return PageDto.create(this.adAccountRepository.searchAdAccount(pageable, searchRequest));
+    }
 
 
 

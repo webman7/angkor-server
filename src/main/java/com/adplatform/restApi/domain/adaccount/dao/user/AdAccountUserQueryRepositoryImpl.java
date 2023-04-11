@@ -1,10 +1,12 @@
 package com.adplatform.restApi.domain.adaccount.dao.user;
 
 import com.adplatform.restApi.domain.adaccount.domain.AdAccountUser;
+import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto;
 import com.adplatform.restApi.domain.adaccount.dto.user.AdAccountUserDto;
 import com.adplatform.restApi.domain.adaccount.dto.user.QAdAccountUserDto_Response_AdAccountUserInfo;
 import com.adplatform.restApi.domain.user.domain.User;
 import com.adplatform.restApi.domain.user.dto.user.QUserDto_Response_BaseInfo;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -48,6 +51,45 @@ public class AdAccountUserQueryRepositoryImpl implements AdAccountUserQueryRepos
         return content.size();
     }
 
+    @Override
+    public Page<AdAccountUserDto.Response.AdAccountUserInfo> adAccountUserSearch(Integer adAccountId, AdAccountDto.Request.SearchUser searchRequest, Pageable pageable) {
+        List<AdAccountUserDto.Response.AdAccountUserInfo> content = this.query.select(new QAdAccountUserDto_Response_AdAccountUserInfo(
+                        adAccount.id,
+                        new QUserDto_Response_BaseInfo(
+                                user.id,
+                                user.loginId,
+                                user.name,
+                                user.phone
+                        ),
+                        adAccountUser.memberType,
+                        adAccountUser.status
+                ))
+                .from(adAccount, adAccountUser, user)
+                .where(adAccount.id.eq(adAccountId),
+                        this.loginIdContains(searchRequest.getUserId()),
+                        this.nameContains(searchRequest.getName()),
+                        adAccountUser.adAccount.id.eq(adAccount.id),
+                        adAccountUser.user.id.eq(user.id),
+                        adAccountUser.status.notIn(AdAccountUser.Status.D),
+                        user.active.in(User.Active.Y, User.Active.L)
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = this.query.select(adAccountUser.count())
+                .from(adAccount, adAccountUser, user)
+                .where(adAccount.id.eq(adAccountId),
+                        this.loginIdContains(searchRequest.getUserId()),
+                        this.nameContains(searchRequest.getName()),
+                        adAccountUser.adAccount.id.eq(adAccount.id),
+                        adAccountUser.user.id.eq(user.id),
+                        adAccountUser.status.notIn(AdAccountUser.Status.D),
+                        user.active.in(User.Active.Y, User.Active.L)
+                );
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
 
     @Override
     public Page<AdAccountUserDto.Response.AdAccountUserInfo> adAccountUserInfo(Integer adAccountId, Pageable pageable) {
@@ -136,5 +178,13 @@ public class AdAccountUserQueryRepositoryImpl implements AdAccountUserQueryRepos
         this.query.delete(adAccountUser)
                 .where(adAccountUser.id.adAccountId.eq(adAccountId), adAccountUser.id.userId.eq(userId))
                 .execute();
+    }
+
+    private BooleanExpression nameContains(String name) {
+        return StringUtils.hasText(name) ? user.name.contains(name) : null;
+    }
+
+    private BooleanExpression loginIdContains(String loginId) {
+        return StringUtils.hasText(loginId) ? user.loginId.contains(loginId) : null;
     }
 }

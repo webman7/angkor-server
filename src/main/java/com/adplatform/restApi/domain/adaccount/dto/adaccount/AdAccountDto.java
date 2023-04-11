@@ -78,6 +78,20 @@ public class AdAccountDto {
 
         @Getter
         @Setter
+        public static class SearchAdAccount {
+            private Integer id;
+            private String name;
+        }
+
+        @Getter
+        @Setter
+        public static class SearchUser {
+            private String userId;
+            private String name;
+        }
+
+        @Getter
+        @Setter
         public static class ForCashSearch {
             private Integer id;
             private String name;
@@ -86,6 +100,35 @@ public class AdAccountDto {
 
 
     public static abstract class Response {
+
+        @Getter
+        @Setter
+        public static class AdAccountSearch {
+            private Integer id;
+            private String name;
+            private Integer businessAccountId;
+            private String businessAccountName;
+            private AdAccount.Config config;
+            private boolean adminStop;
+
+            @QueryProjection
+            public AdAccountSearch(
+                    Integer id,
+                    String name,
+                    Integer businessAccountId,
+                    String businessAccountName,
+                    AdAccount.Config config,
+                    boolean adminStop) {
+                this.id = id;
+                this.name = name;
+                this.businessAccountId = businessAccountId;
+                this.businessAccountName = businessAccountName;
+                this.config = config;
+                this.adminStop = adminStop;
+            }
+        }
+
+
         @Getter
         @Setter
         public static class ForAdminSearch {
