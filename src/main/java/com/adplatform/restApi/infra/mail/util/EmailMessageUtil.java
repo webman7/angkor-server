@@ -28,7 +28,7 @@ public class EmailMessageUtil {
 
     public String getMediaCompanyInviteMessage(String inviteUserName, String companyName) {
         try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new ClassPathResource("email/find-password.html").getInputStream(), StandardCharsets.UTF_8));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new ClassPathResource("email/media-company-invite.html").getInputStream(), StandardCharsets.UTF_8));
             StringBuilder stringBuilder = new StringBuilder();
             while (bufferedReader.ready()) {
                 stringBuilder.append(bufferedReader.readLine());
