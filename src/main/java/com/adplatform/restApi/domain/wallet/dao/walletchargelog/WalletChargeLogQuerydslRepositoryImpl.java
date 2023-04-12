@@ -81,6 +81,22 @@ public class WalletChargeLogQuerydslRepositoryImpl implements WalletChargeLogQue
                                                         .where(walletChargeFile.walletChargeLog.id.eq(walletChargeLog.id)
                                                         ))
                                         ), "fileUrl"),
+                                as(select(walletChargeFile.information.originalFileName)
+                                        .from(walletChargeFile)
+                                        .where(walletChargeFile.walletChargeLog.id.eq(walletChargeLog.id),
+                                                walletChargeFile.id.eq(select(walletChargeFile.id.max())
+                                                        .from(walletChargeFile)
+                                                        .where(walletChargeFile.walletChargeLog.id.eq(walletChargeLog.id)
+                                                        ))
+                                        ), "fileName"),
+                                as(select(walletChargeFile.information.fileType)
+                                        .from(walletChargeFile)
+                                        .where(walletChargeFile.walletChargeLog.id.eq(walletChargeLog.id),
+                                                walletChargeFile.id.eq(select(walletChargeFile.id.max())
+                                                        .from(walletChargeFile)
+                                                        .where(walletChargeFile.walletChargeLog.id.eq(walletChargeLog.id)
+                                                        ))
+                                        ), "fileType"),
                                 walletChargeLog.createdUserNo,
                                 as(select(user.loginId)
                                                 .from(user)

@@ -1,6 +1,7 @@
 package com.adplatform.restApi.domain.wallet.dto;
 
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
+import com.adplatform.restApi.domain.wallet.domain.FileInformation;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
@@ -279,11 +280,13 @@ public class WalletDto {
             private Integer depositAt;
             private String adminMemo;
             private String fileUrl;
+            private String fileName;
+            private FileInformation.FileType fileType;
             private int createdUserNo;
             private String createdUserId;
             private LocalDateTime createdAt;
             @QueryProjection
-            public ChargeSearch(int id, int businessAccountId, String businessAccountName, Float depositAmount, String depositor, Integer depositAt, String adminMemo, String fileUrl, int createdUserNo, String createdUserId, LocalDateTime createdAt) {
+            public ChargeSearch(int id, int businessAccountId, String businessAccountName, Float depositAmount, String depositor, Integer depositAt, String adminMemo, String fileUrl, String fileName, FileInformation.FileType fileType, int createdUserNo, String createdUserId, LocalDateTime createdAt) {
                 this.id = id;
                 this.businessAccountId = businessAccountId;
                 this.businessAccountName = businessAccountName;
@@ -292,6 +295,8 @@ public class WalletDto {
                 this.depositAt = depositAt;
                 this.adminMemo = adminMemo;
                 this.fileUrl = fileUrl;
+                this.fileName = fileName;
+                this.fileType = fileType;
                 this.createdUserNo = createdUserNo;
                 this.createdUserId = createdUserId;
                 this.createdAt = createdAt;
