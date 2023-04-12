@@ -22,11 +22,22 @@ public class EmailEventHandler {
     @Async
     @EventListener(FindPasswordEmailSentEvent.class)
     public void handleFindPasswordEmailSentEvent(FindPasswordEmailSentEvent event) {
-        String subject = "[유니온 모바일] 인증번호 안내";
+        String subject = "[Angkor AD] 인증번호 안내";
         this.emailService.sendEmail(
                 event.getEmail(),
                 subject,
                 new EmailMessageUtil().getFindPasswordMessage(event.getRandomPassword()),
+                true);
+    }
+
+    @Async
+    @EventListener(MediaCompanyInviteEmailSentEvent.class)
+    public void handleMediaCompanyInviteEmailSentEvent(MediaCompanyInviteEmailSentEvent event) {
+        String subject = "[Angkor AD] 초대 메일";
+        this.emailService.sendEmail(
+                event.getEmail(),
+                subject,
+                new EmailMessageUtil().getMediaCompanyInviteMessage(event.getInviteUserName(), event.getCompanyName()),
                 true);
     }
 }

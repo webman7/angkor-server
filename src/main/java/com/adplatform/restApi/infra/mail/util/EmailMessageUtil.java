@@ -25,4 +25,20 @@ public class EmailMessageUtil {
             throw new IllegalArgumentException(e.getCause());
         }
     }
+
+    public String getMediaCompanyInviteMessage(String inviteUserName, String companyName) {
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new ClassPathResource("email/find-password.html").getInputStream(), StandardCharsets.UTF_8));
+            StringBuilder stringBuilder = new StringBuilder();
+            while (bufferedReader.ready()) {
+                stringBuilder.append(bufferedReader.readLine());
+            }
+            return stringBuilder.toString().replace("{inviteUserName}", inviteUserName).replace("{companyName}", companyName);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException(e.getCause());
+        }
+    }
+
+
 }

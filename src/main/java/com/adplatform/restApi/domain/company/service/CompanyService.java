@@ -25,10 +25,14 @@ import com.adplatform.restApi.domain.user.dto.user.UserDto;
 import com.adplatform.restApi.domain.user.exception.UserNotFoundException;
 import com.adplatform.restApi.domain.user.service.UserQueryService;
 import com.adplatform.restApi.global.config.security.util.SecurityUtils;
+import com.adplatform.restApi.global.value.Email;
 import com.adplatform.restApi.infra.file.service.AwsFileService;
 import com.adplatform.restApi.infra.file.service.FileService;
+import com.adplatform.restApi.infra.mail.event.FindPasswordEmailSentEvent;
+import com.adplatform.restApi.infra.mail.event.MediaCompanyInviteEmailSentEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -59,6 +63,7 @@ public class CompanyService {
     private final AdminUserMapper adminUserMapper;
     private final AdminUserInfoHistoryMapper adminUserInfoHistoryMapper;
     private final AdminUserInfoHistoryRepository adminUserInfoHistoryRepository;
+    private final ApplicationEventPublisher eventPublisher;
     private final AwsFileService awsFileService;
 
     public Company findByIdOrElseThrow(Integer id) {
@@ -187,6 +192,8 @@ public class CompanyService {
         Company company = CompanyFindUtils.findByIdOrElseThrow(request.getCompanyId(), this.companyRepository);
         MediaCompanyUser mediaCompanyUser = this.mediaCompanyUserMapper.toEntityInvite(request, company, user);
         this.mediaCompanyUserRepository.save(mediaCompanyUser);
+
+        this.eventPublisher.publishEvent(new MediaCompanyInviteEmailSentEvent(new Email(userInfo.getLoginId()), mediaCompanyUserInfo.getUser().getName(), mediaCompanyUser.getCompany().getName()));
     }
 
     public void updateUserMember(MediaCompanyUserDto.Request.UserMemberUpdate request, Integer loginUserNo) {
