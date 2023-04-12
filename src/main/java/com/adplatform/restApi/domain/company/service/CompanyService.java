@@ -439,11 +439,12 @@ public class CompanyService {
         // 인서트
         User user = this.userQueryService.findByIdOrElseThrow(userInfo.getId());
         Company company = CompanyFindUtils.findByIdOrElseThrow(request.getCompanyId(), this.companyRepository);
+        AdminUser adminUser;
         if(count1.equals(0)) {
-            AdminUser adminUser = this.adminUserMapper.toEntity(request, company, user);
+            adminUser = this.adminUserMapper.toEntity(request, company, user);
             this.adminUserRepository.save(adminUser);
         } else {
-            AdminUser adminUser = this.adminUserMapper.toEntityInvite(request, company, user);
+            adminUser = this.adminUserMapper.toEntityInvite(request, company, user);
             this.adminUserRepository.save(adminUser);
         }
     }
