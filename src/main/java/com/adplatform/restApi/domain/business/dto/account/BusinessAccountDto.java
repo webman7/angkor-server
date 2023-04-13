@@ -452,7 +452,7 @@ public class BusinessAccountDto {
             private String zipCode;
             private String businessCategory;
             private String businessItem;
-            private Bank bank;
+            private Integer bankId;
             private String accountNumber;
             private String accountOwner;
             private com.adplatform.restApi.global.value.Email taxBillEmail;
@@ -467,7 +467,7 @@ public class BusinessAccountDto {
                                String zipCode,
                                String businessCategory,
                                String businessItem,
-                               Bank bank,
+                               Integer bankId,
                                String accountNumber,
                                String accountOwner,
                                com.adplatform.restApi.global.value.Email taxBillEmail) {
@@ -481,7 +481,7 @@ public class BusinessAccountDto {
                 this.zipCode = zipCode;
                 this.businessCategory = businessCategory;
                 this.businessItem = businessItem;
-                this.bank = bank;
+                this.bankId = bankId;
                 this.accountNumber = accountNumber;
                 this.accountOwner = accountOwner;
                 this.taxBillEmail = taxBillEmail;
