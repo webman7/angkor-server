@@ -45,6 +45,7 @@ import com.adplatform.restApi.domain.statistics.domain.taxbill.*;
 import com.adplatform.restApi.domain.statistics.dto.TaxBillDto;
 import com.adplatform.restApi.domain.statistics.service.BusinessAccountTaxBillFindUtils;
 import com.adplatform.restApi.domain.user.dto.user.UserDto;
+import com.adplatform.restApi.domain.user.exception.UserNotFoundException;
 import com.adplatform.restApi.domain.user.service.UserQueryService;
 import com.adplatform.restApi.domain.user.domain.User;
 import com.adplatform.restApi.domain.wallet.domain.WalletMaster;
@@ -224,6 +225,9 @@ public class BusinessAccountSaveService {
 
         // 회원 중복 체크
         UserDto.Response.BaseInfo userInfo = this.userQueryService.findUserByLoginId(request.getUserId());
+        if(userInfo == null) {
+            throw new UserNotFoundException();
+        }
         Integer count = this.businessAccountUserRepository.findByBusinessAccountIdAndUserIdCount(request.getBusinessAccountId(), userInfo.getId());
 
         if(!count.equals(0)) {

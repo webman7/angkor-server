@@ -150,6 +150,9 @@ public class CompanyService {
 
         // 회원 중복 체크
         UserDto.Response.BaseInfo userInfo = this.userQueryService.findUserByLoginId(request.getUserId());
+        if(userInfo == null) {
+            throw new UserNotFoundException();
+        }
         Integer count = this.mediaCompanyUserRepository.findByCompanyIdAndUserIdCount(request.getCompanyId(), userInfo.getId());
 
         if(!count.equals(0)) {
@@ -181,6 +184,9 @@ public class CompanyService {
 
         // 회원 중복 체크
         UserDto.Response.BaseInfo userInfo = this.userQueryService.findUserByLoginId(request.getUserId());
+        if(userInfo == null) {
+            throw new UserNotFoundException();
+        }
         Integer count = this.mediaCompanyUserRepository.findByCompanyIdAndUserIdCount(request.getCompanyId(), userInfo.getId());
 
         if(!count.equals(0)) {
@@ -429,6 +435,9 @@ public class CompanyService {
 
         // 회원 중복 체크
         UserDto.Response.BaseInfo userInfo = this.userQueryService.findUserByLoginId(request.getUserId());
+        if(userInfo == null) {
+            throw new UserNotFoundException();
+        }
         Integer count = this.adminUserRepository.findByCompanyIdAndUserIdCount(request.getCompanyId(), userInfo.getId());
 
         if(!count.equals(0)) {
@@ -459,6 +468,9 @@ public class CompanyService {
 
         // 회원 중복 체크
         UserDto.Response.BaseInfo userInfo = this.userQueryService.findUserByLoginId(request.getUserId());
+        if(userInfo == null) {
+            throw new UserNotFoundException();
+        }
         Integer count = this.adminUserRepository.findByCompanyIdAndUserIdCount(request.getCompanyId(), userInfo.getId());
 
         if(!count.equals(0)) {
