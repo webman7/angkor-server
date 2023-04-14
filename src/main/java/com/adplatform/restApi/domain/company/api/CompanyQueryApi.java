@@ -51,6 +51,13 @@ public class CompanyQueryApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/mediaCompany/list")
+    public List<CompanyDto.Response.Default> mediaCompanyList() {
+
+        return this.companyRepository.mediaCompanyList();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/media/list")
     public List<CompanyDto.Response.MediaByCompany> listMediaByCompany(CompanyDto.Request.MediaByCompany searchRequest) {
         Company company = this.companyRepository.findById(searchRequest.getCompanyId()).orElseThrow(CompanyNotFoundException::new);

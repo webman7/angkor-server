@@ -21,6 +21,9 @@ public interface CompanyQuerydslRepository {
 
     List<CompanyDto.Response.Default> list();
 
+    List<CompanyDto.Response.Default> mediaCompanyList();
+
+
     List<CompanyDto.Response.MediaByCompany> listMediaByCompany(CompanyDto.Request.MediaByCompany searchRequest);
 
 

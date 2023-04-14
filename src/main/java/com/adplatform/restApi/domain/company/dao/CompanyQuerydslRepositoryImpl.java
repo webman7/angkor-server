@@ -67,6 +67,18 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
     }
 
     @Override
+    public List<CompanyDto.Response.Default> mediaCompanyList() {
+        return this.query
+                .select(new QCompanyDto_Response_Default(company.id, company.name))
+                .from(company)
+                .where(
+                        company.type.eq(Company.Type.MEDIA),
+                        company.deleted.eq(false))
+                .fetch();
+    }
+
+
+    @Override
     public List<CompanyDto.Response.MediaByCompany> listMediaByCompany(CompanyDto.Request.MediaByCompany searchRequest) {
         return this.query
                 .select(new QCompanyDto_Response_MediaByCompany(
