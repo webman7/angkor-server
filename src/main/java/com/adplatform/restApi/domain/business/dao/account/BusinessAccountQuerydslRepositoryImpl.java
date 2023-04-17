@@ -579,10 +579,11 @@ public class BusinessAccountQuerydslRepositoryImpl implements BusinessAccountQue
 
 
     @Override
-    public List<BusinessAccountDto.Response.AdAccountInfo> businessAccountByAdAccounts(Integer businessAccountId) {
-        return this.query.select(new QBusinessAccountDto_Response_AdAccountInfo(
+    public List<BusinessAccountDto.Response.AdAccountMemberInfo> businessAccountByAdAccounts(Integer businessAccountId) {
+        return this.query.select(new QBusinessAccountDto_Response_AdAccountMemberInfo(
                     adAccount.id,
-                    adAccount.name
+                    adAccount.name,
+                    adAccountUser.memberType
                 ))
                 .from(businessAccount, adAccount)
                 .where(businessAccount.id.eq(businessAccountId),
