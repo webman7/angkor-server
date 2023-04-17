@@ -297,12 +297,15 @@ public class BusinessAccountDto {
         public static class AdAccountInfo {
             private Integer id;
             private String name;
+            private String memberType;
             @QueryProjection
             public AdAccountInfo(
                     Integer id,
-                    String name) {
+                    String name,
+                    String memberType) {
                 this.id = id;
                 this.name = name;
+                this.memberType = memberType;
             }
         }
 

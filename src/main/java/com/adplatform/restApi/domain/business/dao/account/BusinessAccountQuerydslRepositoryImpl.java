@@ -12,6 +12,7 @@ import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_WalletBalanc
 import com.adplatform.restApi.domain.wallet.dto.QWalletDto_Response_WalletSpend;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -582,7 +583,8 @@ public class BusinessAccountQuerydslRepositoryImpl implements BusinessAccountQue
     public List<BusinessAccountDto.Response.AdAccountInfo> businessAccountByAdAccounts(Integer businessAccountId) {
         return this.query.select(new QBusinessAccountDto_Response_AdAccountInfo(
                     adAccount.id,
-                    adAccount.name
+                    adAccount.name,
+                    Expressions.constant("MASTER")
                 ))
                 .from(businessAccount, adAccount)
                 .where(businessAccount.id.eq(businessAccountId),
