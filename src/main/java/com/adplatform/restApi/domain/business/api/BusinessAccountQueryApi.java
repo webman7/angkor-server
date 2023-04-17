@@ -106,7 +106,7 @@ public class BusinessAccountQueryApi {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/account/{id}/adaccounts/master")
-    public List<BusinessAccountDto.Response.AdAccountMemberInfo> businessAccountByAdAccounts(@PathVariable(name = "id") Integer businessAccountId) {
+    public List<BusinessAccountDto.Response.AdAccountInfo> businessAccountByAdAccounts(@PathVariable(name = "id") Integer businessAccountId) {
         return this.businessAccountRepository.businessAccountByAdAccounts(businessAccountId);
     }
 

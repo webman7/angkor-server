@@ -33,7 +33,7 @@ public interface BusinessAccountQuerydslRepository {
     List<BusinessAccountDto.Response.ForCashSearch> searchForCash(BusinessAccountDto.Request.ForCashSearch request);
     Optional<BusinessAccountDto.Response.BusinessAccountCount> countStatusYN(Integer loginUserNo);
     BusinessAccountDto.Response.BusinessAccountInfo businessAccountInfo(Integer businessAccountId);
-    List<BusinessAccountDto.Response.AdAccountMemberInfo> businessAccountByAdAccounts(Integer businessAccountId);
+    List<BusinessAccountDto.Response.AdAccountInfo> businessAccountByAdAccounts(Integer businessAccountId);
     List<BusinessAccountDto.Response.AdAccountMemberInfo> businessAccountByAdAccountsMember(Integer businessAccountId, Integer loginUserNo);
     Page<BusinessAccountDto.Response.BusinessAccountCreditInfo> searchCredit(Pageable pageable, BusinessAccountDto.Request.SearchCredit searchRequest);
     Page<BusinessAccountDto.Response.BusinessAccountSearch> searchBusiness(Pageable pageable, BusinessAccountDto.Request.SearchBusiness searchRequest);
