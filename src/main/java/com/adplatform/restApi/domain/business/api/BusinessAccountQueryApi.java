@@ -99,6 +99,12 @@ public class BusinessAccountQueryApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/account/{id}/users/master")
+    public List<BusinessAccountUserDto.Response.BusinessAccountUserInfo> businessAccountMasterUserInfo(@PathVariable(name = "id") Integer businessAccountId) {
+        return this.businessAccountUserRepository.businessAccountMasterUserInfo(businessAccountId);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/account/{id}/user/{userNo}")
     public BusinessAccountUserDto.Response.BusinessAccountUserInfo businessAccountUserInfo(@PathVariable(name = "id") Integer businessAccountId, @PathVariable(name = "userNo") Integer userNo) {
         return this.businessAccountUserRepository.businessAccountUserInfo(businessAccountId, userNo);

@@ -20,6 +20,7 @@ public interface BusinessAccountUserQueryRepository {
     Page<BusinessAccountUserDto.Response.BusinessAccountUserInfo> businessAccountUserInfo(Integer businessAccountId, Pageable pageable);
     Page<BusinessAccountUserDto.Response.BusinessAccountUserInfo> businessAccountUserSearch(Integer businessAccountId, BusinessAccountDto.Request.SearchUser searchRequest, Pageable pageable);
     List<BusinessAccountUserDto.Response.BusinessAccountUserInfo> businessAccountRequestUserInfo(Integer businessAccountId);
+    List<BusinessAccountUserDto.Response.BusinessAccountUserInfo> businessAccountMasterUserInfo(Integer businessAccountId);
     BusinessAccountUserDto.Response.BusinessAccountUserInfo businessAccountUserInfo(Integer businessAccountId, Integer userNo);
 
     void deleteByBusinessAccountIdAndUserId(Integer businessAccountId, Integer userId);

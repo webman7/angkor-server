@@ -164,6 +164,31 @@ public class BusinessAccountUserQueryRepositoryImpl implements BusinessAccountUs
     }
 
     @Override
+    public List<BusinessAccountUserDto.Response.BusinessAccountUserInfo> businessAccountMasterUserInfo(Integer businessAccountId) {
+        return this.query.select(new QBusinessAccountUserDto_Response_BusinessAccountUserInfo(
+                        businessAccount.id,
+                        new QUserDto_Response_BaseInfo(
+                                user.id,
+                                user.loginId,
+                                user.name,
+                                user.phone
+                        ),
+                        businessAccountUser.memberType,
+                        businessAccountUser.accountingYN,
+                        businessAccountUser.status
+                ))
+                .from(businessAccount, businessAccountUser, user)
+                .where(businessAccount.id.eq(businessAccountId),
+                        businessAccountUser.businessAccount.id.eq(businessAccount.id),
+                        businessAccountUser.user.id.eq(user.id),
+                        businessAccountUser.memberType.eq(BusinessAccountUser.MemberType.MASTER),
+                        businessAccountUser.status.in(BusinessAccountUser.Status.Y),
+                        user.active.in(User.Active.Y, User.Active.L)
+                )
+                .fetch();
+    }
+
+    @Override
     public BusinessAccountUserDto.Response.BusinessAccountUserInfo businessAccountUserInfo(Integer businessAccountId, Integer userNo) {
         return this.query.select(new QBusinessAccountUserDto_Response_BusinessAccountUserInfo(
                         businessAccount.id,
