@@ -5,6 +5,9 @@ import com.adplatform.restApi.domain.adaccount.exception.AdAccountUserAuthorizat
 import com.adplatform.restApi.domain.adaccount.dao.user.AdAccountUserRepository;
 import com.adplatform.restApi.domain.adaccount.exception.AdAccountUserNotFoundException;
 import com.adplatform.restApi.domain.adaccount.service.AdAccountUserQueryUtils;
+import com.adplatform.restApi.domain.business.dao.user.BusinessAccountUserRepository;
+import com.adplatform.restApi.domain.business.domain.BusinessAccountUser;
+import com.adplatform.restApi.domain.business.service.BusinessAccountUserQueryUtils;
 import com.adplatform.restApi.global.config.security.util.SecurityUtils;
 
 /**
@@ -32,11 +35,15 @@ public class AdAccountUserValidationUtil {
      * @exception AdAccountUserNotFoundException 해당 광고 계정에 접근 권한이 없습니다.
      * @exception AdAccountUserAuthorizationException 해당 광고 계정에 접근 권한이 없습니다.
      */
-    public static void validateAdAccountUser(Integer adAccountId, AdAccountUserRepository adAccountUserRepository) {
-        AdAccountUserQueryUtils.findByAdAccountIdAndUserIdOrElseThrow(
-                        adAccountId,
-                        SecurityUtils.getLoginUserNo(),
-                        adAccountUserRepository)
-                .validateStatus();
+    public static void validateAdAccountUser(Integer businessAccountId, Integer adAccountId, BusinessAccountUserRepository businessAccountUserRepository, AdAccountUserRepository adAccountUserRepository) {
+        Integer count = businessAccountUserRepository.findByBusinessAccountIdAndUserIdCount(businessAccountId, SecurityUtils.getLoginUserNo());
+
+        if(count.equals(0)) {
+            AdAccountUserQueryUtils.findByAdAccountIdAndUserIdOrElseThrow(
+                            adAccountId,
+                            SecurityUtils.getLoginUserNo(),
+                            adAccountUserRepository)
+                    .validateStatus();
+        }
     }
 }

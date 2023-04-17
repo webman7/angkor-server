@@ -1,7 +1,9 @@
 package com.adplatform.restApi.global.config.security.aop;
 
+import com.adplatform.restApi.domain.adaccount.dao.adaccount.AdAccountRepository;
 import com.adplatform.restApi.domain.adaccount.dao.user.AdAccountUserRepository;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountIdGetter;
+import com.adplatform.restApi.domain.adaccount.service.AdAccountFindUtils;
 import com.adplatform.restApi.domain.advertiser.adgroup.dao.adgroup.AdGroupRepository;
 import com.adplatform.restApi.domain.advertiser.adgroup.dto.adgroup.AdGroupIdGetter;
 import com.adplatform.restApi.domain.advertiser.adgroup.service.AdGroupFindUtils;
@@ -11,6 +13,7 @@ import com.adplatform.restApi.domain.advertiser.campaign.service.CampaignFindUti
 import com.adplatform.restApi.domain.advertiser.creative.dao.CreativeRepository;
 import com.adplatform.restApi.domain.advertiser.creative.dto.CreativeIdGetter;
 import com.adplatform.restApi.domain.advertiser.creative.service.CreativeFindUtils;
+import com.adplatform.restApi.domain.business.dao.user.BusinessAccountUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -38,7 +41,9 @@ import static com.adplatform.restApi.global.config.security.aop.AdAccountUserVal
 @Component
 @Aspect
 public class AuthorizedAdAccountAspect {
+    private final BusinessAccountUserRepository businessAccountUserRepository;
     private final AdAccountUserRepository adAccountUserRepository;
+    private final AdAccountRepository adAccountRepository;
     private final CampaignRepository campaignRepository;
     private final AdGroupRepository adGroupRepository;
     private final CreativeRepository creativeRepository;
@@ -52,7 +57,8 @@ public class AuthorizedAdAccountAspect {
     @Around("@annotation(com.adplatform.restApi.global.config.security.aop.AuthorizedAdAccount) && args(adAccountIdGetter, ..)")
     public Object validateAuthorizeAdAccount(ProceedingJoinPoint joinPoint, AdAccountIdGetter adAccountIdGetter) throws Throwable {
         Integer adAccountId = adAccountIdGetter.getAdAccountId();
-        validateAdAccountUser(adAccountId, this.adAccountUserRepository);
+        Integer businessAccountId = AdAccountFindUtils.findByIdOrElseThrow(adAccountId, this.adAccountRepository).getBusinessAccount().getId();
+        validateAdAccountUser(businessAccountId, adAccountId, this.businessAccountUserRepository, this.adAccountUserRepository);
         return joinPoint.proceed();
     }
 
@@ -67,7 +73,8 @@ public class AuthorizedAdAccountAspect {
         Integer adAccountId = CampaignFindUtils.findByIdOrElseThrow(campaignIdGetter.getCampaignId(), this.campaignRepository)
                 .getAdAccount()
                 .getId();
-        validateAdAccountUser(adAccountId, this.adAccountUserRepository);
+        Integer businessAccountId = AdAccountFindUtils.findByIdOrElseThrow(adAccountId, this.adAccountRepository).getBusinessAccount().getId();
+        validateAdAccountUser(businessAccountId, adAccountId, this.businessAccountUserRepository, this.adAccountUserRepository);
         return joinPoint.proceed();
     }
 
@@ -83,7 +90,8 @@ public class AuthorizedAdAccountAspect {
                 .getCampaign()
                 .getAdAccount()
                 .getId();
-        validateAdAccountUser(adAccountId, this.adAccountUserRepository);
+        Integer businessAccountId = AdAccountFindUtils.findByIdOrElseThrow(adAccountId, this.adAccountRepository).getBusinessAccount().getId();
+        validateAdAccountUser(businessAccountId, adAccountId, this.businessAccountUserRepository, this.adAccountUserRepository);
         return joinPoint.proceed();
     }
 
@@ -100,7 +108,8 @@ public class AuthorizedAdAccountAspect {
                 .getCampaign()
                 .getAdAccount()
                 .getId();
-        validateAdAccountUser(adAccountId, this.adAccountUserRepository);
+        Integer businessAccountId = AdAccountFindUtils.findByIdOrElseThrow(adAccountId, this.adAccountRepository).getBusinessAccount().getId();
+        validateAdAccountUser(businessAccountId, adAccountId, this.businessAccountUserRepository, this.adAccountUserRepository);
         return joinPoint.proceed();
     }
 }
