@@ -215,11 +215,12 @@ public class BusinessAccountUserQueryRepositoryImpl implements BusinessAccountUs
                 adAccountUser.memberType,
                 adAccountUser.status
                 ))
-                .from(businessAccount, adAccount, adAccountUser)
+                .from(businessAccount, adAccount, adAccountUser, user)
                 .where(
                         businessAccount.id.eq(adAccount.businessAccount.id),
                         adAccount.id.eq(adAccountUser.id.adAccountId),
                         businessAccount.id.eq(businessAccountId),
+                        adAccountUser.user.id.eq(user.id),
                         adAccountUser.id.userId.eq(userId)
                 ).fetch();
     }
