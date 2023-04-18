@@ -110,6 +110,7 @@ public class MediaTaxBill extends BaseCreatedEntity {
     }
 
     public MediaTaxBill update(TaxBillDto.Request.Update request) {
+        this.statDate = request.getStatDate();
         this.supplyAmount = request.getSupplyAmount();
         this.vatAmount = request.getVatAmount();
         this.totalAmount = request.getTotalAmount();
