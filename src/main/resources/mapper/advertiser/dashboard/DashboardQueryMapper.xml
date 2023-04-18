@@ -98,11 +98,12 @@
         <include refid="com.adplatform.restApi.domain.advertiser.creative.dao.mapper.CreativeQueryMapper.creativeCondition"/>
         ) t1
          ON rad.adaccount_info_id = #{request.adAccountId}
+        WHERE rad.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+         AND rad.adaccount_info_id = #{request.adAccountId}
         AND t1.adaccount_info_id = rad.adaccount_info_id
         AND t1.campaign_info_id = rad.campaign_info_id
         AND t1.adgroup_info_id = rad.adgroup_info_id
         AND t1.creative_info_id = rad.creative_info_id
-        WHERE rad.report_date BETWEEN #{request.startDate} AND #{request.endDate}
         GROUP BY rad.report_date
         UNION
         SELECT report_date,
@@ -119,11 +120,12 @@
         <include refid="com.adplatform.restApi.domain.advertiser.creative.dao.mapper.CreativeQueryMapper.creativeCondition"/>
         ) t1
          ON rac.adaccount_info_id = #{request.adAccountId}
+        WHERE rac.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+          AND rac.adaccount_info_id = #{request.adAccountId}
         AND t1.adaccount_info_id = rac.adaccount_info_id
         AND t1.campaign_info_id = rac.campaign_info_id
         AND t1.adgroup_info_id = rac.adgroup_info_id
         AND t1.creative_info_id = rac.creative_info_id
-        WHERE rac.report_date BETWEEN #{request.startDate} AND #{request.endDate}
         GROUP BY rac.report_date) inner_report
         GROUP BY report_date ) a
         GROUP BY report_date
@@ -152,18 +154,28 @@
             AND c.id = #{campaignId}
         </if>
         <if test="adGroupId">
-            AND a.id = #{campaignId}
+            AND a.id = #{adGroupId}
         </if>
         <if test="creativeId">
             AND cr.id = #{creativeId}
         </if>
         ) t1
         ON rad.adaccount_info_id = #{request.adAccountId}
+        WHERE rad.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+        AND rad.adaccount_info_id = #{request.adAccountId}
         AND t1.adaccount_info_id = rad.adaccount_info_id
         AND t1.campaign_info_id = rad.campaign_info_id
         AND t1.adgroup_info_id = rad.adgroup_info_id
         AND t1.creative_info_id = rad.creative_info_id
-        WHERE rad.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+        <if test="campaignId">
+            AND t1.campaign_info_id = #{campaignId}
+        </if>
+        <if test="adGroupId">
+            AND t1.adgroup_info_id = #{adGroupId}
+        </if>
+        <if test="creativeId">
+            AND t1.creative_info_id = #{creativeId}
+        </if>
         GROUP BY rad.report_date
         UNION
         SELECT report_date,
@@ -179,18 +191,28 @@
             AND c.id = #{campaignId}
         </if>
         <if test="adGroupId">
-            AND a.id = #{campaignId}
+            AND a.id = #{adGroupId}
         </if>
         <if test="creativeId">
             AND cr.id = #{creativeId}
         </if>
         ) t1
         ON rac.adaccount_info_id = #{request.adAccountId}
-        AND t1.adaccount_info_id = rac.adaccount_info_id
-        AND t1.campaign_info_id = rac.campaign_info_id
-        AND t1.adgroup_info_id = rac.adgroup_info_id
-        AND t1.creative_info_id = rac.creative_info_id
         WHERE rac.report_date BETWEEN #{request.startDate} AND #{request.endDate}
+         AND rac.adaccount_info_id = #{request.adAccountId}
+         AND t1.adaccount_info_id = rac.adaccount_info_id
+         AND t1.campaign_info_id = rac.campaign_info_id
+         AND t1.adgroup_info_id = rac.adgroup_info_id
+         AND t1.creative_info_id = rac.creative_info_id
+        <if test="campaignId">
+            AND t1.campaign_info_id = #{campaignId}
+        </if>
+        <if test="adGroupId">
+            AND t1.adgroup_info_id = #{adGroupId}
+        </if>
+        <if test="creativeId">
+            AND t1.creative_info_id = #{creativeId}
+        </if>
         GROUP BY rac.report_date) inner_report
         GROUP BY report_date ) a
         GROUP BY report_date
