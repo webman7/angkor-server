@@ -89,6 +89,10 @@ public class TaxBillDto {
             private Float vatAmount;
             private Float totalAmount;
             private String memo;
+            private String adminMemo;
+            private Integer bankId;
+            private String accountNumber;
+            private String accountOwner;
             private String mediaTaxBillFileUrl;
             private String mediaTaxBillFileName;
             private FileInformation.FileType mediaTaxBillFileType;
@@ -113,6 +117,10 @@ public class TaxBillDto {
                     Float vatAmount,
                     Float totalAmount,
                     String memo,
+                    String adminMemo,
+                    Integer bankId,
+                    String accountNumber,
+                    String accountOwner,
                     String mediaTaxBillFileUrl,
                     String mediaTaxBillFileName,
                     FileInformation.FileType mediaTaxBillFileType,
@@ -133,6 +141,10 @@ public class TaxBillDto {
                 this.supplyAmount = supplyAmount;
                 this.vatAmount = vatAmount;
                 this.totalAmount = totalAmount;
+                this.accountOwner = accountOwner;
+                this.adminMemo = adminMemo;
+                this.bankId = bankId;
+                this.accountNumber = accountNumber;
                 this.memo = memo;
                 this.mediaTaxBillFileUrl = mediaTaxBillFileUrl;
                 this.mediaTaxBillFileName = mediaTaxBillFileName;

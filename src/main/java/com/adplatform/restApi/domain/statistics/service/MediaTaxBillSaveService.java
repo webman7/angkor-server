@@ -37,7 +37,6 @@ public class MediaTaxBillSaveService {
     private final MediaRepository mediaRepository;
     private final MediaTaxBillRepository mediaTaxBillRepository;
     private final TaxBillMapper taxBillMapper;
-    private final BankRepository bankRepository;
     private final AwsFileService awsFileService;
     public void saveMediaTaxBill(TaxBillDto.Request.Save request) {
         try {
@@ -88,8 +87,7 @@ public class MediaTaxBillSaveService {
                 throw new MediaTaxBillUpdateException();
             }
             if(!mediaTaxBill.isPaymentStatus()) {
-                Bank bank = BankFindUtils.findByIdOrElseThrow(request.getBankId(), this.bankRepository);
-                mediaTaxBill.updatePayment(request, bank);
+                mediaTaxBill.updatePayment(request);
                 if(request.getMediaTaxBillPaymentFiles().size() > 0) {
                     request.getMediaTaxBillPaymentFiles().forEach(file -> mediaTaxBill.addMediaTaxBillPaymentFile(this.saveMediaTaxBillPaymentFile(request, mediaTaxBill, file)));
                 }

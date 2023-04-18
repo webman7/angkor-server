@@ -9,6 +9,7 @@ import com.adplatform.restApi.global.config.security.util.SecurityUtils;
 import com.adplatform.restApi.global.converter.BooleanToStringYOrNConverter;
 import com.adplatform.restApi.global.entity.BaseCreatedEntity;
 import com.adplatform.restApi.global.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -68,9 +69,12 @@ public class MediaTaxBill extends BaseCreatedEntity {
     @Column(name = "issue_date")
     private LocalDateTime issueAt;
 
-    @ManyToOne
-    @JoinColumn(name = "bank_info_id")
-    private Bank bank;
+//    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+//    @JoinColumn(name = "bank_info_id", insertable = false, updatable = false)
+//    @JsonIgnore
+//    private Bank bank;
+    @Column(name = "bank_info_id")
+    private Integer bankId;
 
     @Column(name = "account_number", length = 30)
     private String accountNumber;
@@ -118,12 +122,12 @@ public class MediaTaxBill extends BaseCreatedEntity {
         return this;
     }
 
-    public MediaTaxBill updatePayment(TaxBillDto.Request.Payment request, Bank bank) {
+    public MediaTaxBill updatePayment(TaxBillDto.Request.Payment request) {
         String startYear = request.getPaymentDate().toString().substring(0, 4);
         String startMonth = request.getPaymentDate().toString().substring(4, 6);
         String startDay = request.getPaymentDate().toString().substring(6, 8);
         String  paymentDate = startYear + "-" + startMonth + "-" + startDay + " 00:00:00";
-        this.bank = bank;
+        this.bankId = request.getBankId();
         this.accountNumber = request.getAccountNumber();
         this.accountOwner = request.getAccountOwner();
         this.paymentUserNo = SecurityUtils.getLoginUserNo();

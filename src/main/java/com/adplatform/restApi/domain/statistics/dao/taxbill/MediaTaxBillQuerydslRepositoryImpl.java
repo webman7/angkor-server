@@ -19,6 +19,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
+import static com.adplatform.restApi.domain.bank.domain.QBank.bank;
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
 import static com.adplatform.restApi.domain.media.domain.QMedia.media;
 import static com.adplatform.restApi.domain.statistics.domain.taxbill.QMediaTaxBill.mediaTaxBill;
@@ -48,6 +49,10 @@ public class MediaTaxBillQuerydslRepositoryImpl implements MediaTaxBillQuerydslR
                                 mediaTaxBill.vatAmount,
                                 mediaTaxBill.totalAmount,
                                 mediaTaxBill.memo,
+                                mediaTaxBill.adminMemo,
+                                mediaTaxBill.bankId,
+                                mediaTaxBill.accountNumber,
+                                mediaTaxBill.accountOwner,
                                 as(select(mediaTaxBillFile.information.url)
                                         .from(mediaTaxBillFile)
                                         .where(mediaTaxBillFile.mediaTaxBill.id.eq(mediaTaxBill.id),
@@ -146,6 +151,10 @@ public class MediaTaxBillQuerydslRepositoryImpl implements MediaTaxBillQuerydslR
                                 mediaTaxBill.vatAmount,
                                 mediaTaxBill.totalAmount,
                                 mediaTaxBill.memo,
+                                mediaTaxBill.adminMemo,
+                                mediaTaxBill.bankId,
+                                mediaTaxBill.accountNumber,
+                                mediaTaxBill.accountOwner,
                                 as(select(mediaTaxBillFile.information.url)
                                         .from(mediaTaxBillFile)
                                         .where(mediaTaxBillFile.mediaTaxBill.id.eq(mediaTaxBill.id),

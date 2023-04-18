@@ -6,6 +6,7 @@ import com.adplatform.restApi.domain.business.domain.BusinessAccount;
 import com.adplatform.restApi.domain.business.domain.BusinessAccountUser;
 import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.statistics.domain.taxbill.BusinessAccountTaxBill;
+import com.adplatform.restApi.domain.statistics.domain.taxbill.FileInformation;
 import com.adplatform.restApi.domain.wallet.dto.WalletDto;
 import com.adplatform.restApi.global.value.Address;
 import com.querydsl.core.annotations.QueryProjection;
@@ -392,6 +393,10 @@ public class BusinessAccountDto {
             private Float supplyAmount;
             private Float vatAmount;
             private Float totalAmount;
+            private String adminMemo;
+            private String businessAccountTaxBillFileUrl;
+            private String businessAccountTaxBillFileName;
+            private FileInformation.FileType businessAccountTaxBillFileType;
             private boolean issueStatus;
             private Integer issueUserNo;
             private String issueUserId;
@@ -408,6 +413,10 @@ public class BusinessAccountDto {
                     Float supplyAmount,
                     Float vatAmount,
                     Float totalAmount,
+                    String adminMemo,
+                    String businessAccountTaxBillFileUrl,
+                    String businessAccountTaxBillFileName,
+                    FileInformation.FileType businessAccountTaxBillFileType,
                     boolean issueStatus,
                     Integer issueUserNo,
                     String issueUserId,
@@ -421,6 +430,10 @@ public class BusinessAccountDto {
                 this.supplyAmount = supplyAmount;
                 this.vatAmount = vatAmount;
                 this.totalAmount = totalAmount;
+                this.adminMemo = adminMemo;
+                this.businessAccountTaxBillFileUrl = businessAccountTaxBillFileUrl;
+                this.businessAccountTaxBillFileName = businessAccountTaxBillFileName;
+                this.businessAccountTaxBillFileType = businessAccountTaxBillFileType;
                 this.issueStatus = issueStatus;
                 this.issueUserNo = issueUserNo;
                 this.issueUserId = issueUserId;

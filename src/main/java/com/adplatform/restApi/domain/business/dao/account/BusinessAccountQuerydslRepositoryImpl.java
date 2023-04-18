@@ -42,6 +42,9 @@ import static com.adplatform.restApi.domain.company.domain.QCompany.company;
 import static com.adplatform.restApi.domain.statistics.domain.report.QReportAdGroupDaily.reportAdGroupDaily;
 import static com.adplatform.restApi.domain.statistics.domain.sale.QSaleAdAccountDaily.saleAdAccountDaily;
 import static com.adplatform.restApi.domain.statistics.domain.taxbill.QBusinessAccountTaxBill.businessAccountTaxBill;
+import static com.adplatform.restApi.domain.statistics.domain.taxbill.QBusinessAccountTaxBillFile.businessAccountTaxBillFile;
+import static com.adplatform.restApi.domain.statistics.domain.taxbill.QMediaTaxBill.mediaTaxBill;
+import static com.adplatform.restApi.domain.statistics.domain.taxbill.QMediaTaxBillFile.mediaTaxBillFile;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
 import static com.adplatform.restApi.domain.wallet.domain.QWalletMaster.walletMaster;
 import static com.querydsl.core.types.ExpressionUtils.as;
@@ -550,6 +553,31 @@ public class BusinessAccountQuerydslRepositoryImpl implements BusinessAccountQue
                         businessAccountTaxBill.supplyAmount,
                         businessAccountTaxBill.vatAmount,
                         businessAccountTaxBill.totalAmount,
+                        businessAccountTaxBill.adminMemo,
+                        as(select(businessAccountTaxBillFile.information.url)
+                                .from(businessAccountTaxBillFile)
+                                .where(businessAccountTaxBillFile.businessAccountTaxBill.id.eq(businessAccountTaxBill.id),
+                                        businessAccountTaxBillFile.id.eq(select(businessAccountTaxBillFile.id.max())
+                                                .from(businessAccountTaxBillFile)
+                                                .where(businessAccountTaxBillFile.businessAccountTaxBill.id.eq(businessAccountTaxBill.id)
+                                                ))
+                                ), "businessAccountTaxBillFileUrl"),
+                        as(select(businessAccountTaxBillFile.information.originalFileName)
+                                .from(businessAccountTaxBillFile)
+                                .where(businessAccountTaxBillFile.businessAccountTaxBill.id.eq(businessAccountTaxBill.id),
+                                        businessAccountTaxBillFile.id.eq(select(businessAccountTaxBillFile.id.max())
+                                                .from(businessAccountTaxBillFile)
+                                                .where(businessAccountTaxBillFile.businessAccountTaxBill.id.eq(businessAccountTaxBill.id)
+                                                ))
+                                ), "businessAccountTaxBillFileName"),
+                        as(select(businessAccountTaxBillFile.information.fileType)
+                                .from(businessAccountTaxBillFile)
+                                .where(businessAccountTaxBillFile.businessAccountTaxBill.id.eq(businessAccountTaxBill.id),
+                                        businessAccountTaxBillFile.id.eq(select(businessAccountTaxBillFile.id.max())
+                                                .from(businessAccountTaxBillFile)
+                                                .where(businessAccountTaxBillFile.businessAccountTaxBill.id.eq(businessAccountTaxBill.id)
+                                                ))
+                                ), "businessAccountTaxBillFileType"),
                         businessAccountTaxBill.issueStatus,
                         businessAccountTaxBill.issueUserNo,
                         as(select(user.loginId)
@@ -558,6 +586,12 @@ public class BusinessAccountQuerydslRepositoryImpl implements BusinessAccountQue
                                 "issueUserId"),
                         businessAccountTaxBill.issueAt))
                 .from(businessAccount, businessAccountTaxBill, company)
+                .leftJoin(businessAccountTaxBillFile)
+                .on(businessAccountTaxBillFile.businessAccountTaxBill.id.eq(businessAccountTaxBill.id),
+                        businessAccountTaxBillFile.id.eq(select(businessAccountTaxBillFile.id.max())
+                                .from(businessAccountTaxBillFile)
+                                .where(businessAccountTaxBillFile.businessAccountTaxBill.id.eq(businessAccountTaxBill.id)
+                                )))
                 .where(
                         businessAccount.id.eq(businessAccountTaxBill.businessAccountId),
                         businessAccount.company.id.eq(company.id),
