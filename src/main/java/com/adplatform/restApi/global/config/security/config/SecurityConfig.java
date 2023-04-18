@@ -139,6 +139,8 @@ public class SecurityConfig {
 //        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
 //        configuration.addAllowedOriginPattern("*");
         configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedOrigin("http://localhost:3001");
+        configuration.addAllowedOrigin("http://localhost:3002");
         configuration.addAllowedOrigin("http://advertiser.union-mobile.co.kr");
         configuration.addAllowedOrigin("http://ec2-13-209-158-233.ap-northeast-2.compute.amazonaws.com");
 //        configuration.addAllowedOrigin("http://*:8083");
