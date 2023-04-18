@@ -15,7 +15,12 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static com.adplatform.restApi.domain.user.domain.Role.Type.*;
 
@@ -54,6 +59,10 @@ public class SecurityConfig {
                 .csrf().disable()
                 .cors().configurationSource(this.corsConfigurationSource())
                 .and()
+//                .authorizeRequests()
+//                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+//                .anyRequest().authenticated()
+//                .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -66,7 +75,7 @@ public class SecurityConfig {
 
     private void userAntMatchers(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/users/**").hasAnyAuthority(ROLE_ADMIN.name(), ROLE_OPERATOR.name(), ROLE_COMPANY_ADMINISTRATOR.name(), ROLE_COMPANY_GENERAL.name())
+                .antMatchers("/users/**").hasAnyAuthority(ROLE_ADMIN.name(), ROLE_OPERATOR.name(), ROLE_MEMBER.name())
                 .antMatchers(HttpMethod.POST, "/password/change").authenticated()
                 .antMatchers(HttpMethod.POST, "/signup", "/login", "/find/**").permitAll();
     }
@@ -78,7 +87,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.POST, "/companies/advertisers").permitAll()
                 .antMatchers(HttpMethod.GET, "/companies/registration/number").permitAll()
                 .antMatchers(HttpMethod.POST, "/companies/agencies").hasAnyAuthority(ROLE_ADMIN.name())
-                .antMatchers("/companies/**").hasAnyAuthority(ROLE_ADMIN.name(), ROLE_OPERATOR.name(), ROLE_COMPANY_ADMINISTRATOR.name(), ROLE_COMPANY_GENERAL.name());
+                .antMatchers("/companies/**").hasAnyAuthority(ROLE_ADMIN.name(), ROLE_OPERATOR.name(), ROLE_MEMBER.name());
     }
 
     private void businessAccountsAntMatchers(HttpSecurity http) throws Exception {
@@ -95,7 +104,7 @@ public class SecurityConfig {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/campaigns/search/**", "/ad-type-goal").authenticated()
                 .antMatchers(HttpMethod.POST, "/campaigns/**")
-                .hasAnyAuthority(ROLE_ADMIN.name(), ROLE_OPERATOR.name(), ROLE_COMPANY_ADMINISTRATOR.name(), ROLE_COMPANY_GENERAL.name());
+                .hasAnyAuthority(ROLE_ADMIN.name(), ROLE_OPERATOR.name(), ROLE_MEMBER.name());
     }
 
     private void adGroupAntMatchers(HttpSecurity http) throws Exception {
@@ -107,7 +116,7 @@ public class SecurityConfig {
         http.authorizeRequests()
                 .antMatchers("/creatives/search/**").authenticated()
                 .antMatchers("/creatives")
-                .hasAnyAuthority(ROLE_ADMIN.name(), ROLE_OPERATOR.name(), ROLE_COMPANY_ADMINISTRATOR.name(), ROLE_COMPANY_GENERAL.name());
+                .hasAnyAuthority(ROLE_ADMIN.name(), ROLE_OPERATOR.name(), ROLE_MEMBER.name());
     }
 
     private void mediaAndDeviceAntMatchers(HttpSecurity http) throws Exception {
@@ -118,12 +127,21 @@ public class SecurityConfig {
     private void permitAll(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/exception/**", "/", "/files/**","/batch/**").permitAll()
+                // 추가
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Preflight Request 허용해주기
                 .anyRequest().authenticated();
     }
 
     private CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOriginPattern("*");
+//        configuration.setAllowedOrigins(Arrays.asList("*"));
+//        configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT"));
+//        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+//        configuration.addAllowedOriginPattern("*");
+        configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedOrigin("http://advertiser.union-mobile.co.kr");
+        configuration.addAllowedOrigin("http://ec2-13-209-158-233.ap-northeast-2.compute.amazonaws.com");
+//        configuration.addAllowedOrigin("http://*:8083");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);
