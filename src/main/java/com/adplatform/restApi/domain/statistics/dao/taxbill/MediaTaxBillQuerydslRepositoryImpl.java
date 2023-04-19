@@ -77,6 +77,30 @@ public class MediaTaxBillQuerydslRepositoryImpl implements MediaTaxBillQuerydslR
                                                         .where(mediaTaxBillFile.mediaTaxBill.id.eq(mediaTaxBill.id)
                                                         ))
                                         ), "mediaTaxBillFileType"),
+                                as(select(mediaTaxBillPaymentFile.information.url)
+                                        .from(mediaTaxBillPaymentFile)
+                                        .where(mediaTaxBillPaymentFile.mediaTaxBill.id.eq(mediaTaxBill.id),
+                                                mediaTaxBillPaymentFile.id.eq(select(mediaTaxBillPaymentFile.id.max())
+                                                        .from(mediaTaxBillPaymentFile)
+                                                        .where(mediaTaxBillPaymentFile.mediaTaxBill.id.eq(mediaTaxBill.id)
+                                                        ))
+                                        ), "mediaTaxBillPaymentFileUrl"),
+                                as(select(mediaTaxBillPaymentFile.information.originalFileName)
+                                        .from(mediaTaxBillPaymentFile)
+                                        .where(mediaTaxBillPaymentFile.mediaTaxBill.id.eq(mediaTaxBill.id),
+                                                mediaTaxBillPaymentFile.id.eq(select(mediaTaxBillPaymentFile.id.max())
+                                                        .from(mediaTaxBillPaymentFile)
+                                                        .where(mediaTaxBillPaymentFile.mediaTaxBill.id.eq(mediaTaxBill.id)
+                                                        ))
+                                        ), "mediaTaxBillPaymentFileName"),
+                                as(select(mediaTaxBillPaymentFile.information.fileType)
+                                        .from(mediaTaxBillPaymentFile)
+                                        .where(mediaTaxBillPaymentFile.mediaTaxBill.id.eq(mediaTaxBill.id),
+                                                mediaTaxBillPaymentFile.id.eq(select(mediaTaxBillPaymentFile.id.max())
+                                                        .from(mediaTaxBillPaymentFile)
+                                                        .where(mediaTaxBillPaymentFile.mediaTaxBill.id.eq(mediaTaxBill.id)
+                                                        ))
+                                        ), "mediaTaxBillPaymentFileType"),
                                 mediaTaxBill.issueStatus,
                                 mediaTaxBill.issueUserNo,
                                 as(select(user.loginId)
@@ -96,6 +120,12 @@ public class MediaTaxBillQuerydslRepositoryImpl implements MediaTaxBillQuerydslR
                         mediaTaxBillFile.id.eq(select(mediaTaxBillFile.id.max())
                                 .from(mediaTaxBillFile)
                                 .where(mediaTaxBillFile.mediaTaxBill.id.eq(mediaTaxBill.id)
+                                )))
+                .leftJoin(mediaTaxBillPaymentFile)
+                .on(mediaTaxBillPaymentFile.mediaTaxBill.id.eq(mediaTaxBill.id),
+                        mediaTaxBillPaymentFile.id.eq(select(mediaTaxBillPaymentFile.id.max())
+                                .from(mediaTaxBillPaymentFile)
+                                .where(mediaTaxBillPaymentFile.mediaTaxBill.id.eq(mediaTaxBill.id)
                                 )))
                 .where(
                         mediaTaxBill.mediaId.eq(media.id),
@@ -179,6 +209,30 @@ public class MediaTaxBillQuerydslRepositoryImpl implements MediaTaxBillQuerydslR
                                                         .where(mediaTaxBillFile.mediaTaxBill.id.eq(mediaTaxBill.id)
                                                         ))
                                         ), "mediaTaxBillFileType"),
+                                as(select(mediaTaxBillPaymentFile.information.url)
+                                        .from(mediaTaxBillPaymentFile)
+                                        .where(mediaTaxBillPaymentFile.mediaTaxBill.id.eq(mediaTaxBill.id),
+                                                mediaTaxBillPaymentFile.id.eq(select(mediaTaxBillPaymentFile.id.max())
+                                                        .from(mediaTaxBillPaymentFile)
+                                                        .where(mediaTaxBillPaymentFile.mediaTaxBill.id.eq(mediaTaxBill.id)
+                                                        ))
+                                        ), "mediaTaxBillPaymentFileUrl"),
+                                as(select(mediaTaxBillPaymentFile.information.originalFileName)
+                                        .from(mediaTaxBillPaymentFile)
+                                        .where(mediaTaxBillPaymentFile.mediaTaxBill.id.eq(mediaTaxBill.id),
+                                                mediaTaxBillPaymentFile.id.eq(select(mediaTaxBillPaymentFile.id.max())
+                                                        .from(mediaTaxBillPaymentFile)
+                                                        .where(mediaTaxBillPaymentFile.mediaTaxBill.id.eq(mediaTaxBill.id)
+                                                        ))
+                                        ), "mediaTaxBillPaymentFileName"),
+                                as(select(mediaTaxBillPaymentFile.information.fileType)
+                                        .from(mediaTaxBillPaymentFile)
+                                        .where(mediaTaxBillPaymentFile.mediaTaxBill.id.eq(mediaTaxBill.id),
+                                                mediaTaxBillPaymentFile.id.eq(select(mediaTaxBillPaymentFile.id.max())
+                                                        .from(mediaTaxBillPaymentFile)
+                                                        .where(mediaTaxBillPaymentFile.mediaTaxBill.id.eq(mediaTaxBill.id)
+                                                        ))
+                                        ), "mediaTaxBillPaymentFileType"),
                                 mediaTaxBill.issueStatus,
                                 mediaTaxBill.issueUserNo,
                                 as(select(user.loginId)
@@ -198,6 +252,12 @@ public class MediaTaxBillQuerydslRepositoryImpl implements MediaTaxBillQuerydslR
                         mediaTaxBillFile.id.eq(select(mediaTaxBillFile.id.max())
                                 .from(mediaTaxBillFile)
                                 .where(mediaTaxBillFile.mediaTaxBill.id.eq(mediaTaxBill.id)
+                                )))
+                .leftJoin(mediaTaxBillPaymentFile)
+                .on(mediaTaxBillPaymentFile.mediaTaxBill.id.eq(mediaTaxBill.id),
+                        mediaTaxBillPaymentFile.id.eq(select(mediaTaxBillPaymentFile.id.max())
+                                .from(mediaTaxBillPaymentFile)
+                                .where(mediaTaxBillPaymentFile.mediaTaxBill.id.eq(mediaTaxBill.id)
                                 )))
                 .where(
                         mediaTaxBill.mediaId.eq(media.id),

@@ -96,6 +96,9 @@ public class TaxBillDto {
             private String mediaTaxBillFileUrl;
             private String mediaTaxBillFileName;
             private FileInformation.FileType mediaTaxBillFileType;
+            private String mediaTaxBillPaymentFileUrl;
+            private String mediaTaxBillPaymentFileName;
+            private FileInformation.FileType mediaTaxBillPaymentFileType;
             private boolean issueStatus;
             private Integer issueUserNo;
             private String issueUserId;
@@ -124,6 +127,9 @@ public class TaxBillDto {
                     String mediaTaxBillFileUrl,
                     String mediaTaxBillFileName,
                     FileInformation.FileType mediaTaxBillFileType,
+                    String mediaTaxBillPaymentFileUrl,
+                    String mediaTaxBillPaymentFileName,
+                    FileInformation.FileType mediaTaxBillPaymentFileType,
                     Boolean issueStatus,
                     Integer issueUserNo,
                     String issueUserId,
@@ -149,6 +155,9 @@ public class TaxBillDto {
                 this.mediaTaxBillFileUrl = mediaTaxBillFileUrl;
                 this.mediaTaxBillFileName = mediaTaxBillFileName;
                 this.mediaTaxBillFileType = mediaTaxBillFileType;
+                this.mediaTaxBillPaymentFileUrl = mediaTaxBillPaymentFileUrl;
+                this.mediaTaxBillPaymentFileName = mediaTaxBillPaymentFileName;
+                this.mediaTaxBillPaymentFileType = mediaTaxBillPaymentFileType;
                 this.issueStatus = issueStatus;
                 this.issueUserNo = issueUserNo;
                 this.issueUserId = issueUserId;
