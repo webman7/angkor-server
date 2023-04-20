@@ -4,6 +4,7 @@ import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.user.domain.User;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public abstract class UserDto {
         @Getter
         @Setter
         public static class Search {
+            private String userId;
             private String name;
         }
 
@@ -30,6 +32,15 @@ public abstract class UserDto {
         @Getter
         @Setter
         public static class MyInfoModify {
+            private String name;
+            private String phone;
+        }
+
+        @Getter
+        @Setter
+        public static class Modify {
+            @NonNull
+            private Integer id;
             private String name;
             private String phone;
         }
@@ -66,7 +77,16 @@ public abstract class UserDto {
             private String loginId;
             private String name;
             private String phone;
-            private String active;
+            private User.Active active;
+
+            @QueryProjection
+            public Search(Integer id, String loginId, String name, String phone, User.Active active) {
+                this.id = id;
+                this.loginId = loginId;
+                this.name = name;
+                this.phone = phone;
+                this.active = active;
+            }
         }
 
         @Getter

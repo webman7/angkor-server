@@ -11,4 +11,6 @@ public interface UserSaveQueryMapper {
     void updateUserUpdDate(@Param("userNo") Integer userNo, @Param("loginUserNo") Integer loginUserNo);
     void insertUserApproveLog(@Param("request") UserDto.Request.UpdateStatus request, @Param("user") User user, @Param("loginUserNo") Integer loginUserNo);
     void myInfoModify(@Param("request") UserDto.Request.MyInfoModify request, @Param("loginUserNo") Integer loginUserNo);
+
+    void modify(@Param("request") UserDto.Request.Modify request, @Param("loginUserNo") Integer loginUserNo);
 }

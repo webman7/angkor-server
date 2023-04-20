@@ -58,16 +58,30 @@ public class UserApi {
         return this.userMapper.toDetailResponse(user);
     }
 
+//    @ResponseStatus(HttpStatus.OK)
+//    @GetMapping("/search")
+//    public PageDto<UserDto.Response.Search> search(
+//            UserDto.Request.Search request,
+//            @PageableDefault Pageable pageable) {
+//        return PageDto.create(new PageImpl<>(
+//                this.userQueryMapper.search(request, pageable),
+//                pageable,
+//                this.userQueryMapper.countSearch(request)
+//        ));
+//    }
+
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/search")
     public PageDto<UserDto.Response.Search> search(
             UserDto.Request.Search request,
             @PageableDefault Pageable pageable) {
-        return PageDto.create(new PageImpl<>(
-                this.userQueryMapper.search(request, pageable),
-                pageable,
-                this.userQueryMapper.countSearch(request)
-        ));
+        return PageDto.create(this.userRepository.userSearch(request, pageable));
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/modify")
+    public void modify(@RequestBody @Valid UserDto.Request.Modify request) {
+        this.userSaveQueryMapper.modify(request, SecurityUtils.getLoginUserNo());
     }
 
     @ResponseStatus(HttpStatus.OK)
