@@ -607,6 +607,98 @@ public class BusinessAccountQuerydslRepositoryImpl implements BusinessAccountQue
     }
 
 
+    @Override
+    public Page<BusinessAccountDto.Response.BusinessAccountTaxInfo> searchBusinessAccountTaxIssue(
+            Pageable pageable, Integer businessAccountId, BusinessAccountDto.Request.SearchTax searchRequest) {
+        List<BusinessAccountDto.Response.BusinessAccountTaxInfo> content = this.getSearchBusinessAccountTaxIssueQuery(pageable, businessAccountId, searchRequest)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = this.query.select(Wildcard.count)
+                .from(businessAccount, businessAccountTaxBill, company)
+                .where(
+                        businessAccount.id.eq(businessAccountTaxBill.businessAccountId),
+                        businessAccount.id.eq(businessAccountId),
+                        businessAccount.company.id.eq(company.id),
+                        businessAccountTaxBill.issueStatus.eq(true),
+                        businessAccountTaxBill.statDate.between(
+                                searchRequest.getStartDate(),
+                                searchRequest.getEndDate()
+                        ));
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    private JPAQuery<BusinessAccountDto.Response.BusinessAccountTaxInfo> getSearchBusinessAccountTaxIssueQuery(
+            Pageable pageable,
+            Integer businessAccountId,
+            BusinessAccountDto.Request.SearchTax searchRequest) {
+
+        JPAQuery<BusinessAccountDto.Response.BusinessAccountTaxInfo> query = this.query.select(new QBusinessAccountDto_Response_BusinessAccountTaxInfo(
+                        businessAccountTaxBill.id,
+                        businessAccount.id,
+                        businessAccount.name,
+                        company.id,
+                        company.name,
+                        businessAccountTaxBill.statDate,
+                        businessAccountTaxBill.supplyAmount,
+                        businessAccountTaxBill.vatAmount,
+                        businessAccountTaxBill.totalAmount,
+                        businessAccountTaxBill.adminMemo,
+                        as(select(businessAccountTaxBillFile.information.url)
+                                .from(businessAccountTaxBillFile)
+                                .where(businessAccountTaxBillFile.businessAccountTaxBill.id.eq(businessAccountTaxBill.id),
+                                        businessAccountTaxBillFile.id.eq(select(businessAccountTaxBillFile.id.max())
+                                                .from(businessAccountTaxBillFile)
+                                                .where(businessAccountTaxBillFile.businessAccountTaxBill.id.eq(businessAccountTaxBill.id)
+                                                ))
+                                ), "businessAccountTaxBillFileUrl"),
+                        as(select(businessAccountTaxBillFile.information.originalFileName)
+                                .from(businessAccountTaxBillFile)
+                                .where(businessAccountTaxBillFile.businessAccountTaxBill.id.eq(businessAccountTaxBill.id),
+                                        businessAccountTaxBillFile.id.eq(select(businessAccountTaxBillFile.id.max())
+                                                .from(businessAccountTaxBillFile)
+                                                .where(businessAccountTaxBillFile.businessAccountTaxBill.id.eq(businessAccountTaxBill.id)
+                                                ))
+                                ), "businessAccountTaxBillFileName"),
+                        as(select(businessAccountTaxBillFile.information.fileType)
+                                .from(businessAccountTaxBillFile)
+                                .where(businessAccountTaxBillFile.businessAccountTaxBill.id.eq(businessAccountTaxBill.id),
+                                        businessAccountTaxBillFile.id.eq(select(businessAccountTaxBillFile.id.max())
+                                                .from(businessAccountTaxBillFile)
+                                                .where(businessAccountTaxBillFile.businessAccountTaxBill.id.eq(businessAccountTaxBill.id)
+                                                ))
+                                ), "businessAccountTaxBillFileType"),
+                        businessAccountTaxBill.issueStatus,
+                        businessAccountTaxBill.issueUserNo,
+                        as(select(user.loginId)
+                                        .from(user)
+                                        .where(user.id.eq(businessAccountTaxBill.issueUserNo)),
+                                "issueUserId"),
+                        businessAccountTaxBill.issueAt))
+                .from(businessAccount, businessAccountTaxBill, company)
+                .leftJoin(businessAccountTaxBillFile)
+                .on(businessAccountTaxBillFile.businessAccountTaxBill.id.eq(businessAccountTaxBill.id),
+                        businessAccountTaxBillFile.id.eq(select(businessAccountTaxBillFile.id.max())
+                                .from(businessAccountTaxBillFile)
+                                .where(businessAccountTaxBillFile.businessAccountTaxBill.id.eq(businessAccountTaxBill.id)
+                                )))
+                .where(
+                        businessAccount.id.eq(businessAccountTaxBill.businessAccountId),
+                        businessAccount.id.eq(businessAccountId),
+                        businessAccount.company.id.eq(company.id),
+                        businessAccountTaxBill.issueStatus.eq(true),
+                        businessAccountTaxBill.statDate.between(
+                                searchRequest.getStartDate(),
+                                searchRequest.getEndDate()
+                        ));
+
+        return Objects.nonNull(pageable)
+                ? query.orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(BusinessAccount.class, "businessAccount", pageable.getSort()).toArray(OrderSpecifier[]::new))
+                : query;
+    }
+
 
 
 

@@ -40,6 +40,8 @@ public interface BusinessAccountQuerydslRepository {
 
     BusinessAccountDto.Response.BusinessAccountCreditInfo businessAccountCreditInfo(Integer businessAccountId);
     Page<BusinessAccountDto.Response.BusinessAccountTaxInfo> searchTax(Pageable pageable, BusinessAccountDto.Request.SearchTax searchRequest);
+    Page<BusinessAccountDto.Response.BusinessAccountTaxInfo> searchBusinessAccountTaxIssue(Pageable pageable, Integer businessAccountId, BusinessAccountDto.Request.SearchTax searchRequest);
+
     void outOfBalanceUpdate(Integer businessAccountId, Boolean oufOfBalance);
 
 

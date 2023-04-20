@@ -123,6 +123,15 @@ public class BusinessAccountQueryApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/account/{id}/tax/bill/issue/search")
+    public PageDto<BusinessAccountDto.Response.BusinessAccountTaxInfo> searchBusinessAccountTaxIssue(
+            @PathVariable(name = "id") Integer businessAccountId,
+            @PageableDefault Pageable pageable,
+            BusinessAccountDto.Request.SearchTax searchRequest) {
+        return PageDto.create(this.businessAccountRepository.searchBusinessAccountTaxIssue(pageable, businessAccountId, searchRequest));
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/credit/search")
     public PageDto<BusinessAccountDto.Response.BusinessAccountCreditInfo> searchCredit(
             @PageableDefault Pageable pageable,
