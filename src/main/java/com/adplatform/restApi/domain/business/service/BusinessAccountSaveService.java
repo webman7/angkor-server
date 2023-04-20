@@ -97,18 +97,24 @@ public class BusinessAccountSaveService {
 
     public void save(BusinessAccountDto.Request.Save request, Integer loginUserNo) {
 
-        // 회사 중복 체크
-        CompanyDto.Request.SearchKeyword searchRequest = new CompanyDto.Request.SearchKeyword();
-        searchRequest.setSearchKeyword(request.getRegistrationNumber());
+        Company company;
+        if(request.getRegistrationNumber().equals("")) {
+            request.setCompanyName("INDIVIDUAL");
+            // 회사 정보 인서트
+            company = this.companyRepository.save(this.companyMapper.toIndividualEntity(request));
+        } else {
+            // 회사 중복 체크
+            CompanyDto.Request.SearchKeyword searchRequest = new CompanyDto.Request.SearchKeyword();
+            searchRequest.setSearchKeyword(request.getRegistrationNumber());
 
-        Integer companyCount = this.companyRepository.registrationNumberCount(searchRequest);
+            Integer companyCount = this.companyRepository.registrationNumberCount(searchRequest);
 
-        if(!companyCount.equals(0)) {
-            throw new CompanyAlreadyExistException();
+            if(!companyCount.equals(0)) {
+                throw new CompanyAlreadyExistException();
+            }
+            // 회사 정보 인서트
+            company = this.companyRepository.save(this.companyMapper.toBusinessEntity(request));
         }
-
-        // 회사 정보 인서트
-        Company company = this.companyRepository.save(this.companyMapper.toBusinessEntity(request));
         // 인서트한 아이디를 가져온다.
         request.setCompanyId(company.getId());
 
@@ -151,7 +157,7 @@ public class BusinessAccountSaveService {
 
         Integer companyCount = this.companyRepository.registrationNumberCount(searchRequest);
 
-        if(!companyCount.equals(0)) {
+        if (!companyCount.equals(0)) {
             throw new CompanyAlreadyExistException();
         }
 
