@@ -130,6 +130,8 @@ public class BusinessAccountUserQueryRepositoryImpl implements BusinessAccountUs
         JPAQuery<Long> countQuery = this.query.select(businessAccountUser.count())
                 .from(businessAccount, businessAccountUser, user)
                 .where(businessAccount.id.eq(businessAccountId),
+                        this.loginIdContains(searchRequest.getUserId()),
+                        this.nameContains(searchRequest.getName()),
                         businessAccountUser.businessAccount.id.eq(businessAccount.id),
                         businessAccountUser.user.id.eq(user.id),
                         businessAccountUser.status.notIn(BusinessAccountUser.Status.D),
