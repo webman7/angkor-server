@@ -72,19 +72,15 @@ public class CampaignCommandService {
     public void save(CampaignDto.Request.Save request) {
         CampaignDto.Response.CampaignByBusinessAccountId campaignInfo = this.campaignRepository.getCampaignByBusinessAccountId(request.getAdAccountId());
 
-        System.out.println("11111111111111111111");
         AdTypeAndGoal adTypeAndGoal = this.findAdTypeAndGoal(
                 request.getAdTypeAndGoal().getAdTypeName(),
                 request.getAdTypeAndGoal().getAdGoalName());
         BusinessAccount businessAccount = BusinessAccountFindUtils.findByIdOrElseThrow(campaignInfo.getBusinessAccountId(), this.businessAccountRepository);
         AdAccount adAccount = AdAccountFindUtils.findByIdOrElseThrow(request.getAdAccountId(), this.adAccountRepository);
 
-        System.out.println("222222222222222222222222");
         Campaign campaign = this.campaignRepository.save(this.campaignMapper.toEntity(request, adTypeAndGoal, adAccount));
-        System.out.println("33333333333333333333333");
         this.mapToAdGroupSavedEvent(request.getAdGroups(), campaign).forEach(this.eventPublisher::publishEvent);
 
-        System.out.println("44444444444444444444444444");
         // 선불 결제 방식
         if(businessAccount.isPrePayment()) {
             WalletDto.Response.WalletMaster list = this.walletMasterRepository.getWalletMaster(campaignInfo.getBusinessAccountId());
