@@ -18,4 +18,6 @@ public interface AdGroupQuerydslRepository {
     Optional<AdGroup> findByIdFetchJoin(Integer id);
 
     List<AdGroupDto.Response.Budget> getBudget(Integer campaignId);
+
+    Long getBudgetSum(Integer campaignId);
 }

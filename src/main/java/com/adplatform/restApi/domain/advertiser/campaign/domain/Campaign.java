@@ -161,11 +161,15 @@ public class Campaign extends BaseUpdatedEntity {
 
     public Campaign update(CampaignDto.Request.Update request) {
         this.name = request.getName();
-        this.dailyBudgetAmount = request.getDailyBudgetAmount();
-        this.budgetAmount = request.getBudgetAmount();
         this.goalType = request.getGoalType();
         this.trackingId = request.getTrackingId();
         this.trackingType = request.getTrackingType();
+        return this;
+    }
+
+    public Campaign updateBudget(CampaignDto.Request.Update request) {
+        this.dailyBudgetAmount = request.getDailyBudgetAmount();
+        this.budgetAmount = request.getBudgetAmount();
         return this;
     }
 

@@ -78,6 +78,14 @@ public class AdGroupQuerydslRepositoryImpl implements AdGroupQuerydslRepository 
                 .fetch();
     }
 
+    @Override
+    public Long getBudgetSum(Integer id) {
+        return this.query.select(adGroup.budgetAmount.sum())
+                .from(adGroup)
+                .where(adGroup.campaign.id.eq(id))
+                .fetchOne();
+    }
+
     private BooleanExpression eqAdAccountId(Integer adAccountId) {
         return nonNull(adAccountId) ? adGroup.campaign.adAccount.id.eq(adAccountId) : null;
     }

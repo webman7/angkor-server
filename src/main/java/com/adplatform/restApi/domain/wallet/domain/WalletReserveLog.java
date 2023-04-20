@@ -68,5 +68,6 @@ public class WalletReserveLog extends BaseEntity {
         this.totalReserveAmount = totalReserveAmount;
         this.reserveAmount = reserveAmount;
         this.reserveVatAmount = reserveVatAmount;
+        this.updatedAt = LocalDateTime.now();
     }
 }
