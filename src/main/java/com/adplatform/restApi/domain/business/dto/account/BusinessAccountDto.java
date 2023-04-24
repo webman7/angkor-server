@@ -354,6 +354,27 @@ public class BusinessAccountDto {
 
         @Getter
         @Setter
+        public static class BusinessAccountList {
+            private Integer id;
+            private String name;
+            private BusinessAccount.PaymentType type;
+            private BusinessAccount.Config config;
+
+            @QueryProjection
+            public BusinessAccountList(
+                    Integer id,
+                    String name,
+                    BusinessAccount.PaymentType type,
+                    BusinessAccount.Config config) {
+                this.id = id;
+                this.name = name;
+                this.type = type;
+                this.config = config;
+            }
+        }
+
+        @Getter
+        @Setter
         public static class BusinessAccountCreditInfo {
 
             private Integer id;

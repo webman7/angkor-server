@@ -43,7 +43,7 @@ public interface BusinessAccountQuerydslRepository {
     Page<BusinessAccountDto.Response.BusinessAccountTaxInfo> searchBusinessAccountTaxIssue(Pageable pageable, Integer businessAccountId, BusinessAccountDto.Request.SearchTax searchRequest);
 
     void outOfBalanceUpdate(Integer businessAccountId, Boolean oufOfBalance);
-
+    List<BusinessAccountDto.Response.BusinessAccountList> businessList();
 
 //    DashboardDto.Response.BusinessAccountCountByAd businessAccountsCountByAd(Integer businessAccountId);
 //

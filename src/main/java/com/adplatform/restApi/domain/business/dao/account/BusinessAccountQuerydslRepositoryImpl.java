@@ -470,6 +470,20 @@ public class BusinessAccountQuerydslRepositoryImpl implements BusinessAccountQue
     }
 
     @Override
+    public List<BusinessAccountDto.Response.BusinessAccountList> businessList() {
+
+        return this.query.select(new QBusinessAccountDto_Response_BusinessAccountList(
+                        businessAccount.id,
+                        businessAccount.name,
+                        businessAccount.type,
+                        businessAccount.config))
+                .from(businessAccount)
+                .where(
+                        businessAccount.config.in(BusinessAccount.Config.ON, BusinessAccount.Config.OFF))
+                .fetch();
+    }
+
+    @Override
     public Page<BusinessAccountDto.Response.BusinessAccountCreditInfo> searchCredit(
             Pageable pageable, BusinessAccountDto.Request.SearchCredit searchRequest) {
         List<BusinessAccountDto.Response.BusinessAccountCreditInfo> content = this.getSearchCreditQuery(pageable, searchRequest)

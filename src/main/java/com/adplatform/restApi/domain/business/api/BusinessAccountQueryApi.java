@@ -156,6 +156,12 @@ public class BusinessAccountQueryApi {
         return PageDto.create(this.businessAccountRepository.searchBusiness(pageable, searchRequest));
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/list")
+    public List<BusinessAccountDto.Response.BusinessAccountList> businessList() {
+
+        return this.businessAccountRepository.businessList();
+    }
 
 
 
