@@ -17,11 +17,6 @@ public class ReportInformationResponse {
     private final int videoTouches;
     private final int videoUnmute;
     private final int videoPlay3Seconds;
-    private final int videoPlay5Seconds;
-    private final int videoPlay10Seconds;
-    private final int videoPlay15Seconds;
-    private final int videoPlay30Seconds;
-    private final int videoPlay60Seconds;
     private final int videoPlay25Percent;
     private final int videoPlay50Percent;
     private final int videoPlay75Percent;
@@ -37,11 +32,6 @@ public class ReportInformationResponse {
             int videoTouches,
             int videoUnmute,
             int videoPlay3Seconds,
-            int videoPlay5Seconds,
-            int videoPlay10Seconds,
-            int videoPlay15Seconds,
-            int videoPlay30Seconds,
-            int videoPlay60Seconds,
             int videoPlay25Percent,
             int videoPlay50Percent,
             int videoPlay75Percent,
@@ -54,11 +44,6 @@ public class ReportInformationResponse {
         this.videoTouches = videoTouches;
         this.videoUnmute = videoUnmute;
         this.videoPlay3Seconds = videoPlay3Seconds;
-        this.videoPlay5Seconds = videoPlay5Seconds;
-        this.videoPlay10Seconds = videoPlay10Seconds;
-        this.videoPlay15Seconds = videoPlay15Seconds;
-        this.videoPlay30Seconds = videoPlay30Seconds;
-        this.videoPlay60Seconds = videoPlay60Seconds;
         this.videoPlay25Percent = videoPlay25Percent;
         this.videoPlay50Percent = videoPlay50Percent;
         this.videoPlay75Percent = videoPlay75Percent;

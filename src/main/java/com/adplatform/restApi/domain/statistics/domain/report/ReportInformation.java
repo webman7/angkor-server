@@ -39,21 +39,6 @@ public class ReportInformation {
     @Column(name = "video_play_3s")
     private int videoPlay3Seconds;
 
-    @Column(name = "video_play_5s")
-    private int videoPlay5Seconds;
-
-    @Column(name = "video_play_10s")
-    private int videoPlay10Seconds;
-
-    @Column(name = "video_play_15s")
-    private int videoPlay15Seconds;
-
-    @Column(name = "video_play_30s")
-    private int videoPlay30Seconds;
-
-    @Column(name = "video_play_60s")
-    private int videoPlay60Seconds;
-
     @Column(name = "video_play_25p")
     private int videoPlay25Percent;
 

@@ -32,11 +32,6 @@ since 1.0
             <result column="videoTouches" property="videoTouches"/>
             <result column="videoUnmute" property="videoUnmute"/>
             <result column="videoPlay3Seconds" property="videoPlay3Seconds"/>
-            <result column="videoPlay5Seconds" property="videoPlay5Seconds"/>
-            <result column="videoPlay10Seconds" property="videoPlay10Seconds"/>
-            <result column="videoPlay15Seconds" property="videoPlay15Seconds"/>
-            <result column="videoPlay30Seconds" property="videoPlay30Seconds"/>
-            <result column="videoPlay60Seconds" property="videoPlay60Seconds"/>
             <result column="videoPlay25Percent" property="videoPlay25Percent"/>
             <result column="videoPlay50Percent" property="videoPlay50Percent"/>
             <result column="videoPlay75Percent" property="videoPlay75Percent"/>

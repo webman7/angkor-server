@@ -93,14 +93,14 @@ public class CampaignCommandService {
             Float availableAmount = 0.0F;
             Float totalReserveAmount = 0.0F;
 
-            // 예산에 부가세를 더한금액을 예약금액으로 잡는다.
+            // 예산을 예약금액으로 잡는다.
             Float budgetAmount =  (float)(request.getBudgetAmount());
-            Float budgetAmountVat =  (float)(budgetAmount * 1.1);
+
             // 예약금액 증가
             String fluctuation = "P";
-            if(availableAmountTotal > budgetAmountVat) {
-                availableAmount = list.getAvailableAmount() - budgetAmountVat;
-                totalReserveAmount = list.getTotalReserveAmount() + budgetAmountVat;
+            if(availableAmountTotal > budgetAmount) {
+                availableAmount = list.getAvailableAmount() - budgetAmount;
+                totalReserveAmount = list.getTotalReserveAmount() + budgetAmount;
 
                 // 지갑 업데이트
                 this.walletMasterRepository.updateWalletMaster(campaignInfo.getBusinessAccountId(), availableAmount, totalReserveAmount);
@@ -111,7 +111,7 @@ public class CampaignCommandService {
                 log.setAdAccountId(request.getAdAccountId());
                 log.setCampaignId(campaign.getId());
                 log.setFluctuation(fluctuation);
-                log.setTotalReserveAmount(budgetAmountVat);
+                log.setTotalReserveAmount(budgetAmount);
                 log.setReserveAmount(budgetAmount);
                 log.setReserveVatAmount((float)(budgetAmount*0.1));
                 WalletReserveLog walletReserveLog = this.walletReserveLogMapper.toEntity(log, SecurityUtils.getLoginUserNo());
@@ -121,7 +121,7 @@ public class CampaignCommandService {
                 history.setBusinessAccountId(campaignInfo.getBusinessAccountId());
                 history.setAdAccountId(request.getAdAccountId());
                 history.setCampaignId(campaign.getId());
-                history.setChgAmount(budgetAmountVat);
+                history.setChgAmount(budgetAmount);
                 history.setAvailableAmount(list.getAvailableAmount());
                 history.setAvailableChgAmount(availableAmount);
                 history.setTotalReserveAmount(list.getTotalReserveAmount());

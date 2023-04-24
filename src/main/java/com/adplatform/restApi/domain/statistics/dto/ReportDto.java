@@ -29,11 +29,6 @@ public abstract class ReportDto {
         private int videoTouches;
         private int videoUnmute;
         private int videoPlay3Seconds;
-        private int videoPlay5Seconds;
-        private int videoPlay10Seconds;
-        private int videoPlay15Seconds;
-        private int videoPlay30Seconds;
-        private int videoPlay60Seconds;
         private int videoPlay25Percent;
         private int videoPlay50Percent;
         private int videoPlay75Percent;
