@@ -17,6 +17,7 @@ import java.util.Optional;
 public interface BusinessAccountUserQueryRepository {
     Optional<BusinessAccountUser> findByBusinessAccountIdAndUserId(Integer businessAccountId, Integer userId);
     Integer findByBusinessAccountIdAndUserIdCount(Integer businessAccountId, Integer userId);
+    Integer findByBusinessAccountIdCount(Integer businessAccountId);
     Page<BusinessAccountUserDto.Response.BusinessAccountUserInfo> businessAccountUserInfo(Integer businessAccountId, Pageable pageable);
     Page<BusinessAccountUserDto.Response.BusinessAccountUserInfo> businessAccountUserSearch(Integer businessAccountId, BusinessAccountDto.Request.SearchUser searchRequest, Pageable pageable);
     List<BusinessAccountUserDto.Response.BusinessAccountUserInfo> businessAccountRequestUserInfo(Integer businessAccountId);

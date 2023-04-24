@@ -24,10 +24,6 @@ public class BusinessAccountSettlement extends BaseEntity {
     @Column(name = "stat_date")
     private int statDate;
 
-    @Convert(converter = BooleanToStringYOrNConverter.class)
-    @Column(name = "pre_payment_yn", nullable = false, columnDefinition = "CHAR(1)")
-    private boolean prePayment;
-
     @Column(name = "supply_amount", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2)")
     private Float supplyAmount;
 
@@ -35,11 +31,9 @@ public class BusinessAccountSettlement extends BaseEntity {
     public BusinessAccountSettlement(
             Integer businessAccountId,
             Integer statDate,
-            boolean prePayment,
             Float supplyAmount) {
         this.businessAccountId = businessAccountId;
         this.statDate = statDate;
-        this.prePayment = prePayment;
         this.supplyAmount = supplyAmount;
     }
 }

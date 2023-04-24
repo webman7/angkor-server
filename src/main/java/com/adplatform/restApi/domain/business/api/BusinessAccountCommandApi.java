@@ -73,6 +73,12 @@ public class BusinessAccountCommandApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @PostMapping("user/admin")
+    public void saveUserAdmin(@RequestBody @Valid BusinessAccountUserDto.Request.SaveUser request) {
+        this.businessAccountSaveService.saveUserAdmin(request, SecurityUtils.getLoginUserNo());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @PatchMapping("user/admin/accounting")
     public void updateUserAdminAccounting(@RequestBody @Valid BusinessAccountUserDto.Request.UserUpdate request) {
         this.businessAccountSaveService.updateUserAdminAccounting(request, SecurityUtils.getLoginUserNo());

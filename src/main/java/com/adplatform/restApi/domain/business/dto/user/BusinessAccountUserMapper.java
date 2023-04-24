@@ -11,6 +11,12 @@ import org.mapstruct.Mapping;
 public interface BusinessAccountUserMapper {
     @Mapping(target = "businessAccount", source = "businessAccount")
     @Mapping(target = "user", source = "user")
+    @Mapping(target = "accountingYN", expression = "java(BusinessAccountUser.AccountingYN.Y)")
+    @Mapping(target = "status", expression = "java(BusinessAccountUser.Status.Y)")
+    BusinessAccountUser toEntitySave(BusinessAccountUserDto.Request.SaveUser request, BusinessAccount businessAccount, User user);
+
+    @Mapping(target = "businessAccount", source = "businessAccount")
+    @Mapping(target = "user", source = "user")
     @Mapping(target = "accountingYN", expression = "java(BusinessAccountUser.AccountingYN.N)")
     @Mapping(target = "status", expression = "java(BusinessAccountUser.Status.Y)")
     BusinessAccountUser toEntityInvite(BusinessAccountUserDto.Request.SaveUser request, BusinessAccount businessAccount, User user);

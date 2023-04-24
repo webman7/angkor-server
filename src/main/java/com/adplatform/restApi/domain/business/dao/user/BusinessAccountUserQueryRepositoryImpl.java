@@ -64,6 +64,18 @@ public class BusinessAccountUserQueryRepositoryImpl implements BusinessAccountUs
     }
 
     @Override
+    public Integer findByBusinessAccountIdCount(Integer businessAccountId) {
+        List<Integer> content = this.query.select(
+                        businessAccountUser.id.businessAccountId
+                )
+                .from(businessAccountUser)
+                .where(businessAccountUser.id.businessAccountId.eq(businessAccountId))
+                .fetch();
+
+        return content.size();
+    }
+
+    @Override
     public Page<BusinessAccountUserDto.Response.BusinessAccountUserInfo> businessAccountUserInfo(Integer businessAccountId, Pageable pageable) {
         List<BusinessAccountUserDto.Response.BusinessAccountUserInfo> content = this.query.select(new QBusinessAccountUserDto_Response_BusinessAccountUserInfo(
                         businessAccount.id,

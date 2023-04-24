@@ -25,10 +25,14 @@ import com.adplatform.restApi.domain.business.dto.user.BusinessAccountUserMapper
 import com.adplatform.restApi.domain.business.dto.user.BusinessAccountUserTransferMapper;
 import com.adplatform.restApi.domain.business.exception.*;
 import com.adplatform.restApi.domain.company.dao.CompanyRepository;
+import com.adplatform.restApi.domain.company.dao.user.AdminUserRepository;
+import com.adplatform.restApi.domain.company.domain.AdminUser;
 import com.adplatform.restApi.domain.company.domain.Company;
 import com.adplatform.restApi.domain.company.domain.MediaCompanyUserTransfer;
 import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.company.dto.CompanyMapper;
+import com.adplatform.restApi.domain.company.dto.user.AdminUserDto;
+import com.adplatform.restApi.domain.company.exception.AdminUserAuthorizationException;
 import com.adplatform.restApi.domain.company.exception.CompanyAlreadyExistException;
 import com.adplatform.restApi.domain.company.service.CompanyFindUtils;
 import com.adplatform.restApi.domain.company.service.CompanyService;
@@ -93,6 +97,7 @@ public class BusinessAccountSaveService {
     private final CompanyRepository companyRepository;
     private final BusinessAccountPreDeferredPaymentMapper businessAccountPreDeferredPaymentMapper;
     private final BusinessAccountPreDeferredPaymentRepository businessAccountPreDeferredPaymentRepository;
+    private final AdminUserRepository adminUserRepository;
     private final AwsFileService awsFileService;
 
     public void save(BusinessAccountDto.Request.Save request, Integer loginUserNo) {
@@ -246,6 +251,42 @@ public class BusinessAccountSaveService {
         BusinessAccountUser businessAccountUser = this.businessAccountUserMapper.toEntityInvite(request, businessAccount, user);
         this.businessAccountUserRepository.save(businessAccountUser);
     }
+
+    public void saveUserAdmin(BusinessAccountUserDto.Request.SaveUser request, Integer loginUserNo) {
+
+        // ADMIN MASTER 권한 체크
+        AdminUserDto.Response.AdminUserInfo adminUserInfo = this.adminUserRepository.adminUserInfo(loginUserNo);
+        if(adminUserInfo.getMemberType() != AdminUser.MemberType.MASTER) {
+            throw new AdminUserAuthorizationException();
+        }
+
+        // 회원 중복 체크
+        UserDto.Response.BaseInfo userInfo = this.userQueryService.findUserByLoginId(request.getUserId());
+        if(userInfo == null) {
+            throw new UserNotFoundException();
+        }
+        Integer count = this.businessAccountUserRepository.findByBusinessAccountIdAndUserIdCount(request.getBusinessAccountId(), userInfo.getId());
+
+        if(!count.equals(0)) {
+            throw new BusinessAccountUserAlreadyExistException();
+        }
+
+        // 인서트
+        User user = this.userQueryService.findByIdOrElseThrow(userInfo.getId());
+        BusinessAccount businessAccount = BusinessAccountFindUtils.findByIdOrElseThrow(request.getBusinessAccountId(), this.businessAccountRepository);
+
+        Integer count1 = this.businessAccountUserRepository.findByBusinessAccountIdCount(request.getBusinessAccountId());
+
+        if(count1 == 0) {
+            BusinessAccountUser businessAccountUser = this.businessAccountUserMapper.toEntitySave(request, businessAccount, user);
+            this.businessAccountUserRepository.save(businessAccountUser);
+        } else {
+            BusinessAccountUser businessAccountUser = this.businessAccountUserMapper.toEntityInvite(request, businessAccount, user);
+            this.businessAccountUserRepository.save(businessAccountUser);
+        }
+
+    }
+
 
     public void updateUserMember(BusinessAccountUserDto.Request.UserMemberUpdate request, Integer loginUserNo) {
 
