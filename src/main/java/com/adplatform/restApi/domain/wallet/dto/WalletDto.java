@@ -75,6 +75,44 @@ public class WalletDto {
 
         @Getter
         @Setter
+        public static class SaveWalletCampaignReserveDetail {
+            @NotNull
+            private int businessAccountId;
+            private int adAccountId;
+            private int campaignId;
+            private String fluctuation;
+            private String summary;
+            private Float changeAmount;
+            private Float reserveAmount;
+            private Float reserveChangeAmount;
+        }
+
+        @Getter
+        @Setter
+        public static class SaveWalletCampaignReserve {
+            @NotNull
+            private int businessAccountId;
+            private int adAccountId;
+            private int campaignId;
+            private Float reserveAmount;
+            private Float reserveChangeAmount;
+            private LocalDateTime updateAt;
+        }
+
+        @Getter
+        @Setter
+        public static class SaveWalletMasterDetail {
+            @NotNull
+            private int businessAccountId;
+            private Float availableAmount;
+            private Float totalReserveAmount;
+            private String summary;
+        }
+
+
+
+        @Getter
+        @Setter
         public static class SaveWalletLog {
             @NotNull
             private int businessAccountId;
@@ -203,6 +241,17 @@ public class WalletDto {
             public WalletMaster(Float availableAmount, Float totalReserveAmount) {
                 this.availableAmount = availableAmount;
                 this.totalReserveAmount = totalReserveAmount;
+            }
+        }
+
+        @Getter
+        @Setter
+        public static class WalletCampaignReserve {
+            private Float reserveAmount;
+
+            @QueryProjection
+            public WalletCampaignReserve(Float reserveAmount) {
+                this.reserveAmount = reserveAmount;
             }
         }
 

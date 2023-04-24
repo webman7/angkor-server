@@ -26,11 +26,16 @@ import com.adplatform.restApi.domain.history.dto.AdminStopHistoryDto;
 import com.adplatform.restApi.domain.history.dto.AdminStopHistoryMapper;
 import com.adplatform.restApi.domain.history.dto.campaign.CampaignBudgetChangeHistoryDto;
 import com.adplatform.restApi.domain.history.dto.campaign.CampaignBudgetChangeHistoryMapper;
+import com.adplatform.restApi.domain.wallet.dao.walletcampaignreserve.WalletCampaignReserveDetailRepository;
+import com.adplatform.restApi.domain.wallet.dao.walletcampaignreserve.WalletCampaignReserveRepository;
+import com.adplatform.restApi.domain.wallet.dao.walletmaster.WalletMasterDetailRepository;
 import com.adplatform.restApi.domain.wallet.dao.walletmaster.WalletMasterRepository;
 import com.adplatform.restApi.domain.wallet.dao.walletmaster.WalletReserveLogRepository;
+import com.adplatform.restApi.domain.wallet.domain.WalletCampaignReserve;
+import com.adplatform.restApi.domain.wallet.domain.WalletCampaignReserveDetail;
+import com.adplatform.restApi.domain.wallet.domain.WalletMasterDetail;
 import com.adplatform.restApi.domain.wallet.domain.WalletReserveLog;
-import com.adplatform.restApi.domain.wallet.dto.WalletDto;
-import com.adplatform.restApi.domain.wallet.dto.WalletReserveLogMapper;
+import com.adplatform.restApi.domain.wallet.dto.*;
 import com.adplatform.restApi.global.config.security.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -38,6 +43,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -63,11 +69,16 @@ public class CampaignCommandService {
     private final CampaignBudgetChangeHistoryMapper campaignBudgetChangeHistoryMapper;
     private final BusinessAccountRepository businessAccountRepository;
     private final WalletMasterRepository walletMasterRepository;
-    private final WalletReserveLogRepository walletReserveLogRepository;
-    private final WalletReserveLogMapper walletReserveLogMapper;
     private final AdGroupRepository adGroupRepository;
     private final AdminStopHistoryMapper adminStopHistoryMapper;
     private final AdminStopHistoryRepository adminStopHistoryRepository;
+    private final WalletCampaignReserveDetailMapper walletCampaignReserveDetailMapper;
+    private final WalletCampaignReserveDetailRepository walletCampaignReserveDetailRepository;
+    private final WalletCampaignReserveMapper walletCampaignReserveMapper;
+    private final WalletCampaignReserveRepository walletCampaignReserveRepository;
+    private final WalletMasterDetailMapper walletMasterDetailMapper;
+    private final WalletMasterDetailRepository walletMasterDetailRepository;
+
 
     public void save(CampaignDto.Request.Save request) {
         CampaignDto.Response.CampaignByBusinessAccountId campaignInfo = this.campaignRepository.getCampaignByBusinessAccountId(request.getAdAccountId());
@@ -89,12 +100,18 @@ public class CampaignCommandService {
             Float availableAmountTotal = 0.0F;
             availableAmountTotal += list.getAvailableAmount();
 
-            // 예산
+            // 현재 캠페인 예약금액
+            Float campaignReserveAmount = 0.0F;
+
+            // 가용금액, 총예약금액
             Float availableAmount = 0.0F;
             Float totalReserveAmount = 0.0F;
 
             // 예산을 예약금액으로 잡는다.
-            Float budgetAmount =  (float)(request.getBudgetAmount());
+            Float budgetAmount = (float)(request.getBudgetAmount());
+
+            // 캠페인 변경 금액
+            Float reserveChangeAmount = campaignReserveAmount + budgetAmount;
 
             // 예약금액 증가
             String fluctuation = "P";
@@ -105,17 +122,37 @@ public class CampaignCommandService {
                 // 지갑 업데이트
                 this.walletMasterRepository.updateWalletMaster(campaignInfo.getBusinessAccountId(), availableAmount, totalReserveAmount);
 
-                // 지갑예약(예산)변경내역
-                WalletDto.Request.SaveWalletReserveLog log = new WalletDto.Request.SaveWalletReserveLog();
-                log.setBusinessAccountId(campaignInfo.getBusinessAccountId());
-                log.setAdAccountId(request.getAdAccountId());
-                log.setCampaignId(campaign.getId());
-                log.setFluctuation(fluctuation);
-                log.setTotalReserveAmount(budgetAmount);
-                log.setReserveAmount(budgetAmount);
-                log.setReserveVatAmount((float)(budgetAmount*0.1));
-                WalletReserveLog walletReserveLog = this.walletReserveLogMapper.toEntity(log, SecurityUtils.getLoginUserNo());
-                this.walletReserveLogRepository.save(walletReserveLog);
+                // 지갑 상세 인서트
+                WalletDto.Request.SaveWalletMasterDetail saveWalletMasterDetail = new WalletDto.Request.SaveWalletMasterDetail();
+                saveWalletMasterDetail.setBusinessAccountId(campaignInfo.getBusinessAccountId());
+                saveWalletMasterDetail.setAvailableAmount(availableAmount);
+                saveWalletMasterDetail.setTotalReserveAmount(totalReserveAmount);
+                saveWalletMasterDetail.setSummary("budget_change");
+                WalletMasterDetail walletMasterDetail = this.walletMasterDetailMapper.toEntity(saveWalletMasterDetail, SecurityUtils.getLoginUserNo());
+                this.walletMasterDetailRepository.save(walletMasterDetail);
+
+                // 지갑캠페인예약 금액 등록
+                WalletDto.Request.SaveWalletCampaignReserve saveWalletCampaignReserve = new WalletDto.Request.SaveWalletCampaignReserve();
+                saveWalletCampaignReserve.setBusinessAccountId(campaignInfo.getBusinessAccountId());
+                saveWalletCampaignReserve.setAdAccountId(request.getAdAccountId());
+                saveWalletCampaignReserve.setCampaignId(campaign.getId());
+                saveWalletCampaignReserve.setReserveAmount(reserveChangeAmount);
+                saveWalletCampaignReserve.setUpdateAt(LocalDateTime.now());
+                WalletCampaignReserve walletCampaignReserve = this.walletCampaignReserveMapper.toEntity(saveWalletCampaignReserve, SecurityUtils.getLoginUserNo());
+                this.walletCampaignReserveRepository.save(walletCampaignReserve);
+
+                // 지갑캠페인예약상세내역
+                WalletDto.Request.SaveWalletCampaignReserveDetail detail = new WalletDto.Request.SaveWalletCampaignReserveDetail();
+                detail.setBusinessAccountId(campaignInfo.getBusinessAccountId());
+                detail.setAdAccountId(request.getAdAccountId());
+                detail.setCampaignId(campaign.getId());
+                detail.setFluctuation(fluctuation);
+                detail.setSummary("budget_change");
+                detail.setChangeAmount(budgetAmount);
+                detail.setReserveAmount(campaignReserveAmount);
+                detail.setReserveChangeAmount(reserveChangeAmount);
+                WalletCampaignReserveDetail walletCampaignReserveDetail = this.walletCampaignReserveDetailMapper.toEntity(detail, SecurityUtils.getLoginUserNo());
+                this.walletCampaignReserveDetailRepository.save(walletCampaignReserveDetail);
 
                 CampaignBudgetChangeHistoryDto.Request.Save history = new CampaignBudgetChangeHistoryDto.Request.Save();
                 history.setBusinessAccountId(campaignInfo.getBusinessAccountId());
@@ -133,63 +170,6 @@ public class CampaignCommandService {
                 throw new CampaignCashException();
             }
         }
-        
-        
-
-
-
-
-//        List<WalletDto.Response.WalletCashTotal> list = this.walletCashTotalRepository.getWalletCashTotal(request.getAdAccountId());
-//
-//        // 이용가능금액 조회
-//        Float availableAmountSum = 0.0F;
-//        for (WalletDto.Response.WalletCashTotal m: list) {
-//            availableAmountSum += m.getAvailableAmount();
-//        }
-//
-//        // 이용가능 금액 보다 크다면
-//        Float availableAmount = 0.0F;
-//        Float reserveAmount = 0.0F;
-//        Float budgetAmount =  (float)request.getBudgetAmount();
-//        Float budgetAmountRemain = budgetAmount;
-//        Boolean isLoop = true;
-//        if(availableAmountSum > budgetAmount) {
-//            for (WalletDto.Response.WalletCashTotal m: list) {
-//                // 하나의 캐시가 큰 경우
-//                if(m.getAvailableAmount() - budgetAmount > 0) {
-//                    availableAmount = m.getAvailableAmount() - budgetAmount;
-//                    reserveAmount = m.getReserveAmount() + budgetAmount;
-//                    isLoop = false;
-//                } else {
-//                    budgetAmountRemain = budgetAmount - m.getAvailableAmount();
-//                    if(budgetAmountRemain >= 0) {
-//                        availableAmount = 0.0F;
-//                        reserveAmount = m.getReserveAmount() + m.getAvailableAmount();
-//                    }
-//                    budgetAmount = budgetAmountRemain;
-//                    isLoop = true;
-//                }
-//                this.walletCashTotalRepository.saveWalletCashReserve(request.getAdAccountId(), m.getCashId(), availableAmount, reserveAmount);
-//
-//                CampaignBudgetChangeHistoryDto.Request.Save history = new CampaignBudgetChangeHistoryDto.Request.Save();
-//                history.setAdAccountId(request.getAdAccountId());
-//                history.setCampaignId(campaign.getId());
-//                history.setCashId(m.getCashId());
-//                history.setChgAmount(budgetAmount);
-//                history.setAvailableAmount(m.getAvailableAmount());
-//                history.setAvailableChgAmount(availableAmount);
-//                history.setReserveAmount(m.getReserveAmount());
-//                history.setReserveChgAmount(reserveAmount);
-//                CampaignBudgetChangeHistory campaignBudgetChangeHistory = this.campaignBudgetChangeHistoryMapper.toEntity(history, SecurityUtils.getLoginUserNo());
-//                this.campaignBudgetChangeHistoryRepository.save(campaignBudgetChangeHistory);
-//
-//                if(!isLoop) {
-//                    break;
-//                }
-//            }
-//        } else {
-//            throw new CampaignCashException();
-//        }
     }
 
     private AdTypeAndGoal findAdTypeAndGoal(String adTypeName, String adGoalName) {
@@ -231,11 +211,18 @@ public class CampaignCommandService {
                 Float availableAmountTotal = 0.0F;
                 availableAmountTotal += list.getAvailableAmount();
 
-                // 예산
+                // 현재 캠페인 예약금액
+                WalletDto.Response.WalletCampaignReserve walletCampaignReserve = this.walletCampaignReserveRepository.getCampaignReserveAmount(campaignInfo.getBusinessAccountId(), campaignInfo.getAdAccountId(), request.getCampaignId());
+                Float campaignReserveAmount = walletCampaignReserve.getReserveAmount();
+
+                // 가용금액, 총예약금액
                 Float availableAmount = 0.0F;
                 Float totalReserveAmount = 0.0F;
+
                 Float budgetAmount = (float) request.getBudgetAmount() - (float) campaignInfo.getBudgetAmount();
-                Float budgetAmountVat =  (float)(budgetAmount * 1.1);
+
+                // 캠페인 변경 금액
+                Float reserveChangeAmount = campaignReserveAmount + budgetAmount;
 
                 // 예약금액 증감
                 String fluctuation = "";
@@ -245,9 +232,9 @@ public class CampaignCommandService {
                     fluctuation = "M";
                 }
 
-                if (availableAmountTotal > budgetAmountVat) {
-                    availableAmount = list.getAvailableAmount() - budgetAmountVat;
-                    totalReserveAmount = list.getTotalReserveAmount() + budgetAmountVat;
+                if (availableAmountTotal > budgetAmount) {
+                    availableAmount = list.getAvailableAmount() - budgetAmount;
+                    totalReserveAmount = list.getTotalReserveAmount() + budgetAmount;
 
                     // 예산 업데이트
                     CampaignFindUtils.findByIdOrElseThrow(request.getCampaignId(), this.campaignRepository)
@@ -256,24 +243,37 @@ public class CampaignCommandService {
                     // 지갑 업데이트
                     this.walletMasterRepository.updateWalletMaster(campaignInfo.getBusinessAccountId(), availableAmount, totalReserveAmount);
 
-                    // 지갑예약(예산)변경내역
-                    WalletDto.Request.SaveWalletReserveLog log = new WalletDto.Request.SaveWalletReserveLog();
-                    log.setBusinessAccountId(campaignInfo.getBusinessAccountId());
-                    log.setAdAccountId(campaignInfo.getAdAccountId());
-                    log.setCampaignId(request.getCampaignId());
-                    log.setFluctuation(fluctuation);
-                    log.setTotalReserveAmount(budgetAmountVat);
-                    log.setReserveAmount(budgetAmount);
-                    log.setReserveVatAmount((float) (budgetAmount * 0.1));
-                    WalletReserveLog walletReserveLog = this.walletReserveLogMapper.toEntity(log, SecurityUtils.getLoginUserNo());
-                    this.walletReserveLogRepository.save(walletReserveLog);
+                    // 지갑 상세 인서트
+                    WalletDto.Request.SaveWalletMasterDetail saveWalletMasterDetail = new WalletDto.Request.SaveWalletMasterDetail();
+                    saveWalletMasterDetail.setBusinessAccountId(campaignInfo.getBusinessAccountId());
+                    saveWalletMasterDetail.setAvailableAmount(availableAmount);
+                    saveWalletMasterDetail.setTotalReserveAmount(totalReserveAmount);
+                    saveWalletMasterDetail.setSummary("budget_change");
+                    WalletMasterDetail walletMasterDetail = this.walletMasterDetailMapper.toEntity(saveWalletMasterDetail, SecurityUtils.getLoginUserNo());
+                    this.walletMasterDetailRepository.save(walletMasterDetail);
+
+                    // 지갑캠페인예약 금액 변경
+                    this.walletCampaignReserveRepository.updateCampaignReserveAmount(campaignInfo.getBusinessAccountId(), campaignInfo.getAdAccountId(), request.getCampaignId(), reserveChangeAmount);
+
+                    // 지갑캠페인예약상세내역
+                    WalletDto.Request.SaveWalletCampaignReserveDetail detail = new WalletDto.Request.SaveWalletCampaignReserveDetail();
+                    detail.setBusinessAccountId(campaignInfo.getBusinessAccountId());
+                    detail.setAdAccountId(campaignInfo.getAdAccountId());
+                    detail.setCampaignId(request.getCampaignId());
+                    detail.setFluctuation(fluctuation);
+                    detail.setSummary("budget_change");
+                    detail.setChangeAmount(budgetAmount);
+                    detail.setReserveAmount(campaignReserveAmount);
+                    detail.setReserveChangeAmount(reserveChangeAmount);
+                    WalletCampaignReserveDetail walletCampaignReserveDetail = this.walletCampaignReserveDetailMapper.toEntity(detail, SecurityUtils.getLoginUserNo());
+                    this.walletCampaignReserveDetailRepository.save(walletCampaignReserveDetail);
 
                     // 캠페인 예산 변경 히스토리
                     CampaignBudgetChangeHistoryDto.Request.Save history = new CampaignBudgetChangeHistoryDto.Request.Save();
                     history.setBusinessAccountId(campaignInfo.getBusinessAccountId());
                     history.setAdAccountId(campaignInfo.getAdAccountId());
                     history.setCampaignId(request.getCampaignId());
-                    history.setChgAmount(budgetAmountVat);
+                    history.setChgAmount(budgetAmount);
                     history.setAvailableAmount(list.getAvailableAmount());
                     history.setAvailableChgAmount(availableAmount);
                     history.setTotalReserveAmount(list.getTotalReserveAmount());
@@ -290,83 +290,6 @@ public class CampaignCommandService {
             CampaignFindUtils.findByIdOrElseThrow(request.getCampaignId(), this.campaignRepository)
                     .updateBudget(request);
         }
-
-
-
-
-
-
-//        List<WalletDto.Response.WalletCashTotal> list = this.walletCashTotalRepository.getWalletCashTotal(campaignAdAccountId.getAdAccountId());
-//
-//        // 이용가능금액 조회
-//        Float availableAmountSum = 0.0F;
-//        for (WalletDto.Response.WalletCashTotal m: list) {
-//            availableAmountSum += m.getAvailableAmount();
-//        }
-//
-//        // 이용가능 금액 보다 크다면
-//        Float availableAmount = 0.0F;
-//        Float reserveAmount = 0.0F;
-//        Float budgetAmount = (float)request.getBudgetAmount() - (float)campaignAdAccountId.getBudgetAmount();
-//        Float budgetAmountRemain = budgetAmount;
-//        Boolean isLoop = true;
-//        if(availableAmountSum > budgetAmount) {
-//            for (WalletDto.Response.WalletCashTotal m: list) {
-//                if(budgetAmount == 0) {
-//                    break;
-//                } else if(budgetAmount > 0) {
-//                    // 하나의 캐시가 큰 경우
-//                    if(m.getAvailableAmount() > abs(budgetAmount)) {
-//                        availableAmount = m.getAvailableAmount() - budgetAmount;
-//                        reserveAmount = m.getReserveAmount() + budgetAmount;
-//                        isLoop = false;
-//                    } else {
-//                        budgetAmountRemain = budgetAmount - m.getAvailableAmount();
-//                        if(budgetAmountRemain >= 0) {
-//                            availableAmount = 0.0F;
-//                            reserveAmount = m.getReserveAmount() + m.getAvailableAmount();
-//                        }
-//                        budgetAmount = budgetAmountRemain;
-//                        isLoop = true;
-//                    }
-//                } else {
-//                    if(m.getReserveAmount() > abs(budgetAmount)) {
-//                        availableAmount = m.getAvailableAmount() - budgetAmount;
-//                        reserveAmount = m.getReserveAmount() + budgetAmount;
-//                        isLoop = false;
-//                    } else {
-//                        budgetAmountRemain = budgetAmount + m.getReserveAmount();
-//                        if(budgetAmountRemain < 0) {
-//                            reserveAmount = 0.0F;
-//                            availableAmount = m.getReserveAmount();
-//                        }
-//                        budgetAmount = budgetAmountRemain;
-//                        isLoop = true;
-//                    }
-//                }
-//
-//                this.walletCashTotalRepository.saveWalletCashReserve(campaignAdAccountId.getAdAccountId(), m.getCashId(), availableAmount, reserveAmount);
-//
-//                CampaignBudgetChangeHistoryDto.Request.Save history = new CampaignBudgetChangeHistoryDto.Request.Save();
-//                history.setAdAccountId(campaignAdAccountId.getAdAccountId());
-//                history.setCampaignId(request.getCampaignId());
-//                history.setCashId(m.getCashId());
-//                history.setChgAmount(budgetAmount);
-//                history.setAvailableAmount(m.getAvailableAmount());
-//                history.setAvailableChgAmount(availableAmount);
-//                history.setReserveAmount(m.getReserveAmount());
-//                history.setReserveChgAmount(reserveAmount);
-//                CampaignBudgetChangeHistory campaignBudgetChangeHistory = this.campaignBudgetChangeHistoryMapper.toEntity(history, SecurityUtils.getLoginUserNo());
-//                this.campaignBudgetChangeHistoryRepository.save(campaignBudgetChangeHistory);
-//
-//                if(!isLoop) {
-//                    break;
-//                }
-//            }
-//        } else {
-//            throw new CampaignCashException();
-//        }
-//
     }
 
     public void delete(Integer id) {
