@@ -14,6 +14,7 @@ public interface AdminUserQuerydslRepository {
 
     Optional<AdminUser> findByCompanyIdAndUserId(Integer companyId, Integer userId);
     Integer findByCompanyIdAndUserIdCount(Integer companyId, Integer userId);
+    Integer findByUserIdCount(Integer userId);
     Integer findByCompanyIdCount(Integer companyId);
     void deleteByCompanyIdAndUserIdCount(Integer companyId, Integer userId);
 

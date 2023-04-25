@@ -449,15 +449,15 @@ public class CompanyService {
         if(userInfo == null) {
             throw new UserNotFoundException();
         }
-        Integer count0 = this.mediaCompanyUserRepository.findByUserIdCount(userInfo.getId());
+        Integer count0 = this.adminUserRepository.findByUserIdCount(userInfo.getId());
 
         if(!count0.equals(0)) {
-            throw new MediaCompanyUserAlreadyExistException();
+            throw new AdminUserAlreadyExistException();
         }
         Integer count = this.adminUserRepository.findByCompanyIdAndUserIdCount(request.getCompanyId(), userInfo.getId());
 
         if(!count.equals(0)) {
-            throw new MediaCompanyUserAlreadyExistException();
+            throw new AdminUserAlreadyExistException();
         }
 
         Integer count1 = this.adminUserRepository.findByCompanyIdCount(request.getCompanyId());
@@ -487,10 +487,10 @@ public class CompanyService {
         if(userInfo == null) {
             throw new UserNotFoundException();
         }
-        Integer count0 = this.mediaCompanyUserRepository.findByUserIdCount(userInfo.getId());
+        Integer count0 = this.adminUserRepository.findByUserIdCount(userInfo.getId());
 
         if(!count0.equals(0)) {
-            throw new MediaCompanyUserAlreadyExistException();
+            throw new AdminUserAlreadyExistException();
         }
         Integer count = this.adminUserRepository.findByCompanyIdAndUserIdCount(request.getCompanyId(), userInfo.getId());
 

@@ -53,6 +53,18 @@ public class AdminUserQuerydslRepositoryImpl implements AdminUserQuerydslReposit
     }
 
     @Override
+    public Integer findByUserIdCount(Integer userId) {
+        List<Integer> content = this.query.select(
+                        adminUser.id.companyId
+                )
+                .from(adminUser)
+                .where(adminUser.id.userId.eq(userId))
+                .fetch();
+
+        return content.size();
+    }
+
+    @Override
     public Integer findByCompanyIdAndUserIdCount(Integer companyId, Integer userId) {
         List<Integer> content = this.query.select(
                         adminUser.id.companyId
