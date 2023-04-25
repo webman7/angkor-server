@@ -63,14 +63,10 @@ public class BatchThirdSaveService {
         }
 
         // 6일날 전월 데이터를 정산한다.(캠페인별)
-//        if (String.valueOf(exeDate).endsWith("06")) {
-        this.campaignFinishSettlement(exeDate);
-//        }
+        if (String.valueOf(exeDate).endsWith("06")) {
+            this.campaignFinishSettlement(exeDate);
+        }
 
-
-
-//        this.saleAmountDaily(exeDate);
-//        this.mediaSettlementDaily(exeDate);
     }
 
     public void campaignFinishSettlement(Integer exeDate) {
@@ -80,11 +76,17 @@ public class BatchThirdSaveService {
         String batchType = "M";
         String batchName = "campaign_finish_settlement";
 
+
+        String beforeMonthFirstDate = CommonUtils.getBeforeYearMonthByYMD(String.valueOf(exeDate), 1);
+        String beforeMonthLastDate = CommonUtils.getLastDayOfMonthByYMD(beforeMonthFirstDate);
+
+        beforeMonthFirstDate = beforeMonthFirstDate.substring(0, 6) + "01";
+
         ////////////////////////////////////////////////////////////
         // 선행 작업 체크
         ////////////////////////////////////////////////////////////
         // Batch Y Count
-        int repCnt = this.batchQueryMapper.getBatchStatusYNCount(batchType, exeDate, "campaign_reserve_settlement");
+        int repCnt = this.batchQueryMapper.getBatchStatusYNCount(batchType, Integer.parseInt(beforeMonthFirstDate), "campaign_reserve_settlement");
         if (repCnt == 0) {
             System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             return;
@@ -94,15 +96,10 @@ public class BatchThirdSaveService {
         // 진행 여부 확인
         ////////////////////////////////////////////////////////////
         // Batch Y Count
-        int cnt = this.batchQueryMapper.getBatchStatusYNCount(batchType, exeDate, batchName);
+        int cnt = this.batchQueryMapper.getBatchStatusYNCount(batchType, Integer.parseInt(beforeMonthFirstDate), batchName);
         if (cnt > 0) {
             return;
         }
-
-        String beforeMonthFirstDate = CommonUtils.getBeforeYearMonthByYMD(String.valueOf(exeDate), 1);
-        String beforeMonthLastDate = CommonUtils.getLastDayOfMonthByYMD(beforeMonthFirstDate);
-
-        beforeMonthFirstDate = beforeMonthFirstDate.substring(0, 6) + "01";
 
         ////////////////////////////////////////////////////////////
         // 종료 캠페인 조회
@@ -173,15 +170,6 @@ public class BatchThirdSaveService {
             WalletLog walletLog = this.walletLogMapper.toEntity(saveWalletLog, SecurityUtils.getLoginUserNo());
             this.walletLogRepository.save(walletLog);
 
-
-
-
-
-
-
-
-
-
         }
 
         ////////////////////////////////////////////////////////////
@@ -190,7 +178,7 @@ public class BatchThirdSaveService {
         // Batch Execution
         BatchStatusDto.Request.Save saveList = new BatchStatusDto.Request.Save();
         saveList.setType(batchType);
-        saveList.setExeDate(exeDate);
+        saveList.setExeDate(Integer.parseInt(beforeMonthFirstDate));
         saveList.setName(batchName);
         saveList.setExeYn(true);
         BatchStatus batchStatus = this.batchStatusMapper.toEntity(saveList);

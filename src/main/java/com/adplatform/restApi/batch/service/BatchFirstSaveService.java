@@ -41,9 +41,9 @@ public class BatchFirstSaveService {
         }
 
         // 6일날 전월 데이터를 정산한다.(캠페인별)
-//        if (String.valueOf(exeDate).endsWith("06")) {
+        if (String.valueOf(exeDate).endsWith("06")) {
             this.campaignSettlementMonthly(exeDate);
-//        }
+        }
     }
 
     public void campaignSettlementMonthly(Integer exeDate) {
@@ -53,19 +53,20 @@ public class BatchFirstSaveService {
         String batchType = "M";
         String batchName = "campaign_settlement_daily";
 
-        ////////////////////////////////////////////////////////////
-        // 진행 여부 확인
-        ////////////////////////////////////////////////////////////
-        // Batch Y Count
-        int cnt = this.batchQueryMapper.getBatchStatusYNCount(batchType, exeDate, batchName);
-        if (cnt > 0) {
-            return;
-        }
-
         String beforeMonthFirstDate = CommonUtils.getBeforeYearMonthByYMD(String.valueOf(exeDate), 1);
         String beforeMonthLastDate = CommonUtils.getLastDayOfMonthByYMD(beforeMonthFirstDate);
 
         beforeMonthFirstDate = beforeMonthFirstDate.substring(0, 6) + "01";
+
+        ////////////////////////////////////////////////////////////
+        // 진행 여부 확인
+        ////////////////////////////////////////////////////////////
+        // Batch Y Count
+        int cnt = this.batchQueryMapper.getBatchStatusYNCount(batchType, Integer.parseInt(beforeMonthFirstDate), batchName);
+        if (cnt > 0) {
+            return;
+        }
+
         ////////////////////////////////////////////////////////////
         // 캠페인 일별 정산
         ////////////////////////////////////////////////////////////
@@ -82,7 +83,7 @@ public class BatchFirstSaveService {
         // Batch Execution
         BatchStatusDto.Request.Save saveList = new BatchStatusDto.Request.Save();
         saveList.setType(batchType);
-        saveList.setExeDate(exeDate);
+        saveList.setExeDate(Integer.parseInt(beforeMonthFirstDate));
         saveList.setName(batchName);
         saveList.setExeYn(true);
         BatchStatus batchStatus = this.batchStatusMapper.toEntity(saveList);

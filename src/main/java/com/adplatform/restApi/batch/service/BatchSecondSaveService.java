@@ -63,11 +63,11 @@ public class BatchSecondSaveService {
         }
 
         // 6일날 전월 데이터로 세금계산서를 만든다.
-//        if (String.valueOf(exeDate).endsWith("06")) {
+        if (String.valueOf(exeDate).endsWith("06")) {
             this.businessAccountTaxBillMonthly(exeDate);
             // 캠페인 예약금액을 정산한다.
             this.campaignSettlementMonthly(exeDate);
-//        }
+        }
 
     }
 
@@ -130,11 +130,17 @@ public class BatchSecondSaveService {
         String batchType = "M";
         String batchName = "campaign_reserve_settlement";
 
+        String beforeMonthFirstDate = CommonUtils.getBeforeYearMonthByYMD(String.valueOf(exeDate), 1);
+        String beforeMonthLastDate = CommonUtils.getLastDayOfMonthByYMD(beforeMonthFirstDate);
+
+        beforeMonthFirstDate = beforeMonthFirstDate.substring(0, 6) + "01";
+
+
         ////////////////////////////////////////////////////////////
         // 선행 작업 체크
         ////////////////////////////////////////////////////////////
         // Batch Y Count
-        int repCnt = this.batchQueryMapper.getBatchStatusYNCount(batchType, exeDate, "campaign_settlement_daily");
+        int repCnt = this.batchQueryMapper.getBatchStatusYNCount(batchType, Integer.parseInt(beforeMonthFirstDate), "campaign_settlement_daily");
         if (repCnt == 0) {
             System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             return;
@@ -144,17 +150,11 @@ public class BatchSecondSaveService {
         // 진행 여부 확인
         ////////////////////////////////////////////////////////////
         // Batch Y Count
-        int cnt = this.batchQueryMapper.getBatchStatusYNCount(batchType, exeDate, batchName);
+        int cnt = this.batchQueryMapper.getBatchStatusYNCount(batchType, Integer.parseInt(beforeMonthFirstDate), batchName);
         if (cnt > 0) {
             System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
             return;
         }
-
-        String beforeMonthFirstDate = CommonUtils.getBeforeYearMonthByYMD(String.valueOf(exeDate), 1);
-        String beforeMonthLastDate = CommonUtils.getLastDayOfMonthByYMD(beforeMonthFirstDate);
-
-        beforeMonthFirstDate = beforeMonthFirstDate.substring(0, 6) + "01";
-
 
         ////////////////////////////////////////////////////////////
         // 캠페인 월 정산 금액 계산
@@ -230,7 +230,7 @@ public class BatchSecondSaveService {
         // Batch Execution
         BatchStatusDto.Request.Save saveList = new BatchStatusDto.Request.Save();
         saveList.setType(batchType);
-        saveList.setExeDate(exeDate);
+        saveList.setExeDate(Integer.parseInt(beforeMonthFirstDate));
         saveList.setName(batchName);
         saveList.setExeYn(true);
         BatchStatus batchStatus = this.batchStatusMapper.toEntity(saveList);
