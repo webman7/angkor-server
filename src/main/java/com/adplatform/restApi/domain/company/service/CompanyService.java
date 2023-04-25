@@ -153,6 +153,11 @@ public class CompanyService {
         if(userInfo == null) {
             throw new UserNotFoundException();
         }
+        Integer count0 = this.mediaCompanyUserRepository.findByUserIdCount(userInfo.getId());
+
+        if(!count0.equals(0)) {
+            throw new MediaCompanyUserAlreadyExistException();
+        }
         Integer count = this.mediaCompanyUserRepository.findByCompanyIdAndUserIdCount(request.getCompanyId(), userInfo.getId());
 
         if(!count.equals(0)) {
@@ -187,15 +192,15 @@ public class CompanyService {
         if(userInfo == null) {
             throw new UserNotFoundException();
         }
-        Integer count = this.mediaCompanyUserRepository.findByUserIdCount(userInfo.getId());
+        Integer count0 = this.mediaCompanyUserRepository.findByUserIdCount(userInfo.getId());
 
-        if(!count.equals(0)) {
+        if(!count0.equals(0)) {
             throw new MediaCompanyUserAlreadyExistException();
         }
 
-        Integer count1 = this.mediaCompanyUserRepository.findByCompanyIdAndUserIdCount(request.getCompanyId(), userInfo.getId());
+        Integer count = this.mediaCompanyUserRepository.findByCompanyIdAndUserIdCount(request.getCompanyId(), userInfo.getId());
 
-        if(!count1.equals(0)) {
+        if(!count.equals(0)) {
             throw new MediaCompanyUserAlreadyExistException();
         }
 
@@ -444,6 +449,11 @@ public class CompanyService {
         if(userInfo == null) {
             throw new UserNotFoundException();
         }
+        Integer count0 = this.mediaCompanyUserRepository.findByUserIdCount(userInfo.getId());
+
+        if(!count0.equals(0)) {
+            throw new MediaCompanyUserAlreadyExistException();
+        }
         Integer count = this.adminUserRepository.findByCompanyIdAndUserIdCount(request.getCompanyId(), userInfo.getId());
 
         if(!count.equals(0)) {
@@ -476,6 +486,11 @@ public class CompanyService {
         UserDto.Response.BaseInfo userInfo = this.userQueryService.findUserByLoginId(request.getUserId());
         if(userInfo == null) {
             throw new UserNotFoundException();
+        }
+        Integer count0 = this.mediaCompanyUserRepository.findByUserIdCount(userInfo.getId());
+
+        if(!count0.equals(0)) {
+            throw new MediaCompanyUserAlreadyExistException();
         }
         Integer count = this.adminUserRepository.findByCompanyIdAndUserIdCount(request.getCompanyId(), userInfo.getId());
 
