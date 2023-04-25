@@ -15,13 +15,13 @@ import java.util.Optional;
  * @since 1.0
  */
 public interface AdAccountQuerydslRepository {
-    Page<AdAccountDto.Response.ForAdminSearch> searchForAdmin(Pageable pageable, AdAccountDto.Request.ForAdminSearch request);
+//    Page<AdAccountDto.Response.ForAdminSearch> searchForAdmin(Pageable pageable, AdAccountDto.Request.ForAdminSearch request);
+//
+//    List<AdAccountDto.Response.ForAdminSearch> searchForAdmin(AdAccountDto.Request.ForAdminSearch request);
 
-    List<AdAccountDto.Response.ForAdminSearch> searchForAdmin(AdAccountDto.Request.ForAdminSearch request);
-
-    Page<AdAccountDto.Response.ForAgencySearch> searchForAgency(Pageable pageable, AdAccountDto.Request.ForAgencySearch request, Integer userId);
-
-    List<AdAccountDto.Response.ForAgencySearch> searchForAgency(AdAccountDto.Request.ForAgencySearch request, Integer userId);
+//    Page<AdAccountDto.Response.ForAgencySearch> searchForAgency(Pageable pageable, AdAccountDto.Request.ForAgencySearch request, Integer userId);
+//
+//    List<AdAccountDto.Response.ForAgencySearch> searchForAgency(AdAccountDto.Request.ForAgencySearch request, Integer userId);
 
     Page<AdAccountDto.Response.ForAdvertiserSearch> searchForAdvertiser(
             Pageable pageable, Integer id, String name, Integer loginUserNo, AdAccountUser.Status status);

@@ -16,13 +16,13 @@ import java.util.Optional;
  */
 public interface BusinessAccountQuerydslRepository {
 
-    Page<BusinessAccountDto.Response.ForAdminSearch> searchForAdmin(Pageable pageable, BusinessAccountDto.Request.ForAdminSearch request);
-
-    List<BusinessAccountDto.Response.ForAdminSearch> searchForAdmin(BusinessAccountDto.Request.ForAdminSearch request);
-
-    Page<BusinessAccountDto.Response.ForAgencySearch> searchForAgency(Pageable pageable, BusinessAccountDto.Request.ForAgencySearch request, Integer userId);
-
-    List<BusinessAccountDto.Response.ForAgencySearch> searchForAgency(BusinessAccountDto.Request.ForAgencySearch request, Integer userId);
+//    Page<BusinessAccountDto.Response.ForAdminSearch> searchForAdmin(Pageable pageable, BusinessAccountDto.Request.ForAdminSearch request);
+//
+//    List<BusinessAccountDto.Response.ForAdminSearch> searchForAdmin(BusinessAccountDto.Request.ForAdminSearch request);
+//
+//    Page<BusinessAccountDto.Response.ForAgencySearch> searchForAgency(Pageable pageable, BusinessAccountDto.Request.ForAgencySearch request, Integer userId);
+//
+//    List<BusinessAccountDto.Response.ForAgencySearch> searchForAgency(BusinessAccountDto.Request.ForAgencySearch request, Integer userId);
 
     Page<BusinessAccountDto.Response.ForAdvertiserSearch> searchForAdvertiser(
             Pageable pageable, Integer id, String name, Integer loginUserNo, BusinessAccountUser.Status requestStatus);

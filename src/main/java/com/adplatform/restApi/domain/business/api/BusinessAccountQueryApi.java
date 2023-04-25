@@ -179,21 +179,21 @@ public class BusinessAccountQueryApi {
                 id, name, SecurityUtils.getLoginUserNo(), status);
     }
 
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/search-for-admin")
-    public PageDto<BusinessAccountDto.Response.ForAdminSearch> searchForAdmin(
-            @PageableDefault Pageable pageable,
-            BusinessAccountDto.Request.ForAdminSearch request) {
-        return PageDto.create(this.businessAccountRepository.searchForAdmin(pageable, request));
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/search-for-agency")
-    public PageDto<BusinessAccountDto.Response.ForAgencySearch> searchForAgency(
-            @PageableDefault Pageable pageable,
-            BusinessAccountDto.Request.ForAgencySearch request) {
-        return PageDto.create(this.businessAccountRepository.searchForAgency(pageable, request, SecurityUtils.getLoginUserNo()));
-    }
+//    @ResponseStatus(HttpStatus.OK)
+//    @GetMapping("/search-for-admin")
+//    public PageDto<BusinessAccountDto.Response.ForAdminSearch> searchForAdmin(
+//            @PageableDefault Pageable pageable,
+//            BusinessAccountDto.Request.ForAdminSearch request) {
+//        return PageDto.create(this.businessAccountRepository.searchForAdmin(pageable, request));
+//    }
+//
+//    @ResponseStatus(HttpStatus.OK)
+//    @GetMapping("/search-for-agency")
+//    public PageDto<BusinessAccountDto.Response.ForAgencySearch> searchForAgency(
+//            @PageableDefault Pageable pageable,
+//            BusinessAccountDto.Request.ForAgencySearch request) {
+//        return PageDto.create(this.businessAccountRepository.searchForAgency(pageable, request, SecurityUtils.getLoginUserNo()));
+//    }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/search-for-advertiser")

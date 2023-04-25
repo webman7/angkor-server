@@ -44,7 +44,6 @@ import static com.adplatform.restApi.domain.advertiser.creative.domain.QCreative
 import static com.adplatform.restApi.domain.business.domain.QBusinessAccount.businessAccount;
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
 import static com.adplatform.restApi.domain.statistics.domain.report.QReportAdGroupDaily.reportAdGroupDaily;
-import static com.adplatform.restApi.domain.statistics.domain.sale.QSaleAdAccountDaily.saleAdAccountDaily;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
 import static com.adplatform.restApi.domain.wallet.domain.QWalletMaster.walletMaster;
 import static com.querydsl.core.types.ExpressionUtils.as;
@@ -105,178 +104,178 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                 : query;
     }
 
-    @Override
-    public Page<Response.ForAdminSearch> searchForAdmin(Pageable pageable, Request.ForAdminSearch request) {
-        List<Response.ForAdminSearch> content = this.getSearchForAdminQuery(pageable, request)
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
+//    @Override
+//    public Page<Response.ForAdminSearch> searchForAdmin(Pageable pageable, Request.ForAdminSearch request) {
+//        List<Response.ForAdminSearch> content = this.getSearchForAdminQuery(pageable, request)
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize())
+//                .fetch();
+//
+//        JPAQuery<Long> countQuery = this.query.select(adAccount.count())
+//                .from(adAccount)
+//                .join(adAccount.adAccountUsers, adAccountUser)
+//                .where(
+//                        this.eqId(request.getId()),
+//                        this.containsName(request.getName())
+//                ).groupBy(adAccount.id);
+//        // group by 일 경우 () -> countQuery.fetch().size()
+//        return PageableExecutionUtils.getPage(content, pageable, () -> countQuery.fetch().size());
+//    }
+//
+//    @Override
+//    public List<Response.ForAdminSearch> searchForAdmin(Request.ForAdminSearch request) {
+//        return this.getSearchForAdminQuery(null, request).fetch();
+//    }
+//
+//    private JPAQuery<Response.ForAdminSearch> getSearchForAdminQuery(
+//            Pageable pageable,
+//            Request.ForAdminSearch request) {
+//        LocalDate now = LocalDate.now();
+//        DateTimeFormatter yyyyMMdd = DateTimeFormatter.ofPattern("yyyyMMdd");
+//        JPAQuery<Response.ForAdminSearch> query = this.query.select(
+//                        new QAdAccountDto_Response_ForAdminSearch(
+//                                adAccount.id,
+//                                adAccount.businessAccount,
+//                                adAccount.name,
+//                                as(select(user.name)
+//                                                .from(user)
+//                                                .join(adAccountUser).on(user.id.eq(adAccountUser.id.userId),
+//                                                        adAccountUser.memberType.eq(AdAccountUser.MemberType.MASTER))
+//                                                .where(adAccountUser.id.adAccountId.eq(adAccount.id)),
+//                                        "marketerName"),
+//                                new QWalletDto_Response_WalletSpend(
+//                                        as(select(walletMaster.availableAmount.sum())
+//                                                        .from(walletMaster)
+//                                                        .where(walletMaster.id.eq(adAccount.businessAccount.id)),
+//                                                "cash"),
+//                                        as(select(reportAdGroupDaily.information.cost.sum())
+//                                                        .from(reportAdGroupDaily)
+//                                                        .where(reportAdGroupDaily.adAccountId.eq(adAccount.id),
+//                                                                reportAdGroupDaily.reportDate.eq(Integer.valueOf(now.format(yyyyMMdd)))),
+//                                                "todaySpend"),
+//                                        as(select(saleAdAccountDaily.supplyAmount.sum())
+//                                                        .from(saleAdAccountDaily)
+//                                                        .where(saleAdAccountDaily.id.adAccountId.eq(adAccount.id),
+//                                                                saleAdAccountDaily.id.statDate.eq(Integer.valueOf(now.minusDays(1L).format(yyyyMMdd)))),
+//                                                "yesterdaySpend"),
+//                                        as(select(saleAdAccountDaily.supplyAmount.sum())
+//                                                        .from(saleAdAccountDaily)
+//                                                        .where(
+//                                                                saleAdAccountDaily.id.adAccountId.eq(adAccount.id),
+//                                                                saleAdAccountDaily.id.statDate.between(
+//                                                                        Integer.valueOf(now.withDayOfMonth(1).format(yyyyMMdd)),
+//                                                                        Integer.valueOf(now.withDayOfMonth(now.lengthOfMonth()).format(yyyyMMdd))
+//                                                                )
+//                                                        ),
+//                                                "monthSpendQuery")
+//                                ),
+//                                adAccount.config,
+//                                adAccount.adminStop,
+//                                adAccount.outOfBalance
+//                        )
+//                )
+//                .from(adAccount)
+//                .join(adAccount.adAccountUsers, adAccountUser)
+//                .where(
+//                        this.eqId(request.getId()),
+//                        this.containsName(request.getName())
+//                )
+//                .groupBy(
+//                        adAccount.id
+//                );
+//
+//        return Objects.nonNull(pageable)
+//                ? query.orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(AdAccount.class, "adAccount", pageable.getSort()).toArray(OrderSpecifier[]::new))
+//                : query;
+//    }
 
-        JPAQuery<Long> countQuery = this.query.select(adAccount.count())
-                .from(adAccount)
-                .join(adAccount.adAccountUsers, adAccountUser)
-                .where(
-                        this.eqId(request.getId()),
-                        this.containsName(request.getName())
-                ).groupBy(adAccount.id);
-        // group by 일 경우 () -> countQuery.fetch().size()
-        return PageableExecutionUtils.getPage(content, pageable, () -> countQuery.fetch().size());
-    }
+//    @Override
+//    public Page<Response.ForAgencySearch> searchForAgency(Pageable pageable, Request.ForAgencySearch request, Integer userId) {
+//        List<Response.ForAgencySearch> content = this.getSearchForAgencyQuery(pageable, request, userId)
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize())
+//                .fetch();
+//
+//        JPAQuery<Long> countQuery = this.query.select(adAccount.count())
+//                .from(adAccount)
+//                .join(adAccount.adAccountUsers, adAccountUser)
+//                .where(
+//                        adAccountUser.id.userId.eq(userId),
+//                        this.eqId(request.getId()),
+//                        this.containsName(request.getName())
+//                ).groupBy(adAccount.id);
+//        // group by 일 경우 () -> countQuery.fetch().size()
+//        return PageableExecutionUtils.getPage(content, pageable, () -> countQuery.fetch().size());
+//    }
+//
+//    @Override
+//    public List<Response.ForAgencySearch> searchForAgency(Request.ForAgencySearch request, Integer userId) {
+//        return this.getSearchForAgencyQuery(null, request, userId).fetch();
+//    }
 
-    @Override
-    public List<Response.ForAdminSearch> searchForAdmin(Request.ForAdminSearch request) {
-        return this.getSearchForAdminQuery(null, request).fetch();
-    }
-
-    private JPAQuery<Response.ForAdminSearch> getSearchForAdminQuery(
-            Pageable pageable,
-            Request.ForAdminSearch request) {
-        LocalDate now = LocalDate.now();
-        DateTimeFormatter yyyyMMdd = DateTimeFormatter.ofPattern("yyyyMMdd");
-        JPAQuery<Response.ForAdminSearch> query = this.query.select(
-                        new QAdAccountDto_Response_ForAdminSearch(
-                                adAccount.id,
-                                adAccount.businessAccount,
-                                adAccount.name,
-                                as(select(user.name)
-                                                .from(user)
-                                                .join(adAccountUser).on(user.id.eq(adAccountUser.id.userId),
-                                                        adAccountUser.memberType.eq(AdAccountUser.MemberType.MASTER))
-                                                .where(adAccountUser.id.adAccountId.eq(adAccount.id)),
-                                        "marketerName"),
-                                new QWalletDto_Response_WalletSpend(
-                                        as(select(walletMaster.availableAmount.sum())
-                                                        .from(walletMaster)
-                                                        .where(walletMaster.id.eq(adAccount.businessAccount.id)),
-                                                "cash"),
-                                        as(select(reportAdGroupDaily.information.cost.sum())
-                                                        .from(reportAdGroupDaily)
-                                                        .where(reportAdGroupDaily.adAccountId.eq(adAccount.id),
-                                                                reportAdGroupDaily.reportDate.eq(Integer.valueOf(now.format(yyyyMMdd)))),
-                                                "todaySpend"),
-                                        as(select(saleAdAccountDaily.supplyAmount.sum())
-                                                        .from(saleAdAccountDaily)
-                                                        .where(saleAdAccountDaily.id.adAccountId.eq(adAccount.id),
-                                                                saleAdAccountDaily.id.statDate.eq(Integer.valueOf(now.minusDays(1L).format(yyyyMMdd)))),
-                                                "yesterdaySpend"),
-                                        as(select(saleAdAccountDaily.supplyAmount.sum())
-                                                        .from(saleAdAccountDaily)
-                                                        .where(
-                                                                saleAdAccountDaily.id.adAccountId.eq(adAccount.id),
-                                                                saleAdAccountDaily.id.statDate.between(
-                                                                        Integer.valueOf(now.withDayOfMonth(1).format(yyyyMMdd)),
-                                                                        Integer.valueOf(now.withDayOfMonth(now.lengthOfMonth()).format(yyyyMMdd))
-                                                                )
-                                                        ),
-                                                "monthSpendQuery")
-                                ),
-                                adAccount.config,
-                                adAccount.adminStop,
-                                adAccount.outOfBalance
-                        )
-                )
-                .from(adAccount)
-                .join(adAccount.adAccountUsers, adAccountUser)
-                .where(
-                        this.eqId(request.getId()),
-                        this.containsName(request.getName())
-                )
-                .groupBy(
-                        adAccount.id
-                );
-
-        return Objects.nonNull(pageable)
-                ? query.orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(AdAccount.class, "adAccount", pageable.getSort()).toArray(OrderSpecifier[]::new))
-                : query;
-    }
-
-    @Override
-    public Page<Response.ForAgencySearch> searchForAgency(Pageable pageable, Request.ForAgencySearch request, Integer userId) {
-        List<Response.ForAgencySearch> content = this.getSearchForAgencyQuery(pageable, request, userId)
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-
-        JPAQuery<Long> countQuery = this.query.select(adAccount.count())
-                .from(adAccount)
-                .join(adAccount.adAccountUsers, adAccountUser)
-                .where(
-                        adAccountUser.id.userId.eq(userId),
-                        this.eqId(request.getId()),
-                        this.containsName(request.getName())
-                ).groupBy(adAccount.id);
-        // group by 일 경우 () -> countQuery.fetch().size()
-        return PageableExecutionUtils.getPage(content, pageable, () -> countQuery.fetch().size());
-    }
-
-    @Override
-    public List<Response.ForAgencySearch> searchForAgency(Request.ForAgencySearch request, Integer userId) {
-        return this.getSearchForAgencyQuery(null, request, userId).fetch();
-    }
-
-    private JPAQuery<Response.ForAgencySearch> getSearchForAgencyQuery(
-            Pageable pageable,
-            Request.ForAgencySearch request,
-            Integer userId) {
-        LocalDate now = LocalDate.now();
-        DateTimeFormatter yyyyMMdd = DateTimeFormatter.ofPattern("yyyyMMdd");
-        JPAQuery<Response.ForAgencySearch> query = this.query.select(
-                        new QAdAccountDto_Response_ForAgencySearch(
-                                adAccount.id,
-                                adAccount.businessAccount,
-                                adAccount.name,
-                                as(select(user.name)
-                                                .from(user)
-                                                .join(adAccountUser).on(user.id.eq(adAccountUser.id.userId),
-                                                        adAccountUser.memberType.eq(AdAccountUser.MemberType.MASTER))
-                                                .where(adAccountUser.id.adAccountId.eq(adAccount.id)),
-                                        "marketerName"),
-                                new QWalletDto_Response_WalletSpend(
-                                        as(select(walletMaster.availableAmount.sum())
-                                                        .from(walletMaster)
-                                                        .where(walletMaster.id.eq(adAccount.businessAccount.id)),
-                                                "cash"),
-                                        as(select(reportAdGroupDaily.information.cost.sum())
-                                                        .from(reportAdGroupDaily)
-                                                        .where(reportAdGroupDaily.adAccountId.eq(adAccount.id),
-                                                                reportAdGroupDaily.reportDate.eq(Integer.valueOf(now.format(yyyyMMdd)))),
-                                                "todaySpend"),
-                                        as(select(saleAdAccountDaily.supplyAmount.sum())
-                                                        .from(saleAdAccountDaily)
-                                                        .where(saleAdAccountDaily.id.adAccountId.eq(adAccount.id),
-                                                                saleAdAccountDaily.id.statDate.eq(Integer.valueOf(now.minusDays(1L).format(yyyyMMdd)))),
-                                                "yesterdaySpend"),
-                                        as(select(saleAdAccountDaily.supplyAmount.sum())
-                                                        .from(saleAdAccountDaily)
-                                                        .where(
-                                                                saleAdAccountDaily.id.adAccountId.eq(adAccount.id),
-                                                                saleAdAccountDaily.id.statDate.between(
-                                                                        Integer.valueOf(now.withDayOfMonth(1).format(yyyyMMdd)),
-                                                                        Integer.valueOf(now.withDayOfMonth(now.lengthOfMonth()).format(yyyyMMdd))
-                                                                )
-                                                        ),
-                                                "monthSpendQuery")
-                                ),
-                                adAccount.config,
-                                adAccount.adminStop,
-                                adAccount.outOfBalance
-                        )
-                )
-                .from(adAccount)
-                .join(adAccount.adAccountUsers, adAccountUser)
-                .where(
-                        adAccountUser.id.userId.eq(userId),
-                        this.eqId(request.getId()),
-                        this.containsName(request.getName())
-                )
-                .groupBy(
-                        adAccount.id
-                );
-
-        return Objects.nonNull(pageable)
-                ? query.orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(AdAccount.class, "adAccount", pageable.getSort()).toArray(OrderSpecifier[]::new))
-                : query;
-    }
+//    private JPAQuery<Response.ForAgencySearch> getSearchForAgencyQuery(
+//            Pageable pageable,
+//            Request.ForAgencySearch request,
+//            Integer userId) {
+//        LocalDate now = LocalDate.now();
+//        DateTimeFormatter yyyyMMdd = DateTimeFormatter.ofPattern("yyyyMMdd");
+//        JPAQuery<Response.ForAgencySearch> query = this.query.select(
+//                        new QAdAccountDto_Response_ForAgencySearch(
+//                                adAccount.id,
+//                                adAccount.businessAccount,
+//                                adAccount.name,
+//                                as(select(user.name)
+//                                                .from(user)
+//                                                .join(adAccountUser).on(user.id.eq(adAccountUser.id.userId),
+//                                                        adAccountUser.memberType.eq(AdAccountUser.MemberType.MASTER))
+//                                                .where(adAccountUser.id.adAccountId.eq(adAccount.id)),
+//                                        "marketerName"),
+//                                new QWalletDto_Response_WalletSpend(
+//                                        as(select(walletMaster.availableAmount.sum())
+//                                                        .from(walletMaster)
+//                                                        .where(walletMaster.id.eq(adAccount.businessAccount.id)),
+//                                                "cash"),
+//                                        as(select(reportAdGroupDaily.information.cost.sum())
+//                                                        .from(reportAdGroupDaily)
+//                                                        .where(reportAdGroupDaily.adAccountId.eq(adAccount.id),
+//                                                                reportAdGroupDaily.reportDate.eq(Integer.valueOf(now.format(yyyyMMdd)))),
+//                                                "todaySpend"),
+//                                        as(select(saleAdAccountDaily.supplyAmount.sum())
+//                                                        .from(saleAdAccountDaily)
+//                                                        .where(saleAdAccountDaily.id.adAccountId.eq(adAccount.id),
+//                                                                saleAdAccountDaily.id.statDate.eq(Integer.valueOf(now.minusDays(1L).format(yyyyMMdd)))),
+//                                                "yesterdaySpend"),
+//                                        as(select(saleAdAccountDaily.supplyAmount.sum())
+//                                                        .from(saleAdAccountDaily)
+//                                                        .where(
+//                                                                saleAdAccountDaily.id.adAccountId.eq(adAccount.id),
+//                                                                saleAdAccountDaily.id.statDate.between(
+//                                                                        Integer.valueOf(now.withDayOfMonth(1).format(yyyyMMdd)),
+//                                                                        Integer.valueOf(now.withDayOfMonth(now.lengthOfMonth()).format(yyyyMMdd))
+//                                                                )
+//                                                        ),
+//                                                "monthSpendQuery")
+//                                ),
+//                                adAccount.config,
+//                                adAccount.adminStop,
+//                                adAccount.outOfBalance
+//                        )
+//                )
+//                .from(adAccount)
+//                .join(adAccount.adAccountUsers, adAccountUser)
+//                .where(
+//                        adAccountUser.id.userId.eq(userId),
+//                        this.eqId(request.getId()),
+//                        this.containsName(request.getName())
+//                )
+//                .groupBy(
+//                        adAccount.id
+//                );
+//
+//        return Objects.nonNull(pageable)
+//                ? query.orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(AdAccount.class, "adAccount", pageable.getSort()).toArray(OrderSpecifier[]::new))
+//                : query;
+//    }
 
     @Override
     public Page<Response.ForAdvertiserSearch> searchForAdvertiser(
