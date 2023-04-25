@@ -27,14 +27,14 @@ since 1.0
 
     <insert id="insertBusinessAccountTaxBillMonthly">
         INSERT IGNORE INTO business_account_tax_bill (business_account_info_id, stat_date, supply_amount, vat_amount, total_amount)
-             SELECT t1.business_account_info_id, t1.stat_date, ROUND((t1.supply_amount * 10 / 11), 2) AS supply_amount,
-                    (t1.supply_amount - ROUND((t1.supply_amount * 10 / 11), 2)) AS vat_amount, t1.supply_amount AS total_amount
-               FROM (
-                     SELECT a.business_account_info_id, #{endDate} AS stat_date, SUM(a.supply_amount) AS supply_amount
-                       FROM business_account_settlement a
-                      WHERE stat_date BETWEEN #{startDate} AND #{endDate}
-                      GROUP BY a.business_account_info_id
-                    ) t1
+                SELECT t1.business_account_info_id, t1.stat_date, ROUND((t1.supply_amount * 100 / (100 + b.vat_rate)), 2) AS supply_amount,
+                       ROUND(t1.supply_amount - ROUND((t1.supply_amount * 100 / (100 + b.vat_rate)), 2), 2) AS vat_amount, t1.supply_amount AS total_amount
+                  FROM (
+                       SELECT a.business_account_info_id, 20230331 AS stat_date, SUM(a.supply_amount) AS supply_amount
+                         FROM business_account_settlement a
+                        WHERE stat_date BETWEEN #{startDate} AND #{endDate}
+                        GROUP BY a.business_account_info_id
+                       ) t1, (SELECT ref_data1 AS vat_rate FROM code_info WHERE key_code = '001001') b
               GROUP BY t1.business_account_info_id, t1.stat_date
     </insert>
 
