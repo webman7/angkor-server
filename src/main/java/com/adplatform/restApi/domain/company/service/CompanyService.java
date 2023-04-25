@@ -187,9 +187,15 @@ public class CompanyService {
         if(userInfo == null) {
             throw new UserNotFoundException();
         }
-        Integer count = this.mediaCompanyUserRepository.findByCompanyIdAndUserIdCount(request.getCompanyId(), userInfo.getId());
+        Integer count = this.mediaCompanyUserRepository.findByUserIdCount(userInfo.getId());
 
         if(!count.equals(0)) {
+            throw new MediaCompanyUserAlreadyExistException();
+        }
+
+        Integer count1 = this.mediaCompanyUserRepository.findByCompanyIdAndUserIdCount(request.getCompanyId(), userInfo.getId());
+
+        if(!count1.equals(0)) {
             throw new MediaCompanyUserAlreadyExistException();
         }
 

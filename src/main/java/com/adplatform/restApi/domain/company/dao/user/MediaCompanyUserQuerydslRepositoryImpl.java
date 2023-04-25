@@ -49,6 +49,19 @@ public class MediaCompanyUserQuerydslRepositoryImpl implements MediaCompanyUserQ
     }
 
     @Override
+    public Integer findByUserIdCount(Integer userId) {
+        List<Integer> content = this.query.select(
+                        mediaCompanyUser.id.companyId
+                )
+                .from(mediaCompanyUser)
+                .where(mediaCompanyUser.id.userId.eq(userId))
+                .fetch();
+
+        return content.size();
+    }
+
+
+    @Override
     public Integer findByCompanyIdAndUserIdCount(Integer companyId, Integer userId) {
         List<Integer> content = this.query.select(
                         mediaCompanyUser.id.companyId

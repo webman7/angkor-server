@@ -14,6 +14,7 @@ public interface MediaCompanyUserQuerydslRepository {
 
     Optional<MediaCompanyUser> findByCompanyIdAndUserId(Integer companyId, Integer userId);
     Integer findByCompanyIdAndUserIdCount(Integer companyId, Integer userId);
+    Integer findByUserIdCount(Integer userId);
     Integer findByCompanyIdCount(Integer companyId);
 //    List<MediaCompanyUserDto.Response.MediaCompanyUserInfo> mediaCompanyUserInfo(Integer companyId);
     Page<MediaCompanyUserDto.Response.MediaCompanyUserInfo> mediaCompanyUserInfo(Pageable pageable, Integer companyId);
