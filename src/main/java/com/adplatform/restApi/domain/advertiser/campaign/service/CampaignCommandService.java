@@ -28,13 +28,11 @@ import com.adplatform.restApi.domain.history.dto.campaign.CampaignBudgetChangeHi
 import com.adplatform.restApi.domain.history.dto.campaign.CampaignBudgetChangeHistoryMapper;
 import com.adplatform.restApi.domain.wallet.dao.walletcampaignreserve.WalletCampaignReserveDetailRepository;
 import com.adplatform.restApi.domain.wallet.dao.walletcampaignreserve.WalletCampaignReserveRepository;
+import com.adplatform.restApi.domain.wallet.dao.walletlog.WalletLogRepository;
 import com.adplatform.restApi.domain.wallet.dao.walletmaster.WalletMasterDetailRepository;
 import com.adplatform.restApi.domain.wallet.dao.walletmaster.WalletMasterRepository;
 import com.adplatform.restApi.domain.wallet.dao.walletmaster.WalletReserveLogRepository;
-import com.adplatform.restApi.domain.wallet.domain.WalletCampaignReserve;
-import com.adplatform.restApi.domain.wallet.domain.WalletCampaignReserveDetail;
-import com.adplatform.restApi.domain.wallet.domain.WalletMasterDetail;
-import com.adplatform.restApi.domain.wallet.domain.WalletReserveLog;
+import com.adplatform.restApi.domain.wallet.domain.*;
 import com.adplatform.restApi.domain.wallet.dto.*;
 import com.adplatform.restApi.global.config.security.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
@@ -78,6 +76,8 @@ public class CampaignCommandService {
     private final WalletCampaignReserveRepository walletCampaignReserveRepository;
     private final WalletMasterDetailMapper walletMasterDetailMapper;
     private final WalletMasterDetailRepository walletMasterDetailRepository;
+    private final WalletLogMapper walletLogMapper;
+    private final WalletLogRepository walletLogRepository;
 
 
     public void save(CampaignDto.Request.Save request) {
@@ -125,11 +125,31 @@ public class CampaignCommandService {
                 // 지갑 상세 인서트
                 WalletDto.Request.SaveWalletMasterDetail saveWalletMasterDetail = new WalletDto.Request.SaveWalletMasterDetail();
                 saveWalletMasterDetail.setBusinessAccountId(campaignInfo.getBusinessAccountId());
-                saveWalletMasterDetail.setAvailableAmount(availableAmount);
-                saveWalletMasterDetail.setTotalReserveAmount(totalReserveAmount);
-                saveWalletMasterDetail.setSummary("budget_change");
+                saveWalletMasterDetail.setAvailableAmount(list.getAvailableAmount());
+                saveWalletMasterDetail.setTotalReserveAmount(list.getTotalReserveAmount());
+                saveWalletMasterDetail.setChangeAmount(budgetAmount);
+                saveWalletMasterDetail.setChangeReserveAmount(-budgetAmount);
+                saveWalletMasterDetail.setChangeAvailableAmount(availableAmount);
+                saveWalletMasterDetail.setChangeTotalReserveAmount(totalReserveAmount);
+                saveWalletMasterDetail.setSummary("campaign_budget");
+                saveWalletMasterDetail.setMemo("campaignId : " + campaign.getId());
                 WalletMasterDetail walletMasterDetail = this.walletMasterDetailMapper.toEntity(saveWalletMasterDetail, SecurityUtils.getLoginUserNo());
                 this.walletMasterDetailRepository.save(walletMasterDetail);
+
+                // wallet_log 등록
+                WalletDto.Request.SaveWalletLog saveWalletLog = new WalletDto.Request.SaveWalletLog();
+                saveWalletLog.setBusinessAccountId(campaignInfo.getBusinessAccountId());
+                saveWalletLog.setSummary("campaign_budget");
+                saveWalletLog.setChangeAmount(budgetAmount);
+                saveWalletLog.setAvailableAmount(availableAmountTotal);
+                saveWalletLog.setChangeAvailableAmount(availableAmount);
+                saveWalletLog.setMemo("campaignId : " + campaign.getId());
+                saveWalletLog.setWalletChargeLogId(0);
+                saveWalletLog.setWalletRefundId(0);
+                saveWalletLog.setWalletAutoChargeLogId(0);
+
+                WalletLog walletLog = this.walletLogMapper.toEntity(saveWalletLog, SecurityUtils.getLoginUserNo());
+                this.walletLogRepository.save(walletLog);
 
                 // 지갑캠페인예약 금액 등록
                 WalletDto.Request.SaveWalletCampaignReserve saveWalletCampaignReserve = new WalletDto.Request.SaveWalletCampaignReserve();
@@ -147,7 +167,7 @@ public class CampaignCommandService {
                 detail.setAdAccountId(request.getAdAccountId());
                 detail.setCampaignId(campaign.getId());
                 detail.setFluctuation(fluctuation);
-                detail.setSummary("budget_change");
+                detail.setSummary("campaign_budget");
                 detail.setChangeAmount(budgetAmount);
                 detail.setReserveAmount(campaignReserveAmount);
                 detail.setReserveChangeAmount(reserveChangeAmount);
@@ -246,11 +266,31 @@ public class CampaignCommandService {
                     // 지갑 상세 인서트
                     WalletDto.Request.SaveWalletMasterDetail saveWalletMasterDetail = new WalletDto.Request.SaveWalletMasterDetail();
                     saveWalletMasterDetail.setBusinessAccountId(campaignInfo.getBusinessAccountId());
-                    saveWalletMasterDetail.setAvailableAmount(availableAmount);
-                    saveWalletMasterDetail.setTotalReserveAmount(totalReserveAmount);
-                    saveWalletMasterDetail.setSummary("budget_change");
+                    saveWalletMasterDetail.setAvailableAmount(list.getAvailableAmount());
+                    saveWalletMasterDetail.setTotalReserveAmount(list.getTotalReserveAmount());
+                    saveWalletMasterDetail.setChangeAmount(-budgetAmount);
+                    saveWalletMasterDetail.setChangeReserveAmount(budgetAmount);
+                    saveWalletMasterDetail.setChangeAvailableAmount(availableAmount);
+                    saveWalletMasterDetail.setChangeTotalReserveAmount(totalReserveAmount);
+                    saveWalletMasterDetail.setSummary("campaign_budget");
+                    saveWalletMasterDetail.setMemo("");
                     WalletMasterDetail walletMasterDetail = this.walletMasterDetailMapper.toEntity(saveWalletMasterDetail, SecurityUtils.getLoginUserNo());
                     this.walletMasterDetailRepository.save(walletMasterDetail);
+
+                    // wallet_log 등록
+                    WalletDto.Request.SaveWalletLog saveWalletLog = new WalletDto.Request.SaveWalletLog();
+                    saveWalletLog.setBusinessAccountId(campaignInfo.getBusinessAccountId());
+                    saveWalletLog.setSummary("campaign_budget");
+                    saveWalletLog.setChangeAmount(-budgetAmount);
+                    saveWalletLog.setAvailableAmount(availableAmountTotal);
+                    saveWalletLog.setChangeAvailableAmount(availableAmount);
+                    saveWalletLog.setMemo("");
+                    saveWalletLog.setWalletChargeLogId(0);
+                    saveWalletLog.setWalletRefundId(0);
+                    saveWalletLog.setWalletAutoChargeLogId(0);
+
+                    WalletLog walletLog = this.walletLogMapper.toEntity(saveWalletLog, SecurityUtils.getLoginUserNo());
+                    this.walletLogRepository.save(walletLog);
 
                     // 지갑캠페인예약 금액 변경
                     this.walletCampaignReserveRepository.updateCampaignReserveAmount(campaignInfo.getBusinessAccountId(), campaignInfo.getAdAccountId(), request.getCampaignId(), reserveChangeAmount);
@@ -261,7 +301,7 @@ public class CampaignCommandService {
                     detail.setAdAccountId(campaignInfo.getAdAccountId());
                     detail.setCampaignId(request.getCampaignId());
                     detail.setFluctuation(fluctuation);
-                    detail.setSummary("budget_change");
+                    detail.setSummary("campaign_budget");
                     detail.setChangeAmount(budgetAmount);
                     detail.setReserveAmount(campaignReserveAmount);
                     detail.setReserveChangeAmount(reserveChangeAmount);

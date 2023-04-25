@@ -16,14 +16,13 @@ public class WalletLog extends BaseCreatedEntity {
 
     @Column(name = "summary", length = 40)
     private String summary;
-
-    @Column(name = "out_amount", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2)")
-    private Float outAmount;
-
-    @Column(name = "in_amount", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2)")
-    private Float inAmount;
-
-    @Column(name = "memo", length = 100)
+    @Column(name = "change_amount", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2)")
+    private Float changeAmount;
+    @Column(name = "available_amount", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2)")
+    private Float availableAmount;
+    @Column(name = "change_available_amount", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2)")
+    private Float changeAvailableAmount;
+    @Column(name = "memo", length = 1000)
     private String memo;
 
     @Column(name = "wallet_charge_log_id")
@@ -37,11 +36,12 @@ public class WalletLog extends BaseCreatedEntity {
 
 
     @Builder
-    public WalletLog(Integer businessAccountId, String summary, Float outAmount, Float inAmount, String memo, Integer walletChargeLogId, Integer walletAutoChargeLogId, Integer walletRefundId) {
+    public WalletLog(Integer businessAccountId, String summary, Float changeAmount, Float availableAmount, Float changeAvailableAmount, String memo, Integer walletChargeLogId, Integer walletAutoChargeLogId, Integer walletRefundId) {
         this.businessAccountId = businessAccountId;
         this.summary = summary;
-        this.outAmount = outAmount;
-        this.inAmount = inAmount;
+        this.changeAmount = changeAmount;
+        this.availableAmount = availableAmount;
+        this.changeAvailableAmount = changeAvailableAmount;
         this.memo = memo;
         this.walletChargeLogId = walletChargeLogId;
         this.walletAutoChargeLogId = walletAutoChargeLogId;

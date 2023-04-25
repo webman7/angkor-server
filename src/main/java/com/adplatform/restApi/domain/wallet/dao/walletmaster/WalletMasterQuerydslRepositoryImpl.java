@@ -43,6 +43,16 @@ public class WalletMasterQuerydslRepositoryImpl implements WalletMasterQuerydslR
                 .execute();
     }
 
+    public void updateWalletMasterReserveAmount(Integer businessAccountId, Float totalReserveAmount) {
+        LocalDateTime now = LocalDateTime.now();
+
+        this.query.update(walletMaster)
+                .set(walletMaster.totalReserveAmount, totalReserveAmount)
+                .set(walletMaster.updatedAt, now)
+                .where(walletMaster.businessAccount.id.eq(businessAccountId))
+                .execute();
+    }
+
     public void updateWalletMasterCharge(Integer businessAccountId, Float availableAmount) {
         LocalDateTime now = LocalDateTime.now();
 

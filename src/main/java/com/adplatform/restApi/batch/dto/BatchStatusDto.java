@@ -38,6 +38,31 @@ public class BatchStatusDto {
 
         @Getter
         @Setter
+        public static class CampaignSettlementDaily {
+            private Integer businessAccountId;
+            private Integer adAccountId;
+            private Integer campaignId;
+            private Float supplyAmount;
+        }
+
+        @Getter
+        @Setter
+        public static class CampaignFinish {
+            private Integer businessAccountId;
+            private Integer adAccountId;
+            private Integer campaignId;
+            private String campaignName;
+        }
+
+        @Getter
+        @Setter
+        public static class BusinessAccountSettlement {
+            private Integer businessAccountId;
+            private Float supplyAmount;
+        }
+
+        @Getter
+        @Setter
         public static class Batch {
             private String type;
             private int exeDate;

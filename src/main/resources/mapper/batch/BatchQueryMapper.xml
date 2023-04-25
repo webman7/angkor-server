@@ -103,4 +103,64 @@ since 1.0
         <include refid="walletCashTotalQuery"/>
     </select>
 
+    <resultMap id="campaignSettlementDailyMap" type="com.adplatform.restApi.batch.dto.BatchStatusDto$Response$CampaignSettlementDaily">
+        <result column="businessAccountId" property="businessAccountId"/>
+        <result column="adAccountId" property="adAccountId"/>
+        <result column="campaignId" property="campaignId"/>
+        <result column="supplyAmount" property="supplyAmount"/>
+    </resultMap>
+
+    <sql id="campaignSettlementDailyQuery">
+        SELECT a.business_account_info_id AS businessAccountId, a.adaccount_info_id AS adAccountId, a.campaign_info_id AS campaignId, SUM(a.supply_amount) AS supplyAmount
+          FROM campaign_settlement_daily a, business_account_info b
+         WHERE a.business_account_info_id = b.id
+           AND a.stat_date BETWEEN #{startDate} AND #{endDate}
+           AND b.pre_payment_yn = 'Y'
+         GROUP BY a.business_account_info_id, a.adaccount_info_id, a.campaign_info_id
+    </sql>
+
+    <select id="campaignSettlementDaily" resultMap="campaignSettlementDailyMap">
+        <include refid="campaignSettlementDailyQuery"/>
+    </select>
+
+    <resultMap id="businessAccountSettlementMap" type="com.adplatform.restApi.batch.dto.BatchStatusDto$Response$BusinessAccountSettlement">
+        <result column="businessAccountId" property="businessAccountId"/>
+        <result column="adAccountId" property="adAccountId"/>
+        <result column="campaignId" property="campaignId"/>
+        <result column="supplyAmount" property="supplyAmount"/>
+    </resultMap>
+
+    <sql id="businessAccountSettlementQuery">
+        SELECT a.business_account_info_id AS businessAccountId, SUM(supply_amount) AS supplyAmount
+        FROM campaign_settlement_daily a
+        WHERE a.stat_date BETWEEN #{startDate} AND #{endDate}
+        GROUP BY a.business_account_info_id
+    </sql>
+
+    <select id="businessAccountSettlement" resultMap="businessAccountSettlementMap">
+        <include refid="businessAccountSettlementQuery"/>
+    </select>
+
+
+    <resultMap id="campaignFinishMap" type="com.adplatform.restApi.batch.dto.BatchStatusDto$Response$CampaignFinish">
+        <result column="businessAccountId" property="businessAccountId"/>
+        <result column="adAccountId" property="adAccountId"/>
+        <result column="campaignId" property="campaignId"/>
+        <result column="campaignName" property="campaignName"/>
+    </resultMap>
+
+    <sql id="campaignFinishQuery">
+        SELECT b.business_account_info_id AS businessAccountId, b.id AS adAccountId, a.id AS campaignId, a.name AS campaignName
+          FROM campaign_info a, adaccount_info b, business_account_info c
+         WHERE a.adaccount_info_id = b.id
+           AND b.business_account_info_id = c.id
+           AND a.end_date BETWEEN #{startDate} AND #{endDate}
+           AND c.pre_payment_yn = 'Y'
+    </sql>
+
+    <select id="campaignFinish" resultMap="campaignFinishMap">
+        <include refid="campaignFinishQuery"/>
+    </select>
+
+
 </mapper>

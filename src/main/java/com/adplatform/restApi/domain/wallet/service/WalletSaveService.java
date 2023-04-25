@@ -54,12 +54,17 @@ public class WalletSaveService {
         request.getWalletChargeFiles().forEach(file -> walletChargeLog.addWalletChargeFile(this.saveWalletChargeFile(request, walletChargeLog, file, "CHARGE")));
         Integer walletChargeLogId = this.walletChargeLogRepository.save(walletChargeLog).getId();
 
+        // Master 금액 업데이트
+        WalletDto.Response.WalletMaster list = this.walletMasterRepository.getWalletMaster(request.getBusinessAccountId());
+        this.walletMasterRepository.updateWalletMasterCharge(request.getBusinessAccountId(), (float)(list.getAvailableAmount() + request.getDepositAmount()));
+
         // wallet_log 등록
         WalletDto.Request.SaveWalletLog saveWalletLog = new WalletDto.Request.SaveWalletLog();
         saveWalletLog.setBusinessAccountId(request.getBusinessAccountId());
         saveWalletLog.setSummary("charge");
-        saveWalletLog.setInAmount(request.getDepositAmount());
-        saveWalletLog.setOutAmount(0.0F);
+        saveWalletLog.setChangeAmount(request.getDepositAmount());
+        saveWalletLog.setAvailableAmount(list.getAvailableAmount());
+        saveWalletLog.setChangeAvailableAmount((float)(list.getAvailableAmount() + request.getDepositAmount()));
         saveWalletLog.setMemo(request.getAdminMemo());
         saveWalletLog.setWalletChargeLogId(walletChargeLogId);
         saveWalletLog.setWalletRefundId(0);
@@ -67,10 +72,6 @@ public class WalletSaveService {
 
         WalletLog walletLog = this.walletLogMapper.toEntity(saveWalletLog, loginUserNo);
         this.walletLogRepository.save(walletLog);
-
-        // Master 금액 업데이트
-        WalletDto.Response.WalletMaster list = this.walletMasterRepository.getWalletMaster(request.getBusinessAccountId());
-        this.walletMasterRepository.updateWalletMasterCharge(request.getBusinessAccountId(), (float)(list.getAvailableAmount() + request.getDepositAmount()));
 
 //        this.businessAccountRepository.outOfBalanceUpdate(request.getBusinessAccountId(), false);
 
@@ -143,12 +144,17 @@ public class WalletSaveService {
             throw new WalletRefundAlreadyRejectException();
         }
 
+        // 계좌에서 돈 빼기
+        WalletDto.Response.WalletMaster list = this.walletMasterRepository.getWalletMaster(request.getBusinessAccountId());
+        this.walletMasterRepository.updateWalletMasterCharge(request.getBusinessAccountId(), (float)(list.getAvailableAmount() - request.getAmount()));
+
         // wallet_log 등록
         WalletDto.Request.SaveWalletLog saveWalletLog = new WalletDto.Request.SaveWalletLog();
         saveWalletLog.setBusinessAccountId(request.getBusinessAccountId());
         saveWalletLog.setSummary("refund");
-        saveWalletLog.setInAmount(request.getAmount());
-        saveWalletLog.setOutAmount(0.0F);
+        saveWalletLog.setChangeAmount(-request.getAmount());
+        saveWalletLog.setAvailableAmount(list.getAvailableAmount());
+        saveWalletLog.setChangeAvailableAmount((float)(list.getAvailableAmount() - request.getAmount()));
         saveWalletLog.setMemo(request.getAdminMemo());
         saveWalletLog.setWalletChargeLogId(0);
         saveWalletLog.setWalletRefundId(request.getId());
@@ -156,10 +162,6 @@ public class WalletSaveService {
 
         WalletLog walletLog = this.walletLogMapper.toEntity(saveWalletLog, loginUserNo);
         this.walletLogRepository.save(walletLog);
-
-        // 계좌에서 돈 빼기
-        WalletDto.Response.WalletMaster list = this.walletMasterRepository.getWalletMaster(request.getBusinessAccountId());
-        this.walletMasterRepository.updateWalletMasterCharge(request.getBusinessAccountId(), (float)(list.getAvailableAmount() - request.getAmount()));
 
         // 환불 내역 업데이트
         walletRefund.updateApprove(request, loginUserNo);
@@ -213,51 +215,5 @@ public class WalletSaveService {
                 .originalFileName(originalFilename)
                 .mimeType(mimetype)
                 .build();
-    }
-
-
-
-
-
-
-
-    public void saveFreeCash(WalletDto.Request.SaveFreeCash request, Integer loginUserNo) {
-//        WalletFreeCash walletFreeCash = this.walletFreeCashMapper.toEntity(request, loginUserNo);
-//        this.walletFreeCashRepository.save(walletFreeCash);
-    }
-
-    public void updateFreeCashStatus(Integer id, String status, Integer loginUserNo) {
-//        if(status.equals("USED")) {
-//            WalletFreeCash walletFreeCash = walletFreeCashRepository.findById(id).orElseThrow(CashNotFoundException::new);
-//
-//            if (walletFreeCash.getStatus().toString().equals("READY")) {
-//                WalletDto.Response.WalletCashTotal list = walletCashTotalRepository.getCashTotalByCashId(walletFreeCash.getAdAccountId(), walletFreeCash.getCashId());
-//                // 총합캐시
-//                Long prevAmount = list.getAmount();
-//                // 가용캐시
-//                Long prevAvailableAmount = list.getAvailableAmount();
-//
-//                // total 캐시 변경
-//                Long amount = prevAmount + walletFreeCash.getPubAmount();
-//                Long availableAmount = prevAvailableAmount + walletFreeCash.getPubAmount();
-//
-//                WalletDto.Request.SaveCash request = new WalletDto.Request.SaveCash();
-//                request.setAdAccountId(walletFreeCash.getAdAccountId());
-//                request.setCashId(walletFreeCash.getCashId());
-//                request.setSummary("charge");
-//                request.setInAmount(walletFreeCash.getPubAmount());
-//                request.setOutAmount(0L);
-//                request.setMemo("use free cash");
-//
-//                this.adAccountRepository.outOfBalanceUpdate(request.getAdAccountId(), false);
-//                WalletLog walletLog = this.walletLogMapper.toEntity(request, loginUserNo);
-//                this.walletCashTotalRepository.updateWalletCashAdd(request.getAdAccountId(), request.getCashId(), amount, availableAmount);
-//                this.walletLogRepository.save(walletLog);
-//
-//                this.walletFreeCashRepository.updateFreeCashStats(id, status, loginUserNo);
-//            }
-//        } else {
-//            this.walletFreeCashRepository.updateFreeCashStats(id, status, loginUserNo);
-//        }
     }
 }

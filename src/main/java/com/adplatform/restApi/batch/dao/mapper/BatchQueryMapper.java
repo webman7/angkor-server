@@ -11,6 +11,12 @@ public interface BatchQueryMapper {
 
     List<BatchStatusDto.Response.ReportAdGroupCost> reportAdGroupCost(@Param("exeDate") Integer exeDate);
 
+    List<BatchStatusDto.Response.CampaignSettlementDaily> campaignSettlementDaily(@Param("startDate") Integer startDate, @Param("endDate") Integer endDate);
+    List<BatchStatusDto.Response.CampaignFinish> campaignFinish(@Param("startDate") Integer startDate, @Param("endDate") Integer endDate);
+
+
+    List<BatchStatusDto.Response.BusinessAccountSettlement> businessAccountSettlement(@Param("startDate") Integer startDate, @Param("endDate") Integer endDate);
+
     BatchStatusDto.Request.Search getBatchStatusYN(@Param("type") String type, @Param("exeDate") Integer exeDate, @Param("name") String name);
 
     int getBatchStatusYNCount(@Param("type") String type, @Param("exeDate") Integer exeDate, @Param("name") String name);

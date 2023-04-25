@@ -39,18 +39,4 @@ public class WalletCommandApi {
         this.walletSaveService.updateRefundReject(request, SecurityUtils.getLoginUserNo());
     }
 
-
-
-    @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/freecash/add")
-    public void saveFreeCash(@RequestBody @Valid WalletDto.Request.SaveFreeCash request) {
-        this.walletSaveService.saveFreeCash(request, SecurityUtils.getLoginUserNo());
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/freecash/{id}/use")
-    public void updateFreeCashUse(@PathVariable(name = "id") Integer id) {
-        this.walletSaveService.updateFreeCashStatus(id, "USED", SecurityUtils.getLoginUserNo());
-    }
-
 }

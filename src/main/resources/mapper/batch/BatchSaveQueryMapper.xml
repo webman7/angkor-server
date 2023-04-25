@@ -7,28 +7,40 @@ author junny
 since 1.0
 -->
 <mapper namespace="com.adplatform.restApi.batch.dao.mapper.BatchSaveQueryMapper">
+    <insert id="insertCampaignSettlementDaily">
+        INSERT IGNORE INTO campaign_settlement_daily (stat_date, business_account_info_id, adaccount_info_id, campaign_info_id, pre_payment_yn, supply_amount)
+        SELECT a.report_date, a.business_account_info_id, a.adaccount_info_id, a.campaign_info_id, b.pre_payment_yn, SUM(a.cost)
+        FROM report_adgroup_daily a, business_account_info b
+        WHERE a.business_account_info_id = b.id
+        AND a.report_date BETWEEN #{startDate} AND #{endDate}
+        GROUP BY a.report_date, a.business_account_info_id, a.adaccount_info_id, a.campaign_info_id
+    </insert>
+
     <insert id="insertBusinessAccountSettlementMonthly">
-        INSERT IGNORE INTO business_account_settlement (business_account_info_id, stat_date, pre_payment_yn, supply_amount)
-               SELECT a.business_account_info_id, a.report_date, b.pre_payment_yn, SUM(a.cost)
+        INSERT IGNORE INTO business_account_settlement (business_account_info_id, stat_date, supply_amount)
+               SELECT a.business_account_info_id, #{endDate} AS stat_date, SUM(a.cost)
                  FROM report_adgroup_daily a, business_account_info b
                 WHERE a.business_account_info_id = b.id
                   AND a.report_date BETWEEN #{startDate} AND #{endDate}
-                GROUP BY a.business_account_info_id, a.report_date
+                GROUP BY a.business_account_info_id, left(a.report_date, 6)
     </insert>
 
     <insert id="insertBusinessAccountTaxBillMonthly">
-        INSERT INTO business_account_tax_bill (business_account_info_id, stat_date, supply_amount, vat_amount, total_amount)
-             SELECT t1.business_account_info_id, t1.stat_date, t1.supply_amount,
-                    (t1.supply_amount * 0.1) AS vat_amount, (t1.supply_amount * 1.1) AS total_amount
+        INSERT IGNORE INTO business_account_tax_bill (business_account_info_id, stat_date, supply_amount, vat_amount, total_amount)
+             SELECT t1.business_account_info_id, t1.stat_date, ROUND((t1.supply_amount * 10 / 11), 2) AS supply_amount,
+                    (t1.supply_amount - ROUND((t1.supply_amount * 10 / 11), 2)) AS vat_amount, t1.supply_amount AS total_amount
                FROM (
                      SELECT a.business_account_info_id, #{endDate} AS stat_date, SUM(a.supply_amount) AS supply_amount
-                       FROM business_account_settlement_daily a
+                       FROM business_account_settlement a
                       WHERE stat_date BETWEEN #{startDate} AND #{endDate}
                       GROUP BY a.business_account_info_id
                     ) t1
               GROUP BY t1.business_account_info_id, t1.stat_date
-
     </insert>
+
+
+
+
 
     <insert id="insertMediaSettlementMonthly">
     </insert>

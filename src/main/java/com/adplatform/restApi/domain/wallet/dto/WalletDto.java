@@ -106,7 +106,12 @@ public class WalletDto {
             private int businessAccountId;
             private Float availableAmount;
             private Float totalReserveAmount;
+            private Float changeAmount;
+            private Float changeReserveAmount;
+            private Float changeAvailableAmount;
+            private Float changeTotalReserveAmount;
             private String summary;
+            private String memo;
         }
 
 
@@ -119,6 +124,9 @@ public class WalletDto {
             private String summary;
             private Float inAmount;
             private Float outAmount;
+            private Float changeAmount;
+            private Float availableAmount;
+            private Float changeAvailableAmount;
             private String memo;
             private int walletChargeLogId;
             private int walletAutoChargeLogId;
@@ -298,19 +306,21 @@ public class WalletDto {
             private int id;
             private int businessAccountId;
             private String summary;
-            private Float inAmount;
-            private Float outAmount;
+            private Float changeAmount;
+            private Float availableAmount;
+            private Float changeAvailableAmount;
             private String memo;
             private int createdUserNo;
             private String createdUserId;
             private LocalDateTime createdAt;
             @QueryProjection
-            public CreditSearch(int id, int businessAccountId, String summary, Float inAmount, Float outAmount, String memo, int createdUserNo, String createdUserId, LocalDateTime createdAt) {
+            public CreditSearch(int id, int businessAccountId, String summary, Float changeAmount, Float availableAmount, Float changeAvailableAmount, String memo, int createdUserNo, String createdUserId, LocalDateTime createdAt) {
                 this.id = id;
                 this.businessAccountId = businessAccountId;
                 this.summary = summary;
-                this.inAmount = inAmount;
-                this.outAmount = outAmount;
+                this.changeAmount = changeAmount;
+                this.availableAmount = availableAmount;
+                this.changeAvailableAmount = changeAvailableAmount;
                 this.memo = memo;
                 this.createdUserNo = createdUserNo;
                 this.createdUserId = createdUserId;

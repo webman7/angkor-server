@@ -114,8 +114,9 @@ public class WalletLogQuerydslRepositoryImpl implements WalletLogQuerydslReposit
                                 walletLog.id,
                                 walletLog.businessAccountId,
                                 walletLog.summary,
-                                walletLog.inAmount,
-                                walletLog.outAmount,
+                                walletLog.changeAmount,
+                                walletLog.availableAmount,
+                                walletLog.changeAvailableAmount,
                                 walletLog.memo,
                                 walletLog.createdUserNo,
                                 as(select(user.loginId)

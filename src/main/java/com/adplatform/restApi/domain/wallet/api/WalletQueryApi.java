@@ -43,14 +43,4 @@ public class WalletQueryApi {
             WalletDto.Request.RefundSearch request) {
         return PageDto.create(this.walletRefundRepository.searchForRefund(pageable, request));
     }
-
-//    @ResponseStatus(HttpStatus.OK)
-//    @GetMapping("/freecash/search")
-//    public PageDto<WalletDto.Response.FreeCashSearch> searchForFreeCash(
-//            @PageableDefault Pageable pageable,
-//            WalletDto.Request.FreeCashSearch request) {
-//        System.out.println("==============================================");
-//        System.out.println(request.getAdAccountId());
-//        return PageDto.create(this.walletFreeCashRepository.searchForFreeCash(pageable, request));
-//    }
 }
