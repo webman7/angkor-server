@@ -204,7 +204,6 @@ public class AdAccountDto {
             private long memberSize;
             private AdAccount.Config config;
             private boolean adminStop;
-            private boolean outOfBalance;
             private AdAccountUser.Status status;
 
             @QueryProjection
@@ -213,13 +212,11 @@ public class AdAccountDto {
                     String name,
                     AdAccount.Config config,
                     boolean adminStop,
-                    boolean outOfBalance,
                     AdAccountUser.Status status) {
                 this.id = id;
                 this.name = name;
                 this.config = config;
                 this.adminStop = adminStop;
-                this.outOfBalance = outOfBalance;
                 this.status = status;
             }
         }
@@ -230,20 +227,17 @@ public class AdAccountDto {
             private String name;
             private AdAccount.Config config;
             private boolean adminStop;
-            private boolean outOfBalance;
 
             @QueryProjection
             public ForCashSearch(
                     Integer id,
                     String name,
                     AdAccount.Config config,
-                    boolean adminStop,
-                    boolean outOfBalance) {
+                    boolean adminStop) {
                 this.id = id;
                 this.name = name;
                 this.config = config;
                 this.adminStop = adminStop;
-                this.outOfBalance = outOfBalance;
             }
         }
         @Getter
@@ -266,8 +260,6 @@ public class AdAccountDto {
             private AdAccount.Config config;
 
             private boolean adminStop;
-            private boolean outOfBalance;
-
             @QueryProjection
             public AdAccountInfo(
                     Integer id,
@@ -279,7 +271,6 @@ public class AdAccountDto {
                 this.name = name;
                 this.config = config;
                 this.adminStop = adminStop;
-                this.outOfBalance = outOfBalance;
             }
         }
 

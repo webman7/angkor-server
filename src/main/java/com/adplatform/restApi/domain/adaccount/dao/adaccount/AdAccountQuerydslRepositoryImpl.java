@@ -325,7 +325,6 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
 //                                "memberSize"),
                         adAccount.config,
                         adAccount.adminStop,
-                        adAccount.outOfBalance,
                         adAccountUser.status))
                 .from(adAccount)
                 .join(adAccount.adAccountUsers, adAccountUser)
@@ -393,8 +392,7 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
 //                                                "freeCash")
 //                                ),
                                 adAccount.config,
-                                adAccount.adminStop,
-                                adAccount.outOfBalance
+                                adAccount.adminStop
                         )
                 )
                 .from(adAccount)
@@ -436,8 +434,7 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                         adAccount.id,
                         adAccount.name,
                         adAccount.config,
-                        adAccount.adminStop,
-                        adAccount.outOfBalance
+                        adAccount.adminStop
                 ))
                 .from(adAccount)
                 .where(adAccount.id.eq(adAccountId))
