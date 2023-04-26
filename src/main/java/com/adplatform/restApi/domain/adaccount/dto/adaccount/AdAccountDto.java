@@ -258,7 +258,6 @@ public class AdAccountDto {
             private Integer id;
             private String name;
             private AdAccount.Config config;
-
             private boolean adminStop;
             @QueryProjection
             public AdAccountInfo(
