@@ -265,8 +265,7 @@ public class AdAccountDto {
                     Integer id,
                     String name,
                     AdAccount.Config config,
-                    boolean adminStop,
-                    boolean outOfBalance) {
+                    boolean adminStop) {
                 this.id = id;
                 this.name = name;
                 this.config = config;
