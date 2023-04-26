@@ -59,6 +59,20 @@ public class WalletSaveService {
         WalletDto.Response.WalletMaster list = this.walletMasterRepository.getWalletMaster(request.getBusinessAccountId());
         this.walletMasterRepository.updateWalletMasterCharge(request.getBusinessAccountId(), (float)(list.getAvailableAmount() + request.getDepositAmount()));
 
+        // 지갑 상세 인서트
+        WalletDto.Request.SaveWalletMasterDetail saveWalletMasterDetail = new WalletDto.Request.SaveWalletMasterDetail();
+        saveWalletMasterDetail.setBusinessAccountId(request.getBusinessAccountId());
+        saveWalletMasterDetail.setAvailableAmount(list.getAvailableAmount());
+        saveWalletMasterDetail.setTotalReserveAmount(list.getTotalReserveAmount());
+        saveWalletMasterDetail.setChangeAmount(request.getDepositAmount());
+        saveWalletMasterDetail.setChangeReserveAmount(list.getTotalReserveAmount());
+        saveWalletMasterDetail.setChangeAvailableAmount(list.getTotalReserveAmount()+request.getDepositAmount());
+        saveWalletMasterDetail.setChangeTotalReserveAmount(list.getTotalReserveAmount());
+        saveWalletMasterDetail.setSummary("charge");
+        saveWalletMasterDetail.setMemo(request.getAdminMemo());
+        WalletMasterDetail walletMasterDetail = this.walletMasterDetailMapper.toEntity(saveWalletMasterDetail, SecurityUtils.getLoginUserNo());
+        this.walletMasterDetailRepository.save(walletMasterDetail);
+
         // wallet_log 등록
         WalletDto.Request.SaveWalletLog saveWalletLog = new WalletDto.Request.SaveWalletLog();
         saveWalletLog.setBusinessAccountId(request.getBusinessAccountId());
