@@ -170,6 +170,18 @@ public class AdGroupService {
         }
         else {
             adGroup.changeAdminStopOff();
+
+            Calendar calendar = new GregorianCalendar();
+            SimpleDateFormat SDF = new SimpleDateFormat("yyyyMMdd");
+
+            Integer chkDate = Integer.parseInt(SDF.format(calendar.getTime()));
+            if(adGroup.getAdGroupSchedule().getStartDate() > chkDate) {
+                adGroup.changeStatusReady();
+            } else if (adGroup.getAdGroupSchedule().getStartDate() <= chkDate && adGroup.getAdGroupSchedule().getEndDate() >= chkDate) {
+                adGroup.changeStatusLive();
+            } else {
+                adGroup.changeStatusFinished();
+            }
         }
     }
 }

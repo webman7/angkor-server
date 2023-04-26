@@ -201,6 +201,11 @@ public class CreativeCommandService {
         }
         else {
             creative.changeAdminStopOff();
+            if(creative.getReviewStatus().equals(Creative.ReviewStatus.APPROVED)) {
+                creative.changeStatusOperating();
+            } else {
+                creative.changeStatusUnApproved();
+            }
         }
     }
 
