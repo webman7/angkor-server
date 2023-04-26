@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.adplatform.restApi.domain.business.domain.QBusinessAccount.businessAccount;
+import static com.adplatform.restApi.domain.company.domain.QCompany.company;
 import static com.adplatform.restApi.domain.media.domain.QMedia.media;
 import static com.adplatform.restApi.domain.media.domain.QMediaFile.mediaFile;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
@@ -36,6 +37,7 @@ import static com.adplatform.restApi.domain.wallet.domain.QWalletRefund.walletRe
 import static com.adplatform.restApi.domain.wallet.domain.QWalletRefundFile.walletRefundFile;
 import static com.querydsl.core.types.ExpressionUtils.as;
 import static com.querydsl.jpa.JPAExpressions.select;
+import static java.util.Objects.nonNull;
 
 @RequiredArgsConstructor
 @Repository
@@ -179,7 +181,7 @@ public class WalletRefundQuerydslRepositoryImpl implements WalletRefundQuerydslR
 //    }
 
     private BooleanExpression eqId(Integer id) {
-        return id != null ? businessAccount.id.eq(id) : null;
+        return nonNull(id) && !id.equals(0) ? businessAccount.id.eq(id) : null;
     }
 
     private BooleanExpression eqSendYn(String sendYn) {
