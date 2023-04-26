@@ -238,7 +238,7 @@ public class BusinessAccountDto {
             private Integer adAccountId;
             private String adAccountName;
             private String config;
-            private boolean adminStop;
+            private String adminStop;
         }
 
 
