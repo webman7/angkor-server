@@ -17,6 +17,5 @@ public interface AdAccountMapper {
     @Mapping(target = "name", source = "request.name")
     @Mapping(target = "config", expression = "java(AdAccount.Config.ON)")
     @Mapping(target = "adminStop", expression = "java(false)")
-    @Mapping(target = "outOfBalance", expression = "java(true)")
     AdAccount toEntity(AdAccountDto.Request.Save request, BusinessAccount businessAccount);
 }

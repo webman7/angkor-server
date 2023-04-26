@@ -238,7 +238,7 @@ public class BusinessAccountDto {
             private Integer adAccountId;
             private String adAccountName;
             private String config;
-            private String outOfBalance;
+            private boolean adminStop;
         }
 
 

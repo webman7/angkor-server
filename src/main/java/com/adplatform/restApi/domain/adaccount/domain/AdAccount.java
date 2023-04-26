@@ -52,23 +52,17 @@ public class AdAccount extends BaseUpdatedEntity {
     @Column(name = "admin_stop_yn", nullable = false, columnDefinition = "CHAR(1)")
     private boolean adminStop;
 
-    @Convert(converter = BooleanToStringYOrNConverter.class)
-    @Column(name = "out_of_balance_yn", nullable = false, columnDefinition = "CHAR(1)")
-    private boolean outOfBalance;
-
     @Builder
     public AdAccount(
 //            User user,
             BusinessAccount businessAccount,
             String name,
             Config config,
-            boolean adminStop,
-            boolean outOfBalance) {
+            boolean adminStop) {
         this.businessAccount = businessAccount;
         this.name = name;
         this.config = config;
         this.adminStop = adminStop;
-        this.outOfBalance = outOfBalance;
     }
 
     public AdAccount update(AdAccountDto.Request.Update request) {

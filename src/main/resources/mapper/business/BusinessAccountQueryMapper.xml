@@ -83,7 +83,7 @@
         <result column="adAccountId" property="adAccountId"/>
         <result column="adAccountName" property="adAccountName"/>
         <result column="config" property="config"/>
-        <result column="outOfBalance" property="outOfBalance"/>
+        <result column="adminStop" property="adminStop"/>
     </resultMap>
 
     <sql id="businessAdAccountCondition">
@@ -110,7 +110,7 @@
     </sql>
 
     <sql id="businessAdAccountSelectQuery">
-        SELECT a.id AS id, a.name AS name, b.id AS adAccountId, b.name AS adAccountName, a.config AS config, a.out_of_balance_yn AS outOfBalance
+        SELECT a.id AS id, a.name AS name, b.id AS adAccountId, b.name AS adAccountName, b.config AS config, b.admin_stop_yn AS adminStop
          FROM business_account_info a, adaccount_info b
         WHERE a.id = b.business_account_info_id
           <include refid="businessAdAccountCondition"/>
