@@ -379,19 +379,6 @@ public class CampaignCommandService {
         }
         else {
             campaign.changeAdminStopOff();
-            Calendar calendar = new GregorianCalendar();
-            SimpleDateFormat SDF = new SimpleDateFormat("yyyyMMdd");
-
-            Integer chkDate = Integer.parseInt(SDF.format(calendar.getTime()));
-
-            if (campaign.getStartDate() > chkDate) {
-                campaign.changeStatusReady();
-            }
-            else if( campaign.getStartDate() <= chkDate && campaign.getEndDate() >= chkDate) {
-                campaign.changeStatusLive();
-            } else {
-                campaign.changeStatusFinished();
-            }
         }
     }
 }
