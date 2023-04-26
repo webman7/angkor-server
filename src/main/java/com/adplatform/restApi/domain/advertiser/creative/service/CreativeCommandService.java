@@ -180,8 +180,10 @@ public class CreativeCommandService {
             }
         }
         else if (config == Creative.Config.OFF) {
-            creative.changeConfigOff();
-            creative.changeStatusOff();
+            if(!creative.getSystemConfig().equals(Creative.SystemConfig.ADMIN_STOP)) {
+                creative.changeConfigOff();
+                creative.changeStatusOff();
+            }
         }
     }
 

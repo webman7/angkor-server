@@ -149,8 +149,10 @@ public class AdGroupService {
             }
         }
         else if (config == AdGroup.Config.OFF) {
-            adGroup.changeConfigOff();
-            adGroup.changeStatusOff();
+            if(!adGroup.getSystemConfig().equals(AdGroup.SystemConfig.ADMIN_STOP)) {
+                adGroup.changeConfigOff();
+                adGroup.changeStatusOff();
+            }
         }
     }
 

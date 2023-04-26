@@ -358,8 +358,10 @@ public class CampaignCommandService {
                 }
             }
         } else if (config == Campaign.Config.OFF) {
-            campaign.changeConfigOff();
-            campaign.changeStatusOff();
+            if(!campaign.getSystemConfig().equals(Campaign.SystemConfig.ADMIN_STOP)) {
+                campaign.changeConfigOff();
+                campaign.changeStatusOff();
+            }
         }
     }
 
