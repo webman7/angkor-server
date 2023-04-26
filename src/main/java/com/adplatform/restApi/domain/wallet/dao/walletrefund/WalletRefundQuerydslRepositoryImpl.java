@@ -138,6 +138,22 @@ public class WalletRefundQuerydslRepositoryImpl implements WalletRefundQuerydslR
                                                         .where(walletRefundFile.walletRefund.id.eq(walletRefund.id)
                                                         ))
                                         ), "fileUrl"),
+                                as(select(walletRefundFile.information.originalFileName)
+                                        .from(walletRefundFile)
+                                        .where(walletRefundFile.walletRefund.id.eq(walletRefund.id),
+                                                walletRefundFile.id.eq(select(walletRefundFile.id.max())
+                                                        .from(walletRefundFile)
+                                                        .where(walletRefundFile.walletRefund.id.eq(walletRefund.id)
+                                                        ))
+                                        ), "fileName"),
+                                as(select(walletRefundFile.information.fileType)
+                                        .from(walletRefundFile)
+                                        .where(walletRefundFile.walletRefund.id.eq(walletRefund.id),
+                                                walletRefundFile.id.eq(select(walletRefundFile.id.max())
+                                                        .from(walletRefundFile)
+                                                        .where(walletRefundFile.walletRefund.id.eq(walletRefund.id)
+                                                        ))
+                                        ), "fileType"),
                                 walletRefund.sendYN.stringValue(),
                                 walletRefund.createdUserNo,
                                 as(select(user.loginId)

@@ -376,6 +376,8 @@ public class WalletDto {
             private Float amount;
             private String adminMemo;
             private String fileUrl;
+            private String fileName;
+            private FileInformation.FileType fileType;
             private String sendYn;
             private int createdUserNo;
             private String createdUserId;
@@ -384,7 +386,7 @@ public class WalletDto {
             private String updatedUserId;
             private LocalDateTime updatedAt;
             @QueryProjection
-            public RefundSearch(int id, int businessAccountId, String businessAccountName, int bankId, String accountNumber, String accountOwner, Float availableAmount, Float requestAmount, Float amount, String adminMemo, String fileUrl, String sendYn, int createdUserNo, String createdUserId, LocalDateTime createdAt, int updatedUserNo, String updatedUserId, LocalDateTime updatedAt) {
+            public RefundSearch(int id, int businessAccountId, String businessAccountName, int bankId, String accountNumber, String accountOwner, Float availableAmount, Float requestAmount, Float amount, String adminMemo, String fileUrl, String fileName, FileInformation.FileType fileType, String sendYn, int createdUserNo, String createdUserId, LocalDateTime createdAt, int updatedUserNo, String updatedUserId, LocalDateTime updatedAt) {
                 this.id = id;
                 this.businessAccountId = businessAccountId;
                 this.businessAccountName = businessAccountName;
@@ -396,6 +398,8 @@ public class WalletDto {
                 this.amount = amount;
                 this.adminMemo = adminMemo;
                 this.fileUrl = fileUrl;
+                this.fileName = fileName;
+                this.fileType = fileType;
                 this.sendYn = sendYn;
                 this.createdUserNo = createdUserNo;
                 this.createdUserId = createdUserId;
