@@ -59,10 +59,6 @@ public class SecurityConfig {
                 .csrf().disable()
                 .cors().configurationSource(this.corsConfigurationSource())
                 .and()
-//                .authorizeRequests()
-//                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-//                .anyRequest().authenticated()
-//                .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -134,15 +130,20 @@ public class SecurityConfig {
 
     private CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOrigins(Arrays.asList("*"));
-//        configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT"));
-//        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
-//        configuration.addAllowedOriginPattern("*");
+        configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+        configuration.addAllowedOriginPattern("*");
         configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedOrigin("http://localhost:3001");
         configuration.addAllowedOrigin("http://localhost:3002");
-        configuration.addAllowedOrigin("http://advertiser.union-mobile.co.kr");
-        configuration.addAllowedOrigin("http://ec2-13-209-158-233.ap-northeast-2.compute.amazonaws.com");
+        configuration.addAllowedOrigin("http://advertiser-dev.angkoradwave.com");
+        configuration.addAllowedOrigin("http://media-dev.angkoradwave.com");
+        configuration.addAllowedOrigin("http://admin-dev.angkoradwave.com");
+        configuration.addAllowedOrigin("http://advertiser.angkoradwave.com");
+        configuration.addAllowedOrigin("http://media.angkoradwave.com");
+        configuration.addAllowedOrigin("http://admin.angkoradwave.com");
+//        configuration.addAllowedOrigin("http://localhost:8080");
+//        configuration.addAllowedOrigin("http://ec2-13-209-158-233.ap-northeast-2.compute.amazonaws.com");
 //        configuration.addAllowedOrigin("http://*:8083");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
