@@ -2,17 +2,16 @@ package com.adplatform.restApi.domain.wallet.service;
 
 import com.adplatform.restApi.domain.business.dao.account.BusinessAccountRepository;
 import com.adplatform.restApi.domain.wallet.dao.walletlog.WalletLogRepository;
+import com.adplatform.restApi.domain.wallet.dao.walletmaster.WalletMasterDetailRepository;
 import com.adplatform.restApi.domain.wallet.dao.walletmaster.WalletMasterRepository;
 import com.adplatform.restApi.domain.wallet.dao.walletrefund.WalletRefundRepository;
 import com.adplatform.restApi.domain.wallet.domain.*;
 import com.adplatform.restApi.domain.wallet.dao.walletchargelog.WalletChargeLogRepository;
-import com.adplatform.restApi.domain.wallet.dto.WalletChargeLogMapper;
-import com.adplatform.restApi.domain.wallet.dto.WalletDto;
-import com.adplatform.restApi.domain.wallet.dto.WalletLogMapper;
-import com.adplatform.restApi.domain.wallet.dto.WalletRefundMapper;
+import com.adplatform.restApi.domain.wallet.dto.*;
 import com.adplatform.restApi.domain.wallet.exception.WalletRefundAlreadyException;
 import com.adplatform.restApi.domain.wallet.exception.WalletRefundAlreadyRejectException;
 import com.adplatform.restApi.domain.wallet.exception.WalletRefundNotFoundException;
+import com.adplatform.restApi.global.config.security.util.SecurityUtils;
 import com.adplatform.restApi.infra.file.service.AwsFileService;
 import com.adplatform.restApi.infra.file.service.FileService;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +37,8 @@ public class WalletSaveService {
     private final WalletLogMapper walletLogMapper;
     private final AwsFileService awsFileService;
     private final BusinessAccountRepository businessAccountRepository;
+    private final WalletMasterDetailMapper walletMasterDetailMapper;
+    private final WalletMasterDetailRepository walletMasterDetailRepository;
 
 
 //    @Data
@@ -147,6 +148,20 @@ public class WalletSaveService {
         // 계좌에서 돈 빼기
         WalletDto.Response.WalletMaster list = this.walletMasterRepository.getWalletMaster(request.getBusinessAccountId());
         this.walletMasterRepository.updateWalletMasterCharge(request.getBusinessAccountId(), (float)(list.getAvailableAmount() - request.getAmount()));
+
+        // 지갑 상세 인서트
+        WalletDto.Request.SaveWalletMasterDetail saveWalletMasterDetail = new WalletDto.Request.SaveWalletMasterDetail();
+        saveWalletMasterDetail.setBusinessAccountId(request.getBusinessAccountId());
+        saveWalletMasterDetail.setAvailableAmount(list.getAvailableAmount());
+        saveWalletMasterDetail.setTotalReserveAmount(list.getTotalReserveAmount());
+        saveWalletMasterDetail.setChangeAmount(-request.getAmount());
+        saveWalletMasterDetail.setChangeReserveAmount(list.getTotalReserveAmount());
+        saveWalletMasterDetail.setChangeAvailableAmount(list.getTotalReserveAmount()-request.getAmount());
+        saveWalletMasterDetail.setChangeTotalReserveAmount(list.getTotalReserveAmount());
+        saveWalletMasterDetail.setSummary("refund");
+        saveWalletMasterDetail.setMemo("");
+        WalletMasterDetail walletMasterDetail = this.walletMasterDetailMapper.toEntity(saveWalletMasterDetail, SecurityUtils.getLoginUserNo());
+        this.walletMasterDetailRepository.save(walletMasterDetail);
 
         // wallet_log 등록
         WalletDto.Request.SaveWalletLog saveWalletLog = new WalletDto.Request.SaveWalletLog();
