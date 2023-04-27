@@ -144,7 +144,40 @@ public class WalletSaveService {
 
     public void saveRefund(WalletDto.Request.SaveRefund request, Integer loginUserNo) {
         WalletRefund walletRefund = this.walletRefundMapper.toEntity(request, loginUserNo);
-        this.walletRefundRepository.save(walletRefund);
+        Integer walletRefundId = this.walletRefundRepository.save(walletRefund).getId();
+
+        // 계좌에서 돈 빼기
+        WalletDto.Response.WalletMaster list = this.walletMasterRepository.getWalletMaster(request.getBusinessAccountId());
+        this.walletMasterRepository.updateWalletMasterCharge(request.getBusinessAccountId(), (float)(list.getAvailableAmount() - request.getRequestAmount()));
+
+        // 지갑 상세 인서트
+        WalletDto.Request.SaveWalletMasterDetail saveWalletMasterDetail = new WalletDto.Request.SaveWalletMasterDetail();
+        saveWalletMasterDetail.setBusinessAccountId(request.getBusinessAccountId());
+        saveWalletMasterDetail.setAvailableAmount(list.getAvailableAmount());
+        saveWalletMasterDetail.setTotalReserveAmount(list.getTotalReserveAmount());
+        saveWalletMasterDetail.setChangeAmount(-request.getRequestAmount());
+        saveWalletMasterDetail.setChangeReserveAmount(list.getTotalReserveAmount());
+        saveWalletMasterDetail.setChangeAvailableAmount(list.getTotalReserveAmount()-request.getRequestAmount());
+        saveWalletMasterDetail.setChangeTotalReserveAmount(list.getTotalReserveAmount());
+        saveWalletMasterDetail.setSummary("refund");
+        saveWalletMasterDetail.setMemo("");
+        WalletMasterDetail walletMasterDetail = this.walletMasterDetailMapper.toEntity(saveWalletMasterDetail, SecurityUtils.getLoginUserNo());
+        this.walletMasterDetailRepository.save(walletMasterDetail);
+
+        // wallet_log 등록
+        WalletDto.Request.SaveWalletLog saveWalletLog = new WalletDto.Request.SaveWalletLog();
+        saveWalletLog.setBusinessAccountId(request.getBusinessAccountId());
+        saveWalletLog.setSummary("refund");
+        saveWalletLog.setChangeAmount(-request.getRequestAmount());
+        saveWalletLog.setAvailableAmount(list.getAvailableAmount());
+        saveWalletLog.setChangeAvailableAmount((float)(list.getAvailableAmount() - request.getRequestAmount()));
+        saveWalletLog.setMemo("Request");
+        saveWalletLog.setWalletChargeLogId(0);
+        saveWalletLog.setWalletRefundId(walletRefundId);
+        saveWalletLog.setWalletAutoChargeLogId(0);
+
+        WalletLog walletLog = this.walletLogMapper.toEntity(saveWalletLog, loginUserNo);
+        this.walletLogRepository.save(walletLog);
     }
 
     public void updateRefundApprove(WalletDto.Request.UpdateRefund request, Integer loginUserNo) {
@@ -159,38 +192,38 @@ public class WalletSaveService {
             throw new WalletRefundAlreadyRejectException();
         }
 
-        // 계좌에서 돈 빼기
-        WalletDto.Response.WalletMaster list = this.walletMasterRepository.getWalletMaster(request.getBusinessAccountId());
-        this.walletMasterRepository.updateWalletMasterCharge(request.getBusinessAccountId(), (float)(list.getAvailableAmount() - request.getAmount()));
+//        // 계좌에서 돈 빼기
+//        WalletDto.Response.WalletMaster list = this.walletMasterRepository.getWalletMaster(request.getBusinessAccountId());
+//        this.walletMasterRepository.updateWalletMasterCharge(request.getBusinessAccountId(), (float)(list.getAvailableAmount() - request.getAmount()));
+//
+//        // 지갑 상세 인서트
+//        WalletDto.Request.SaveWalletMasterDetail saveWalletMasterDetail = new WalletDto.Request.SaveWalletMasterDetail();
+//        saveWalletMasterDetail.setBusinessAccountId(request.getBusinessAccountId());
+//        saveWalletMasterDetail.setAvailableAmount(list.getAvailableAmount());
+//        saveWalletMasterDetail.setTotalReserveAmount(list.getTotalReserveAmount());
+//        saveWalletMasterDetail.setChangeAmount(-request.getAmount());
+//        saveWalletMasterDetail.setChangeReserveAmount(list.getTotalReserveAmount());
+//        saveWalletMasterDetail.setChangeAvailableAmount(list.getTotalReserveAmount()-request.getAmount());
+//        saveWalletMasterDetail.setChangeTotalReserveAmount(list.getTotalReserveAmount());
+//        saveWalletMasterDetail.setSummary("refund");
+//        saveWalletMasterDetail.setMemo("");
+//        WalletMasterDetail walletMasterDetail = this.walletMasterDetailMapper.toEntity(saveWalletMasterDetail, SecurityUtils.getLoginUserNo());
+//        this.walletMasterDetailRepository.save(walletMasterDetail);
 
-        // 지갑 상세 인서트
-        WalletDto.Request.SaveWalletMasterDetail saveWalletMasterDetail = new WalletDto.Request.SaveWalletMasterDetail();
-        saveWalletMasterDetail.setBusinessAccountId(request.getBusinessAccountId());
-        saveWalletMasterDetail.setAvailableAmount(list.getAvailableAmount());
-        saveWalletMasterDetail.setTotalReserveAmount(list.getTotalReserveAmount());
-        saveWalletMasterDetail.setChangeAmount(-request.getAmount());
-        saveWalletMasterDetail.setChangeReserveAmount(list.getTotalReserveAmount());
-        saveWalletMasterDetail.setChangeAvailableAmount(list.getTotalReserveAmount()-request.getAmount());
-        saveWalletMasterDetail.setChangeTotalReserveAmount(list.getTotalReserveAmount());
-        saveWalletMasterDetail.setSummary("refund");
-        saveWalletMasterDetail.setMemo("");
-        WalletMasterDetail walletMasterDetail = this.walletMasterDetailMapper.toEntity(saveWalletMasterDetail, SecurityUtils.getLoginUserNo());
-        this.walletMasterDetailRepository.save(walletMasterDetail);
-
-        // wallet_log 등록
-        WalletDto.Request.SaveWalletLog saveWalletLog = new WalletDto.Request.SaveWalletLog();
-        saveWalletLog.setBusinessAccountId(request.getBusinessAccountId());
-        saveWalletLog.setSummary("refund");
-        saveWalletLog.setChangeAmount(-request.getAmount());
-        saveWalletLog.setAvailableAmount(list.getAvailableAmount());
-        saveWalletLog.setChangeAvailableAmount((float)(list.getAvailableAmount() - request.getAmount()));
-        saveWalletLog.setMemo(request.getAdminMemo());
-        saveWalletLog.setWalletChargeLogId(0);
-        saveWalletLog.setWalletRefundId(request.getId());
-        saveWalletLog.setWalletAutoChargeLogId(0);
-
-        WalletLog walletLog = this.walletLogMapper.toEntity(saveWalletLog, loginUserNo);
-        this.walletLogRepository.save(walletLog);
+//        // wallet_log 등록
+//        WalletDto.Request.SaveWalletLog saveWalletLog = new WalletDto.Request.SaveWalletLog();
+//        saveWalletLog.setBusinessAccountId(request.getBusinessAccountId());
+//        saveWalletLog.setSummary("refund");
+//        saveWalletLog.setChangeAmount(-request.getAmount());
+//        saveWalletLog.setAvailableAmount(list.getAvailableAmount());
+//        saveWalletLog.setChangeAvailableAmount((float)(list.getAvailableAmount() - request.getAmount()));
+//        saveWalletLog.setMemo(request.getAdminMemo());
+//        saveWalletLog.setWalletChargeLogId(0);
+//        saveWalletLog.setWalletRefundId(request.getId());
+//        saveWalletLog.setWalletAutoChargeLogId(0);
+//
+//        WalletLog walletLog = this.walletLogMapper.toEntity(saveWalletLog, loginUserNo);
+//        this.walletLogRepository.save(walletLog);
 
         // 환불 내역 업데이트
         walletRefund.updateApprove(request, loginUserNo);
@@ -208,6 +241,39 @@ public class WalletSaveService {
         if(walletRefund.getSendYN().equals(WalletRefund.SendYN.R)) {
             throw new WalletRefundAlreadyRejectException();
         }
+
+        // 계좌에서 돈 빼기
+        WalletDto.Response.WalletMaster list = this.walletMasterRepository.getWalletMaster(request.getBusinessAccountId());
+        this.walletMasterRepository.updateWalletMasterCharge(request.getBusinessAccountId(), (float)(list.getAvailableAmount() + request.getAmount()));
+
+        // 지갑 상세 인서트
+        WalletDto.Request.SaveWalletMasterDetail saveWalletMasterDetail = new WalletDto.Request.SaveWalletMasterDetail();
+        saveWalletMasterDetail.setBusinessAccountId(request.getBusinessAccountId());
+        saveWalletMasterDetail.setAvailableAmount(list.getAvailableAmount());
+        saveWalletMasterDetail.setTotalReserveAmount(list.getTotalReserveAmount());
+        saveWalletMasterDetail.setChangeAmount(request.getAmount());
+        saveWalletMasterDetail.setChangeReserveAmount(list.getTotalReserveAmount());
+        saveWalletMasterDetail.setChangeAvailableAmount(list.getTotalReserveAmount()+request.getAmount());
+        saveWalletMasterDetail.setChangeTotalReserveAmount(list.getTotalReserveAmount());
+        saveWalletMasterDetail.setSummary("refund");
+        saveWalletMasterDetail.setMemo("");
+        WalletMasterDetail walletMasterDetail = this.walletMasterDetailMapper.toEntity(saveWalletMasterDetail, SecurityUtils.getLoginUserNo());
+        this.walletMasterDetailRepository.save(walletMasterDetail);
+
+        // wallet_log 등록
+        WalletDto.Request.SaveWalletLog saveWalletLog = new WalletDto.Request.SaveWalletLog();
+        saveWalletLog.setBusinessAccountId(request.getBusinessAccountId());
+        saveWalletLog.setSummary("refund");
+        saveWalletLog.setChangeAmount(request.getAmount());
+        saveWalletLog.setAvailableAmount(list.getAvailableAmount());
+        saveWalletLog.setChangeAvailableAmount((float)(list.getAvailableAmount() + request.getAmount()));
+        saveWalletLog.setMemo("Reject");
+        saveWalletLog.setWalletChargeLogId(0);
+        saveWalletLog.setWalletRefundId(request.getId());
+        saveWalletLog.setWalletAutoChargeLogId(0);
+
+        WalletLog walletLog = this.walletLogMapper.toEntity(saveWalletLog, loginUserNo);
+        this.walletLogRepository.save(walletLog);
 
         // 환불거절
         walletRefund.updateReject(request, loginUserNo);
