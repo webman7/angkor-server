@@ -202,8 +202,8 @@ public class WalletSaveService {
 //        saveWalletMasterDetail.setAvailableAmount(list.getAvailableAmount());
 //        saveWalletMasterDetail.setTotalReserveAmount(list.getTotalReserveAmount());
 //        saveWalletMasterDetail.setChangeAmount(-request.getAmount());
-//        saveWalletMasterDetail.setChangeReserveAmount(list.getTotalReserveAmount());
-//        saveWalletMasterDetail.setChangeAvailableAmount(list.getTotalReserveAmount()-request.getAmount());
+//        saveWalletMasterDetail.setChangeReserveAmount(0.0F);
+//        saveWalletMasterDetail.setChangeAvailableAmount(list.getAvailableAmount()-request.getAmount());
 //        saveWalletMasterDetail.setChangeTotalReserveAmount(list.getTotalReserveAmount());
 //        saveWalletMasterDetail.setSummary("refund");
 //        saveWalletMasterDetail.setMemo("");
