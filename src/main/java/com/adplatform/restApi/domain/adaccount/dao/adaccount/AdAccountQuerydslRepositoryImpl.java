@@ -43,6 +43,7 @@ import static com.adplatform.restApi.domain.advertiser.campaign.domain.QCampaign
 import static com.adplatform.restApi.domain.advertiser.creative.domain.QCreative.creative;
 import static com.adplatform.restApi.domain.business.domain.QBusinessAccount.businessAccount;
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
+import static com.adplatform.restApi.domain.media.domain.QMedia.media;
 import static com.adplatform.restApi.domain.statistics.domain.report.QReportAdGroupDaily.reportAdGroupDaily;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
 import static com.adplatform.restApi.domain.wallet.domain.QWalletMaster.walletMaster;
@@ -293,7 +294,8 @@ public class AdAccountQuerydslRepositoryImpl implements AdAccountQuerydslReposit
                         adAccountUser.id.userId.eq(loginUserNo),
                         adAccountUser.status.eq(status),
                         this.eqId(id),
-                        this.containsName(name));
+                        this.containsName(name))
+                .orderBy(adAccount.id.desc());
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }

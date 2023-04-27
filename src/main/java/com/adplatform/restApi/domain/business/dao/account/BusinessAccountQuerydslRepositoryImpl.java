@@ -250,7 +250,8 @@ public class BusinessAccountQuerydslRepositoryImpl implements BusinessAccountQue
                         businessAccountUser.id.userId.eq(loginUserNo),
                         businessAccountUser.status.eq(status),
                         this.eqId(id),
-                        this.containsName(name));
+                        this.containsName(name))
+                .orderBy(businessAccount.id.desc());
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
@@ -355,7 +356,8 @@ public class BusinessAccountQuerydslRepositoryImpl implements BusinessAccountQue
                 )
                 .groupBy(
                         businessAccount.id
-                );
+                )
+                .orderBy(businessAccount.id.desc());
 
         return Objects.nonNull(pageable)
                 ? query.orderBy(QuerydslOrderSpecifierUtil.getOrderSpecifier(BusinessAccount.class, "businessAccount", pageable.getSort()).toArray(OrderSpecifier[]::new))

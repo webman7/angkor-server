@@ -96,6 +96,7 @@ public class BusinessAccountUserQueryRepositoryImpl implements BusinessAccountUs
                         businessAccountUser.status.in(BusinessAccountUser.Status.Y),
                         user.active.in(User.Active.Y, User.Active.L)
                 )
+                .orderBy(businessAccount.id.desc(), businessAccountUser.user.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -135,6 +136,7 @@ public class BusinessAccountUserQueryRepositoryImpl implements BusinessAccountUs
                         businessAccountUser.status.notIn(BusinessAccountUser.Status.D),
                         user.active.in(User.Active.Y, User.Active.L)
                 )
+                .orderBy(businessAccount.id.desc(), businessAccountUser.user.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

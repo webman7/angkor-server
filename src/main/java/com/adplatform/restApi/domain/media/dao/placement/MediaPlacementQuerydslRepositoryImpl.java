@@ -21,6 +21,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
+import static com.adplatform.restApi.domain.company.domain.QMediaCompanyUser.mediaCompanyUser;
 import static com.adplatform.restApi.domain.media.domain.QMedia.media;
 import static com.adplatform.restApi.domain.media.domain.QMediaFile.mediaFile;
 import static com.adplatform.restApi.domain.media.domain.QMediaPlacement.mediaPlacement;
@@ -100,6 +101,7 @@ public class MediaPlacementQuerydslRepositoryImpl implements MediaPlacementQuery
                         this.mediaEq(searchRequest.getMediaId()),
                         this.statusEq(searchRequest.getStatus())
                 )
+                .orderBy(placement.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

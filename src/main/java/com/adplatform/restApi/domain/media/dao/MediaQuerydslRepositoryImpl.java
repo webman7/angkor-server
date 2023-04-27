@@ -85,6 +85,7 @@ public class MediaQuerydslRepositoryImpl implements MediaQuerydslRepository {
                         this.companyEq(searchRequest.getCompanyId()),
                         this.statusEq(searchRequest.getStatus())
                 )
+                .orderBy(media.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

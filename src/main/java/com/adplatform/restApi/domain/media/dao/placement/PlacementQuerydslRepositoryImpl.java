@@ -47,6 +47,7 @@ public class PlacementQuerydslRepositoryImpl implements PlacementQuerydslReposit
                 .where(placement.status.in(Placement.Status.Y, Placement.Status.N),
                         placement.createdUserNo.eq(user.id)
                 )
+                .orderBy(placement.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

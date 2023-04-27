@@ -22,6 +22,7 @@ import java.util.List;
 import static com.adplatform.restApi.domain.bank.domain.QBank.bank;
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
 import static com.adplatform.restApi.domain.media.domain.QMedia.media;
+import static com.adplatform.restApi.domain.media.domain.QPlacement.placement;
 import static com.adplatform.restApi.domain.statistics.domain.taxbill.QMediaTaxBill.mediaTaxBill;
 import static com.adplatform.restApi.domain.statistics.domain.taxbill.QMediaTaxBillFile.mediaTaxBillFile;
 import static com.adplatform.restApi.domain.statistics.domain.taxbill.QMediaTaxBillPaymentFile.mediaTaxBillPaymentFile;
@@ -139,6 +140,7 @@ public class MediaTaxBillQuerydslRepositoryImpl implements MediaTaxBillQuerydslR
                                 Integer.parseInt(searchRequest.getEndDate())
                         )
                 )
+                .orderBy(mediaTaxBill.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -272,6 +274,7 @@ public class MediaTaxBillQuerydslRepositoryImpl implements MediaTaxBillQuerydslR
                                 Integer.parseInt(searchRequest.getEndDate())
                         )
                 )
+                .orderBy(mediaTaxBill.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

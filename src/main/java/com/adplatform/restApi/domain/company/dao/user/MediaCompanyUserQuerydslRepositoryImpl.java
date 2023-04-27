@@ -20,6 +20,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 import java.util.Optional;
 
+import static com.adplatform.restApi.domain.company.domain.QAdminUser.adminUser;
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
 import static com.adplatform.restApi.domain.company.domain.QMediaCompanyUser.mediaCompanyUser;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
@@ -94,6 +95,7 @@ public class MediaCompanyUserQuerydslRepositoryImpl implements MediaCompanyUserQ
                         mediaCompanyUser.status.in(MediaCompanyUser.Status.Y),
                         user.active.in(User.Active.Y, User.Active.L)
                 )
+                .orderBy(company.id.desc(), mediaCompanyUser.user.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -133,6 +135,7 @@ public class MediaCompanyUserQuerydslRepositoryImpl implements MediaCompanyUserQ
                         mediaCompanyUser.status.notIn(MediaCompanyUser.Status.D),
                         user.active.in(User.Active.Y, User.Active.L)
                 )
+                .orderBy(company.id.desc(), mediaCompanyUser.user.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

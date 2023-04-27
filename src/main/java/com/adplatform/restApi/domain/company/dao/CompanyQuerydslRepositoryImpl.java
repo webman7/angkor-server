@@ -17,6 +17,7 @@ import java.util.List;
 
 import static com.adplatform.restApi.domain.adaccount.domain.QAdAccount.adAccount;
 import static com.adplatform.restApi.domain.bank.domain.QBank.bank;
+import static com.adplatform.restApi.domain.business.domain.QBusinessAccountUser.businessAccountUser;
 import static com.adplatform.restApi.domain.company.domain.QCompany.company;
 import static com.adplatform.restApi.domain.company.domain.QCompanyFile.companyFile;
 import static com.adplatform.restApi.domain.media.domain.QMedia.media;
@@ -42,6 +43,7 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                         this.nameContains(searchRequest.getName()),
                         this.typeEq(searchRequest.getType()),
                         this.isDeletedEq(searchRequest.getDeleted()))
+                .orderBy(company.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -186,6 +188,7 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                         this.nameContains(searchRequest.getName()),
                         this.registrationNumberEq(searchRequest.getRegistrationNumber()),
                         company.type.eq(Company.Type.MEDIA))
+                .orderBy(company.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -220,6 +223,7 @@ public class CompanyQuerydslRepositoryImpl implements CompanyQuerydslRepository 
                 .where(
                         this.registrationNumberEq(searchRequest.getSearchKeyword()),
                         this.typeEq(searchRequest.getType()))
+                .orderBy(company.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

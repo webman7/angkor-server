@@ -153,6 +153,7 @@ public class AdminUserQuerydslRepositoryImpl implements AdminUserQuerydslReposit
                         adminUser.status.notIn(AdminUser.Status.D),
                         user.active.in(User.Active.Y, User.Active.L)
                 )
+                .orderBy(company.id.desc(), adminUser.user.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

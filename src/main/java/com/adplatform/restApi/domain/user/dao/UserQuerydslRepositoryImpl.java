@@ -27,6 +27,7 @@ import java.util.Optional;
 import static com.adplatform.restApi.domain.business.domain.QBusinessAccount.businessAccount;
 import static com.adplatform.restApi.domain.business.domain.QBusinessAccountUser.businessAccountUser;
 import static com.adplatform.restApi.domain.history.domain.QUserPasswordChangeHistory.userPasswordChangeHistory;
+import static com.adplatform.restApi.domain.statistics.domain.taxbill.QMediaTaxBill.mediaTaxBill;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
 
 /**
@@ -79,6 +80,7 @@ public class UserQuerydslRepositoryImpl implements UserQuerydslRepository {
                         this.nameContains(request.getName()),
                         user.active.in(User.Active.Y, User.Active.L)
                 )
+                .orderBy(user.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

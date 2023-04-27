@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.adplatform.restApi.domain.media.domain.QCategory.category;
+import static com.adplatform.restApi.domain.media.domain.QMedia.media;
 import static com.adplatform.restApi.domain.user.domain.QUser.user;
 
 @RequiredArgsConstructor
@@ -35,6 +36,7 @@ public class CategoryQuerydslRepositoryImpl implements CategoryQuerydslRepositor
                 .where(category.deleted.eq(false),
                         category.createdUserNo.eq(user.id)
                 )
+                .orderBy(category.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

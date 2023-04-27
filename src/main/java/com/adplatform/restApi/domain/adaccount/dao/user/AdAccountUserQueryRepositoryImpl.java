@@ -73,6 +73,7 @@ public class AdAccountUserQueryRepositoryImpl implements AdAccountUserQueryRepos
                         adAccountUser.status.notIn(AdAccountUser.Status.D),
                         user.active.in(User.Active.Y, User.Active.L)
                 )
+                .orderBy(adAccount.id.desc(), adAccountUser.user.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -111,6 +112,7 @@ public class AdAccountUserQueryRepositoryImpl implements AdAccountUserQueryRepos
                         adAccountUser.status.in(AdAccountUser.Status.Y),
                         user.active.in(User.Active.Y, User.Active.L)
                 )
+                .orderBy(adAccount.id.desc(), adAccountUser.user.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
