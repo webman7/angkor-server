@@ -157,7 +157,7 @@ public class WalletSaveService {
         saveWalletMasterDetail.setTotalReserveAmount(list.getTotalReserveAmount());
         saveWalletMasterDetail.setChangeAmount(-request.getRequestAmount());
         saveWalletMasterDetail.setChangeReserveAmount(list.getTotalReserveAmount());
-        saveWalletMasterDetail.setChangeAvailableAmount(list.getTotalReserveAmount()-request.getRequestAmount());
+        saveWalletMasterDetail.setChangeAvailableAmount(list.getAvailableAmount()-request.getRequestAmount());
         saveWalletMasterDetail.setChangeTotalReserveAmount(list.getTotalReserveAmount());
         saveWalletMasterDetail.setSummary("refund");
         saveWalletMasterDetail.setMemo("");
