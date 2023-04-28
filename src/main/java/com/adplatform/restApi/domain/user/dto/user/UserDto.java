@@ -57,6 +57,7 @@ public abstract class UserDto {
             private String phone;
             private User.Active active;
 
+
 //            @QueryProjection
 //            public Detail(Integer id, String loginId, String name, String email, String phone, User.Active active, List<String> roles, String company) {
 //                this.id = id;

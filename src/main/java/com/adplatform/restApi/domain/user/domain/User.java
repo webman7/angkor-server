@@ -52,6 +52,7 @@ public class User extends BaseUpdatedEntity {
     private Active active;
 //    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 //    private final Set<UserRole> roles = new HashSet<>();
+
     @Column(name = "status_chg_user_no")
     private Integer statusChangedUserNo;
 

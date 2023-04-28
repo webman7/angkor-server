@@ -19,6 +19,7 @@ public interface UserMapper {
 
     @Mapping(target = "id", source = "user.id")
     @Mapping(target = "name", source = "user.name")
+    @Mapping(target = "phone", source = "user.phone")
     @Mapping(target = "active", source = "user.active")
     UserDto.Response.Detail toDetailResponse(User user);
 

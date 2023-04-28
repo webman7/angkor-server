@@ -36,7 +36,7 @@ public class Password {
 
     @LastModifiedDate
     @Column(name = "pwd_upd_date")
-    private LocalDateTime updatedAt;
+    private LocalDateTime pwdUpdatedAt;
 
     public Password(String password) {
         this.value = password;
