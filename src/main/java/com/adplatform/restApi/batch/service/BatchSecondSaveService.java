@@ -115,7 +115,7 @@ public class BatchSecondSaveService {
         // Batch Execution
         BatchStatusDto.Request.Save saveList = new BatchStatusDto.Request.Save();
         saveList.setType(batchType);
-        saveList.setExeDate(exeDate);
+        saveList.setExeDate(Integer.parseInt(beforeMonthFirstDate));
         saveList.setName(batchName);
         saveList.setExeYn(true);
         BatchStatus batchStatus = this.batchStatusMapper.toEntity(saveList);
