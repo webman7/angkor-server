@@ -61,7 +61,7 @@ public class BatchSecondSaveService {
         } else {
             exeDate = Integer.parseInt(CommonUtils.getBeforeYearMonthDayByYMD(String.valueOf(reportDate), 1));
         }
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! :::::::::::::::" + exeDate);
+
         // 6일날 전월 데이터로 세금계산서를 만든다.
         if (String.valueOf(exeDate).endsWith("06")) {
             this.businessAccountTaxBillMonthly(exeDate);
