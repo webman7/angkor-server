@@ -22,6 +22,7 @@ public class BatchCommandApi {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/settlement")
     public void settlement(@RequestParam(value="exeDate", defaultValue="0") Integer exeDate) {
+        exeDate = 20230507;
         // 캠페인별 일 정산, 비즈니스별 월 정산
         this.batchFirstSaveService.batchJob(exeDate);
         try {

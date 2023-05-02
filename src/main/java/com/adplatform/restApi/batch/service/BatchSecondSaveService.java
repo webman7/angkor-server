@@ -61,7 +61,7 @@ public class BatchSecondSaveService {
         } else {
             exeDate = Integer.parseInt(CommonUtils.getBeforeYearMonthDayByYMD(String.valueOf(reportDate), 1));
         }
-
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! :::::::::::::::" + exeDate);
         // 6일날 전월 데이터로 세금계산서를 만든다.
         if (String.valueOf(exeDate).endsWith("06")) {
             this.businessAccountTaxBillMonthly(exeDate);
@@ -79,11 +79,16 @@ public class BatchSecondSaveService {
         String batchType = "M";
         String batchName = "business_account_tax_bill";
 
+        String beforeMonthFirstDate = CommonUtils.getBeforeYearMonthByYMD(String.valueOf(exeDate), 1);
+        String beforeMonthLastDate = CommonUtils.getLastDayOfMonthByYMD(beforeMonthFirstDate);
+
+        beforeMonthFirstDate = beforeMonthFirstDate.substring(0, 6) + "01";
+
         ////////////////////////////////////////////////////////////
         // 선행 작업 체크
         ////////////////////////////////////////////////////////////
         // Batch Y Count
-        int repCnt = this.batchQueryMapper.getBatchStatusYNCount(batchType, exeDate, "campaign_settlement_daily");
+        int repCnt = this.batchQueryMapper.getBatchStatusYNCount(batchType, Integer.parseInt(beforeMonthFirstDate), "campaign_settlement_daily");
         if (repCnt == 0) {
             System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             return;
@@ -93,16 +98,11 @@ public class BatchSecondSaveService {
         // 진행 여부 확인
         ////////////////////////////////////////////////////////////
         // Batch Y Count
-        int cnt = this.batchQueryMapper.getBatchStatusYNCount(batchType, exeDate, batchName);
+        int cnt = this.batchQueryMapper.getBatchStatusYNCount(batchType, Integer.parseInt(beforeMonthFirstDate), batchName);
         if (cnt > 0) {
             System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
             return;
         }
-
-        String beforeMonthFirstDate = CommonUtils.getBeforeYearMonthByYMD(String.valueOf(exeDate), 1);
-        String beforeMonthLastDate = CommonUtils.getLastDayOfMonthByYMD(beforeMonthFirstDate);
-
-        beforeMonthFirstDate = beforeMonthFirstDate.substring(0, 6) + "01";
 
         ////////////////////////////////////////////////////////////
         // 월별 세금계산서

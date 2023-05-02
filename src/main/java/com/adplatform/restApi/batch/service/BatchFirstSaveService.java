@@ -39,7 +39,7 @@ public class BatchFirstSaveService {
         } else {
             exeDate = Integer.parseInt(CommonUtils.getBeforeYearMonthDayByYMD(String.valueOf(reportDate), 1));
         }
-
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! First " + exeDate);
         // 6일날 전월 데이터를 정산한다.(캠페인별)
         if (String.valueOf(exeDate).endsWith("06")) {
             this.campaignSettlementMonthly(exeDate);
