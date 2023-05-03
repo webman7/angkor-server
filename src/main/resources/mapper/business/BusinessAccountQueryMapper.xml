@@ -31,16 +31,16 @@
     </sql>
 
     <sql id="accountsSelectQuery">
-        SELECT a.id AS id, a.name AS name, b.member_type AS memberType, (SELECT ai.id
-                                                                           FROM adaccount_info ai, adaccount_user_info au
-                                                                          WHERE ai.id = au.adaccount_info_id
-                                                                            AND au.user_no = #{loginUserNo}
-                                                                            AND ai.config IN ('ON', 'OFF')
-                                                                            AND au.`status` = 'Y'
-                                                                          ORDER BY ai.id ASC
-                                                                          LIMIT 0,1)  AS adAccountId, a.config, a.out_of_balance_yn AS outOfBalance
-          FROM business_account_info a, business_account_user_info b
-         WHERE a.id = b.business_account_info_id
+        SELECT a.id AS id, a.name AS name, b.member_type AS memberType, c.id AS adAccountId, a.config, a.out_of_balance_yn AS outOfBalance
+          FROM business_account_user_info b, business_account_info a LEFT JOIN (SELECT ai.id
+                                                                                FROM business_account_info a, adaccount_info ai, adaccount_user_info au
+                                                                                WHERE a.id = ai.business_account_info_id
+                                                                                AND ai.id = au.adaccount_info_id
+                                                                                AND au.user_no = #{loginUserNo}
+                                                                                <include refid="accountsCondition1"/>
+                                                                                AND ai.config IN ('ON', 'OFF')
+                                                                                AND au.`status` = 'Y') c ON a.id = c.business_account_info_id
+        WHERE a.id = b.business_account_info_id
            AND b.user_no = #{loginUserNo}
            <include refid="accountsCondition1"/>
            AND a.config IN ('ON', 'OFF')
