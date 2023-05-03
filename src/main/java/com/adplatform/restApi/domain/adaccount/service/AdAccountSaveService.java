@@ -183,15 +183,6 @@ public class AdAccountSaveService {
 
     public void deleteUser(AdAccountUserDto.Request.UserUpdate request, Integer loginUserNo) {
         // 권한 체크
-//        AdAccountUserDto.Response.AdAccountUserInfo adAccountUserInfo = this.adAccountUserRepository.adAccountUserInfo(request.getAdAccountId(), loginUserNo);
-//        // 본인 여부 체크
-//        if(!adAccountUserInfo.getUser().getId().equals(request.getId())) {
-//            // MASTER 권한 체크
-//            if(adAccountUserInfo.getMemberType() != AdAccountUser.MemberType.MASTER) {
-//                throw new AdAccountUserAuthorizationException();
-//            }
-//        }
-
         AdAccountUserDto.Response.AdAccountUserInfo adAccountUserInfo = this.adAccountUserRepository.adAccountUserInfo(request.getAdAccountId(), loginUserNo);
         if(adAccountUserInfo == null) {
             throw new UserNotFoundException();
