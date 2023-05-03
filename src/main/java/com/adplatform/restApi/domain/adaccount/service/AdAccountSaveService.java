@@ -9,7 +9,11 @@ import com.adplatform.restApi.domain.adaccount.dto.user.AdAccountUserDto;
 import com.adplatform.restApi.domain.adaccount.dto.adaccount.AdAccountDto;
 import com.adplatform.restApi.domain.adaccount.dto.user.AdAccountUserMapper;
 import com.adplatform.restApi.domain.adaccount.exception.AdAccountUserAuthorizationException;
+import com.adplatform.restApi.domain.business.dao.user.BusinessAccountUserRepository;
 import com.adplatform.restApi.domain.business.domain.BusinessAccount;
+import com.adplatform.restApi.domain.business.domain.BusinessAccountUser;
+import com.adplatform.restApi.domain.business.dto.account.BusinessAccountDto;
+import com.adplatform.restApi.domain.business.dto.user.BusinessAccountUserDto;
 import com.adplatform.restApi.domain.business.exception.*;
 import com.adplatform.restApi.domain.business.service.BusinessAccountQueryService;
 import com.adplatform.restApi.domain.company.service.CompanyService;
@@ -47,6 +51,7 @@ public class AdAccountSaveService {
     private final BusinessAccountQueryService businessAccountQueryService;
     private final AdAccountUserMapper adAccountUserMapper;
     private final AdAccountUserInfoHistoryMapper adAccountUserInfoHistoryMapper;
+    private final BusinessAccountUserRepository businessAccountUserRepository;
     private final AdminStopHistoryMapper adminStopHistoryMapper;
     private final AdminStopHistoryRepository adminStopHistoryRepository;
 
@@ -81,8 +86,19 @@ public class AdAccountSaveService {
 
         // MASTER 권한 체크
         AdAccountUserDto.Response.AdAccountUserInfo adAccountUserInfo = this.adAccountUserRepository.adAccountUserInfo(request.getAdAccountId(), loginUserNo);
-        if(adAccountUserInfo.getMemberType() != AdAccountUser.MemberType.MASTER) {
-            throw new AdAccountUserAuthorizationException();
+        if(adAccountUserInfo == null) {
+            throw new UserNotFoundException();
+        }
+
+        BusinessAccountUserDto.Response.BusinessAccountUserInfo adAccountBusinessAccountInfo = this.businessAccountUserRepository.businessAccountUserInfo(adAccountUserInfo.getBusinessAccountId(), loginUserNo);
+        if(adAccountBusinessAccountInfo == null) {
+            throw new BusinessAccountUserAuthorizationException();
+        }
+
+        if(adAccountBusinessAccountInfo.getMemberType() != BusinessAccountUser.MemberType.MASTER) {
+            if(adAccountUserInfo.getMemberType() != AdAccountUser.MemberType.MASTER) {
+                throw new AdAccountUserAuthorizationException();
+            }
         }
 
         // 회원 중복 체크
@@ -172,14 +188,35 @@ public class AdAccountSaveService {
 
     public void deleteUser(AdAccountUserDto.Request.UserUpdate request, Integer loginUserNo) {
         // 권한 체크
+//        AdAccountUserDto.Response.AdAccountUserInfo adAccountUserInfo = this.adAccountUserRepository.adAccountUserInfo(request.getAdAccountId(), loginUserNo);
+//        // 본인 여부 체크
+//        if(!adAccountUserInfo.getUser().getId().equals(request.getId())) {
+//            // MASTER 권한 체크
+//            if(adAccountUserInfo.getMemberType() != AdAccountUser.MemberType.MASTER) {
+//                throw new AdAccountUserAuthorizationException();
+//            }
+//        }
+
         AdAccountUserDto.Response.AdAccountUserInfo adAccountUserInfo = this.adAccountUserRepository.adAccountUserInfo(request.getAdAccountId(), loginUserNo);
-        // 본인 여부 체크
-        if(!adAccountUserInfo.getUser().getId().equals(request.getId())) {
-            // MASTER 권한 체크
-            if(adAccountUserInfo.getMemberType() != AdAccountUser.MemberType.MASTER) {
-                throw new AdAccountUserAuthorizationException();
+        if(adAccountUserInfo == null) {
+            throw new UserNotFoundException();
+        }
+
+        BusinessAccountUserDto.Response.BusinessAccountUserInfo adAccountBusinessAccountInfo = this.businessAccountUserRepository.businessAccountUserInfo(adAccountUserInfo.getBusinessAccountId(), loginUserNo);
+        if(adAccountBusinessAccountInfo == null) {
+            throw new BusinessAccountUserAuthorizationException();
+        }
+
+        if(adAccountBusinessAccountInfo.getMemberType() != BusinessAccountUser.MemberType.MASTER) {
+            // 본인 여부 체크
+            if(!adAccountUserInfo.getUser().getId().equals(request.getId())) {
+                // MASTER 권한 체크
+                if(adAccountUserInfo.getMemberType() != AdAccountUser.MemberType.MASTER) {
+                    throw new AdAccountUserAuthorizationException();
+                }
             }
         }
+
 
         AdAccountUser adAccountUser = AdAccountUserQueryUtils.findByAdAccountIdAndUserIdOrElseThrow(request.getAdAccountId(), request.getId(), this.adAccountUserRepository);
 

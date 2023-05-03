@@ -55,6 +55,7 @@ public class AdAccountUserQueryRepositoryImpl implements AdAccountUserQueryRepos
     public Page<AdAccountUserDto.Response.AdAccountUserInfo> adAccountUserSearch(Integer adAccountId, AdAccountDto.Request.SearchUser searchRequest, Pageable pageable) {
         List<AdAccountUserDto.Response.AdAccountUserInfo> content = this.query.select(new QAdAccountUserDto_Response_AdAccountUserInfo(
                         adAccount.id,
+                        adAccount.businessAccount.id,
                         new QUserDto_Response_BaseInfo(
                                 user.id,
                                 user.loginId,
@@ -96,6 +97,7 @@ public class AdAccountUserQueryRepositoryImpl implements AdAccountUserQueryRepos
     public Page<AdAccountUserDto.Response.AdAccountUserInfo> adAccountUserInfo(Integer adAccountId, Pageable pageable) {
         List<AdAccountUserDto.Response.AdAccountUserInfo> content = this.query.select(new QAdAccountUserDto_Response_AdAccountUserInfo(
                         adAccount.id,
+                        adAccount.businessAccount.id,
                         new QUserDto_Response_BaseInfo(
                                 user.id,
                                 user.loginId,
@@ -133,6 +135,7 @@ public class AdAccountUserQueryRepositoryImpl implements AdAccountUserQueryRepos
     public List<AdAccountUserDto.Response.AdAccountUserInfo> adAccountRequestUserInfo(Integer adAccountId) {
         return this.query.select(new QAdAccountUserDto_Response_AdAccountUserInfo(
                         adAccount.id,
+                        adAccount.businessAccount.id,
                         new QUserDto_Response_BaseInfo(
                                 user.id,
                                 user.loginId,
@@ -156,6 +159,7 @@ public class AdAccountUserQueryRepositoryImpl implements AdAccountUserQueryRepos
     public AdAccountUserDto.Response.AdAccountUserInfo adAccountUserInfo(Integer adAccountId, Integer userNo) {
         return this.query.select(new QAdAccountUserDto_Response_AdAccountUserInfo(
                         adAccount.id,
+                        adAccount.businessAccount.id,
                         new QUserDto_Response_BaseInfo(
                                 user.id,
                                 user.loginId,
