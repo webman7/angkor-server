@@ -19,16 +19,17 @@ public class BatchOperationSaveService {
         ////////////////////////////////////////////////////////////
         // Daily Batch
         ////////////////////////////////////////////////////////////
+        // 오늘 날짜
         Calendar calendar = new GregorianCalendar();
         SimpleDateFormat SDF = new SimpleDateFormat("yyyyMMdd");
-        calendar.add(Calendar.DATE, -1);
+        calendar.add(Calendar.DATE, 0);
         String chkDate = SDF.format(calendar.getTime());
 
         int exeDate = 0;
         if (reportDate.equals(0)) {
             exeDate = Integer.parseInt(chkDate);
         } else {
-            exeDate = Integer.parseInt(CommonUtils.getBeforeYearMonthDayByYMD(String.valueOf(reportDate), 1));
+            exeDate = Integer.parseInt(CommonUtils.getBeforeYearMonthDayByYMD(String.valueOf(reportDate), 0));
         }
 
         // 캠페인, 광고그룹 LIVE, FINISHED 를 체크한다
@@ -37,8 +38,8 @@ public class BatchOperationSaveService {
 
     public void operationStatusJob(Integer exeDate) {
         this.batchSaveQueryMapper.updateCampaignLive(exeDate);
-        this.batchSaveQueryMapper.updateCampaignFinished(exeDate);
         this.batchSaveQueryMapper.updateAdGroupLive(exeDate);
+        this.batchSaveQueryMapper.updateCampaignFinished(exeDate);
         this.batchSaveQueryMapper.updateAdGroupFinished(exeDate);
     }
 }
