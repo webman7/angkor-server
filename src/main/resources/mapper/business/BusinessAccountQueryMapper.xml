@@ -31,9 +31,12 @@
     </sql>
 
     <sql id="accountsSelectQuery">
-        SELECT a.id AS id, a.name AS name, b.member_type AS memberType, (SELECT id
-                                                                           FROM adaccount_info ai
-                                                                          WHERE ai.business_account_info_id = a.id
+        SELECT a.id AS id, a.name AS name, b.member_type AS memberType, (SELECT ai.id
+                                                                           FROM adaccount_info ai, adaccount_user_info au
+                                                                          WHERE ai.id = au.adaccount_info_id
+                                                                            AND au.user_no = #{loginUserNo}
+                                                                            AND ai.config IN ('ON', 'OFF')
+                                                                            AND au.`status` = 'Y'
                                                                           ORDER BY ai.id ASC
                                                                           LIMIT 0,1)  AS adAccountId, a.config, a.out_of_balance_yn AS outOfBalance
           FROM business_account_info a, business_account_user_info b
