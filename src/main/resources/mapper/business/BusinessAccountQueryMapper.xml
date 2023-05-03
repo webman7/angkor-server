@@ -32,7 +32,7 @@
 
     <sql id="accountsSelectQuery">
         SELECT a.id AS id, a.name AS name, b.member_type AS memberType, c.id AS adAccountId, a.config, a.out_of_balance_yn AS outOfBalance
-          FROM business_account_user_info b, business_account_info a LEFT JOIN (SELECT ai.id
+          FROM business_account_user_info b, business_account_info a LEFT JOIN (SELECT a.id AS business_account_info_id, ai.id
                                                                                 FROM business_account_info a, adaccount_info ai, adaccount_user_info au
                                                                                 WHERE a.id = ai.business_account_info_id
                                                                                 AND ai.id = au.adaccount_info_id
