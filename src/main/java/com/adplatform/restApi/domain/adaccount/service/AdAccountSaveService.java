@@ -83,14 +83,9 @@ public class AdAccountSaveService {
     }
 
     public void saveUserInvite(AdAccountUserDto.Request.SaveUser request, Integer loginUserNo) {
-
         // MASTER 권한 체크
         AdAccountUserDto.Response.AdAccountUserInfo adAccountUserInfo = this.adAccountUserRepository.adAccountUserInfo(request.getAdAccountId(), loginUserNo);
-        if(adAccountUserInfo == null) {
-            throw new UserNotFoundException();
-        }
-
-        BusinessAccountUserDto.Response.BusinessAccountUserInfo adAccountBusinessAccountInfo = this.businessAccountUserRepository.businessAccountUserInfo(adAccountUserInfo.getBusinessAccountId(), loginUserNo);
+        BusinessAccountUserDto.Response.BusinessAccountUserInfo adAccountBusinessAccountInfo = this.businessAccountUserRepository.businessAccountUserInfo(request.getBusinessAccountId(), loginUserNo);
         if(adAccountBusinessAccountInfo == null) {
             throw new BusinessAccountUserAuthorizationException();
         }

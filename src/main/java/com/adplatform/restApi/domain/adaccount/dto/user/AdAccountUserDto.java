@@ -13,6 +13,7 @@ public class AdAccountUserDto {
         @Setter
         public static class SaveUser {
             private Integer adAccountId;
+            private Integer businessAccountId;
             private String userId;
             private AdAccountUser.MemberType memberType;
         }
@@ -21,6 +22,7 @@ public class AdAccountUserDto {
         @Setter
         public static class UserStatusUpdate {
             private Integer adAccountId;
+            private Integer businessAccountId;
             private Integer id;
             private AdAccountUser.Status status;
         }
@@ -29,6 +31,7 @@ public class AdAccountUserDto {
         @Setter
         public static class UserMemberUpdate {
             private Integer adAccountId;
+            private Integer businessAccountId;
             private Integer id;
             private AdAccountUser.MemberType memberType;
         }
@@ -37,6 +40,7 @@ public class AdAccountUserDto {
         @Setter
         public static class UserUpdate {
             private Integer adAccountId;
+            private Integer businessAccountId;
             private Integer id;
         }
     }
