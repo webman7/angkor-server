@@ -53,6 +53,7 @@
                  <include refid="accountsCondition1"/>
                  AND a.config IN ('ON', 'OFF')
                  AND b.`status` = 'Y'
+               GROUP BY a.id
         UNION
         SELECT c.business_account_info_id AS id, e.name AS name, d.member_type AS memberType, c.id AS adAccountIdMaster, c.id AS adAccountId, e.config, e.out_of_balance_yn AS outOfBalance
           FROM adaccount_info c, adaccount_user_info d, business_account_info e
@@ -70,6 +71,7 @@
                               AND b.user_no = #{loginUserNo}
                               AND a.config IN ('ON', 'OFF')
                               AND b.`status` = 'Y')
+        GROUP BY c.business_account_info_id
     </sql>
 
     <select id="accounts" resultMap="mapAccounts">
