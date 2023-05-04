@@ -60,7 +60,7 @@
          WHERE c.id = d.adaccount_info_id
            AND c.business_account_info_id = e.id
            AND d.user_no = #{loginUserNo}
-           AND d.member_type = 'MEMBER'
+           AND d.member_type IN ('OPERATOR', 'MEMBER')
            <include refid="accountsCondition2"/>
            AND e.config IN ('ON', 'OFF')
            AND c.config IN ('ON', 'OFF')
