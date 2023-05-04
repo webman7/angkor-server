@@ -188,21 +188,13 @@ public class AdAccountSaveService {
             throw new UserNotFoundException();
         }
 
-        BusinessAccountUserDto.Response.BusinessAccountUserInfo adAccountBusinessAccountInfo = this.businessAccountUserRepository.businessAccountUserInfo(adAccountUserInfo.getBusinessAccountId(), loginUserNo);
-        if(adAccountBusinessAccountInfo == null) {
-            throw new BusinessAccountUserAuthorizationException();
-        }
-
-        if(adAccountBusinessAccountInfo.getMemberType() != BusinessAccountUser.MemberType.MASTER) {
-            // 본인 여부 체크
-            if(!adAccountUserInfo.getUser().getId().equals(request.getId())) {
-                // MASTER 권한 체크
-                if(adAccountUserInfo.getMemberType() != AdAccountUser.MemberType.MASTER) {
-                    throw new AdAccountUserAuthorizationException();
-                }
+        // 본인 여부 체크
+        if(!adAccountUserInfo.getUser().getId().equals(request.getId())) {
+            // MASTER 권한 체크
+            if(adAccountUserInfo.getMemberType() != AdAccountUser.MemberType.MASTER) {
+                throw new AdAccountUserAuthorizationException();
             }
         }
-
 
         AdAccountUser adAccountUser = AdAccountUserQueryUtils.findByAdAccountIdAndUserIdOrElseThrow(request.getAdAccountId(), request.getId(), this.adAccountUserRepository);
 
