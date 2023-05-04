@@ -247,6 +247,7 @@ public class BusinessAccountUserQueryRepositoryImpl implements BusinessAccountUs
     public List<AdAccountUserDto.Response.AdAccountUserInfo> adAccountByBusinessAccountIdAndUserId(Integer businessAccountId, Integer userId) {
         return this.query.select(new QAdAccountUserDto_Response_AdAccountUserInfo(
                 adAccount.id,
+                adAccount.name,
                 adAccount.businessAccount.id,
                 new QUserDto_Response_BaseInfo(
                         user.id,

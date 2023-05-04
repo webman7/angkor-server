@@ -50,6 +50,7 @@ public class AdAccountUserDto {
         @Setter
         public static class AdAccountUserInfo {
             private Integer id;
+            private String name;
             private Integer businessAccountId;
             private UserDto.Response.BaseInfo user;
             private AdAccountUser.MemberType memberType;
@@ -58,11 +59,13 @@ public class AdAccountUserDto {
             @QueryProjection
             public AdAccountUserInfo(
                     Integer id,
+                    String name,
                     Integer businessAccountId,
                     UserDto.Response.BaseInfo user,
                     AdAccountUser.MemberType memberType,
                     AdAccountUser.Status status) {
                 this.id = id;
+                this.name = name;
                 this.businessAccountId = businessAccountId;
                 this.user = user;
                 this.memberType = memberType;
