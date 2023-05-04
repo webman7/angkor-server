@@ -225,6 +225,7 @@ public class BusinessAccountDto {
             private Integer id;
             private String name;
             private String memberType;
+            private String memberTypeAccount;
             private Integer adAccountIdMaster;
             private Integer adAccountId;
             private String config;

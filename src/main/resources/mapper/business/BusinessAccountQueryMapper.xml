@@ -7,6 +7,7 @@
         <id column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="memberType" property="memberType"/>
+        <result column="memberTypeAccount" property="memberTypeAccount"/>
         <result column="adAccountIdMaster" property="adAccountIdMaster"/>
         <result column="adAccountId" property="adAccountId"/>
         <result column="config" property="config"/>
@@ -32,7 +33,7 @@
     </sql>
 
     <sql id="accountsSelectQuery">
-        SELECT a.id AS id, a.name AS name, b.member_type AS memberType, c.id AS adAccountIdMaster, d.id AS adAccountId, a.config, a.out_of_balance_yn AS outOfBalance
+        SELECT a.id AS id, a.name AS name, b.member_type AS memberType, '' AS memberTypeAccount, c.id AS adAccountIdMaster, d.id AS adAccountId, a.config, a.out_of_balance_yn AS outOfBalance
                 FROM business_account_user_info b, business_account_info a LEFT JOIN (SELECT a.id AS business_account_info_id, ai.id
                                                                                         FROM business_account_info a, adaccount_info ai, adaccount_user_info au
                                                                                        WHERE a.id = ai.business_account_info_id
@@ -55,12 +56,11 @@
                  AND b.`status` = 'Y'
                GROUP BY a.id
         UNION
-        SELECT c.business_account_info_id AS id, e.name AS name, d.member_type AS memberType, c.id AS adAccountIdMaster, c.id AS adAccountId, e.config, e.out_of_balance_yn AS outOfBalance
+        SELECT c.business_account_info_id AS id, e.name AS name, '' AS memberType, d.member_type AS memberTypeAccount, c.id AS adAccountIdMaster, c.id AS adAccountId, e.config, e.out_of_balance_yn AS outOfBalance
           FROM adaccount_info c, adaccount_user_info d, business_account_info e
          WHERE c.id = d.adaccount_info_id
            AND c.business_account_info_id = e.id
            AND d.user_no = #{loginUserNo}
-           AND d.member_type IN ('OPERATOR', 'MEMBER')
            <include refid="accountsCondition2"/>
            AND e.config IN ('ON', 'OFF')
            AND c.config IN ('ON', 'OFF')
