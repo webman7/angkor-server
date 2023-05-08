@@ -24,7 +24,10 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
@@ -635,9 +638,9 @@ public class BusinessAccountQuerydslRepositoryImpl implements BusinessAccountQue
                         businessAccount.id.eq(businessAccountId),
                         businessAccount.company.id.eq(company.id),
                         businessAccountTaxBill.issueStatus.eq(true),
-                        businessAccountTaxBill.statDate.between(
-                                searchRequest.getStartDate(),
-                                searchRequest.getEndDate()
+                        businessAccountTaxBill.issueAt.between(
+                                LocalDateTime.of(LocalDate.parse(searchRequest.getStartDate().toString(), DateTimeFormatter.ofPattern("yyyyMMdd")), LocalTime.MIN),
+                                LocalDateTime.of(LocalDate.parse(searchRequest.getEndDate().toString(), DateTimeFormatter.ofPattern("yyyyMMdd")), LocalTime.MAX).withNano(0)
                         ));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
@@ -702,9 +705,9 @@ public class BusinessAccountQuerydslRepositoryImpl implements BusinessAccountQue
                         businessAccount.id.eq(businessAccountId),
                         businessAccount.company.id.eq(company.id),
                         businessAccountTaxBill.issueStatus.eq(true),
-                        businessAccountTaxBill.statDate.between(
-                                searchRequest.getStartDate(),
-                                searchRequest.getEndDate()
+                        businessAccountTaxBill.issueAt.between(
+                                LocalDateTime.of(LocalDate.parse(searchRequest.getStartDate().toString(), DateTimeFormatter.ofPattern("yyyyMMdd")), LocalTime.MIN),
+                                LocalDateTime.of(LocalDate.parse(searchRequest.getEndDate().toString(), DateTimeFormatter.ofPattern("yyyyMMdd")), LocalTime.MAX).withNano(0)
                         ));
 
         return Objects.nonNull(pageable)
