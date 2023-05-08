@@ -134,7 +134,7 @@ public class UserApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/site")
+    @PostMapping("/site")
     public UserDto.Response.Count userSite(@RequestBody @Valid UserDto.Request.UserSite searchRequest) {
         int count = 0;
         if (searchRequest.getUserSite().equals("admin")) {
