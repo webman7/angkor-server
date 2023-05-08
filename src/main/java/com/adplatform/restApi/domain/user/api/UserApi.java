@@ -1,19 +1,14 @@
 package com.adplatform.restApi.domain.user.api;
 
 import com.adplatform.restApi.domain.company.dao.CompanyRepository;
-import com.adplatform.restApi.domain.company.dto.CompanyDto;
 import com.adplatform.restApi.domain.company.dto.CompanyMapper;
-import com.adplatform.restApi.domain.company.service.CompanyFindUtils;
 import com.adplatform.restApi.domain.history.dao.user.UserHistoryRepository;
 import com.adplatform.restApi.domain.history.domain.UserHistory;
-import com.adplatform.restApi.domain.history.domain.UserLoginHistory;
 import com.adplatform.restApi.domain.history.dto.user.UserHistoryDto;
 import com.adplatform.restApi.domain.history.dto.user.UserHistoryMapper;
-import com.adplatform.restApi.domain.history.dto.user.UserLoginHistoryDto;
 import com.adplatform.restApi.domain.user.dao.UserRepository;
 import com.adplatform.restApi.domain.user.dao.mapper.UserSaveQueryMapper;
 import com.adplatform.restApi.domain.user.domain.User;
-import com.adplatform.restApi.domain.user.dto.auth.AuthDto;
 import com.adplatform.restApi.domain.user.dto.user.UserDto;
 import com.adplatform.restApi.domain.user.dto.user.UserMapper;
 import com.adplatform.restApi.domain.user.service.UserFindUtils;
@@ -21,10 +16,7 @@ import com.adplatform.restApi.domain.user.dao.mapper.UserQueryMapper;
 import com.adplatform.restApi.domain.user.service.UserQueryService;
 import com.adplatform.restApi.global.config.security.util.SecurityUtils;
 import com.adplatform.restApi.global.dto.PageDto;
-import com.adplatform.restApi.global.util.HttpReqRespUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -139,5 +131,23 @@ public class UserApi {
         this.userHistoryRepository.save(userHistory);
 
         this.userSaveQueryMapper.myInfoModify(request, SecurityUtils.getLoginUserNo());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/site")
+    public UserDto.Response.Count userSite(@RequestBody @Valid UserDto.Request.UserSite searchRequest) {
+        int count = 0;
+        if (searchRequest.getUserSite().equals("admin")) {
+            count = this.userQueryMapper.getAdminUserCount(SecurityUtils.getLoginUserNo());
+        } else if(searchRequest.getUserSite().equals("media")) {
+            count = this.userQueryMapper.getMediaCompanyUserCount(SecurityUtils.getLoginUserNo());
+        } else {
+            count = 1;
+        }
+
+        UserDto.Response.Count co = new UserDto.Response.Count();
+        co.setId(count);
+
+        return co;
     }
 }

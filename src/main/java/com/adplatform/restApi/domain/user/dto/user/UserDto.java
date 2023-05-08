@@ -45,6 +45,13 @@ public abstract class UserDto {
             private String phone;
         }
 
+
+        @Getter
+        @Setter
+        public static class UserSite {
+            private String userSite;
+        }
+
     }
 
     public static abstract class Response {
