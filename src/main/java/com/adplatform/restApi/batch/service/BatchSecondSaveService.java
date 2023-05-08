@@ -88,7 +88,7 @@ public class BatchSecondSaveService {
         // 선행 작업 체크
         ////////////////////////////////////////////////////////////
         // Batch Y Count
-        int repCnt = this.batchQueryMapper.getBatchStatusYNCount(batchType, Integer.parseInt(beforeMonthFirstDate), "campaign_settlement_daily");
+        int repCnt = this.batchQueryMapper.getBatchStatusYNCount(batchType, Integer.parseInt(beforeMonthLastDate), "campaign_settlement_daily");
         if (repCnt == 0) {
             System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             return;
@@ -115,7 +115,7 @@ public class BatchSecondSaveService {
         // Batch Execution
         BatchStatusDto.Request.Save saveList = new BatchStatusDto.Request.Save();
         saveList.setType(batchType);
-        saveList.setExeDate(Integer.parseInt(beforeMonthFirstDate));
+        saveList.setExeDate(Integer.parseInt(beforeMonthLastDate));
         saveList.setName(batchName);
         saveList.setExeYn(true);
         BatchStatus batchStatus = this.batchStatusMapper.toEntity(saveList);
@@ -140,7 +140,7 @@ public class BatchSecondSaveService {
         // 선행 작업 체크
         ////////////////////////////////////////////////////////////
         // Batch Y Count
-        int repCnt = this.batchQueryMapper.getBatchStatusYNCount(batchType, Integer.parseInt(beforeMonthFirstDate), "campaign_settlement_daily");
+        int repCnt = this.batchQueryMapper.getBatchStatusYNCount(batchType, Integer.parseInt(beforeMonthLastDate), "campaign_settlement_daily");
         if (repCnt == 0) {
             System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             return;
@@ -150,7 +150,7 @@ public class BatchSecondSaveService {
         // 진행 여부 확인
         ////////////////////////////////////////////////////////////
         // Batch Y Count
-        int cnt = this.batchQueryMapper.getBatchStatusYNCount(batchType, Integer.parseInt(beforeMonthFirstDate), batchName);
+        int cnt = this.batchQueryMapper.getBatchStatusYNCount(batchType, Integer.parseInt(beforeMonthLastDate), batchName);
         if (cnt > 0) {
             System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
             return;
@@ -230,7 +230,7 @@ public class BatchSecondSaveService {
         // Batch Execution
         BatchStatusDto.Request.Save saveList = new BatchStatusDto.Request.Save();
         saveList.setType(batchType);
-        saveList.setExeDate(Integer.parseInt(beforeMonthFirstDate));
+        saveList.setExeDate(Integer.parseInt(beforeMonthLastDate));
         saveList.setName(batchName);
         saveList.setExeYn(true);
         BatchStatus batchStatus = this.batchStatusMapper.toEntity(saveList);

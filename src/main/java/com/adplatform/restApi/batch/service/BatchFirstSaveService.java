@@ -39,7 +39,7 @@ public class BatchFirstSaveService {
         } else {
             exeDate = Integer.parseInt(CommonUtils.getBeforeYearMonthDayByYMD(String.valueOf(reportDate), 1));
         }
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! First " + exeDate);
+
         // 6일날 전월 데이터를 정산한다.(캠페인별)
         if (String.valueOf(exeDate).endsWith("06")) {
             this.campaignSettlementMonthly(exeDate);
@@ -62,7 +62,7 @@ public class BatchFirstSaveService {
         // 진행 여부 확인
         ////////////////////////////////////////////////////////////
         // Batch Y Count
-        int cnt = this.batchQueryMapper.getBatchStatusYNCount(batchType, Integer.parseInt(beforeMonthFirstDate), batchName);
+        int cnt = this.batchQueryMapper.getBatchStatusYNCount(batchType, Integer.parseInt(beforeMonthLastDate), batchName);
         if (cnt > 0) {
             return;
         }
@@ -83,7 +83,7 @@ public class BatchFirstSaveService {
         // Batch Execution
         BatchStatusDto.Request.Save saveList = new BatchStatusDto.Request.Save();
         saveList.setType(batchType);
-        saveList.setExeDate(Integer.parseInt(beforeMonthFirstDate));
+        saveList.setExeDate(Integer.parseInt(beforeMonthLastDate));
         saveList.setName(batchName);
         saveList.setExeYn(true);
         BatchStatus batchStatus = this.batchStatusMapper.toEntity(saveList);
