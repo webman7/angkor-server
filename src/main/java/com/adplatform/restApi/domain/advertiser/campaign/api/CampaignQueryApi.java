@@ -84,6 +84,4 @@ public class CampaignQueryApi {
                 pageable,
                 this.campaignQueryMapper.countSearch(request)));
     }
-
-
 }
