@@ -72,4 +72,18 @@ public class CampaignQueryApi {
     public CampaignDto.Response.Detail searchByCampaignId(@PathVariable(name = "id") Integer campaignId) {
         return this.campaignQueryMapper.searchByCampaignId(campaignId);
     }
+
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/search-admin")
+    public PageDto<CampaignDto.Response.Page> searchAdmin(
+            @RequestBody @Valid AdvertiserSearchRequest request,
+            @PageableDefault Pageable pageable) {
+        return PageDto.create(new PageImpl<>(
+                this.campaignQueryMapper.search(request, pageable),
+                pageable,
+                this.campaignQueryMapper.countSearch(request)));
+    }
+
+
 }
